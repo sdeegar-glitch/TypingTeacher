@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
@@ -21,7 +21,6 @@ const sampleTexts: Record<string, { title: string; content: string }> = {
 
 const TypingTestPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   
   // Get active test or fallback to test 1
   const activeTest = sampleTexts[id || '1'] || sampleTexts['1'];
