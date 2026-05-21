@@ -20,8 +20,17 @@ const sampleTexts: Record<string, { title: string; content: string }> = {
 };
 
 const TypingTestPage = () => {
-  const { id } = useParams();
+  const { id, duration, profession, language } = useParams();
   
+  // SEO Meta Titles dynamically generated based on routes
+  useEffect(() => {
+    let title = 'Typing Speed Test | FastTypingLab';
+    if (duration) title = `${duration} Typing Test | FastTypingLab`;
+    if (profession) title = `Typing Test for ${profession.charAt(0).toUpperCase() + profession.slice(1)} | FastTypingLab`;
+    if (language) title = `${language.charAt(0).toUpperCase() + language.slice(1)} Typing Test | FastTypingLab`;
+    document.title = title;
+  }, [duration, profession, language]);
+
   // Get active test or fallback to test 1
   const activeTest = sampleTexts[id || '1'] || sampleTexts['1'];
   const targetContent = activeTest.content;
@@ -32,8 +41,9 @@ const TypingTestPage = () => {
   const [isFinished, setIsFinished] = useState(false);
   const [wpm, setWpm] = useState(0);
   
-  // Test has a standard 60-second duration countdown
-  const TEST_DURATION = 60;
+  // Programmatic duration parsing (e.g. "1-minute", "3-minute")
+  const parsedDuration = duration ? parseInt(duration) * 60 : 60;
+  const TEST_DURATION = isNaN(parsedDuration) ? 60 : parsedDuration;
   const [timeLeft, setTimeLeft] = useState(TEST_DURATION);
   const [lastKeyPressStatus, setLastKeyPressStatus] = useState<'none' | 'correct' | 'error'>('none');
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());

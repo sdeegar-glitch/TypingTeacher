@@ -78,6 +78,14 @@ const AppContent = () => {
       <main className={`flex-grow ${isLearningInterface ? 'overflow-hidden' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />
+          
+          {/* Programmatic SEO Routes */}
+          <Route path="/typing-test" element={<TypingTestPage />} />
+          <Route path="/typing-test/:duration" element={<TypingTestPage />} />
+          <Route path="/typing-test-for/:profession" element={<TypingTestPage />} />
+          <Route path="/typing-test/language/:language" element={<TypingTestPage />} />
+          
+          {/* Legacy/Existing Routes */}
           <Route path="/tests/:id" element={<TypingTestPage />} />
           <Route path="/tests" element={<TypingTestPage />} />
           <Route path="/learn" element={<LearningCoursePage />} />
