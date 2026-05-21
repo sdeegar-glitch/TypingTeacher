@@ -95,7 +95,7 @@ const AppContent = () => {
 
 function App() {
   return (
-    <Router basename="/TypingTeacher">
+    <Router>
       <AppContent />
     </Router>
   );
