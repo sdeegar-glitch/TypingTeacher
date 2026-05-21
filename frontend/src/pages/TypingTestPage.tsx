@@ -178,28 +178,38 @@ const TypingTestPage = () => {
     <div className="h-screen bg-[#f5f5f0] text-[#1e293b] flex flex-col overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
       
       {/* ===== TOP HEADER BAR (100% Identical to Learning Page) ===== */}
-      <div className="shrink-0 bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between z-50 shadow-sm">
+      <div className="shrink-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 z-50 shadow-sm">
         {/* Left: Back + Title */}
-        <div className="flex items-center gap-4 min-w-0">
-          <Link 
-            to="/dashboard" 
-            className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium group"
-          >
-            <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-            </svg>
-            Back
-          </Link>
-          <div className="w-px h-5 bg-white/10"></div>
-          <div>
-            <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest block">Practice Test #{id || '1'}</span>
-            <h1 className="text-sm font-bold text-slate-800 leading-none">{activeTest.title}</h1>
+        <div className="flex items-center gap-4 min-w-0 self-start md:self-auto w-full md:w-auto justify-between md:justify-start">
+          <div className="flex items-center gap-4">
+            <Link 
+              to="/dashboard" 
+              className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium group"
+            >
+              <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              <span className="hidden sm:inline">Back</span>
+            </Link>
+            <div className="w-px h-5 bg-slate-200"></div>
+            <div>
+              <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest block">Practice Test #{id || '1'}</span>
+              <h1 className="text-sm font-bold text-slate-800 leading-none truncate max-w-[150px] sm:max-w-xs">{activeTest.title}</h1>
+            </div>
           </div>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="md:hidden flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-slate-300"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </button>
         </div>
 
         {/* Center: Finger hint */}
         {nextChar && !isFinished && (
-          <div className="flex items-center gap-2 bg-indigo-50 border border-indigo-200 px-4 py-1.5 rounded-full">
+          <div className="hidden sm:flex items-center gap-2 bg-indigo-50 border border-indigo-200 px-4 py-1.5 rounded-full">
             <span className="text-xs text-indigo-600">Type</span>
             <kbd className="bg-indigo-600 text-white text-xs font-black px-2 py-0.5 rounded-md min-w-[24px] text-center">
               {nextChar === ' ' ? '⎵' : nextChar.toUpperCase()}
@@ -209,26 +219,26 @@ const TypingTestPage = () => {
         )}
 
         {/* Right: Stats + Restart */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4 sm:gap-5 w-full md:w-auto justify-around md:justify-end">
           {/* Time */}
           <div className="text-center">
-            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Time Left</span>
-            <span className="text-lg font-black text-slate-800 tabular-nums">{formattedTime}</span>
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Time</span>
+            <span className="text-base sm:text-lg font-black text-slate-800 tabular-nums">{formattedTime}</span>
           </div>
           {/* WPM */}
           <div className="text-center">
             <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Speed</span>
-            <span className="text-lg font-black text-indigo-600 tabular-nums">{wpm} WPM</span>
+            <span className="text-base sm:text-lg font-black text-indigo-600 tabular-nums">{wpm} WPM</span>
           </div>
           {/* Accuracy */}
           <div className="text-center">
-            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Accuracy</span>
-            <span className={`text-lg font-black tabular-nums ${accuracy >= 90 ? 'text-emerald-600' : 'text-rose-500'}`}>{accuracy}%</span>
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Acc</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${accuracy >= 90 ? 'text-emerald-600' : 'text-rose-500'}`}>{accuracy}%</span>
           </div>
-          {/* Restart */}
+          {/* Restart (Desktop) */}
           <button 
             onClick={() => window.location.reload()} 
-            className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-slate-300"
+            className="hidden md:flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-slate-300"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -299,7 +309,7 @@ const TypingTestPage = () => {
         </div>
 
         {/* ── Keyboard & Hands (Side by Side) ── */}
-        <div className="w-full flex justify-center items-end gap-[2px] mt-2 transform scale-[0.70] xl:scale-[0.85] origin-bottom transition-transform">
+        <div className="w-full flex justify-center items-end gap-[2px] mt-2 transform scale-[0.45] sm:scale-75 lg:scale-[0.85] origin-bottom transition-transform">
           {/* Left Hand */}
           <div className="hidden md:block pb-2">
             <HandGuide 

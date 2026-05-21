@@ -23,9 +23,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 const Navbar = () => (
   <nav className="bg-indigo-600 text-white p-4 shadow-md shrink-0">
-    <div className="container mx-auto flex justify-between items-center">
+    <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
       <Link to="/" className="text-2xl font-bold tracking-wider">TypingTeacher</Link>
-      <div className="space-x-4">
+      <div className="flex flex-wrap justify-center gap-4">
         {localStorage.getItem('accessToken') ? (
           <>
             <Link to="/dashboard" className="hover:text-indigo-200 transition-colors">Dashboard</Link>
@@ -50,16 +50,16 @@ const Navbar = () => (
 
 const Home = () => (
   <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-center p-4">
-    <h1 className="text-5xl font-extrabold text-gray-900 mb-6">Master Your Typing Skills</h1>
-    <p className="text-xl text-gray-600 mb-8 max-w-2xl">
+    <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6">Master Your Typing Skills</h1>
+    <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl">
       Improve your typing speed and accuracy with our engaging lessons, real-time feedback, and competitive leaderboards. Practice for SSC, RRB, and more.
     </p>
-    <div className="flex space-x-4">
+    <div className="flex flex-col sm:flex-row gap-4">
       <Link to="/learn" className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg text-lg transition-transform transform hover:-translate-y-1">
         Start Learning
       </Link>
-      <Link to="/login" className="bg-white hover:bg-gray-100 text-indigo-600 font-bold py-3 px-8 rounded-lg shadow-lg text-lg border border-indigo-100 transition-transform transform hover:-translate-y-1">
-        Save Progress (Login)
+      <Link to="/tests" className="bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-bold py-3 px-8 rounded-lg shadow-lg text-lg transition-transform transform hover:-translate-y-1">
+        Take a Test
       </Link>
     </div>
   </div>

@@ -272,7 +272,7 @@ const LearningInterfacePage = () => {
         </div>
 
         {/* ── Keyboard & Hands (Side by Side) ── */}
-        <div className="w-full flex justify-center items-end gap-[2px] mt-2 transform scale-[0.70] xl:scale-[0.85] origin-bottom transition-transform">
+        <div className="w-full flex justify-center items-end gap-[2px] mt-2 transform scale-[0.45] sm:scale-75 lg:scale-[0.85] origin-bottom transition-transform">
           {/* Left Hand */}
           <div className="hidden md:block pb-2">
             <HandGuide 

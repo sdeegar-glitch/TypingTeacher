@@ -37,23 +37,23 @@ const DashboardPage = () => {
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* User Stats Header */}
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Welcome back, {mockUser.name}! 👋</h1>
-            <p className="text-gray-500">Ready to break your record of {mockUser.bestWpm} WPM?</p>
+        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+          <div className="mb-6 md:mb-0">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Welcome back, {mockUser.name}! 👋</h1>
+            <p className="text-gray-500 text-sm sm:text-base">Ready to break your record of {mockUser.bestWpm} WPM?</p>
           </div>
-          <div className="flex space-x-6 mt-6 md:mt-0">
-            <div className="text-center">
-              <p className="text-4xl font-black text-indigo-600">{mockUser.totalTests}</p>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tests Taken</p>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-2 md:mt-0">
+            <div className="text-center bg-gray-50 md:bg-transparent rounded-lg p-3 md:p-0">
+              <p className="text-3xl sm:text-4xl font-black text-indigo-600">{mockUser.totalTests}</p>
+              <p className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">Tests Taken</p>
             </div>
-            <div className="text-center">
-              <p className="text-4xl font-black text-amber-500">{mockUser.bestWpm}</p>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Best WPM</p>
+            <div className="text-center bg-gray-50 md:bg-transparent rounded-lg p-3 md:p-0">
+              <p className="text-3xl sm:text-4xl font-black text-amber-500">{mockUser.bestWpm}</p>
+              <p className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">Best WPM</p>
             </div>
-            <div className="text-center">
-              <p className="text-4xl font-black text-green-500">{mockUser.averageAccuracy}%</p>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Avg Accuracy</p>
+            <div className="text-center bg-gray-50 md:bg-transparent rounded-lg p-3 md:p-0">
+              <p className="text-3xl sm:text-4xl font-black text-green-500">{mockUser.averageAccuracy}%</p>
+              <p className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-wider mt-1">Avg Accuracy</p>
             </div>
           </div>
         </div>

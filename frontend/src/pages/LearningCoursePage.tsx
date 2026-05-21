@@ -79,15 +79,15 @@ const LearningCoursePage = () => {
             const stars = getStars(lesson.id);
 
             return (
-              <div key={lesson.id} className={`flex items-center gap-8 ${isLeft ? 'flex-row' : 'flex-row-reverse'} justify-center group`}>
+              <div key={lesson.id} className={`flex flex-col md:flex-row items-center gap-4 md:gap-8 ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} justify-center group`}>
                 
-                <div className={`w-1/3 ${isLeft ? 'text-right' : 'text-left'} transition-all duration-300 ${!unlocked ? 'opacity-30' : 'group-hover:translate-y-[-2px]'}`}>
+                <div className={`w-full md:w-1/3 text-center md:${isLeft ? 'text-right' : 'text-left'} transition-all duration-300 ${!unlocked ? 'opacity-30' : 'group-hover:translate-y-[-2px]'} order-2 md:order-none`}>
                   <span className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-1 block">Level {lesson.id}</span>
                   <h3 className="text-xl font-black text-blue-900 leading-tight">{lesson.title}</h3>
                   <p className="text-xs text-gray-400 mt-1">{lesson.description}</p>
                 </div>
 
-                <div className="relative">
+                <div className="relative order-1 md:order-none">
                   {unlocked && !completed && (
                     <div className="absolute inset-[-15px] bg-blue-400/20 rounded-full animate-pulse"></div>
                   )}
@@ -114,7 +114,7 @@ const LearningCoursePage = () => {
                   </Link>
                 </div>
 
-                <div className="w-1/3"></div>
+                <div className="hidden md:block w-1/3 order-3 md:order-none"></div>
               </div>
             );
           })}
