@@ -25,7 +25,7 @@ const DashboardPage = () => {
   const [tests, setTests] = useState<any[]>(mockTests);
 
   useEffect(() => {
-    fetch('http://localhost:3000/tests')
+    fetch('https://typingteacher-2lnd.onrender.com/tests')
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) setTests(data);

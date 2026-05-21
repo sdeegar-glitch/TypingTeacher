@@ -22,7 +22,7 @@ const AuthPage = () => {
       const endpoint = isLogin ? '/auth/login' : '/auth/signup';
       const body = isLogin ? { email, password } : { email, password, name };
       
-      const response = await fetch(`http://localhost:3000${endpoint}`, {
+      const response = await fetch(`https://typingteacher-2lnd.onrender.com${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)

@@ -18,7 +18,7 @@ const LeaderboardPage = () => {
     const fetchLeaderboard = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:3000/leaderboard');
+        const response = await fetch('https://typingteacher-2lnd.onrender.com/leaderboard');
         const result = await response.json();
         if (response.ok) {
           // If no data yet, keep mock data to make UI look good for demo

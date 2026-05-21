@@ -17,7 +17,7 @@ const AdminDashboardPage = () => {
   const [newTest, setNewTest] = useState({ title: '', content: '', duration: 60, difficulty: 'Easy' });
 
   useEffect(() => {
-    fetch('http://localhost:3000/tests')
+    fetch('https://typingteacher-2lnd.onrender.com/tests')
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) setTests(data);
@@ -27,7 +27,7 @@ const AdminDashboardPage = () => {
 
   const handleCreateTest = async () => {
     try {
-      const res = await fetch('http://localhost:3000/tests', {
+      const res = await fetch('https://typingteacher-2lnd.onrender.com/tests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newTest)
