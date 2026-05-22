@@ -11,22 +11,7 @@ export default function HomePage() {
 
       <div className="container mx-auto px-6 relative z-10 w-full max-w-6xl py-8">
         
-        {/* Centered Header */}
-        <div className="text-center mb-10 lg:mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-sm font-medium mb-6 border border-indigo-100 dark:border-indigo-500/20">
-            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
-            Typing Environment Ready
-          </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter mb-4 leading-tight">
-            Master Typing. <br className="sm:hidden"/> 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#8b5cf6]">
-              Elevate Your Speed.
-            </span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 font-light max-w-2xl mx-auto">
-            Choose your path. Build muscle memory from scratch or test your current speed with AI-curated editorial content.
-          </p>
-        </div>
+
 
         {/* Two Massive Decision Cards */}
         <div className="grid sm:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
