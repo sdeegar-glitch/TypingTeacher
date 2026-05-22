@@ -107,7 +107,7 @@ const TypingArea: React.FC<TypingAreaProps> = ({ text, durationSeconds, onSubmit
       return (
         <span key={wordIdx} className={wordClass}>
           {word.split('').map((char, charIdx) => {
-            let charColor = "text-gray-500"; // default un-typed
+            let charColor = "text-slate-800 dark:text-slate-200 opacity-80"; // default un-typed, darker for readability
             if (typedWord != null) {
               if (charIdx < typedWord.length) {
                 charColor = typedWord[charIdx] === char ? "text-green-600" : "text-red-600 bg-pink-100";

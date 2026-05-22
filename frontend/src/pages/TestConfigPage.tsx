@@ -75,7 +75,7 @@ export default function TestConfigPage() {
             </button>
           </div>
           
-          <button onClick={() => navigate(-1)} className="mt-8 w-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-medium text-sm text-center">
+          <button onClick={() => navigate('/tests')} className="mt-8 w-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-medium text-sm text-center">
             ← Go Back
           </button>
         </div>
