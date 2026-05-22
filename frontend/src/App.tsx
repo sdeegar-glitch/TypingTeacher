@@ -22,26 +22,50 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Navbar = () => (
-  <nav className="bg-indigo-600 text-white p-4 shadow-md shrink-0">
-    <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
-      <Link to="/" className="text-2xl font-bold tracking-wider">TypingTeacher</Link>
-      <div className="flex flex-wrap justify-center gap-4">
+  <nav className="bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-white/5 sticky top-0 z-50 transition-colors">
+    <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+      <Link 
+        to="/" 
+        className="text-xl font-bold tracking-tight text-[#09090b] dark:text-white flex items-center gap-2 hover:opacity-80 transition-opacity"
+      >
+        <span className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg shadow-md shadow-indigo-500/20">
+          T
+        </span>
+        TypingTeacher
+      </Link>
+      
+      <div className="flex items-center gap-6 text-sm font-medium">
+        <Link to="/learn" className="text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hidden sm:block">Lessons</Link>
+        <Link to="/tests" className="text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hidden sm:block">Tests</Link>
+
         {localStorage.getItem('accessToken') ? (
-          <>
-            <Link to="/dashboard" className="hover:text-indigo-200 transition-colors">Dashboard</Link>
-            <Link to="/leaderboard" className="hover:text-indigo-200 transition-colors">Leaderboard</Link>
+          <div className="flex items-center gap-4 pl-4 sm:border-l border-slate-200 dark:border-white/10">
+            <Link to="/dashboard" className="text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hidden sm:block">Dashboard</Link>
             <button 
               onClick={() => {
                 localStorage.removeItem('accessToken');
                 window.location.href = '/login';
               }}
-              className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded shadow transition-all"
+              className="text-slate-600 dark:text-slate-400 hover:text-rose-500 transition-colors"
             >
               Logout
             </button>
-          </>
+          </div>
         ) : (
-          <Link to="/login" className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded shadow transition-all">Login</Link>
+          <div className="flex items-center gap-4 pl-4 sm:border-l border-slate-200 dark:border-white/10">
+            <Link 
+              to="/login" 
+              className="text-slate-600 dark:text-slate-300 hover:text-[#09090b] dark:hover:text-white transition-colors"
+            >
+              Log in
+            </Link>
+            <Link 
+              to="/signup" 
+              className="bg-[#09090b] dark:bg-white text-white dark:text-[#09090b] hover:bg-indigo-600 dark:hover:bg-indigo-500 px-4 py-2 rounded-lg font-semibold transition-all duration-300 shadow-sm"
+            >
+              Sign up
+            </Link>
+          </div>
         )}
       </div>
     </div>
