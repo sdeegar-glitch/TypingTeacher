@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Keyboard, Zap, Activity, CheckCircle2, ChevronRight, BookOpen } from 'lucide-react';
+import { Keyboard, Zap, Activity, ChevronRight, BookOpen } from 'lucide-react';
 
 export default function HomePage() {
   return (
