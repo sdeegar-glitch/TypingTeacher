@@ -19,20 +19,49 @@ const sampleTexts: Record<string, { title: string; content: string }> = {
   }
 };
 
+import { useLocation } from 'react-router-dom';
+
 const TypingTestPage = () => {
   const { id, duration, profession, language } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const queryDuration = searchParams.get('duration');
   
   // SEO Meta Titles dynamically generated based on routes
   useEffect(() => {
     let title = 'Typing Speed Test | FastTypingLab';
-    if (duration) title = `${duration} Typing Test | FastTypingLab`;
+    if (duration || queryDuration) title = `${duration || (Number(queryDuration)/60) + ' min'} Typing Test | FastTypingLab`;
     if (profession) title = `Typing Test for ${profession.charAt(0).toUpperCase() + profession.slice(1)} | FastTypingLab`;
     if (language) title = `${language.charAt(0).toUpperCase() + language.slice(1)} Typing Test | FastTypingLab`;
     document.title = title;
-  }, [duration, profession, language]);
+  }, [duration, profession, language, queryDuration]);
 
-  // Get active test or fallback to test 1
-  const activeTest = sampleTexts[id || '1'] || sampleTexts['1'];
+  const [activeTest, setActiveTest] = useState<{title: string, content: string}>(sampleTexts['1']);
+  const [loadingTest, setLoadingTest] = useState(true);
+
+  // Fetch active test
+  useEffect(() => {
+    if (id && !sampleTexts[id]) {
+      fetch(`https://typingteacher-2lnd.onrender.com/api/tests/${id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.content) {
+            setActiveTest(data);
+          } else {
+            setActiveTest(sampleTexts['1']);
+          }
+          setLoadingTest(false);
+        })
+        .catch(() => {
+          setActiveTest(sampleTexts['1']);
+          setLoadingTest(false);
+        });
+    } else {
+      setActiveTest(sampleTexts[id || '1'] || sampleTexts['1']);
+      setLoadingTest(false);
+    }
+  }, [id]);
+
   const targetContent = activeTest.content;
 
   const [userInput, setUserInput] = useState('');
@@ -41,10 +70,15 @@ const TypingTestPage = () => {
   const [isFinished, setIsFinished] = useState(false);
   const [wpm, setWpm] = useState(0);
   
-  // Programmatic duration parsing (e.g. "1-minute", "3-minute")
-  const parsedDuration = duration ? parseInt(duration) * 60 : 60;
-  const TEST_DURATION = isNaN(parsedDuration) ? 60 : parsedDuration;
+  // Programmatic duration parsing
+  const routeDuration = duration ? parseInt(duration) * 60 : NaN;
+  const urlDuration = queryDuration ? parseInt(queryDuration) : NaN;
+  const TEST_DURATION = !isNaN(urlDuration) ? urlDuration : (!isNaN(routeDuration) ? routeDuration : 60);
+  
   const [timeLeft, setTimeLeft] = useState(TEST_DURATION);
+  useEffect(() => {
+    setTimeLeft(TEST_DURATION);
+  }, [TEST_DURATION]);
   const [lastKeyPressStatus, setLastKeyPressStatus] = useState<'none' | 'correct' | 'error'>('none');
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
 
@@ -173,6 +207,10 @@ const TypingTestPage = () => {
   
   // Format MM:SS for countdown timer
   const formattedTime = `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}`;
+
+  if (loadingTest) {
+    return <div className="min-h-screen flex items-center justify-center bg-slate-50"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div></div>;
+  }
 
   return (
     <div className="h-screen bg-[#f5f5f0] text-[#1e293b] flex flex-col overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>

@@ -48,42 +48,33 @@ const Navbar = () => (
   </nav>
 );
 
-const Home = () => (
-  <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-center p-4">
-    <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6">Master Your Typing Skills</h1>
-    <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl">
-      Improve your typing speed and accuracy with our engaging lessons, real-time feedback, and competitive leaderboards. Practice for SSC, RRB, and more.
-    </p>
-    <div className="flex flex-col sm:flex-row gap-4">
-      <Link to="/learn" className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg text-lg transition-transform transform hover:-translate-y-1">
-        Start Learning
-      </Link>
-      <Link to="/tests" className="bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-bold py-3 px-8 rounded-lg shadow-lg text-lg transition-transform transform hover:-translate-y-1">
-        Take a Test
-      </Link>
-    </div>
-  </div>
-);
+
+
+import HomePage from './pages/HomePage';
+import TestConfigPage from './pages/TestConfigPage';
 
 const AppContent = () => {
   const location = useLocation();
   const isLearningInterface = 
     (location.pathname.startsWith('/learn/') && location.pathname !== '/learn') ||
-    (location.pathname.startsWith('/tests/') && location.pathname !== '/tests') ||
+    (location.pathname.startsWith('/tests/') && location.pathname !== '/tests' && !location.pathname.includes('/config/')) ||
     location.pathname === '/tests';
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans ${isLearningInterface ? 'h-screen overflow-hidden' : ''}`}>
+    <div className={`min-h-screen flex flex-col font-sans bg-slate-50 dark:bg-slate-900 transition-colors ${isLearningInterface ? 'h-screen overflow-hidden' : ''}`}>
       {!isLearningInterface && <Navbar />}
       <main className={`flex-grow ${isLearningInterface ? 'overflow-hidden' : ''}`}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
           
           {/* Programmatic SEO Routes */}
           <Route path="/typing-test" element={<TypingTestPage />} />
           <Route path="/typing-test/:duration" element={<TypingTestPage />} />
           <Route path="/typing-test-for/:profession" element={<TypingTestPage />} />
           <Route path="/typing-test/language/:language" element={<TypingTestPage />} />
+          
+          {/* New Dynamic Routes */}
+          <Route path="/tests/config/:slug" element={<TestConfigPage />} />
           
           {/* Legacy/Existing Routes */}
           <Route path="/tests/:id" element={<TypingTestPage />} />
