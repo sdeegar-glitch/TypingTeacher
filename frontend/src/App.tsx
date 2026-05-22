@@ -75,6 +75,7 @@ const Navbar = () => (
 
 
 import HomePage from './pages/HomePage';
+import TestsListPage from './pages/TestsListPage';
 import TestConfigPage from './pages/TestConfigPage';
 
 const AppContent = () => {
@@ -102,7 +103,7 @@ const AppContent = () => {
           
           {/* Legacy/Existing Routes */}
           <Route path="/tests/:id" element={<TypingTestPage />} />
-          <Route path="/tests" element={<TypingTestPage />} />
+          <Route path="/tests" element={<TestsListPage />} />
           <Route path="/learn" element={<LearningCoursePage />} />
           <Route path="/learn/:lessonId" element={<LearningInterfacePageWithKey />} />
           <Route path="/login" element={<AuthPage />} />
