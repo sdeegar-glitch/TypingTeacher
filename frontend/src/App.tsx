@@ -85,7 +85,7 @@ const AppContent = () => {
           <Route path="/signup" element={<AuthPage />} />
           <Route path="/leaderboard" element={<ProtectedRoute><LeaderboardPage /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-          <Route path="/admin" element={<ProtectedRoute><AdminDashboardPage /></ProtectedRoute>} />
+          <Route path="/admin" element={<AdminDashboardPage />} />
         </Routes>
       </main>
     </div>
