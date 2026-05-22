@@ -1,167 +1,98 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Keyboard, Zap, Activity, ShieldCheck, ChevronRight } from 'lucide-react';
+import { Keyboard, Zap, ChevronRight, Activity } from 'lucide-react';
 
 export default function HomePage() {
-  const [textToType] = useState("The quick brown fox jumps over the lazy dog");
-  const [typedText, setTypedText] = useState("");
-  const [cursorVisible, setCursorVisible] = useState(true);
-
-  // Blinking cursor effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCursorVisible((v) => !v);
-    }, 530);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Auto-typing animation for the hero section
-  useEffect(() => {
-    let i = 0;
-    let isDeleting = false;
-    let timeout: ReturnType<typeof setTimeout>;
-
-    const type = () => {
-      if (!isDeleting) {
-        if (i <= textToType.length) {
-          setTypedText(textToType.substring(0, i));
-          i++;
-          timeout = setTimeout(type, Math.random() * 50 + 50); // Human-like typing speed
-        } else {
-          isDeleting = true;
-          timeout = setTimeout(type, 3000); // Wait before deleting
-        }
-      } else {
-        if (i >= 0) {
-          setTypedText(textToType.substring(0, i));
-          i--;
-          timeout = setTimeout(type, 30); // Fast delete
-        } else {
-          isDeleting = false;
-          timeout = setTimeout(type, 500); // Pause before re-typing
-        }
-      }
-    };
-
-    timeout = setTimeout(type, 1000);
-    return () => clearTimeout(timeout);
-  }, [textToType]);
-
   return (
-    <div className="min-h-screen bg-[#fafafa] dark:bg-[#0f0f11] text-[#111827] dark:text-[#f9fafb] font-sans selection:bg-indigo-500/30">
+    <div className="flex flex-col items-center justify-center min-h-[calc(100dvh-80px)] lg:h-[calc(100dvh-80px)] overflow-hidden relative bg-[#fafafa] dark:bg-[#0f0f11] text-[#111827] dark:text-[#f9fafb] font-sans selection:bg-indigo-500/30">
       
-      {/* SECTION 1: Learn Typing (Hero) */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Abstract Background Elements */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="container mx-auto px-6 relative z-10 w-full max-w-6xl py-8">
         
-        <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+        {/* Centered Header */}
+        <div className="text-center mb-10 lg:mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-sm font-medium mb-6 border border-indigo-100 dark:border-indigo-500/20">
+            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+            Typing Environment Ready
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter mb-4 leading-tight">
+            Master Typing. <br className="sm:hidden"/> 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#8b5cf6]">
+              Elevate Your Speed.
+            </span>
+          </h1>
+          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 font-light max-w-2xl mx-auto">
+            Choose your path. Build muscle memory from scratch or test your current speed with AI-curated editorial content.
+          </p>
+        </div>
+
+        {/* Two Massive Decision Cards */}
+        <div className="grid sm:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
           
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-sm font-medium mb-8 border border-indigo-100 dark:border-indigo-500/20">
-              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
-              New: AI-Powered Lessons
+          {/* Card 1: Learn */}
+          <div className="group relative bg-white dark:bg-[#1a1b1e] border border-slate-200 dark:border-slate-800 rounded-[2rem] p-8 lg:p-10 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 flex flex-col justify-between overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl group-hover:bg-indigo-500/10 transition-colors pointer-events-none"></div>
+            
+            <div className="relative z-10">
+              <div className="w-14 h-14 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 dark:text-indigo-400">
+                <Keyboard className="w-7 h-7" />
+              </div>
+              <h2 className="text-2xl lg:text-3xl font-bold mb-3">Learn Typing</h2>
+              <p className="text-slate-600 dark:text-slate-400 mb-8 font-light leading-relaxed">
+                Master touch typing from scratch with structured lessons designed to build muscle memory effortlessly.
+              </p>
             </div>
-            
-            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter mb-8 leading-[1.1]">
-              Learn <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#8b5cf6]">
-                Typing.
-              </span>
-            </h1>
-            
-            <p className="text-xl sm:text-2xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed font-light">
-              Master touch typing from scratch with structured, interactive lessons designed to build muscle memory effortlessly.
-            </p>
-            
+
             <Link 
               to="/learn" 
-              className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white px-8 py-4 rounded-2xl text-lg font-bold shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-1 transition-all duration-300"
+              className="relative z-10 inline-flex items-center justify-between w-full bg-[#111827] dark:bg-white text-white dark:text-[#111827] px-6 py-4 rounded-xl text-lg font-bold hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white transition-colors duration-300"
             >
-              Start Learning
+              <span>Start Learning</span>
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            
-            <div className="mt-12 flex items-center gap-8 text-sm font-medium text-slate-500 dark:text-slate-400">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-emerald-500" /> No ads
-              </div>
-              <div className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-indigo-500" /> Real-time feedback
-              </div>
-            </div>
           </div>
 
-          {/* Animated Keyboard/Typing Visual */}
-          <div className="relative hidden lg:block">
-            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 to-purple-500/5 rounded-[2rem] border border-white/20 dark:border-white/5 backdrop-blur-3xl transform rotate-3 scale-105 transition-transform duration-700 hover:rotate-0 hover:scale-100"></div>
-            <div className="bg-white dark:bg-[#1a1b1e] border border-slate-200 dark:border-slate-800 rounded-[2rem] p-8 shadow-2xl relative z-10">
-              <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-100 dark:border-slate-800/50">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-rose-500/20 border border-rose-500/50"></div>
-                  <div className="w-3 h-3 rounded-full bg-amber-500/20 border border-amber-500/50"></div>
-                  <div className="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500/50"></div>
-                </div>
-                <Keyboard className="text-slate-400 w-5 h-5" />
+          {/* Card 2: Test */}
+          <div className="group relative bg-white dark:bg-[#1a1b1e] border border-slate-200 dark:border-slate-800 rounded-[2rem] p-8 lg:p-10 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-500 flex flex-col justify-between overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl group-hover:bg-purple-500/10 transition-colors pointer-events-none"></div>
+            
+            <div className="relative z-10">
+              <div className="w-14 h-14 bg-purple-50 dark:bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400">
+                <Zap className="w-7 h-7" />
               </div>
-              
-              <div className="font-mono text-xl md:text-2xl leading-relaxed text-slate-400 min-h-[120px]">
-                <span className="text-[#111827] dark:text-[#f9fafb] font-medium">{typedText}</span>
-                <span className={`inline-block w-3 h-6 ml-1 -mb-1 bg-[#6366f1] ${cursorVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}></span>
-              </div>
+              <h2 className="text-2xl lg:text-3xl font-bold mb-3">Test Your Speed</h2>
+              <p className="text-slate-600 dark:text-slate-400 mb-8 font-light leading-relaxed">
+                Measure your WPM and accuracy in real-time. Practice with dynamic, high-quality editorial texts.
+              </p>
             </div>
+
+            <Link 
+              to="/tests" 
+              className="relative z-10 inline-flex items-center justify-between w-full bg-transparent border-2 border-[#111827] dark:border-white text-[#111827] dark:text-white px-6 py-4 rounded-xl text-lg font-bold hover:bg-[#111827] dark:hover:bg-white hover:text-white dark:hover:text-[#111827] transition-colors duration-300"
+            >
+              <span>Take Test</span>
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
 
         </div>
-      </section>
 
-      {/* SECTION 2: Test Your Typing Speed */}
-      <section className="py-24 bg-white dark:bg-[#151619] border-t border-slate-100 dark:border-white/5">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            
-            <div className="w-16 h-16 mx-auto bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center mb-8 rotate-3">
-              <Zap className="w-8 h-8 text-[#10b981]" />
-            </div>
-
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-              Test Your Typing Speed
-            </h2>
-            
-            <p className="text-xl text-slate-600 dark:text-slate-400 mb-12 max-w-2xl mx-auto font-light">
-              Measure your Words Per Minute (WPM) and accuracy in real-time with AI-curated editorial content. Track your progress daily.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link 
-                to="/tests" 
-                className="group inline-flex items-center justify-center gap-3 bg-transparent border-2 border-[#111827] dark:border-[#f9fafb] text-[#111827] dark:text-[#f9fafb] hover:bg-[#111827] hover:text-white dark:hover:bg-[#f9fafb] dark:hover:text-[#111827] px-8 py-4 rounded-2xl text-lg font-bold transition-all duration-300"
-              >
-                Take Test
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            {/* Minimalist Live Stats Preview */}
-            <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-              {[
-                { label: 'Avg Speed', value: '65 WPM' },
-                { label: 'Accuracy', value: '98.5%' },
-                { label: 'Tests Taken', value: '142k+' },
-                { label: 'Users', value: '25k+' }
-              ].map((stat, i) => (
-                <div key={i} className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-white/5">
-                  <div className="text-3xl font-black mb-1">{stat.value}</div>
-                  <div className="text-sm font-medium text-slate-500 dark:text-slate-400">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-
+        {/* Minimalist Stats Footer */}
+        <div className="mt-12 lg:mt-16 flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-sm text-slate-500 dark:text-slate-400 font-medium">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            142k+ Tests Taken
+          </div>
+          <div className="hidden sm:block w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+          <div className="flex items-center gap-2">
+            <Activity className="w-4 h-4 text-indigo-500" />
+            Real-time WPM Tracking
           </div>
         </div>
-      </section>
 
+      </div>
     </div>
   );
 }
