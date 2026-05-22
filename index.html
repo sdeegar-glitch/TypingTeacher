@@ -4,6 +4,22 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- GitHub Pages SPA routing fix: restore the path from ?p= -->
+    <script type="text/javascript">
+      (function() {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+        // Also handle the ?p= pattern from 404.html
+        var q = window.location.search;
+        if (q && q.indexOf('?p=') === 0) {
+          var path = decodeURIComponent(q.slice(3));
+          history.replaceState(null, null, path);
+        }
+      })();
+    </script>
     <title>FastTypingLab | Ultimate Typing Speed Test & Tutor</title>
     <meta name="description" content="Improve your typing speed and accuracy with FastTypingLab. Take our 1-minute WPM test, practice touch typing, and track your progress with our advanced typing tutor." />
     <meta name="keywords" content="typing test, typing speed, wpm test, learn to type, touch typing, typing tutor, fast typing lab" />
