@@ -23,7 +23,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
     setError('');
     setLoading(true);
     await new Promise(r => setTimeout(r, 800));
-    if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
+    if (email.trim() === ADMIN_EMAIL && password.trim() === ADMIN_PASS) {
       setStep('otp');
       // In production: backend sends real OTP to email
       alert(`Demo: Your OTP is ${generatedOtp} (In production this is emailed)`);
