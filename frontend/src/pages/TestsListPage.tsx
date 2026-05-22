@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, BookOpen, BarChart, ChevronRight, Zap } from 'lucide-react';
+import { BookOpen, ChevronRight, Zap } from 'lucide-react';
 
 const API_URL = 'https://typingteacher-2lnd.onrender.com/api/tests';
 
@@ -61,49 +61,38 @@ export default function TestsListPage() {
 }
 
 function TestCard({ test }: { test: any }) {
-  const diffColors: Record<string, string> = {
-    easy: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20',
-    medium: 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border-amber-200 dark:border-amber-500/20',
-    hard: 'bg-rose-100 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400 border-rose-200 dark:border-rose-500/20'
-  };
-
   return (
     <Link 
       to={`/tests/config/${test.slug || test.id}`}
-      className="group bg-white dark:bg-zinc-900/50 backdrop-blur-xl border border-slate-200/60 dark:border-white/5 rounded-3xl p-6 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 flex flex-col h-full relative overflow-hidden"
+      className="relative flex flex-col justify-between w-full h-[184px] p-5 rounded-2xl text-white overflow-hidden group transition-transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5936B4]/30"
+      style={{
+        background: 'linear-gradient(90deg, #5936B4 0%, #362A84 100%)'
+      }}
     >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-colors pointer-events-none" />
-
-      <div className="flex items-center justify-between mb-4">
-        <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border ${diffColors[test.difficulty_level || 'medium']}`}>
-          {test.difficulty_level || 'Medium'}
-        </span>
-        <span className="text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-zinc-800 px-3 py-1 rounded-full">
-          {test.category || 'General'}
-        </span>
+      {/* Cloud SVG Simulation matching Uiverse style */}
+      <div className="absolute right-0 -top-3 text-white/10 group-hover:text-white/20 transition-colors pointer-events-none">
+        <svg height="120" viewBox="0 0 120 120" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 40C100 28.9543 91.0457 20 80 20C71.3093 20 63.9056 25.5414 61.1352 33.3082C58.8315 31.2582 55.8055 30 52.5 30C45.5964 30 40 35.5964 40 42.5C40 44.1793 40.3297 45.7818 40.9234 47.2355C34.7212 48.7451 30 54.3413 30 61C30 68.732 36.268 75 44 75H90C101.046 75 110 66.0457 110 55C110 47.4144 105.776 40.817 99.4182 37.6694C99.8003 38.4069 100 39.1882 100 40Z" />
+        </svg>
       </div>
 
-      <h3 className="text-xl font-bold mb-3 text-[#09090b] dark:text-white line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-        {test.title}
-      </h3>
+      <div className="relative z-10 flex flex-col h-full justify-between">
+        {/* Main Text (Title) */}
+        <h3 className="text-3xl font-bold line-clamp-2 pr-8 leading-tight tracking-tight">
+          {test.title}
+        </h3>
 
-      <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3 flex-grow">
-        {test.excerpt || 'Practice typing with this new engaging text.'}
-      </p>
-
-      <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-white/5 mt-auto">
-        <div className="flex items-center gap-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
-          <div className="flex items-center gap-1.5">
-            <BarChart className="w-4 h-4" />
-            <span>{test.word_count || 1000} words</span>
+        {/* Info Block */}
+        <div className="flex justify-between items-end text-[rgba(235,235,245,0.60)] text-sm font-medium w-full">
+          <div className="flex flex-col gap-1">
+            <span className="uppercase tracking-wider text-xs">{test.difficulty_level || 'Medium'}</span>
+            <span className="text-white/90">{test.word_count || 1000} words</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4" />
+          
+          <div className="flex items-center gap-1 self-end bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-white group-hover:bg-white/20 transition-colors">
             <span>{test.estimated_read_time || 5}m</span>
+            <ChevronRight className="w-4 h-4" />
           </div>
-        </div>
-        <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-          <ChevronRight className="w-4 h-4" />
         </div>
       </div>
     </Link>
