@@ -21,8 +21,8 @@ const LeaderboardPage = () => {
         const response = await fetch('https://typingteacher-2lnd.onrender.com/leaderboard');
         const result = await response.json();
         if (response.ok) {
-          // If no data yet, keep mock data to make UI look good for demo
-          setData(result.length > 0 ? result : mockLeaderboard);
+          // Use real data, even if empty
+          setData(result);
         } else {
           console.error('Failed to fetch leaderboard', result);
         }

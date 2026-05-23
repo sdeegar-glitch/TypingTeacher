@@ -22,13 +22,13 @@ const mockTests = [
 ];
 
 const DashboardPage = () => {
-  const [tests, setTests] = useState<any[]>(mockTests);
+  const [tests, setTests] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('https://typingteacher-2lnd.onrender.com/tests')
+    fetch('https://typingteacher-2lnd.onrender.com/api/tests/latest')
       .then(res => res.json())
       .then(data => {
-        if (data.length > 0) setTests(data);
+        if (Array.isArray(data)) setTests(data);
       })
       .catch(err => console.error(err));
   }, []);
@@ -78,21 +78,21 @@ const DashboardPage = () => {
                   <div>
                     <div className="flex justify-between items-start mb-4">
                       <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">
-                        {test.exam_type_id ? 'Exam' : 'General'}
+                        {test.category || 'General'}
                       </span>
-                      <span className={`text-xs font-bold px-2 py-1 rounded ${
-                        test.difficulty === 'Easy' ? 'bg-green-50 text-green-700' :
-                        test.difficulty === 'Medium' ? 'bg-amber-50 text-amber-700' :
+                      <span className={`text-xs font-bold px-2 py-1 rounded uppercase ${
+                        test.difficulty_level === 'easy' ? 'bg-green-50 text-green-700' :
+                        test.difficulty_level === 'medium' ? 'bg-amber-50 text-amber-700' :
                         'bg-red-50 text-red-700'
                       }`}>
-                        {test.difficulty}
+                        {test.difficulty_level || 'Medium'}
                       </span>
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{test.title}</h3>
-                    <p className="text-gray-500 text-sm mb-6">⏱️ {test.duration / 60} minutes</p>
+                    <p className="text-gray-500 text-sm mb-6">⏱️ {test.estimated_read_time || Math.round(test.duration/60) || 5} min read</p>
                   </div>
                   <Link 
-                    to={`/tests/${test.id}`}
+                    to={`/tests/config/${test.slug || test.id}`}
                     className="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded transition-colors"
                   >
                     Start Test
