@@ -25,7 +25,7 @@ router.get('/latest', async (req, res) => {
     .select('id, title, slug, excerpt, difficulty_level, word_count, estimated_read_time, category, featured_image, views, created_at')
     .eq('is_published', true)
     .order('created_at', { ascending: false })
-    .limit(10);
+    .limit(100);
     
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);

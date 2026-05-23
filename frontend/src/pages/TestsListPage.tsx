@@ -64,39 +64,41 @@ function TestCard({ test }: { test: any }) {
   return (
     <Link 
       to={`/tests/config/${test.slug || test.id}`}
-      className="relative flex flex-col justify-between w-full h-[184px] p-5 rounded-2xl text-white overflow-hidden group transition-transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5936B4]/30"
+      className="relative flex flex-col justify-between w-full h-[150px] p-5 rounded-2xl text-white overflow-hidden group transition-transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5936B4]/30"
       style={{
         background: 'linear-gradient(90deg, #5936B4 0%, #362A84 100%)'
       }}
     >
-      {/* Cloud SVG Simulation matching Uiverse style */}
-      <div className="absolute right-0 -top-3 text-white/10 group-hover:text-white/20 transition-colors pointer-events-none">
-        <svg height="120" viewBox="0 0 120 120" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M100 40C100 28.9543 91.0457 20 80 20C71.3093 20 63.9056 25.5414 61.1352 33.3082C58.8315 31.2582 55.8055 30 52.5 30C45.5964 30 40 35.5964 40 42.5C40 44.1793 40.3297 45.7818 40.9234 47.2355C34.7212 48.7451 30 54.3413 30 61C30 68.732 36.268 75 44 75H90C101.046 75 110 66.0457 110 55C110 47.4144 105.776 40.817 99.4182 37.6694C99.8003 38.4069 100 39.1882 100 40Z" />
+      {/* Typewriter SVG Simulation matching Uiverse style */}
+      <div className="absolute right-0 top-0 text-white/10 group-hover:text-white/20 transition-colors pointer-events-none opacity-50">
+        <svg height="100" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="transform translate-x-4 -translate-y-2 group-hover:scale-105 transition-transform">
+          <path d="M4 18h16a2 2 0 002-2v-4a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2zM3 14a1 1 0 011-1h16a1 1 0 011 1v2H3v-2z" />
+          <path d="M6 10h12v-4a2 2 0 00-2-2H8a2 2 0 00-2 2v4zm2-4h8v2H8V6z" />
+          <path d="M5 15h2v2H5zM9 15h2v2H9zM13 15h2v2h-2zM17 15h2v2h-2z" />
         </svg>
       </div>
 
       <div className="relative z-10 flex flex-col h-full justify-between">
         <div>
           {test.created_at && (
-            <div className="text-[rgba(235,235,245,0.80)] text-xs font-semibold mb-2 tracking-wide uppercase">
+            <div className="text-[rgba(235,235,245,0.80)] text-[10px] font-semibold mb-1 tracking-wide uppercase">
               {new Date(test.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • {new Date(test.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             </div>
           )}
           {/* Main Text (Title) */}
-          <h3 className="text-3xl font-bold line-clamp-2 pr-8 leading-tight tracking-tight">
+          <h3 className="text-xl font-bold line-clamp-2 pr-8 leading-tight tracking-tight">
             {test.title}
           </h3>
         </div>
 
         {/* Info Block */}
-        <div className="flex justify-between items-end text-[rgba(235,235,245,0.60)] text-sm font-medium w-full">
-          <div className="flex flex-col gap-1">
-            <span className="uppercase tracking-wider text-xs">{test.difficulty_level || 'Medium'}</span>
+        <div className="flex justify-between items-end text-[rgba(235,235,245,0.60)] text-xs font-medium w-full">
+          <div className="flex flex-col gap-0.5">
+            <span className="uppercase tracking-wider">{test.difficulty_level || 'Medium'}</span>
             <span className="text-white/90">{test.word_count || 1000} words</span>
           </div>
           
-          <div className="flex items-center gap-1 self-end bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-white group-hover:bg-white/20 transition-colors">
+          <div className="flex items-center gap-1 self-end bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full text-white group-hover:bg-white/20 transition-colors">
             <span>{test.estimated_read_time || 5}m</span>
             <ChevronRight className="w-4 h-4" />
           </div>
