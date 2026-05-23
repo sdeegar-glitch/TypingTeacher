@@ -256,7 +256,7 @@ const LearningInterfacePage = () => {
                         relative transition-all duration-75 inline-block
                         ${status === 'correct' ? 'text-emerald-600' : ''}
                         ${status === 'error' ? 'text-red-500 bg-red-50 rounded px-0.5' : ''}
-                        ${status === 'upcoming' ? 'text-gray-300' : ''}
+                        ${status === 'upcoming' ? 'text-slate-400' : ''}
                         ${status === 'current' ? 'text-indigo-600 border-b-2 border-indigo-500 animate-pulse' : ''}
                       `}
                     >
