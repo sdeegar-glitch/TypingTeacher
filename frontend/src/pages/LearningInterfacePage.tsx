@@ -304,6 +304,22 @@ const LearningInterfacePage = () => {
             />
           </div>
         </div>
+
+        {/* Finish Test Early Button */}
+        {!isFinished && startTime && (
+          <div className="w-full max-w-4xl flex justify-center mt-2 z-10">
+            <button 
+              onClick={() => setIsFinished(true)} 
+              className="flex items-center gap-2 bg-white/50 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-slate-600 hover:text-rose-600 px-6 py-2 rounded-full font-semibold text-sm transition-all duration-300 shadow-sm"
+              title="Finish test immediately and view results"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              Finish Test Early
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ===== RESULT MODAL ===== */}
