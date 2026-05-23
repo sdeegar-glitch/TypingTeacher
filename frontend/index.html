@@ -33,20 +33,25 @@
 
     <!-- JSON-LD Schema Markup -->
     <script type="application/ld+json">
+    [{
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Typing Teacher",
+      "url": "https://fasttypinglab.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://fasttypinglab.com/tests/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "FastTypingLab",
-      "applicationCategory": "EducationalApplication",
-      "operatingSystem": "Web",
-      "url": "https://fasttypinglab.com",
-      "description": "An interactive typing speed test and touch typing tutor.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0.00",
-        "priceCurrency": "USD"
-      }
-    }
+      "@type": "Organization",
+      "name": "Typing Teacher",
+      "url": "https://fasttypinglab.com/",
+      "logo": "https://fasttypinglab.com/favicon.svg",
+      "description": "Learn touch typing from scratch and test your speed with AI-curated editorial content."
+    }]
     </script>
   </head>
   <body>
