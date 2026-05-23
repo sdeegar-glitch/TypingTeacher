@@ -9,6 +9,9 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Trust the first proxy (Render)
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet({
   crossOriginResourcePolicy: false,

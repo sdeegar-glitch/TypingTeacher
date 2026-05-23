@@ -74,7 +74,13 @@ Requirements:
       const text = result.response.text();
       
       try {
-        const generatedData = JSON.parse(text);
+        let jsonString = text;
+        const startIndex = text.indexOf('{');
+        const endIndex = text.lastIndexOf('}');
+        if (startIndex !== -1 && endIndex !== -1) {
+          jsonString = text.substring(startIndex, endIndex + 1);
+        }
+        const generatedData = JSON.parse(jsonString);
         
         // Calculate word count
         const wordCount = generatedData.content.split(/\s+/).length;
