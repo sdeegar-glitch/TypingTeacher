@@ -71,9 +71,16 @@ const DashboardPage = () => {
                 <div key={test.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col justify-between">
                   <div>
                     <div className="flex justify-between items-start mb-4">
-                      <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">
-                        {test.category || 'General'}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">
+                          {test.category || 'General'}
+                        </span>
+                        {test.created_at && (
+                          <span className="text-xs font-medium text-gray-500">
+                            {new Date(test.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} at {new Date(test.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        )}
+                      </div>
                       <span className={`text-xs font-bold px-2 py-1 rounded uppercase ${
                         test.difficulty_level === 'easy' ? 'bg-green-50 text-green-700' :
                         test.difficulty_level === 'medium' ? 'bg-amber-50 text-amber-700' :

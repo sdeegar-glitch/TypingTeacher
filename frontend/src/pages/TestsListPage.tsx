@@ -77,10 +77,17 @@ function TestCard({ test }: { test: any }) {
       </div>
 
       <div className="relative z-10 flex flex-col h-full justify-between">
-        {/* Main Text (Title) */}
-        <h3 className="text-3xl font-bold line-clamp-2 pr-8 leading-tight tracking-tight">
-          {test.title}
-        </h3>
+        <div>
+          {test.created_at && (
+            <div className="text-[rgba(235,235,245,0.80)] text-xs font-semibold mb-2 tracking-wide uppercase">
+              {new Date(test.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • {new Date(test.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+            </div>
+          )}
+          {/* Main Text (Title) */}
+          <h3 className="text-3xl font-bold line-clamp-2 pr-8 leading-tight tracking-tight">
+            {test.title}
+          </h3>
+        </div>
 
         {/* Info Block */}
         <div className="flex justify-between items-end text-[rgba(235,235,245,0.60)] text-sm font-medium w-full">
