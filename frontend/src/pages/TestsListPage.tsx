@@ -98,8 +98,8 @@ function TestCard({ test }: { test: any }) {
             <span className="text-white/90">{test.word_count || 1000} words</span>
           </div>
           
-          <div className="flex items-center gap-1 self-end bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full text-white group-hover:bg-white/20 transition-colors">
-            <span>{test.estimated_read_time || 5}m</span>
+          <div className="flex items-center gap-1 self-end bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full text-white font-bold group-hover:bg-white/20 transition-colors">
+            <span>Start Test</span>
             <ChevronRight className="w-4 h-4" />
           </div>
         </div>
