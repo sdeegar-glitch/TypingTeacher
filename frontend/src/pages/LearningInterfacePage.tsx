@@ -36,7 +36,8 @@ const LearningInterfacePage = () => {
   const [mistakes, setMistakes] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [isFinished, setIsFinished] = useState(false);
-  const [wpm, setWpm] = useState(0);
+  const [wpm, setWpm] = useState(0); // Gross WPM
+  const [netWpm, setNetWpm] = useState(0); // Net WPM
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [lastKeyPressStatus, setLastKeyPressStatus] = useState<'none' | 'correct' | 'error'>('none');
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
@@ -101,27 +102,29 @@ const LearningInterfacePage = () => {
     if (userInput.length === targetContent.length && userInput.length > 0) {
       setIsFinished(true);
       const timeElapsed = (Date.now() - (startTime || Date.now())) / 60000;
-      const finalWpm = Math.round((userInput.length / 5) / timeElapsed);
+      const finalNetWpm = Math.max(0, Math.round(((userInput.length - mistakes.length) / 5) / timeElapsed));
       const finalAccuracy = Math.round(((userInput.length - mistakes.length) / userInput.length) * 100);
       
       let stars = 0;
-      if (finalWpm >= currentLesson.minWpm && finalAccuracy >= 90) {
+      if (finalNetWpm >= currentLesson.minWpm && finalAccuracy >= 90) {
         stars = 1;
         if (finalAccuracy >= 95) stars = 2;
         if (finalAccuracy >= 98) stars = 3;
-        if (finalAccuracy >= 99 && finalWpm >= currentLesson.minWpm + 5) stars = 4;
-        if (finalAccuracy === 100 && finalWpm >= currentLesson.minWpm + 10) stars = 5;
+        if (finalAccuracy >= 99 && finalNetWpm >= currentLesson.minWpm + 5) stars = 4;
+        if (finalAccuracy === 100 && finalNetWpm >= currentLesson.minWpm + 10) stars = 5;
       }
 
       if (stars > 0) {
-        saveProgress({ lessonId: lessonId || '1', stars, bestWpm: finalWpm, bestAccuracy: finalAccuracy, completed: true });
+        saveProgress({ lessonId: lessonId || '1', stars, bestWpm: finalNetWpm, bestAccuracy: finalAccuracy, completed: true });
       }
     }
     
     if (startTime && userInput.length > 0 && !isFinished) {
       const timeElapsed = (Date.now() - startTime) / 60000; 
-      const currentWpm = Math.round((userInput.length / 5) / timeElapsed);
-      setWpm(currentWpm);
+      const currentGrossWpm = Math.round((userInput.length / 5) / timeElapsed);
+      const currentNetWpm = Math.max(0, Math.round(((userInput.length - mistakes.length) / 5) / timeElapsed));
+      setWpm(currentGrossWpm);
+      setNetWpm(currentNetWpm);
     }
   }, [userInput, targetContent, startTime, isFinished, currentLesson, lessonId, mistakes.length]);
 
@@ -184,10 +187,15 @@ const LearningInterfacePage = () => {
             <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Time</span>
             <span className="text-lg font-black text-slate-800 tabular-nums">{formattedTime}</span>
           </div>
-          {/* WPM */}
+          {/* WPM (Gross) */}
           <div className="text-center">
-            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">WPM</span>
-            <span className={`text-lg font-black tabular-nums ${wpm >= currentLesson.minWpm ? 'text-indigo-600' : 'text-slate-400'}`}>{wpm}</span>
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Gross</span>
+            <span className={`text-lg font-black tabular-nums ${wpm >= currentLesson.minWpm ? 'text-indigo-400' : 'text-slate-400'}`}>{wpm}</span>
+          </div>
+          {/* Net WPM */}
+          <div className="text-center">
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Net</span>
+            <span className={`text-lg font-black tabular-nums ${netWpm >= currentLesson.minWpm ? 'text-indigo-600' : 'text-slate-400'}`}>{netWpm}</span>
           </div>
           {/* Accuracy */}
           <div className="text-center">
@@ -308,10 +316,14 @@ const LearningInterfacePage = () => {
                 <h2 className="text-4xl font-black text-slate-800 mb-1">Level Complete!</h2>
                 <p className="text-slate-500 mb-6 text-sm">Great job! You've passed this level.</p>
 
-                <div className="grid grid-cols-2 gap-3 mb-6">
+                <div className="grid grid-cols-3 gap-3 mb-6">
+                  <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl">
+                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Gross</span>
+                    <span className="text-2xl font-black text-slate-700">{wpm} WPM</span>
+                  </div>
                   <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-2xl">
-                    <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest block mb-1">Speed</span>
-                    <span className="text-2xl font-black text-indigo-300">{wpm} WPM</span>
+                    <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest block mb-1">Net Speed</span>
+                    <span className="text-2xl font-black text-indigo-600">{netWpm} WPM</span>
                   </div>
                   <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl">
                     <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Accuracy</span>
@@ -339,10 +351,14 @@ const LearningInterfacePage = () => {
                 <div className="text-6xl mb-4">💪</div>
                 <h2 className="text-4xl font-black text-slate-800 mb-1">Keep Practicing!</h2>
                 <p className="text-slate-500 mb-2 text-sm">You need at least <span className="text-rose-500 font-bold">{currentLesson.minWpm} WPM</span> to pass.</p>
-                <div className="grid grid-cols-2 gap-3 mb-6">
+                <div className="grid grid-cols-3 gap-3 mb-6">
                   <div className="bg-slate-100 p-3 rounded-2xl">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Your Speed</span>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Gross</span>
                     <span className="text-xl font-black text-slate-800">{wpm} WPM</span>
+                  </div>
+                  <div className="bg-slate-100 p-3 rounded-2xl">
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Net Speed</span>
+                    <span className="text-xl font-black text-slate-800">{netWpm} WPM</span>
                   </div>
                   <div className="bg-slate-100 p-3 rounded-2xl">
                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Accuracy</span>

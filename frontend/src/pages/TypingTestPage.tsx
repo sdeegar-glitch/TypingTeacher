@@ -68,7 +68,8 @@ const TypingTestPage = () => {
   const [mistakes, setMistakes] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [isFinished, setIsFinished] = useState(false);
-  const [wpm, setWpm] = useState(0);
+  const [wpm, setWpm] = useState(0); // Gross WPM
+  const [netWpm, setNetWpm] = useState(0); // Net WPM
   
   // Programmatic duration parsing
   const routeDuration = duration ? parseInt(duration) * 60 : NaN;
@@ -184,8 +185,10 @@ const TypingTestPage = () => {
     
     if (startTime && userInput.length > 0 && !isFinished) {
       const timeElapsedMinutes = (TEST_DURATION - timeLeft) / 60 || 0.01;
-      const currentWpm = Math.round((userInput.length / 5) / timeElapsedMinutes);
-      setWpm(currentWpm);
+      const currentGrossWpm = Math.round((userInput.length / 5) / timeElapsedMinutes);
+      const currentNetWpm = Math.max(0, Math.round(((userInput.length - mistakes.length) / 5) / timeElapsedMinutes));
+      setWpm(currentGrossWpm);
+      setNetWpm(currentNetWpm);
     }
   }, [userInput, targetContent, startTime, isFinished, timeLeft]);
 
@@ -263,10 +266,15 @@ const TypingTestPage = () => {
             <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Time</span>
             <span className="text-base sm:text-lg font-black text-slate-800 tabular-nums">{formattedTime}</span>
           </div>
-          {/* WPM */}
+          {/* Gross WPM */}
           <div className="text-center">
-            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Speed</span>
-            <span className="text-base sm:text-lg font-black text-indigo-600 tabular-nums">{wpm} WPM</span>
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Gross</span>
+            <span className="text-base sm:text-lg font-black text-slate-600 tabular-nums">{wpm} WPM</span>
+          </div>
+          {/* Net WPM */}
+          <div className="text-center">
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Net</span>
+            <span className="text-base sm:text-lg font-black text-indigo-600 tabular-nums">{netWpm} WPM</span>
           </div>
           {/* Accuracy */}
           <div className="text-center">
@@ -381,10 +389,14 @@ const TypingTestPage = () => {
             <h2 className="text-4xl font-black text-slate-800 mb-1">Test Completed!</h2>
             <p className="text-slate-500 mb-6 text-sm">Your typing test results have been registered.</p>
 
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl">
+                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Gross Speed</span>
+                <span className="text-2xl font-black text-slate-700">{wpm} WPM</span>
+              </div>
               <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-2xl">
-                <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest block mb-1">Final Speed</span>
-                <span className="text-2xl font-black text-indigo-600">{wpm} WPM</span>
+                <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest block mb-1">Net Speed</span>
+                <span className="text-2xl font-black text-indigo-600">{netWpm} WPM</span>
               </div>
               <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl">
                 <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Accuracy</span>
