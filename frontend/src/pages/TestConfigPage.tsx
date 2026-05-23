@@ -39,13 +39,14 @@ export default function TestConfigPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-4 transition-colors">
       <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 dark:border-slate-700">
         <div className="p-8">
-          <div className="mb-2 flex items-center gap-2">
-            <span className="text-xs font-bold px-2 py-1 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 uppercase tracking-wider">Configure Test</span>
+          <div className="mb-6 flex flex-col items-center gap-4 text-center">
+            <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 uppercase tracking-widest shadow-sm">
+              Test Configuration
+            </span>
+            <h2 className="text-3xl font-black text-slate-900 dark:text-white leading-tight">
+              Select Time Duration
+            </h2>
           </div>
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2 leading-tight">{test.title}</h2>
-          <p className="text-slate-500 dark:text-slate-400 mb-8">{test.excerpt}</p>
-          
-          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4">Select Duration:</h3>
           
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             {[1, 3, 5, 10].map(mins => (

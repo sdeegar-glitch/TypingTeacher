@@ -221,7 +221,7 @@ const TypingTestPage = () => {
         <div className="flex items-center gap-4 min-w-0 self-start md:self-auto w-full md:w-auto justify-between md:justify-start">
           <div className="flex items-center gap-4">
             <Link 
-              to="/dashboard" 
+              to="/tests" 
               className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium group"
             >
               <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -400,10 +400,10 @@ const TypingTestPage = () => {
                 Try Again
               </button>
               <Link 
-                to="/dashboard" 
+                to="/tests" 
                 className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/30 transition-all text-center flex items-center justify-center"
               >
-                Dashboard
+                Tests Library
               </Link>
             </div>
           </div>
