@@ -14,12 +14,6 @@ const mockUser = {
   ]
 };
 
-const mockTests = [
-  { id: 1, title: 'Standard English - 1 Min', difficulty: 'Easy', duration: 60, type: 'General' },
-  { id: 2, title: 'Advanced Punctuation', difficulty: 'Hard', duration: 120, type: 'General' },
-  { id: 3, title: 'SSC CGL Tier 2 Passage', difficulty: 'Medium', duration: 900, type: 'SSC' },
-  { id: 4, title: 'RRB NTPC Practice Test', difficulty: 'Medium', duration: 600, type: 'RRB' },
-];
 
 const DashboardPage = () => {
   const [tests, setTests] = useState<any[]>([]);
