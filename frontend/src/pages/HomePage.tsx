@@ -3,7 +3,7 @@ import { Keyboard, Zap, Activity, ChevronRight, BookOpen } from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100dvh-80px)] lg:h-[calc(100dvh-80px)] overflow-hidden relative bg-[#f8fafc] dark:bg-[#09090b] text-[#09090b] dark:text-[#fafafa] font-sans selection:bg-indigo-500/30">
+    <div className="flex flex-col items-center justify-start pt-12 lg:pt-20 pb-16 min-h-[calc(100vh-64px)] relative bg-[#f8fafc] dark:bg-[#09090b] text-[#09090b] dark:text-[#fafafa] font-sans selection:bg-indigo-500/30">
       
       {/* Background Soft Glow Effects */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
