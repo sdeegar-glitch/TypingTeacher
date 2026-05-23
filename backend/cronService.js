@@ -8,43 +8,50 @@ dotenv.config();
 const parser = new Parser();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-const HINDU_RSS_URL = 'https://www.thehindu.com/opinion/editorial/feeder/default.rss';
+const RSS_FEEDS = [
+  { name: 'The Hindu', url: 'https://www.thehindu.com/opinion/editorial/feeder/default.rss' },
+  { name: 'The Economic Times', url: 'https://economictimes.indiatimes.com/rssfeeds/43984.cms' },
+  { name: 'The Indian Express', url: 'https://indianexpress.com/section/opinion/feed/' },
+  { name: 'Hindustan Times', url: 'https://www.hindustantimes.com/feeds/rss/editorials/rssfeed.xml' }
+];
 
 export async function fetchAndGenerateTests() {
-  console.log('Starting automated typing test generation from The Hindu...');
+  console.log('Starting automated typing test generation from multiple sources...');
   
   if (!process.env.GEMINI_API_KEY) {
     console.error('GEMINI_API_KEY is not set. Cannot run automated generation.');
     return;
   }
 
-  try {
-    const feed = await parser.parseURL(HINDU_RSS_URL);
-    if (!feed.items || feed.items.length === 0) {
-      console.log('No items found in RSS feed.');
-      return;
-    }
-
-    // Process top 2 articles
-    const articles = feed.items.slice(0, 2);
-
-    for (const article of articles) {
-      // Check if already processed
-      const { data: existing } = await supabase
-        .from('typing_test')
-        .select('id')
-        .eq('original_source', article.link)
-        .single();
-      
-      if (existing) {
-        console.log(`Article already processed: ${article.title}`);
+  for (const source of RSS_FEEDS) {
+    try {
+      console.log(`Fetching RSS from ${source.name}...`);
+      const feed = await parser.parseURL(source.url);
+      if (!feed.items || feed.items.length === 0) {
+        console.log(`No items found in RSS feed for ${source.name}.`);
         continue;
       }
 
-      console.log(`Generating test for: ${article.title}`);
-      
-      const prompt = `
-You are an expert educational content writer. Your task is to create a high-quality, plagiarism-free typing practice article based on the following editorial from The Hindu.
+      // Process top 1 article from each source to maintain variety
+      const articles = feed.items.slice(0, 1);
+
+      for (const article of articles) {
+        // Check if already processed
+        const { data: existing } = await supabase
+          .from('typing_test')
+          .select('id')
+          .eq('original_source', article.link)
+          .single();
+        
+        if (existing) {
+          console.log(`Article already processed: ${article.title}`);
+          continue;
+        }
+
+        console.log(`Generating test for: ${article.title} (Source: ${source.name})`);
+        
+        const prompt = `
+You are an expert educational content writer. Your task is to create a high-quality, plagiarism-free typing practice article based on the following editorial from ${source.name}.
 
 Title: ${article.title}
 Summary/Snippet: ${article.contentSnippet || article.content}
@@ -115,8 +122,9 @@ Requirements:
         console.error('Error parsing JSON from Gemini:', parseError);
       }
     }
-  } catch (err) {
-    console.error('Error in automated generation:', err);
+    } catch (err) {
+      console.error(`Error in automated generation for ${source.name}:`, err);
+    }
   }
 }
 
