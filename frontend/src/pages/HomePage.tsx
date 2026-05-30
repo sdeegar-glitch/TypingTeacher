@@ -71,7 +71,7 @@ export default function HomePage() {
             <Link 
               to="/tests" 
               title="Take speed test"
-              className="inline-flex items-center justify-between w-full bg-brand-surface border border-brand-muted/20 hover:border-brand-muted/40 text-brand-text px-6 py-4 rounded-xl text-lg font-semibold transition-all duration-300 group/btn"
+              className="inline-flex items-center justify-between w-full bg-brand-secondary hover:bg-brand-primary text-white px-6 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-brand-secondary/25 transition-all duration-300 group/btn"
             >
               <span>Take Speed Test</span>
               <ChevronRight className="w-6 h-6 group-hover/btn:translate-x-1 transition-transform" />

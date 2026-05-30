@@ -40,7 +40,28 @@ export default function TestConfigPage() {
       <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 dark:border-slate-700">
         <div className="p-8">
           <div className="mb-8 flex flex-col items-center text-center">
-            <span className="text-sm font-bold px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 uppercase tracking-widest shadow-sm">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white mb-3 tracking-tight">
+              {test.title}
+            </h2>
+            
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-medium mb-6 bg-slate-100 dark:bg-slate-700/30 px-4 py-2 rounded-full">
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
+                {test.word_count} words
+              </span>
+              <span className="opacity-40">•</span>
+              <span className="capitalize">{test.difficulty_level || 'Medium'}</span>
+              <span className="opacity-40">•</span>
+              <span>{test.category || 'Typing'}</span>
+            </div>
+
+            {test.excerpt && (
+              <p className="text-slate-600 dark:text-slate-300 text-sm italic mb-6 max-w-md mx-auto leading-relaxed border-l-2 border-indigo-200 pl-4 py-1 text-left">
+                "{test.excerpt}"
+              </p>
+            )}
+
+            <span className="text-xs sm:text-sm font-bold px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 uppercase tracking-widest shadow-sm mt-2 block w-max mx-auto">
               Select Time Duration
             </span>
           </div>

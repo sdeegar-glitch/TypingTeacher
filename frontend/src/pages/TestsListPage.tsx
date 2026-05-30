@@ -22,7 +22,7 @@ export default function TestsListPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#09090b] py-12 px-6">
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#09090b] py-8 px-4 sm:py-12 sm:px-6">
       <div className="container mx-auto max-w-6xl">
         
         <div className="text-center mb-16">

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import TypingTestPage from './pages/TypingTestPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import DashboardPage from './pages/DashboardPage';
@@ -21,56 +22,118 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-const Navbar = () => (
-  <nav className="bg-brand-bg/80 backdrop-blur-xl border-b border-brand-muted/20 sticky top-0 z-50 transition-colors">
-    <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-      <Link 
-        to="/" 
-        className="text-xl font-bold tracking-tight text-brand-text flex items-center gap-2 hover:opacity-80 transition-opacity"
-      >
-        <span className="w-8 h-8 rounded-xl bg-brand-primary text-white flex items-center justify-center font-black text-lg shadow-md shadow-brand-primary/20">
-          T
-        </span>
-        TypingTeacher
-      </Link>
-      
-      <div className="flex items-center gap-6 text-sm font-medium">
-        <Link to="/learn" className="text-brand-muted hover:text-brand-primary transition-colors hidden sm:block">Lessons</Link>
-        <Link to="/tests" className="text-brand-muted hover:text-brand-primary transition-colors hidden sm:block">Tests</Link>
+const Navbar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isAuthenticated = !!localStorage.getItem('accessToken');
 
-        {localStorage.getItem('accessToken') ? (
-          <div className="flex items-center gap-4 pl-4 sm:border-l border-brand-muted/20">
-            <Link to="/dashboard" className="text-brand-muted hover:text-brand-primary transition-colors hidden sm:block">Dashboard</Link>
-            <button 
-              onClick={() => {
-                localStorage.removeItem('accessToken');
-                window.location.href = '/login';
-              }}
-              className="text-brand-muted hover:text-rose-500 transition-colors"
-            >
-              Logout
-            </button>
+  const closeMenu = () => setIsMobileMenuOpen(false);
+
+  return (
+    <nav className="bg-brand-bg/80 backdrop-blur-xl border-b border-brand-muted/20 sticky top-0 z-50 transition-colors">
+      <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <Link 
+          to="/" 
+          onClick={closeMenu}
+          className="text-xl font-bold tracking-tight text-brand-text flex items-center gap-2 hover:opacity-80 transition-opacity z-50 relative"
+        >
+          <span className="w-8 h-8 rounded-xl bg-brand-primary text-white flex items-center justify-center font-black text-lg shadow-md shadow-brand-primary/20">
+            T
+          </span>
+          TypingTeacher
+        </Link>
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+          <Link to="/learn" className="text-brand-muted hover:text-brand-primary transition-colors">Lessons</Link>
+          <Link to="/tests" className="text-brand-muted hover:text-brand-primary transition-colors">Tests</Link>
+
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4 pl-4 border-l border-brand-muted/20">
+              <Link to="/dashboard" className="text-brand-muted hover:text-brand-primary transition-colors">Dashboard</Link>
+              <button 
+                onClick={() => {
+                  localStorage.removeItem('accessToken');
+                  window.location.href = '/login';
+                }}
+                className="text-brand-muted hover:text-rose-500 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4 pl-4 border-l border-brand-muted/20">
+              <Link 
+                to="/login" 
+                className="text-brand-muted hover:text-brand-text transition-colors"
+              >
+                Log in
+              </Link>
+              <Link 
+                to="/signup" 
+                className="bg-brand-primary text-white hover:bg-brand-secondary px-4 py-2 rounded-lg font-semibold transition-all duration-300 shadow-sm"
+              >
+                Sign up
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Menu Toggle Button */}
+        <button 
+          className="md:hidden z-50 relative p-2 text-brand-text"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle mobile menu"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        {/* Mobile Navigation Overlay */}
+        <div 
+          className={`fixed inset-0 bg-brand-bg/95 backdrop-blur-md z-40 flex flex-col pt-24 px-6 md:hidden transition-transform duration-300 ease-in-out ${
+            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          <div className="flex flex-col gap-6 text-xl font-medium">
+            <Link to="/learn" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Lessons</Link>
+            <Link to="/tests" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Tests</Link>
+
+            {isAuthenticated ? (
+              <>
+                <Link to="/dashboard" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Dashboard</Link>
+                <button 
+                  onClick={() => {
+                    localStorage.removeItem('accessToken');
+                    window.location.href = '/login';
+                  }}
+                  className="text-left text-rose-500 hover:text-rose-600 transition-colors py-2 font-bold"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <div className="flex flex-col gap-4 mt-4">
+                <Link 
+                  to="/login" 
+                  onClick={closeMenu}
+                  className="bg-brand-surface border border-brand-muted/20 text-brand-text text-center px-4 py-3 rounded-xl font-semibold transition-all"
+                >
+                  Log in
+                </Link>
+                <Link 
+                  to="/signup" 
+                  onClick={closeMenu}
+                  className="bg-brand-primary text-white text-center px-4 py-3 rounded-xl font-semibold shadow-md shadow-brand-primary/20"
+                >
+                  Sign up
+                </Link>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="flex items-center gap-4 pl-4 sm:border-l border-brand-muted/20">
-            <Link 
-              to="/login" 
-              className="text-brand-muted hover:text-brand-text transition-colors"
-            >
-              Log in
-            </Link>
-            <Link 
-              to="/signup" 
-              className="bg-brand-primary text-white hover:bg-brand-secondary px-4 py-2 rounded-lg font-semibold transition-all duration-300 shadow-sm"
-            >
-              Sign up
-            </Link>
-          </div>
-        )}
+        </div>
       </div>
-    </div>
-  </nav>
-);
+    </nav>
+  );
+};
 
 
 
