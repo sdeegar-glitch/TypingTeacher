@@ -134,4 +134,24 @@ router.post('/generate', async (req, res) => {
   }
 });
 
+// POST /api/tests - Save a newly generated test
+router.post('/', async (req, res) => {
+  try {
+    const { title, slug, content, excerpt, difficulty_level, word_count, estimated_read_time, category, seo_title, seo_description, tags, keywords, typing_duration_options } = req.body;
+    
+    const { data, error } = await supabase
+      .from('typing_test')
+      .insert({
+        title, slug, content, excerpt, difficulty_level, word_count, estimated_read_time, category, seo_title, seo_description, tags, keywords, typing_duration_options,
+        is_published: true
+      })
+      .select();
+
+    if (error) return res.status(500).json({ error: error.message });
+    res.status(201).json(data[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;
