@@ -144,8 +144,8 @@ import TestConfigPage from './pages/TestConfigPage';
 const AppContent = () => {
   const location = useLocation();
   const isLearningInterface = 
-    (location.pathname.startsWith('/learn/') && location.pathname !== '/learn') ||
-    (location.pathname.startsWith('/tests/') && location.pathname !== '/tests' && !location.pathname.includes('/config/'));
+    (location.pathname.startsWith('/learn/') && location.pathname !== '/learn' && location.pathname !== '/learn/') ||
+    (location.pathname.startsWith('/tests/') && location.pathname !== '/tests' && location.pathname !== '/tests/' && !location.pathname.includes('/config/'));
 
   return (
     <div className={`min-h-screen flex flex-col font-sans bg-brand-bg transition-colors ${isLearningInterface ? 'h-screen overflow-hidden' : ''}`}>
