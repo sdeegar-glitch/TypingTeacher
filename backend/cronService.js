@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import Parser from 'rss-parser';
 import { supabase } from './supabaseClient.js';
 import dotenv from 'dotenv';
+// Uses Node.js 18+ built-in fetch for keep-alive pings
 dotenv.config();
 
 const parser = new Parser();
@@ -36,18 +37,6 @@ export async function fetchAndGenerateTests() {
       const articles = feed.items.slice(0, 1);
 
       for (const article of articles) {
-        // Check if already processed
-        const { data: existing } = await supabase
-          .from('typing_test')
-          .select('id')
-          .eq('original_source', article.link)
-          .single();
-        
-        if (existing) {
-          console.log(`Article already processed: ${article.title}`);
-          continue;
-        }
-
         console.log(`Generating test for: ${article.title} (Source: ${source.name})`);
         
         const prompt = `
@@ -76,62 +65,74 @@ Requirements:
 }
 `;
 
-      const model = genAI.getGenerativeModel({ model: 'gemini-3.5-flash', generationConfig: { responseMimeType: "application/json" } });
-      const result = await model.generateContent(prompt);
-      const text = result.response.text();
-      
-      try {
-        let jsonString = text;
-        const startIndex = text.indexOf('{');
-        const endIndex = text.lastIndexOf('}');
-        if (startIndex !== -1 && endIndex !== -1) {
-          jsonString = text.substring(startIndex, endIndex + 1);
-        }
-        const generatedData = JSON.parse(jsonString);
-        
-        // Calculate word count
-        const wordCount = generatedData.content.split(/\s+/).length;
-        const estimatedReadTime = Math.ceil(wordCount / 200);
-        
-        // Create slug
-        const slug = generatedData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Date.now();
+        try {
+          const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash', generationConfig: { responseMimeType: "application/json" } });
+          const result = await model.generateContent(prompt);
+          const text = result.response.text();
 
-        const { error } = await supabase.from('typing_test').insert({
-          title: generatedData.title,
-          slug,
-          original_source: article.link,
-          content: generatedData.content,
-          excerpt: generatedData.excerpt,
-          difficulty_level: generatedData.difficulty_level,
-          word_count: wordCount,
-          estimated_read_time: estimatedReadTime,
-          category: generatedData.category,
-          tags: generatedData.tags,
-          seo_title: generatedData.seo_title,
-          seo_description: generatedData.seo_description,
-          keywords: generatedData.keywords,
-          typing_duration_options: ["1min", "3min", "5min", "10min"]
-        });
+          let jsonString = text;
+          const startIndex = text.indexOf('{');
+          const endIndex = text.lastIndexOf('}');
+          if (startIndex !== -1 && endIndex !== -1) {
+            jsonString = text.substring(startIndex, endIndex + 1);
+          }
+          const generatedData = JSON.parse(jsonString);
 
-        if (error) {
-          console.error(`Error saving test to DB: ${error.message}`);
-        } else {
-          console.log(`Successfully generated and saved: ${generatedData.title}`);
+          // Calculate word count
+          const wordCount = generatedData.content.split(/\s+/).length;
+          const estimatedReadTime = Math.ceil(wordCount / 200);
+
+          // Create slug
+          const slug = generatedData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Date.now();
+
+          const { error } = await supabase.from('typing_test').insert({
+            title: generatedData.title,
+            slug,
+            original_source: article.link,
+            content: generatedData.content,
+            excerpt: generatedData.excerpt,
+            difficulty_level: generatedData.difficulty_level,
+            word_count: wordCount,
+            estimated_read_time: estimatedReadTime,
+            category: generatedData.category,
+            tags: generatedData.tags,
+            seo_title: generatedData.seo_title,
+            seo_description: generatedData.seo_description,
+            keywords: generatedData.keywords,
+            typing_duration_options: ["1min", "3min", "5min", "10min"]
+          });
+
+          if (error) {
+            console.error(`Error saving test to DB: ${error.message}`);
+          } else {
+            console.log(`Successfully generated and saved: ${generatedData.title}`);
+          }
+        } catch (parseError) {
+          console.error('Error generating/parsing for article:', parseError.message);
         }
-      } catch (parseError) {
-        console.error('Error parsing JSON from Gemini:', parseError);
-      }
-    }
+      } // end for articles
     } catch (err) {
-      console.error(`Error in automated generation for ${source.name}:`, err);
+      console.error(`Error in automated generation for ${source.name}:`, err.message);
     }
-  }
+  } // end for sources
 }
 
-// Run twice a day: at 00:00 and 12:00
+// ⚠️ TESTING MODE: Runs every minute. Change back to '0 0,12 * * *' for production.
 export const initCronJobs = () => {
-  cron.schedule('0 0,12 * * *', () => {
+  cron.schedule('* * * * *', () => {
     fetchAndGenerateTests();
   });
-  console.log('Cron jobs initialized: Typing test generation scheduled for 00:00 and 12:00 daily.');
+  console.log('Cron jobs initialized: Typing test generation scheduled EVERY MINUTE (testing mode).');
+
+  // Keep-alive ping every 14 minutes to prevent Render free-tier cold starts (fixes 2-3 min loading delay)
+  const BACKEND_URL = process.env.BACKEND_URL || 'https://typingteacher-2lnd.onrender.com';
+  cron.schedule('*/14 * * * *', async () => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/health`);
+      console.log(`[Keep-alive] Pinged ${BACKEND_URL}/health → ${res.status}`);
+    } catch (err) {
+      console.warn('[Keep-alive] Ping failed:', err.message);
+    }
+  });
+  console.log(`[Keep-alive] Pinging ${BACKEND_URL}/health every 14 minutes to prevent cold starts.`);
 };
