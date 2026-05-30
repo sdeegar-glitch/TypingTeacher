@@ -183,12 +183,15 @@ CONTENT: [detailed 700-900 word summary of the article]`;
 
   // ── STEP 2: Rewrite into structured typing test JSON ──────────────────────
   console.log(`  [Step 2] Rewriting into typing test JSON...`);
-  const rewriteModel = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
-    generationConfig: { responseMimeType: 'application/json' },
-  });
+  
+  let data;
+  try {
+    const rewriteModel = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash',
+      generationConfig: { responseMimeType: 'application/json' },
+    });
 
-  const rewritePrompt = `You are an expert educational writer creating typing practice content.
+    const rewritePrompt = `You are an expert educational writer creating typing practice content.
 
 Source article about "${topic}":
 TITLE: ${foundTitle}
@@ -212,18 +215,33 @@ Return ONLY valid JSON:
   "keywords": ["kw1", "kw2", "kw3"]
 }`;
 
-  const rewriteResult = await withRetry(() => rewriteModel.generateContent(rewritePrompt));
-  const rewriteText = rewriteResult.response.text();
+    const rewriteResult = await withRetry(() => rewriteModel.generateContent(rewritePrompt), 2, 10000); // reduced retries to fail faster
+    const rewriteText = rewriteResult.response.text();
 
-  // Strip markdown fences if any
-  const start = rewriteText.indexOf('{');
-  const end = rewriteText.lastIndexOf('}');
-  const jsonString = start !== -1 && end !== -1 ? rewriteText.substring(start, end + 1) : rewriteText;
-  const data = JSON.parse(jsonString);
-
-  if (!data.title || !data.content) {
-    console.error(`  Parsed JSON missing title/content. Skipping.`);
-    return false;
+    // Strip markdown fences if any
+    const start = rewriteText.indexOf('{');
+    const end = rewriteText.lastIndexOf('}');
+    const jsonString = start !== -1 && end !== -1 ? rewriteText.substring(start, end + 1) : rewriteText;
+    data = JSON.parse(jsonString);
+    
+    if (!data.title || !data.content) throw new Error("Parsed JSON missing title or content");
+  } catch (err) {
+    console.warn(`  [Step 2] Gemini rewrite failed: ${err.message}. Falling back to raw content.`);
+    // ── STEP 2B: Pure Wikipedia / Raw Content Fallback ──
+    // Clean up content slightly for typing (remove multiple newlines, weird characters)
+    let cleanContent = foundContent.replace(/\n+/g, ' ').replace(/[\[\]]/g, '').trim();
+    
+    data = {
+      title: foundTitle,
+      content: cleanContent,
+      excerpt: cleanContent.substring(0, 120) + '...',
+      difficulty_level: 'medium',
+      category: 'General Education',
+      seo_title: `${foundTitle} - Typing Test | FastTypingLab`,
+      seo_description: `Practice your typing speed with our test about ${foundTitle}.`,
+      tags: [topic.toLowerCase().replace(/\s+/g, '-'), 'typing', 'education'],
+      keywords: [topic.toLowerCase(), 'typing test', 'wpm']
+    };
   }
 
   // ── STEP 3: Save to Supabase ──────────────────────────────────────────────
@@ -260,7 +278,7 @@ Return ONLY valid JSON:
 }
 
 // ─── MAIN RUN FUNCTION (generates TESTS_PER_RUN tests) ───────────────────────
-const TESTS_PER_RUN = 2; // 2 tests × 3 runs/day = 6 tests/day
+const TESTS_PER_RUN = 1; // 1 test × 3 runs/day = 3 tests/day
 
 export async function fetchAndGenerateTests() {
   if (isRunning) {
@@ -304,7 +322,7 @@ export const initCronJobs = () => {
   cron.schedule('30 2,8,14 * * *', () => {
     fetchAndGenerateTests();
   });
-  console.log('[CronService] Scheduled: 3× daily at 8am, 2pm, 8pm IST (2 tests each = 6/day).');
+  console.log('[CronService] Scheduled: 3× daily at 8am, 2pm, 8pm IST (1 test each = 3/day).');
 
   // Keep-alive: ping /health every 14 min to prevent Render free-tier cold starts
   const BACKEND_URL = process.env.BACKEND_URL || 'https://typingteacher-2lnd.onrender.com';
