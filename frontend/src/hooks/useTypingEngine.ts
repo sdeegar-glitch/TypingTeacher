@@ -1,0 +1,195 @@
+/**
+ * useTypingEngine — Zero-lag, character-level typing engine hook.
+ * Supports: timed mode, article/passage mode, word mode, quote mode.
+ * Works on both desktop (keydown events) and mobile (hidden input).
+ */
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+
+export type TypingMode = 'timed' | 'passage';
+
+export interface TypingStats {
+  wpm: number;
+  netWpm: number;
+  accuracy: number;
+  errors: number;
+  cpm: number;
+  progress: number;   // 0–100
+  timeLeft: number;
+  isFinished: boolean;
+  isActive: boolean;
+  elapsedSeconds: number;
+}
+
+export interface TypingEngineResult {
+  stats: TypingStats;
+  userInput: string;
+  mistakes: Set<number>;       // set of indices with errors
+  nextChar: string;
+  caretIndex: number;
+  processChar: (char: string) => void;
+  processBackspace: () => void;
+  handleMobileInput: (val: string) => void;
+  reset: () => void;
+  pressedKey: string;          // last pressed key (for virtual keyboard highlight)
+}
+
+export function useTypingEngine(
+  text: string,
+  durationSeconds: number,
+  mode: TypingMode = 'timed',
+  onFinish?: (stats: TypingStats) => void
+): TypingEngineResult {
+  const [userInput, setUserInput] = useState('');
+  const [mistakes, setMistakes] = useState<Set<number>>(new Set());
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState(durationSeconds);
+  const [isFinished, setIsFinished] = useState(false);
+  const [pressedKey, setPressedKey] = useState('');
+  const lastMobileVal = useRef('');
+  const finishedRef = useRef(false);  // avoid stale closure issues
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Derived stats
+  const elapsedSeconds = startTime
+    ? Math.max(0, durationSeconds - timeLeft)
+    : 0;
+
+  const stats: TypingStats = useMemo(() => {
+    const elapsed = elapsedSeconds > 0 ? elapsedSeconds : 1;
+    const minutes = elapsed / 60;
+    const totalChars = userInput.length;
+    const errorsCount = mistakes.size;
+    const cpm = Math.round(totalChars / minutes);
+    const grossWpm = Math.round((totalChars / 5) / minutes);
+    const netWpm = Math.max(0, Math.round(grossWpm - errorsCount / minutes));
+    const accuracy = totalChars > 0
+      ? Math.round(((totalChars - errorsCount) / totalChars) * 100)
+      : 100;
+    const progress = text.length > 0
+      ? Math.min(100, Math.round((userInput.length / text.length) * 100))
+      : 0;
+
+    return {
+      wpm: grossWpm,
+      netWpm,
+      accuracy,
+      errors: errorsCount,
+      cpm,
+      progress,
+      timeLeft,
+      isFinished,
+      isActive: !!startTime && !isFinished,
+      elapsedSeconds,
+    };
+  }, [userInput, mistakes, elapsedSeconds, timeLeft, isFinished, startTime, text]);
+
+  // Countdown timer
+  useEffect(() => {
+    if (!startTime || isFinished) return;
+    timerRef.current = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current!);
+          finishedRef.current = true;
+          setIsFinished(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timerRef.current!);
+  }, [startTime, isFinished]);
+
+  // Fire onFinish callback
+  useEffect(() => {
+    if (isFinished && onFinish) {
+      onFinish(stats);
+    }
+  }, [isFinished]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const finish = useCallback(() => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
+    clearInterval(timerRef.current!);
+    setIsFinished(true);
+  }, []);
+
+  const processChar = useCallback((char: string) => {
+    if (finishedRef.current) return;
+    setStartTime(prev => prev ?? Date.now());
+
+    setUserInput(prev => {
+      if (prev.length >= text.length) {
+        finish();
+        return prev;
+      }
+      const expected = text[prev.length];
+      if (char !== expected) {
+        setMistakes(m => { const s = new Set(m); s.add(prev.length); return s; });
+      }
+      const next = prev + char;
+      if (next.length >= text.length) {
+        // Complete passage
+        setTimeout(finish, 50);
+      }
+      return next;
+    });
+
+    setPressedKey(char);
+    setTimeout(() => setPressedKey(''), 100);
+  }, [text, finish]);
+
+  const processBackspace = useCallback(() => {
+    if (finishedRef.current) return;
+    setStartTime(prev => prev ?? Date.now());
+    setUserInput(prev => {
+      const newLen = prev.length - 1;
+      if (newLen < 0) return prev;
+      setMistakes(m => { const s = new Set(m); s.delete(newLen); return s; });
+      return prev.slice(0, newLen);
+    });
+    setPressedKey('Backspace');
+    setTimeout(() => setPressedKey(''), 100);
+  }, []);
+
+  const handleMobileInput = useCallback((newVal: string) => {
+    if (finishedRef.current) return;
+    const prev = lastMobileVal.current;
+    if (newVal.length > prev.length) {
+      const added = newVal.slice(prev.length);
+      for (const ch of added) processChar(ch);
+    } else {
+      const removedCount = prev.length - newVal.length;
+      for (let i = 0; i < removedCount; i++) processBackspace();
+    }
+    lastMobileVal.current = newVal;
+  }, [processChar, processBackspace]);
+
+  const reset = useCallback(() => {
+    setUserInput('');
+    setMistakes(new Set());
+    setStartTime(null);
+    setTimeLeft(durationSeconds);
+    setIsFinished(false);
+    setPressedKey('');
+    lastMobileVal.current = '';
+    finishedRef.current = false;
+    clearInterval(timerRef.current!);
+  }, [durationSeconds]);
+
+  const nextChar = text[userInput.length] ?? '';
+  const caretIndex = userInput.length;
+
+  return {
+    stats,
+    userInput,
+    mistakes,
+    nextChar,
+    caretIndex,
+    processChar,
+    processBackspace,
+    handleMobileInput,
+    reset,
+    pressedKey,
+  };
+}

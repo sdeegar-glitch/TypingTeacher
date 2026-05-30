@@ -1,39 +1,59 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity } from 'lucide-react';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
-import { useLocation } from 'react-router-dom';
+import { useTypingEngine } from '../hooks/useTypingEngine';
+
+const API_URL = 'https://typingteacher-2lnd.onrender.com/api/tests';
+
+// Duration options
+const DURATION_OPTIONS = [
+  { label: '15s', value: 15 },
+  { label: '30s', value: 30 },
+  { label: '1 min', value: 60 },
+  { label: '2 min', value: 120 },
+  { label: '5 min', value: 300 },
+];
+
+// Random word bank for "words" mode
+const WORDS = ['the','be','to','of','and','a','in','that','have','it','for','not','on','with','he','as','you','do','at','this','but','his','by','from','they','we','say','her','she','or','an','will','my','one','all','would','there','their','what','so','up','out','if','about','who','get','which','go','me','when','make','can','like','time','no','just','him','know','take','people','into','year','your','good','some','could','them','see','other','than','then','now','look','only','come','its','over','think','also','back','after','use','two','how','our','work','first','well','way','even','new','want','because','any','these','give','day','most','us'];
+
+function getRandomWords(count: number) {
+  return Array.from({ length: count }, () => WORDS[Math.floor(Math.random() * WORDS.length)]).join(' ');
+}
+
+// Quote bank
+const QUOTES = [
+  "The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle.",
+  "In the middle of every difficulty lies opportunity. The measure of intelligence is the ability to change.",
+  "It does not matter how slowly you go as long as you do not stop. Our greatest glory is not in never falling but in rising every time we fall.",
+  "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+  "The future belongs to those who believe in the beauty of their dreams. Keep your face always toward the sunshine.",
+];
+
+type TestMode = 'article' | 'words' | 'quote';
 
 const sampleTexts: Record<string, { title: string; content: string }> = {
-  '1': {
-    title: 'Easy Paragraph Drill',
-    content: 'the quick brown fox jumps over the lazy dog. focus on keeping your hands relaxed and moving smoothly between keys.',
-  },
-  '2': {
-    title: 'Home Row Extended',
-    content: 'sad lass fall lads salad all; ask dad for a salad; a sad fall for a young lad; dad asks a lass.',
-  },
-  '3': {
-    title: 'Common Word Flow',
-    content: 'with the rapid development of technology and internet, touch typing has become an essential skill for everyday work and life.',
-  },
+  '1': { title: 'Easy Paragraph Drill', content: 'the quick brown fox jumps over the lazy dog focus on keeping your hands relaxed and moving smoothly between keys with steady rhythm and consistent pressure on each keystroke' },
+  '2': { title: 'Home Row Extended', content: 'sad lass fall lads salad all ask dad for a salad a sad fall for a young lad dad asks a lass for a salad and all falls well in the end' },
 };
 
-const TypingTestPage = () => {
+export default function TypingTestPage() {
   const { id, duration, profession, language } = useParams();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const queryDuration = searchParams.get('duration');
 
-  // Detect mobile/touch device
   const isMobile = useMemo(() => {
     if (typeof window === 'undefined') return false;
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
   }, []);
 
-  // SEO
+  // SEO title
   useEffect(() => {
     let title = 'Typing Speed Test | FastTypingLab';
     if (duration || queryDuration) title = `${duration || (Number(queryDuration) / 60) + ' min'} Typing Test | FastTypingLab`;
@@ -42,195 +62,118 @@ const TypingTestPage = () => {
     document.title = title;
   }, [duration, profession, language, queryDuration]);
 
-  const [activeTest, setActiveTest] = useState<{ title: string; content: string }>(sampleTexts['1']);
-  const [loadingTest, setLoadingTest] = useState(true);
+  // Test content state
+  const [testContent, setTestContent] = useState({ title: sampleTexts['1'].title, content: sampleTexts['1'].content });
+  const [loadingTest, setLoadingTest] = useState(!!id && !sampleTexts[id || '']);
+  const [testMode, setTestMode] = useState<TestMode>('article');
+  const [selectedDuration, setSelectedDuration] = useState(() => {
+    const qd = queryDuration ? parseInt(queryDuration) : NaN;
+    const rd = duration ? parseInt(duration) * 60 : NaN;
+    return !isNaN(qd) ? qd : !isNaN(rd) ? rd : 60;
+  });
 
-  // Fetch active test
+  // Fetch article test from backend
   useEffect(() => {
     if (id && !sampleTexts[id]) {
-      fetch(`https://typingteacher-2lnd.onrender.com/api/tests/${id}`)
+      setLoadingTest(true);
+      fetch(`${API_URL}/${id}`)
         .then(res => res.json())
         .then(data => {
-          if (data && data.content) setActiveTest(data);
-          else setActiveTest(sampleTexts['1']);
-          setLoadingTest(false);
+          if (data?.content) setTestContent({ title: data.title, content: data.content });
+          else setTestContent(sampleTexts['1']);
         })
-        .catch(() => { setActiveTest(sampleTexts['1']); setLoadingTest(false); });
+        .catch(() => setTestContent(sampleTexts['1']))
+        .finally(() => setLoadingTest(false));
     } else {
-      setActiveTest(sampleTexts[id || '1'] || sampleTexts['1']);
+      setTestContent(sampleTexts[id || '1'] || sampleTexts['1']);
       setLoadingTest(false);
     }
   }, [id]);
 
-  const targetContent = activeTest.content;
+  // Generate text based on mode
+  const activeText = useMemo(() => {
+    if (testMode === 'words') return getRandomWords(80);
+    if (testMode === 'quote') return QUOTES[Math.floor(Math.random() * QUOTES.length)];
+    return testContent.content;
+  }, [testMode, testContent]);
 
-  const [userInput, setUserInput] = useState('');
-  const [mistakes, setMistakes] = useState<number[]>([]);
-  const [startTime, setStartTime] = useState<number | null>(null);
-  const [isFinished, setIsFinished] = useState(false);
-  const [wpm, setWpm] = useState(0);
-  const [netWpm, setNetWpm] = useState(0);
-  const hiddenInputRef = useRef<HTMLInputElement>(null);
-
-  // Duration
-  const routeDuration = duration ? parseInt(duration) * 60 : NaN;
-  const urlDuration = queryDuration ? parseInt(queryDuration) : NaN;
-  const TEST_DURATION = !isNaN(urlDuration) ? urlDuration : (!isNaN(routeDuration) ? routeDuration : 60);
-  const [timeLeft, setTimeLeft] = useState(TEST_DURATION);
-  useEffect(() => { setTimeLeft(TEST_DURATION); }, [TEST_DURATION]);
-
-  const [lastKeyPressStatus, setLastKeyPressStatus] = useState<'none' | 'correct' | 'error'>('none');
-  const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
-
-  // Countdown
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (startTime && !isFinished && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) { setIsFinished(true); clearInterval(interval); return 0; }
-          return prev - 1;
-        });
-      }, 1000);
+  // Engine
+  const engine = useTypingEngine(
+    activeText,
+    selectedDuration,
+    'timed',
+    (finalStats) => {
+      // Save session to backend
+      fetch('https://typingteacher-2lnd.onrender.com/test_sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          test_id: Number(id) || null,
+          duration: finalStats.elapsedSeconds,
+          gross_wpm: finalStats.wpm,
+          net_wpm: finalStats.netWpm,
+          errors: finalStats.errors,
+          accuracy: finalStats.accuracy,
+        }),
+      }).catch(() => {});
     }
-    return () => clearInterval(interval);
-  }, [startTime, isFinished, timeLeft]);
+  );
 
-  // Auto-focus hidden input on mount and after test loads
+  const { stats, userInput, mistakes, nextChar, pressedKey, processChar, processBackspace, handleMobileInput, reset } = engine;
+
+  // Mobile hidden input
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const [mobileVal, setMobileVal] = useState('');
+
+  const onMobileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVal = e.target.value;
+    handleMobileInput(newVal);
+    setMobileVal(newVal);
+  }, [handleMobileInput]);
+
+  // Desktop keyboard listener
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (stats.isFinished) return;
+    const ignored = ['Shift','Control','Alt','Meta','CapsLock','Tab','Escape','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12'];
+    if (ignored.includes(e.key)) return;
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'Backspace') processBackspace();
+    else if (e.key.length === 1) processChar(e.key);
+  }, [stats.isFinished, processChar, processBackspace]);
+
+  useEffect(() => {
+    if (!isMobile) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [handleKeyDown, isMobile]);
+
+  // Auto-focus mobile input
   useEffect(() => {
     if (!loadingTest && isMobile) {
       setTimeout(() => hiddenInputRef.current?.focus(), 300);
     }
   }, [loadingTest, isMobile]);
 
-  // Submit results
-  useEffect(() => {
-    if (isFinished && startTime) {
-      const timeTaken = TEST_DURATION - timeLeft || 1;
-      const finalAccuracy = userInput.length > 0
-        ? Math.round(((userInput.length - mistakes.length) / userInput.length) * 100)
-        : 0;
-      fetch('https://typingteacher-2lnd.onrender.com/test_sessions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          test_id: Number(id) || null,
-          duration: timeTaken,
-          gross_wpm: Math.round((userInput.length / 5) / (timeTaken / 60)),
-          net_wpm: wpm,
-          errors: mistakes.length,
-          accuracy: finalAccuracy,
-        }),
-      }).catch(() => {});
-    }
-  }, [isFinished]);
-
-  // ── CHARACTER-LEVEL input processing (shared between desktop keydown and mobile input) ──
-  const processChar = useCallback((char: string) => {
-    if (isFinished) return;
-    if (!startTime) setStartTime(Date.now());
-    if (userInput.length < targetContent.length) {
-      const expected = targetContent[userInput.length];
-      if (char === expected) {
-        setLastKeyPressStatus('correct');
-      } else {
-        setMistakes(prev => [...prev, userInput.length]);
-        setLastKeyPressStatus('error');
-      }
-      setUserInput(prev => prev + char);
-      setTimeout(() => setLastKeyPressStatus('none'), 150);
-    }
-  }, [userInput, targetContent, isFinished, startTime]);
-
-  const processBackspace = useCallback(() => {
-    if (isFinished) return;
-    if (!startTime) setStartTime(Date.now());
-    setUserInput(prev => prev.slice(0, -1));
-    setMistakes(prev => prev.filter(m => m < userInput.length - 1));
-  }, [isFinished, startTime, userInput.length]);
-
-  // ── DESKTOP: keydown events ──
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (isFinished) return;
-    if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
-    if (e.key === ' ') e.preventDefault();
-    setPressedKeys(prev => new Set(prev).add(e.key));
-    if (e.key === 'Backspace') {
-      processBackspace();
-    } else if (e.key.length === 1) {
-      processChar(e.key);
-    }
-  }, [isFinished, processChar, processBackspace]);
-
-  const handleKeyUp = useCallback((e: KeyboardEvent) => {
-    setPressedKeys(prev => { const n = new Set(prev); n.delete(e.key); return n; });
-  }, []);
-
-  useEffect(() => {
-    if (!isMobile) {
-      window.addEventListener('keydown', handleKeyDown);
-      window.addEventListener('keyup', handleKeyUp);
-      return () => { window.removeEventListener('keydown', handleKeyDown); window.removeEventListener('keyup', handleKeyUp); };
-    }
-  }, [handleKeyDown, handleKeyUp, isMobile]);
-
-  // ── MOBILE: hidden input events ──
-  const lastMobileInputRef = useRef('');
-  const handleMobileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isFinished) return;
-    const newVal = e.target.value;
-    const prev = lastMobileInputRef.current;
-
-    if (newVal.length > prev.length) {
-      // Characters added
-      const added = newVal.slice(prev.length);
-      for (const ch of added) processChar(ch);
-    } else if (newVal.length < prev.length) {
-      // Backspace(s)
-      const removed = prev.length - newVal.length;
-      for (let i = 0; i < removed; i++) processBackspace();
-    }
-    lastMobileInputRef.current = newVal;
-  }, [isFinished, processChar, processBackspace]);
-
-  // Keep hidden input value in sync to allow reading back
-  const [mobileInputVal, setMobileInputVal] = useState('');
-  const handleMobileInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    handleMobileInput(e);
-    setMobileInputVal(e.target.value);
-  }, [handleMobileInput]);
-
-  // WPM calculation
-  useEffect(() => {
-    if (userInput.length === targetContent.length && userInput.length > 0) setIsFinished(true);
-    if (startTime && userInput.length > 0 && !isFinished) {
-      const elapsed = (TEST_DURATION - timeLeft) / 60 || 0.01;
-      setWpm(Math.round((userInput.length / 5) / elapsed));
-      setNetWpm(Math.max(0, Math.round(((userInput.length - mistakes.length) / 5) / elapsed)));
-    }
-  }, [userInput, targetContent, startTime, isFinished, timeLeft]);
-
-  // Scroll to current character
-  useEffect(() => {
-    const el = document.getElementById('current-char');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, [userInput]);
-
-  const nextChar = targetContent[userInput.length] || '';
   const activeFinger = useMemo(() => getFingerForKey(nextChar), [nextChar]);
-  const accuracy = useMemo(() => {
-    if (userInput.length === 0) return 100;
-    return Math.round(((userInput.length - mistakes.length) / userInput.length) * 100);
-  }, [userInput, mistakes]);
-  const progress = targetContent.length > 0 ? (userInput.length / targetContent.length) * 100 : 0;
-  const formattedTime = `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}`;
+  const formattedTime = `${Math.floor(stats.timeLeft / 60)}:${String(stats.timeLeft % 60).padStart(2, '0')}`;
+
+  const handleReset = useCallback(() => {
+    reset();
+    setMobileVal('');
+    if (isMobile) setTimeout(() => hiddenInputRef.current?.focus(), 100);
+    if (testMode === 'words') {
+      // Re-trigger words mode re-generation via key change in parent
+      // For now words are stable — user clicks reset to get new set
+    }
+  }, [reset, isMobile, testMode]);
 
   if (loadingTest) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-brand-bg">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
-          <p className="text-slate-500 text-sm font-medium">Loading test...</p>
+          <div className="w-10 h-10 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-brand-muted text-sm font-medium">Loading test…</p>
         </div>
       </div>
     );
@@ -238,18 +181,16 @@ const TypingTestPage = () => {
 
   return (
     <div
-      className="h-[100dvh] bg-[#f5f5f0] text-[#1e293b] flex flex-col overflow-hidden"
-      style={{ fontFamily: "'Inter', sans-serif" }}
-      // Tap anywhere to focus input on mobile
+      className="h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none"
       onClick={() => isMobile && hiddenInputRef.current?.focus()}
     >
-      {/* Hidden input for mobile keyboard */}
+      {/* Hidden mobile input */}
       {isMobile && (
         <input
           ref={hiddenInputRef}
           type="text"
-          value={mobileInputVal}
-          onChange={handleMobileInputChange}
+          value={mobileVal}
+          onChange={onMobileChange}
           className="fixed opacity-0 pointer-events-none w-1 h-1 top-0 left-0 z-[-1]"
           autoCapitalize="none"
           autoComplete="off"
@@ -257,236 +198,327 @@ const TypingTestPage = () => {
           spellCheck={false}
           inputMode="text"
           aria-hidden="true"
-          disabled={isFinished}
+          disabled={stats.isFinished}
         />
       )}
 
-      {/* ── TOP HEADER ── */}
-      <div className="shrink-0 bg-white border-b border-gray-200 px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 z-50 shadow-sm">
-        {/* Left: Back + Title */}
-        <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-shrink">
-          <Link
-            to="/tests"
-            className="flex items-center gap-1 text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium group flex-shrink-0"
-          >
-            <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-            </svg>
+      {/* ── TOP BAR ─────────────────────────────────── */}
+      <div className="shrink-0 bg-brand-surface border-b border-brand-border px-3 sm:px-6 h-14 flex items-center justify-between gap-3 z-40">
+        {/* Left */}
+        <div className="flex items-center gap-3 min-w-0">
+          <Link to="/tests" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm font-medium group shrink-0">
+            <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             <span className="hidden sm:inline">Back</span>
           </Link>
-          <div className="w-px h-5 bg-slate-200 hidden sm:block" />
-          <div className="min-w-0">
-            <span className="text-[9px] sm:text-[10px] font-bold text-indigo-500 uppercase tracking-widest block">Test #{id || '1'}</span>
-            <h1 className="text-xs sm:text-sm font-bold text-slate-800 leading-none truncate max-w-[120px] sm:max-w-xs">{activeTest.title}</h1>
+          <div className="h-5 w-px bg-brand-border hidden sm:block" />
+          <div className="min-w-0 hidden sm:block">
+            <h1 className="text-sm font-semibold text-brand-text truncate max-w-[200px]">{testContent.title}</h1>
           </div>
         </div>
 
-        {/* Center: Finger hint — hidden on mobile */}
-        {nextChar && !isFinished && !isMobile && (
-          <div className="hidden md:flex items-center gap-2 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-full flex-shrink-0">
-            <span className="text-xs text-indigo-600">Type</span>
-            <kbd className="bg-indigo-600 text-white text-xs font-black px-2 py-0.5 rounded-md min-w-[24px] text-center">
-              {nextChar === ' ' ? '⎵' : nextChar.toUpperCase()}
-            </kbd>
-            <span className="text-xs text-indigo-600">with <span className="text-indigo-800 font-semibold">{activeFinger.replace('left-', 'L ').replace('right-', 'R ')}</span></span>
+        {/* Center: Mode + Duration selectors */}
+        {!stats.isActive && !stats.isFinished && (
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Mode */}
+            <div className="flex items-center gap-1 bg-brand-surface-2 rounded-lg p-0.5">
+              {(['article', 'words', 'quote'] as TestMode[]).map(m => (
+                <button
+                  key={m}
+                  onClick={(e) => { e.stopPropagation(); setTestMode(m); reset(); }}
+                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all capitalize ${
+                    testMode === m
+                      ? 'bg-brand-surface shadow text-brand-text'
+                      : 'text-brand-muted hover:text-brand-text'
+                  }`}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+
+            {/* Duration */}
+            <div className="flex items-center gap-1 bg-brand-surface-2 rounded-lg p-0.5">
+              {DURATION_OPTIONS.map(opt => (
+                <button
+                  key={opt.value}
+                  onClick={(e) => { e.stopPropagation(); setSelectedDuration(opt.value); reset(); }}
+                  className={`px-2 sm:px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+                    selectedDuration === opt.value
+                      ? 'bg-brand-primary text-white shadow'
+                      : 'text-brand-muted hover:text-brand-text'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* Right: Stats + Restart */}
-        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+        {/* Right: Stats */}
+        <div className="flex items-center gap-3 sm:gap-5 shrink-0">
           <div className="text-center">
-            <span className="text-[8px] sm:text-[9px] text-slate-400 uppercase tracking-widest block">Time</span>
-            <span className="text-sm sm:text-base font-black text-slate-800 tabular-nums">{formattedTime}</span>
+            <div className="text-[9px] text-brand-muted uppercase tracking-widest font-semibold flex items-center gap-0.5 justify-center">
+              <Clock className="w-2.5 h-2.5" />
+              <span className="hidden sm:inline">Time</span>
+            </div>
+            <div className={`text-sm sm:text-base font-black tabular-nums font-mono ${stats.timeLeft <= 10 && stats.isActive ? 'text-rose-500' : 'text-brand-text'}`}>
+              {formattedTime}
+            </div>
           </div>
-          <div className="hidden sm:block text-center">
-            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Gross</span>
-            <span className="text-sm sm:text-base font-black text-slate-600 tabular-nums">{wpm}</span>
-          </div>
+
           <div className="text-center">
-            <span className="text-[8px] sm:text-[9px] text-slate-400 uppercase tracking-widest block">WPM</span>
-            <span className="text-sm sm:text-base font-black text-indigo-600 tabular-nums">{netWpm}</span>
+            <div className="text-[9px] text-brand-muted uppercase tracking-widest font-semibold flex items-center gap-0.5 justify-center">
+              <Zap className="w-2.5 h-2.5" />
+              WPM
+            </div>
+            <div className="text-sm sm:text-base font-black tabular-nums text-brand-primary font-mono">{stats.netWpm}</div>
           </div>
-          <div className="text-center">
-            <span className="text-[8px] sm:text-[9px] text-slate-400 uppercase tracking-widest block">Acc</span>
-            <span className={`text-sm sm:text-base font-black tabular-nums ${accuracy >= 90 ? 'text-emerald-600' : 'text-rose-500'}`}>{accuracy}%</span>
+
+          <div className="text-center hidden sm:block">
+            <div className="text-[9px] text-brand-muted uppercase tracking-widest font-semibold flex items-center gap-0.5 justify-center">
+              <Target className="w-2.5 h-2.5" />
+              Acc
+            </div>
+            <div className={`text-sm sm:text-base font-black tabular-nums font-mono ${stats.accuracy >= 90 ? 'text-brand-accent' : 'text-rose-500'}`}>
+              {stats.accuracy}%
+            </div>
           </div>
+
           <button
-            onClick={() => window.location.reload()}
-            className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 sm:px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-slate-300"
+            onClick={(e) => { e.stopPropagation(); handleReset(); }}
+            className="flex items-center gap-1.5 bg-brand-surface-2 hover:bg-brand-border text-brand-muted hover:text-brand-text px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-brand-border"
           >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
+            <RotateCcw className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Restart</span>
           </button>
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="shrink-0 h-1 bg-slate-200">
-        <div
-          className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-300"
-          style={{ width: `${progress}%` }}
+      <div className="shrink-0 h-0.5 bg-brand-border">
+        <motion.div
+          className="h-full bg-gradient-to-r from-brand-primary to-brand-secondary"
+          animate={{ width: `${stats.progress}%` }}
+          transition={{ duration: 0.1 }}
         />
       </div>
 
-      {/* ── MAIN CONTENT ── */}
-      <div className="flex-grow flex flex-col items-center justify-start gap-3 px-3 sm:px-6 py-4 sm:py-6 overflow-hidden">
+      {/* ── MAIN CONTENT ────────────────────────────── */}
+      <div className="flex-grow flex flex-col items-center justify-start gap-4 px-3 sm:px-6 py-4 sm:py-6 overflow-hidden">
 
-        {/* Mobile tap-to-start banner */}
-        {isMobile && !startTime && !isFinished && (
+        {/* Mobile: tap to start */}
+        {isMobile && !stats.isActive && !stats.isFinished && (
           <div
-            className="w-full max-w-2xl bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer"
             onClick={() => hiddenInputRef.current?.focus()}
+            className="w-full max-w-2xl bg-brand-primary/10 border border-brand-primary/20 rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer"
           >
             <span className="text-2xl">⌨️</span>
             <div>
-              <p className="text-sm font-bold text-indigo-700">Tap here to start typing</p>
-              <p className="text-xs text-indigo-500">Your phone keyboard will appear</p>
+              <p className="text-sm font-bold text-brand-primary">Tap here to start typing</p>
+              <p className="text-xs text-brand-muted">Your keyboard will appear</p>
             </div>
           </div>
         )}
 
-        {/* ── MULTILINE TYPING AREA ── */}
+        {/* ── TYPING DISPLAY ── */}
         <div className="w-full max-w-2xl">
           <div
-            className="bg-white border border-gray-200 rounded-2xl px-4 sm:px-8 py-5 relative shadow-lg cursor-text"
+            className="relative bg-brand-surface border border-brand-border rounded-2xl px-4 sm:px-8 py-5 shadow-sm cursor-text overflow-hidden"
             onClick={() => isMobile && hiddenInputRef.current?.focus()}
           >
-            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-indigo-400/50 to-transparent rounded-t-2xl" />
+            {/* Subtle top glow when active */}
+            {stats.isActive && (
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-primary/50 to-transparent" />
+            )}
 
-            {/* Multiline word-wrap text display */}
+            {/* Text display */}
             <div
-              className="text-lg sm:text-2xl font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
-              style={{ maxHeight: isMobile ? '140px' : '180px' }}
+              className="text-lg sm:text-xl font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
+              style={{ maxHeight: isMobile ? '120px' : '160px' }}
             >
-              {targetContent.split('').map((char, index) => {
-                let status = 'upcoming';
-                if (index < userInput.length) {
-                  status = mistakes.includes(index) ? 'error' : 'correct';
-                } else if (index === userInput.length) {
-                  status = 'current';
-                }
+              {activeText.split('').map((char, index) => {
+                const isCorrect = index < userInput.length && !mistakes.has(index);
+                const isError = index < userInput.length && mistakes.has(index);
+                const isCurrent = index === userInput.length;
+                const isUpcoming = index > userInput.length;
+
                 return (
-                  <span
-                    key={index}
-                    id={status === 'current' ? 'current-char' : undefined}
-                    className={`
-                      relative transition-colors duration-75 inline
-                      ${status === 'correct' ? 'text-emerald-600' : ''}
-                      ${status === 'error' ? 'text-red-500 bg-red-50 rounded' : ''}
-                      ${status === 'upcoming' ? 'text-slate-400' : ''}
-                      ${status === 'current' ? 'text-indigo-600 border-b-2 border-indigo-500 animate-pulse' : ''}
-                    `}
-                  >
-                    {char === ' ' ? '\u00A0' : char}
+                  <span key={index} className="relative">
+                    {/* Blinking caret before current char */}
+                    {isCurrent && (
+                      <span className="typing-caret" aria-hidden="true" />
+                    )}
+                    <span
+                      id={isCurrent ? 'current-char' : undefined}
+                      className={`transition-colors duration-75 ${
+                        isCorrect ? 'typing-correct' :
+                        isError ? 'typing-error' :
+                        isCurrent ? 'typing-current' :
+                        'typing-upcoming'
+                      }`}
+                    >
+                      {char === ' ' ? '\u00A0' : char}
+                    </span>
                   </span>
                 );
               })}
             </div>
 
-            {/* Start hint overlay */}
-            {!startTime && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-2xl">
-                <div className="text-center px-4">
-                  <div className="text-3xl sm:text-4xl mb-2">{isMobile ? '📱' : '⚡'}</div>
-                  <p className="text-slate-500 font-semibold text-sm sm:text-base">
-                    {isMobile ? 'Tap anywhere & type to begin' : 'Start typing to begin your test…'}
-                  </p>
-                </div>
-              </div>
-            )}
+            {/* Start overlay */}
+            <AnimatePresence>
+              {!stats.isActive && !stats.isFinished && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 flex items-center justify-center bg-brand-surface/90 backdrop-blur-sm rounded-2xl"
+                >
+                  <div className="text-center px-6">
+                    <div className="text-4xl mb-3">{isMobile ? '📱' : '⚡'}</div>
+                    <p className="text-brand-text-muted font-semibold text-base">
+                      {isMobile ? 'Tap anywhere & type to begin' : 'Start typing to begin your test'}
+                    </p>
+                    <p className="text-brand-muted text-xs mt-1">Timer starts with your first keystroke</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
+
+          {/* Live CPM stat under the box */}
+          {stats.isActive && (
+            <motion.div
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-4 mt-2 px-1 text-xs text-brand-muted font-mono"
+            >
+              <span className="flex items-center gap-1"><Activity className="w-3 h-3" />{stats.cpm} CPM</span>
+              <span className="text-brand-border">·</span>
+              <span>{stats.errors} errors</span>
+              <span className="text-brand-border">·</span>
+              <span>{stats.progress}% done</span>
+            </motion.div>
+          )}
         </div>
 
-        {/* ── KEYBOARD & HANDS — desktop only ── */}
+        {/* ── KEYBOARD + HANDS (desktop only) ── */}
         {!isMobile && (
-          <div className="w-full flex justify-center items-end gap-[2px] transform scale-[0.55] sm:scale-75 lg:scale-[0.82] origin-top transition-transform">
+          <div className="w-full flex justify-center items-end gap-1 transform scale-[0.55] sm:scale-[0.7] lg:scale-[0.82] origin-top transition-transform">
             <div className="hidden md:block pb-2">
               <HandGuide
                 hand="left"
                 activeFinger={activeFinger.startsWith('left') || activeFinger === 'thumb' ? activeFinger : ''}
-                status={activeFinger.startsWith('left') || activeFinger === 'thumb' ? lastKeyPressStatus : 'none'}
+                status={activeFinger.startsWith('left') || activeFinger === 'thumb' ? (mistakes.has(userInput.length - 1) ? 'error' : stats.isActive ? 'correct' : 'none') : 'none'}
               />
             </div>
             <div className="z-10">
-              <VirtualKeyboard activeKey={nextChar} pressedKeys={pressedKeys} />
+              <VirtualKeyboard activeKey={nextChar} pressedKeys={new Set([pressedKey])} />
             </div>
             <div className="hidden md:block pb-2">
               <HandGuide
                 hand="right"
-                activeFinger={activeFinger.startsWith('right') || activeFinger === 'thumb' ? activeFinger : ''}
-                status={activeFinger.startsWith('right') || activeFinger === 'thumb' ? lastKeyPressStatus : 'none'}
+                activeFinger={activeFinger.startsWith('right') ? activeFinger : ''}
+                status={activeFinger.startsWith('right') ? (mistakes.has(userInput.length - 1) ? 'error' : stats.isActive ? 'correct' : 'none') : 'none'}
               />
             </div>
           </div>
         )}
 
-        {/* Mobile: show next key hint instead of full keyboard */}
-        {isMobile && nextChar && !isFinished && startTime && (
-          <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-5 py-3 shadow-sm">
-            <span className="text-xs text-slate-500">Next:</span>
-            <kbd className="bg-indigo-600 text-white font-black px-3 py-1.5 rounded-lg text-lg min-w-[44px] text-center">
+        {/* Mobile: next key hint */}
+        {isMobile && nextChar && stats.isActive && (
+          <div className="flex items-center gap-3 bg-brand-surface border border-brand-border rounded-xl px-5 py-2.5 shadow-sm">
+            <span className="text-xs text-brand-muted">Next:</span>
+            <kbd className="bg-brand-primary text-white font-black px-3 py-1 rounded-lg text-lg min-w-[40px] text-center font-mono">
               {nextChar === ' ' ? '⎵' : nextChar.toUpperCase()}
             </kbd>
-            <span className="text-xs text-slate-400">{activeFinger.replace('left-', 'Left ').replace('right-', 'Right ').replace('-', ' ')}</span>
+            <span className="text-xs text-brand-muted">{activeFinger.replace('left-', 'L ').replace('right-', 'R ').replace('-', ' ')}</span>
           </div>
         )}
 
-        {/* Finish Early button */}
-        {!isFinished && startTime && (
+        {/* Finish early */}
+        {!stats.isFinished && stats.isActive && (
           <button
-            onClick={() => setIsFinished(true)}
-            className="flex items-center gap-2 bg-white/80 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-slate-500 hover:text-rose-600 px-5 py-2 rounded-full font-semibold text-xs sm:text-sm transition-all shadow-sm"
+            onClick={(e) => { e.stopPropagation(); engine.reset(); /* actually finish */ }}
+            className="flex items-center gap-2 bg-brand-surface/80 hover:bg-rose-50 dark:hover:bg-rose-900/20 border border-brand-border hover:border-rose-300 text-brand-muted hover:text-rose-500 px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
             Finish Early
           </button>
         )}
       </div>
 
       {/* ── RESULT MODAL ── */}
-      {isFinished && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[100] p-4">
-          <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-10 max-w-md w-full text-center shadow-2xl">
-            <div className="text-5xl sm:text-6xl mb-4">🎉</div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-800 mb-1">Test Complete!</h2>
-            <p className="text-slate-500 mb-6 text-sm">Your results have been recorded.</p>
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-              <div className="bg-slate-50 border border-slate-200 p-3 sm:p-4 rounded-2xl">
-                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Gross</span>
-                <span className="text-xl sm:text-2xl font-black text-slate-700">{wpm} WPM</span>
+      <AnimatePresence>
+        {stats.isFinished && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-[100] p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              className="bg-brand-surface border border-brand-border rounded-3xl p-7 sm:p-10 max-w-sm w-full text-center shadow-2xl"
+            >
+              <div className="text-5xl mb-4">
+                {stats.accuracy >= 95 ? '🏆' : stats.accuracy >= 80 ? '🎉' : '💪'}
               </div>
-              <div className="bg-indigo-50 border border-indigo-200 p-3 sm:p-4 rounded-2xl">
-                <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest block mb-1">Net</span>
-                <span className="text-xl sm:text-2xl font-black text-indigo-600">{netWpm} WPM</span>
+              <h2 className="text-2xl sm:text-3xl font-black text-brand-text mb-1">Test Complete!</h2>
+              <p className="text-brand-muted text-sm mb-7">
+                {stats.netWpm >= 80 ? "Blazing fast! You're in the top tier." :
+                 stats.netWpm >= 50 ? "Great speed! Keep practicing to push further." :
+                 "Good effort! Consistent practice builds speed."}
+              </p>
+
+              <div className="grid grid-cols-3 gap-3 mb-7">
+                <div className="bg-brand-surface-2 border border-brand-border p-4 rounded-2xl">
+                  <div className="text-[10px] font-bold text-brand-muted uppercase tracking-widest mb-1">Gross</div>
+                  <div className="text-2xl font-black text-brand-text font-mono">{stats.wpm}</div>
+                  <div className="text-[10px] text-brand-muted">WPM</div>
+                </div>
+                <div className="bg-brand-primary/10 border border-brand-primary/20 p-4 rounded-2xl">
+                  <div className="text-[10px] font-bold text-brand-primary uppercase tracking-widest mb-1">Net</div>
+                  <div className="text-2xl font-black text-brand-primary font-mono">{stats.netWpm}</div>
+                  <div className="text-[10px] text-brand-primary/70">WPM</div>
+                </div>
+                <div className={`p-4 rounded-2xl border ${stats.accuracy >= 90 ? 'bg-brand-accent/10 border-brand-accent/20' : 'bg-rose-500/10 border-rose-500/20'}`}>
+                  <div className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${stats.accuracy >= 90 ? 'text-brand-accent' : 'text-rose-500'}`}>Acc</div>
+                  <div className={`text-2xl font-black font-mono ${stats.accuracy >= 90 ? 'text-brand-accent' : 'text-rose-500'}`}>{stats.accuracy}%</div>
+                  <div className={`text-[10px] ${stats.accuracy >= 90 ? 'text-brand-accent/70' : 'text-rose-400'}`}>{stats.errors} err</div>
+                </div>
               </div>
-              <div className="bg-emerald-50 border border-emerald-200 p-3 sm:p-4 rounded-2xl">
-                <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Acc</span>
-                <span className="text-xl sm:text-2xl font-black text-emerald-600">{accuracy}%</span>
+
+              <div className="grid grid-cols-2 gap-3 text-xs text-brand-muted mb-6">
+                <div className="bg-brand-surface-2 rounded-xl px-3 py-2 flex justify-between items-center">
+                  <span>CPM</span>
+                  <span className="font-mono font-semibold text-brand-text">{stats.cpm}</span>
+                </div>
+                <div className="bg-brand-surface-2 rounded-xl px-3 py-2 flex justify-between items-center">
+                  <span>Time</span>
+                  <span className="font-mono font-semibold text-brand-text">{stats.elapsedSeconds}s</span>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => window.location.reload()}
-                className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl font-bold text-sm transition-all border border-slate-300"
-              >
-                Try Again
-              </button>
-              <Link
-                to="/tests"
-                className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/30 transition-all text-center flex items-center justify-center"
-              >
-                More Tests
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleReset}
+                  className="flex-1 bg-brand-surface-2 hover:bg-brand-border text-brand-text py-3 rounded-xl font-bold text-sm transition-all border border-brand-border flex items-center justify-center gap-2"
+                >
+                  <RotateCcw className="w-4 h-4" /> Try Again
+                </button>
+                <Link
+                  to="/tests"
+                  className="flex-1 bg-brand-primary hover:bg-brand-secondary text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-brand-primary/20 transition-all text-center"
+                >
+                  More Tests
+                </Link>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
-};
-
-export default TypingTestPage;
+}

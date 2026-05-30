@@ -35,14 +35,17 @@ import testsRoutes from './routes/tests.js';
 import testSessionsRoutes from './routes/test_sessions.js';
 import authRoutes from './routes/auth.js';
 import leaderboardRoutes from './routes/leaderboard.js';
+import aiCoachRoutes from './routes/ai-coach.js';
+import certificatesRoutes from './routes/certificates.js';
 import { initCronJobs } from './cronService.js';
 
 app.use('/tests', testsRoutes);
-// Mount on /api/tests as well to support the requested path format
 app.use('/api/tests', testsRoutes);
 app.use('/test_sessions', testSessionsRoutes);
 app.use('/auth', authRoutes);
 app.use('/leaderboard', leaderboardRoutes);
+app.use('/api/ai', aiCoachRoutes);
+app.use('/api/certificates', certificatesRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
