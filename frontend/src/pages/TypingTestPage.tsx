@@ -593,6 +593,7 @@ export default function TypingTestPage() {
               >
                 <Award className="w-4 h-4" /> Get Certificate
               </Link>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
