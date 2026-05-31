@@ -158,6 +158,7 @@ import KeyboardTesterPage from './pages/KeyboardTesterPage';
 import SpacebarCounterPage from './pages/SpacebarCounterPage';
 import CpsTestPage from './pages/CpsTestPage';
 import ExamPage from './pages/ExamPage';
+import CertificatePage from './pages/CertificatePage';
 
 const AppContent = () => {
   const location = useLocation();
@@ -200,6 +201,9 @@ const AppContent = () => {
 
           {/* Phase 2: Exam Practice */}
           <Route path="/exam/:examId" element={<ExamPage />} />
+
+          {/* Phase 3: Gamification */}
+          <Route path="/certificate" element={<CertificatePage />} />
         </Routes>
       </main>
     </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity } from 'lucide-react';
+import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, TrendingUp } from 'lucide-react';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
@@ -97,13 +97,16 @@ export default function TypingTestPage() {
     return testContent.content;
   }, [testMode, testContent]);
 
+  // Achievement keys that can be unlocked
+  const [newUnlocks, setNewUnlocks] = useState<Array<{ icon: string; name: string; xp: number }>>([]);
+
   // Engine
   const engine = useTypingEngine(
     activeText,
     selectedDuration,
     'timed',
     (finalStats) => {
-      // Save session to backend
+      // 1. Save to backend
       fetch('https://typingteacher-2lnd.onrender.com/test_sessions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -116,6 +119,46 @@ export default function TypingTestPage() {
           accuracy: finalStats.accuracy,
         }),
       }).catch(() => {});
+
+      // 2. Save to localStorage for Dashboard
+      const session = {
+        netWpm: finalStats.netWpm,
+        wpm: finalStats.wpm,
+        accuracy: finalStats.accuracy,
+        errors: finalStats.errors,
+        cpm: finalStats.cpm,
+        elapsedSeconds: finalStats.elapsedSeconds,
+        mode: testMode,
+        date: new Date().toISOString(),
+      };
+      try {
+        const prev = JSON.parse(localStorage.getItem('typingHistory') || '[]');
+        const updated = [...prev, session].slice(-100); // keep last 100
+        localStorage.setItem('typingHistory', JSON.stringify(updated));
+
+        // 3. Check for newly unlocked achievements
+        const all = [...updated];
+        const total = all.length;
+        const bestWpm = Math.max(...all.map(s => s.netWpm || 0));
+        const avgAcc = Math.round(all.reduce((a, s) => a + (s.accuracy || 0), 0) / all.length);
+        const unlocks: Array<{ icon: string; name: string; xp: number }> = [];
+        const prevKeys = JSON.parse(localStorage.getItem('achievementKeys') || '[]') as string[];
+        const check = (key: string, cond: boolean, icon: string, name: string, xp: number) => {
+          if (cond && !prevKeys.includes(key)) { unlocks.push({ icon, name, xp }); prevKeys.push(key); }
+        };
+        check('first_test', total >= 1, '🎯', 'First Steps', 25);
+        check('wpm_30', bestWpm >= 30, '🔥', 'Warming Up', 50);
+        check('wpm_50', bestWpm >= 50, '⚡', '50 WPM Club', 100);
+        check('wpm_70', bestWpm >= 70, '🚀', '70 WPM Club', 150);
+        check('wpm_100', bestWpm >= 100, '🏆', '100 WPM Legend', 300);
+        check('acc_95', avgAcc >= 95, '🎯', 'Sharpshooter', 75);
+        check('acc_100', finalStats.accuracy === 100, '💎', 'Perfect Accuracy', 200);
+        check('tests_10', total >= 10, '📚', 'Dedicated', 100);
+        check('tests_50', total >= 50, '💪', 'Power User', 250);
+        check('speed_demon', finalStats.netWpm >= 80 && finalStats.accuracy >= 90, '👹', 'Speed Demon', 200);
+        localStorage.setItem('achievementKeys', JSON.stringify(prevKeys));
+        if (unlocks.length) setNewUnlocks(unlocks);
+      } catch {}
     }
   );
 
@@ -501,7 +544,36 @@ export default function TypingTestPage() {
                 </div>
               </div>
 
-              <div className="flex gap-3">
+                {/* Achievement unlocks */}
+                <AnimatePresence>
+                  {newUnlocks.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mb-5 space-y-2"
+                    >
+                      {newUnlocks.map((u, i) => (
+                        <motion.div
+                          key={u.name}
+                          initial={{ x: -20, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          transition={{ delay: i * 0.15 }}
+                          className="flex items-center gap-3 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl px-3 py-2 text-left"
+                        >
+                          <span className="text-2xl">{u.icon}</span>
+                          <div className="flex-1">
+                            <div className="text-xs font-bold text-amber-700 dark:text-amber-400">Achievement Unlocked!</div>
+                            <div className="text-sm font-semibold text-brand-text">{u.name}</div>
+                          </div>
+                          <span className="text-xs font-bold text-amber-600 dark:text-amber-500">+{u.xp} XP</span>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div className="flex gap-3">
                 <button
                   onClick={handleReset}
                   className="flex-1 bg-brand-surface-2 hover:bg-brand-border text-brand-text py-3 rounded-xl font-bold text-sm transition-all border border-brand-border flex items-center justify-center gap-2"
@@ -515,7 +587,12 @@ export default function TypingTestPage() {
                   More Tests
                 </Link>
               </div>
-            </motion.div>
+              <Link
+                to={`/certificate?wpm=${stats.netWpm}&acc=${stats.accuracy}&title=${encodeURIComponent(testContent.title)}`}
+                className="mt-2 w-full flex items-center justify-center gap-2 text-brand-muted hover:text-brand-primary text-sm font-semibold transition-colors"
+              >
+                <Award className="w-4 h-4" /> Get Certificate
+              </Link>
           </motion.div>
         )}
       </AnimatePresence>
