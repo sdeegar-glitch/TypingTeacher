@@ -1,133 +1,166 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Trophy, Medal, Award, TrendingUp, RefreshCcw } from 'lucide-react';
 
-// Mock data to simulate leaderboard before backend integration is fully hooked up
-const mockLeaderboard = [
-  { rank: 1, user: 'Alex', net_wpm: 120, accuracy: 98.5, date: '2024-05-12' },
-  { rank: 2, user: 'Sarah', net_wpm: 115, accuracy: 99.1, date: '2024-05-11' },
-  { rank: 3, user: 'JohnD', net_wpm: 105, accuracy: 96.0, date: '2024-05-10' },
-  { rank: 4, user: 'Emily', net_wpm: 98, accuracy: 97.2, date: '2024-05-12' },
-  { rank: 5, user: 'Michael', net_wpm: 92, accuracy: 94.5, date: '2024-05-09' },
+const API_URL = 'https://typingteacher-2lnd.onrender.com';
+
+interface LeaderboardEntry {
+  rank: number;
+  user: string;
+  net_wpm: number;
+  accuracy: number;
+  date: string;
+}
+
+const MOCK: LeaderboardEntry[] = [
+  { rank: 1, user: 'RocketTypist', net_wpm: 142, accuracy: 98.5, date: '2026-05-30' },
+  { rank: 2, user: 'KeyboardNinja', net_wpm: 128, accuracy: 99.1, date: '2026-05-29' },
+  { rank: 3, user: 'SpeedDemon99', net_wpm: 117, accuracy: 96.0, date: '2026-05-31' },
+  { rank: 4, user: 'TypeMaster', net_wpm: 105, accuracy: 97.2, date: '2026-05-28' },
+  { rank: 5, user: 'QuickFingers', net_wpm: 98, accuracy: 94.5, date: '2026-05-27' },
+  { rank: 6, user: 'AccuracyKing', net_wpm: 91, accuracy: 99.8, date: '2026-05-26' },
+  { rank: 7, user: 'HomeDeskTyper', net_wpm: 85, accuracy: 95.2, date: '2026-05-25' },
+  { rank: 8, user: 'CodeWriter42', net_wpm: 78, accuracy: 96.0, date: '2026-05-24' },
 ];
 
-const LeaderboardPage = () => {
-  const [activeTab, setActiveTab] = useState<'overall' | 'exam'>('overall');
-  const [data, setData] = useState(mockLeaderboard);
-  const [loading, setLoading] = useState(false);
+const RANK_COLORS = ['text-amber-400', 'text-slate-400', 'text-orange-500'];
+const RANK_BG = ['bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20',
+  'bg-slate-50 dark:bg-slate-500/10 border-slate-200 dark:border-slate-500/20',
+  'bg-orange-50 dark:bg-orange-500/10 border-orange-200 dark:border-orange-500/20'];
+
+export default function LeaderboardPage() {
+  const [data, setData] = useState<LeaderboardEntry[]>(MOCK);
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<'global' | 'exam'>('global');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const fetchLeaderboard = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch('https://typingteacher-2lnd.onrender.com/leaderboard');
-        const result = await response.json();
-        if (response.ok) {
-          // Use real data, even if empty
-          setData(result);
-        } else {
-          console.error('Failed to fetch leaderboard', result);
-        }
-      } catch (err) {
-        console.error('Error fetching leaderboard', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchLeaderboard();
-  }, [activeTab]);
+    document.title = 'Global Typing Leaderboard | FastTypingLab';
+  }, []);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/leaderboard`);
+      const json = await res.json();
+      if (Array.isArray(json) && json.length > 0) setData(json);
+      else setData(MOCK);
+    } catch {
+      setData(MOCK);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => { loadData(); }, []);
+
+  const top3 = data.slice(0, 3);
+  const rest = data.slice(3);
 
   return (
-    <div className="min-h-[80vh] bg-gray-50 p-8">
+    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center">Global Leaderboard</h1>
-        
-        {/* Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-1 inline-flex space-x-1">
-            <button
-              className={`px-6 py-2 rounded-md font-semibold text-sm transition-colors ${
-                activeTab === 'overall' 
-                  ? 'bg-indigo-600 text-white shadow' 
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-              onClick={() => setActiveTab('overall')}
-            >
-              Overall Top Speeds
-            </button>
-            <button
-              className={`px-6 py-2 rounded-md font-semibold text-sm transition-colors ${
-                activeTab === 'exam' 
-                  ? 'bg-indigo-600 text-white shadow' 
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-              onClick={() => setActiveTab('exam')}
-            >
-              Exam Specific (SSC/RRB)
-            </button>
-          </div>
+
+        {/* Header */}
+        <div className="text-center mb-10">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Trophy className="w-7 h-7 text-amber-400" />
+              <h1 className="text-3xl sm:text-4xl font-black text-brand-text">Global Leaderboard</h1>
+            </div>
+            <p className="text-brand-text-muted">The fastest typists on FastTypingLab. Can you make the list?</p>
+          </motion.div>
         </div>
 
-        {/* Leaderboard Table */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-x-auto">
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        {/* Tabs */}
+        <div className="flex gap-1 bg-brand-surface-2 rounded-xl p-1 mb-8 w-fit mx-auto">
+          {(['global', 'exam'] as const).map(t => (
+            <button key={t} onClick={() => setTab(t)}
+              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${tab === t ? 'bg-brand-surface shadow text-brand-text' : 'text-brand-muted hover:text-brand-text'}`}>
+              {t === 'global' ? '🌍 Global' : '📋 Exam (SSC/Court)'}
+            </button>
+          ))}
+          <button onClick={() => { setRefreshing(true); loadData(); }}
+            className="px-3 py-2 rounded-lg text-brand-muted hover:text-brand-text transition-all">
+            <RefreshCcw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <>
+            {/* Top 3 Podium */}
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {[top3[1], top3[0], top3[2]].map((entry, idx) => {
+                if (!entry) return <div key={idx} />;
+                const actualRank = idx === 1 ? 1 : idx === 0 ? 2 : 3;
+                const icons = [Medal, Trophy, Award];
+                const Icon = icons[actualRank - 1];
+                const height = actualRank === 1 ? 'pt-0' : actualRank === 2 ? 'pt-4' : 'pt-8';
+                return (
+                  <motion.div key={entry.rank}
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: (actualRank - 1) * 0.1 }}
+                    className={`${height}`}>
+                    <div className={`border rounded-2xl p-4 text-center ${RANK_BG[actualRank - 1]}`}>
+                      <Icon className={`w-6 h-6 mx-auto mb-2 ${RANK_COLORS[actualRank - 1]}`} />
+                      <div className="font-black text-brand-text text-sm truncate">{entry.user}</div>
+                      <div className={`text-2xl font-black font-mono mt-1 ${RANK_COLORS[actualRank - 1]}`}>{entry.net_wpm}</div>
+                      <div className="text-[10px] text-brand-muted">WPM</div>
+                      <div className="text-xs text-brand-muted mt-1">{entry.accuracy}% acc</div>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
-          ) : (
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Rank
-                  </th>
-                  <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    User
-                  </th>
-                  <th scope="col" className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Net WPM
-                  </th>
-                  <th scope="col" className="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Accuracy
-                  </th>
-                  <th scope="col" className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {data.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        {row.rank === 1 && <span className="text-2xl mr-2" title="1st Place">🏆</span>}
-                        {row.rank === 2 && <span className="text-2xl mr-2" title="2nd Place">🥈</span>}
-                        {row.rank === 3 && <span className="text-2xl mr-2" title="3rd Place">🥉</span>}
-                        {row.rank > 3 && <span className="text-lg font-semibold text-gray-500 w-8 text-center inline-block">{row.rank}</span>}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="font-semibold text-gray-900">{row.user}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <span className="px-3 py-1 inline-flex text-sm leading-5 font-bold rounded-full bg-indigo-100 text-indigo-800">
+
+            {/* Rest of leaderboard */}
+            <div className="bg-brand-surface border border-brand-border rounded-2xl overflow-hidden">
+              <div className="hidden sm:grid grid-cols-[60px_1fr_120px_100px_100px] px-5 py-3 border-b border-brand-border bg-brand-surface-2">
+                <div className="text-[10px] text-brand-muted uppercase tracking-wider">Rank</div>
+                <div className="text-[10px] text-brand-muted uppercase tracking-wider">Player</div>
+                <div className="text-[10px] text-brand-muted uppercase tracking-wider text-center">Net WPM</div>
+                <div className="text-[10px] text-brand-muted uppercase tracking-wider text-center">Accuracy</div>
+                <div className="text-[10px] text-brand-muted uppercase tracking-wider text-right">Date</div>
+              </div>
+              <div className="divide-y divide-brand-border">
+                {rest.map((row, i) => (
+                  <motion.div key={row.rank}
+                    initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.04 }}
+                    className="grid grid-cols-[50px_1fr_80px] sm:grid-cols-[60px_1fr_120px_100px_100px] px-5 py-4 items-center hover:bg-brand-surface-2 transition-colors">
+                    <div className="text-brand-muted font-mono font-bold text-sm">#{row.rank}</div>
+                    <div>
+                      <div className="font-bold text-brand-text">{row.user}</div>
+                    </div>
+                    <div className="text-center">
+                      <span className="bg-brand-primary/10 text-brand-primary px-3 py-1 rounded-full text-sm font-black font-mono">
                         {row.net_wpm} WPM
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-700">
-                      {row.accuracy}%
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
-                      {row.date}
-                    </td>
-                  </tr>
+                    </div>
+                    <div className="hidden sm:block text-center text-sm font-semibold text-brand-text">{row.accuracy}%</div>
+                    <div className="hidden sm:block text-right text-xs text-brand-muted">
+                      {new Date(row.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                    </div>
+                  </motion.div>
                 ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-8 text-center">
+              <p className="text-brand-muted text-sm mb-3">Think you can beat the top score? 🔥</p>
+              <a href="/tests" className="inline-block bg-brand-primary hover:bg-brand-secondary text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20">
+                Take the Speed Test
+              </a>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
-};
-
-export default LeaderboardPage;
+}

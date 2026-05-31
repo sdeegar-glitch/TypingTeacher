@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Keyboard, MousePointer, Space, FileText, ChevronRight, Zap, GraduationCap, Clock } from 'lucide-react';
+import { Keyboard, MousePointer, Space, FileText, ChevronRight, Zap, GraduationCap, Clock, Users, Type } from 'lucide-react';
 
 const TOOL_CARDS = [
   {
@@ -43,6 +43,26 @@ const TOOL_CARDS = [
     color: 'text-brand-secondary',
     bg: 'bg-brand-secondary/10 border-brand-secondary/20',
     tagColor: 'bg-brand-secondary/10 text-brand-secondary',
+  },
+  {
+    icon: Type,
+    title: 'Word Counter',
+    desc: 'Count words, characters, sentences, paragraphs and estimate reading time instantly.',
+    href: '/word-counter',
+    tag: 'New',
+    color: 'text-teal-500',
+    bg: 'bg-teal-500/10 border-teal-500/20',
+    tagColor: 'bg-teal-500/10 text-teal-500',
+  },
+  {
+    icon: Users,
+    title: 'Multiplayer Race',
+    desc: 'Race against friends and AI bots in real-time typing competitions.',
+    href: '/race',
+    tag: 'Live',
+    color: 'text-amber-500',
+    bg: 'bg-amber-500/10 border-amber-500/20',
+    tagColor: 'bg-amber-500/10 text-amber-500',
   },
 ];
 
@@ -169,9 +189,9 @@ export default function ToolsPage() {
           </h2>
           <div className="grid sm:grid-cols-3 gap-4">
             {[
-              { title: 'Word Counter', desc: 'Count words, characters, paragraphs instantly.' },
               { title: 'Case Converter', desc: 'Convert text between UPPER, lower, Title Case.' },
               { title: 'Coding Typing', desc: 'Type real JavaScript, Python, and SQL code.' },
+              { title: 'Typing Trainer AI', desc: 'AI-generated drills targeting your weak keys.' },
             ].map(t => (
               <div key={t.title} className="p-5 bg-brand-surface border border-dashed border-brand-border rounded-2xl opacity-60">
                 <h3 className="font-bold text-brand-text mb-1">{t.title}</h3>

@@ -49,6 +49,10 @@ const Navbar = () => {
           <Link to="/learn" className="text-brand-muted hover:text-brand-primary transition-colors">Lessons</Link>
           <Link to="/tests" className="text-brand-muted hover:text-brand-primary transition-colors">Tests</Link>
           <Link to="/tools" className="text-brand-muted hover:text-brand-primary transition-colors">Tools</Link>
+          <Link to="/race" className="text-brand-muted hover:text-brand-primary transition-colors flex items-center gap-1">
+            <span className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-pulse inline-block" />
+            Race
+          </Link>
 
           {isAuthenticated ? (
             <div className="flex items-center gap-4 pl-4 border-l border-brand-muted/20">
@@ -159,6 +163,9 @@ import SpacebarCounterPage from './pages/SpacebarCounterPage';
 import CpsTestPage from './pages/CpsTestPage';
 import ExamPage from './pages/ExamPage';
 import CertificatePage from './pages/CertificatePage';
+import WordCounterPage from './pages/WordCounterPage';
+import TypingTestForPage from './pages/TypingTestForPage';
+import MultiplayerPage from './pages/MultiplayerPage';
 
 const AppContent = () => {
   const location = useLocation();
@@ -189,8 +196,8 @@ const AppContent = () => {
           <Route path="/learn/:lessonId" element={<LearningInterfacePageWithKey />} />
           <Route path="/login" element={<AuthPage />} />
           <Route path="/signup" element={<AuthPage />} />
-          <Route path="/leaderboard" element={<ProtectedRoute><LeaderboardPage /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />
 
           {/* Phase 2: Tools & Utilities */}
@@ -204,6 +211,11 @@ const AppContent = () => {
 
           {/* Phase 3: Gamification */}
           <Route path="/certificate" element={<CertificatePage />} />
+
+          {/* Phase 4: Multiplayer + SEO + Tools */}
+          <Route path="/race" element={<MultiplayerPage />} />
+          <Route path="/word-counter" element={<WordCounterPage />} />
+          <Route path="/typing-test-for/:profession" element={<TypingTestForPage />} />
         </Routes>
       </main>
     </div>
