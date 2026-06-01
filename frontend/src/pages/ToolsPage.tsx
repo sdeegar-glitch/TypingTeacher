@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Keyboard, MousePointer, Space, FileText, ChevronRight, Zap, GraduationCap, Clock, Users, Type } from 'lucide-react';
+import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code } from 'lucide-react';
 
 const TOOL_CARDS = [
   {
@@ -63,6 +63,26 @@ const TOOL_CARDS = [
     color: 'text-amber-500',
     bg: 'bg-amber-500/10 border-amber-500/20',
     tagColor: 'bg-amber-500/10 text-amber-500',
+  },
+  {
+    icon: CaseSensitive,
+    title: 'Case Converter',
+    desc: 'Convert text between UPPER, lower, Title, camelCase, snake_case, and 6 more formats.',
+    href: '/case-converter',
+    tag: 'New',
+    color: 'text-violet-500',
+    bg: 'bg-violet-500/10 border-violet-500/20',
+    tagColor: 'bg-violet-500/10 text-violet-500',
+  },
+  {
+    icon: Code,
+    title: 'Coding Typing',
+    desc: 'Type real JS, Python, TypeScript, SQL and CSS code snippets. Track WPM while coding.',
+    href: '/coding-typing',
+    tag: 'Dev',
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-500/10 border-emerald-500/20',
+    tagColor: 'bg-emerald-500/10 text-emerald-500',
   },
 ];
 
@@ -187,11 +207,10 @@ export default function ToolsPage() {
             <Clock className="w-5 h-5 text-brand-muted" />
             Coming Soon
           </h2>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { title: 'Case Converter', desc: 'Convert text between UPPER, lower, Title Case.' },
-              { title: 'Coding Typing', desc: 'Type real JavaScript, Python, and SQL code.' },
-              { title: 'Typing Trainer AI', desc: 'AI-generated drills targeting your weak keys.' },
+              { title: 'Typing Trainer AI', desc: 'AI-generated drills targeting your weakest keys and common error patterns.' },
+              { title: 'Typing History Export', desc: 'Export your full typing history as CSV or PDF for analysis.' },
             ].map(t => (
               <div key={t.title} className="p-5 bg-brand-surface border border-dashed border-brand-border rounded-2xl opacity-60">
                 <h3 className="font-bold text-brand-text mb-1">{t.title}</h3>

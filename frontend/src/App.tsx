@@ -166,6 +166,8 @@ import CertificatePage from './pages/CertificatePage';
 import WordCounterPage from './pages/WordCounterPage';
 import TypingTestForPage from './pages/TypingTestForPage';
 import MultiplayerPage from './pages/MultiplayerPage';
+import CaseConverterPage from './pages/CaseConverterPage';
+import CodingTypingPage from './pages/CodingTypingPage';
 
 const AppContent = () => {
   const location = useLocation();
@@ -216,6 +218,8 @@ const AppContent = () => {
           <Route path="/race" element={<MultiplayerPage />} />
           <Route path="/word-counter" element={<WordCounterPage />} />
           <Route path="/typing-test-for/:profession" element={<TypingTestForPage />} />
+          <Route path="/case-converter" element={<CaseConverterPage />} />
+          <Route path="/coding-typing" element={<CodingTypingPage />} />
         </Routes>
       </main>
     </div>
