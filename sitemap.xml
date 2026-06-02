@@ -82,6 +82,71 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Hindi Typing Pages -->
+  <url>
+    <loc>https://fasttypinglab.com/hindi-typing-test</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://fasttypinglab.com/kruti-dev-typing</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://fasttypinglab.com/learn-hindi-typing</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- SEO Landing Pages -->
+  <url>
+    <loc>https://fasttypinglab.com/competitive-exam-typing</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://fasttypinglab.com/typing-certificates</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Games -->
+  <url>
+    <loc>https://fasttypinglab.com/games</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://fasttypinglab.com/games/word-rain</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://fasttypinglab.com/games/zombie</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://fasttypinglab.com/games/speed-racer</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Blog -->
+  <url>
+    <loc>https://fasttypinglab.com/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Multiplayer -->
+  <url>
+    <loc>https://fasttypinglab.com/race</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Exam Practice Pages -->
   <url>
     <loc>https://fasttypinglab.com/exam/ssc-chsl</loc>
