@@ -39,9 +39,9 @@ const Navbar = () => {
           className="text-xl font-bold tracking-tight text-brand-text flex items-center gap-2 hover:opacity-80 transition-opacity z-50 relative"
         >
           <span className="w-8 h-8 rounded-xl bg-brand-primary text-white flex items-center justify-center font-black text-lg shadow-md shadow-brand-primary/20">
-            T
+            F
           </span>
-          TypingTeacher
+          FastTypingLab
         </Link>
         
         {/* Desktop Navigation */}
