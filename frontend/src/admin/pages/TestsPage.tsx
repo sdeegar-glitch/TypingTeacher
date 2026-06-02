@@ -45,7 +45,7 @@ export default function TestsPage() {
   const triggerGenerate = async () => {
     setGenerating(true);
     try {
-      const res = await fetch('https://typingteacher-2lnd.onrender.com/api/tests/generate', { method: 'POST' });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}/api/tests/generate`, { method: 'POST' });
       if (res.ok) {
         showToast('AI generation started in background. Refresh in ~30s.');
         setTimeout(() => loadTests(), 35000);

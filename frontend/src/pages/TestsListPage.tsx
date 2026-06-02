@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, ChevronRight, Zap } from 'lucide-react';
 
-const API_URL = 'https://typingteacher-2lnd.onrender.com/api/tests';
+import { API_URL as BASE_URL } from '../lib/api';
+const API_URL = `${BASE_URL}/api/tests`;
 
 export default function TestsListPage() {
   const [tests, setTests] = useState<any[]>([]);

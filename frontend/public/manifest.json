@@ -1,0 +1,38 @@
+{
+  "name": "FastTypingLab",
+  "short_name": "FastTypingLab",
+  "description": "Free typing speed test, Hindi typing practice, and AI typing tutor. Practice for SSC, CPCT, and government exams.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f1a",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Typing Test",
+      "url": "/tests",
+      "description": "Start a typing speed test"
+    },
+    {
+      "name": "Hindi Typing",
+      "url": "/hindi-typing-test",
+      "description": "Practice Hindi Unicode typing"
+    },
+    {
+      "name": "Typing Games",
+      "url": "/games",
+      "description": "Play typing games and earn XP"
+    }
+  ]
+}

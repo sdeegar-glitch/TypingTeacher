@@ -23,7 +23,7 @@ export default function AIGeneratorPage() {
 
     // Use backend route for security (proxies Gemini API key server-side)
     try {
-      const res = await fetch('https://typingteacher-2lnd.onrender.com/api/tests/generate', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}/api/tests/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ topic })
@@ -64,7 +64,7 @@ export default function AIGeneratorPage() {
     try {
       const wordCount = preview.content.split(/\s+/).length;
       const slug = preview.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now();
-      const res = await fetch('https://typingteacher-2lnd.onrender.com/api/tests', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}/api/tests`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...preview, slug, word_count: wordCount, estimated_read_time: Math.ceil(wordCount / 200), typing_duration_options: ['1min', '3min', '5min', '10min'] })

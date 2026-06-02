@@ -88,6 +88,30 @@ const EXAMS: Record<string, {
     ],
     text: 'Practice your Hindi typing speed here. The government of India requires Hindi typing proficiency for many central government posts including SSC, CPCT, and court examination posts. Consistent daily practice of at least one hour is recommended to achieve the required speed. Focus on accuracy over speed initially, as errors will reduce your net score significantly in the final examination.',
   },
+  'up-police': {
+    title: 'UP Police Typing Test',
+    fullName: 'Uttar Pradesh Police — Computer Operator / Clerk Typing Test',
+    duration: 300, // 5 min
+    wpmTarget: 25,
+    accuracyTarget: 80,
+    language: 'Hindi',
+    rules: [
+      'Duration: 5 minutes for UP Police typing test',
+      'Speed: 25 WPM minimum in Hindi Unicode/INSCRIPT',
+      'Font: Mangal Unicode or Kruti Dev as specified',
+      'No software assistance (autocorrect, spell check) permitted',
+      'Test conducted on government-provided computers at exam centers',
+      'Errors reduce the net score — accuracy is equally important',
+    ],
+    tips: [
+      'Practice the INSCRIPT or Remington layout consistently every day',
+      'Focus on common Hindi words from UP government schemes and news',
+      'Practice typing matras (vowel marks) accurately — they are most common mistakes',
+      'Aim for 30+ WPM to have a comfortable safety margin above the 25 WPM requirement',
+      'Practice on FastTypingLab\'s Hindi Typing Test to simulate real exam conditions',
+    ],
+    text: 'उत्तर प्रदेश पुलिस विभाग ने नागरिकों की सुरक्षा के लिए नई पहल शुरू की है। पुलिस थानों में कंप्यूटर ऑपरेटर की भर्ती के लिए हिंदी टाइपिंग परीक्षा अनिवार्य है। अभ्यर्थियों को प्रतिदिन हिंदी टाइपिंग का अभ्यास करना चाहिए। सरकारी योजनाओं और समाचारों से संबंधित अनुच्छेदों पर विशेष ध्यान देना चाहिए।',
+  },
   'court-typing': {
     title: 'Court Typing Test',
     fullName: 'High Court / District Court Typing Examination',

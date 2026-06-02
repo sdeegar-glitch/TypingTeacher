@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const API_URL = 'https://typingteacher-2lnd.onrender.com/api/tests';
+import { API_URL as BASE_URL } from '../lib/api';
+const API_URL = `${BASE_URL}/api/tests`;
 
 export default function TestConfigPage() {
   const { slug } = useParams();

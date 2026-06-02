@@ -1,6 +1,6 @@
 import type { DashboardStats, AnalyticsPoint, PlatformUser, TypingTest, Category, AIGenerationLog, ActivityLog } from './types';
 
-const API = 'https://typingteacher-2lnd.onrender.com';
+const API = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
 
 // ─── Stats ────────────────────────────────────────────────
 export async function fetchDashboardStats(): Promise<DashboardStats> {

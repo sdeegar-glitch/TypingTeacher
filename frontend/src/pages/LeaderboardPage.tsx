@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Medal, Award, TrendingUp, RefreshCcw } from 'lucide-react';
 
-const API_URL = 'https://typingteacher-2lnd.onrender.com';
+import { API_URL } from '../lib/api';
 
 interface LeaderboardEntry {
   rank: number;

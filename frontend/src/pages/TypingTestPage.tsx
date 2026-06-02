@@ -7,7 +7,8 @@ import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 
-const API_URL = 'https://typingteacher-2lnd.onrender.com/api/tests';
+import { API_URL as BASE_URL, saveSession } from '../lib/api';
+const API_URL = `${BASE_URL}/api/tests`;
 
 // Duration options
 const DURATION_OPTIONS = [
@@ -16,6 +17,7 @@ const DURATION_OPTIONS = [
   { label: '1 min', value: 60 },
   { label: '2 min', value: 120 },
   { label: '5 min', value: 300 },
+  { label: '10 min', value: 600 },
 ];
 
 // Random word bank for "words" mode
@@ -99,6 +101,20 @@ export default function TypingTestPage() {
 
   // Achievement keys that can be unlocked
   const [newUnlocks, setNewUnlocks] = useState<Array<{ icon: string; name: string; xp: number }>>([]);
+  // Anti-cheat
+  const [cheatWarning, setCheatWarning] = useState<string | null>(null);
+  const showCheat = (msg: string) => { setCheatWarning(msg); setTimeout(() => setCheatWarning(null), 4000); };
+
+  // Detect paste
+  useEffect(() => {
+    const onPaste = (e: ClipboardEvent) => {
+      e.preventDefault();
+      showCheat('⚠️ Paste detected! Test invalidated. Type manually to get a fair score.');
+      reset();
+    };
+    window.addEventListener('paste', onPaste);
+    return () => window.removeEventListener('paste', onPaste);
+  }, []);
 
   // Engine
   const engine = useTypingEngine(
@@ -107,18 +123,14 @@ export default function TypingTestPage() {
     'timed',
     (finalStats) => {
       // 1. Save to backend
-      fetch('https://typingteacher-2lnd.onrender.com/test_sessions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          test_id: Number(id) || null,
-          duration: finalStats.elapsedSeconds,
-          gross_wpm: finalStats.wpm,
-          net_wpm: finalStats.netWpm,
-          errors: finalStats.errors,
-          accuracy: finalStats.accuracy,
-        }),
-      }).catch(() => {});
+      saveSession({
+        test_id: Number(id) || null,
+        duration: finalStats.elapsedSeconds,
+        gross_wpm: finalStats.wpm,
+        net_wpm: finalStats.netWpm,
+        errors: finalStats.errors,
+        accuracy: finalStats.accuracy,
+      });
 
       // 2. Save to localStorage for Dashboard
       const session = {
@@ -227,6 +239,13 @@ export default function TypingTestPage() {
       className="h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none"
       onClick={() => isMobile && hiddenInputRef.current?.focus()}
     >
+      {/* Anti-cheat warning */}
+      {cheatWarning && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-rose-600 text-white px-5 py-2.5 rounded-xl shadow-2xl font-bold text-sm flex items-center gap-2 animate-bounce">
+          {cheatWarning}
+        </div>
+      )}
+
       {/* Hidden mobile input */}
       {isMobile && (
         <input

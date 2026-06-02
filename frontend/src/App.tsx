@@ -48,11 +48,13 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-6 text-sm font-medium">
           <Link to="/learn" className="text-brand-muted hover:text-brand-primary transition-colors">Lessons</Link>
           <Link to="/tests" className="text-brand-muted hover:text-brand-primary transition-colors">Tests</Link>
+          <Link to="/hindi-typing-test" className="text-brand-muted hover:text-brand-primary transition-colors">Hindi</Link>
+          <Link to="/competitive-exam-typing" className="text-brand-muted hover:text-brand-primary transition-colors">Exams</Link>
           <Link to="/tools" className="text-brand-muted hover:text-brand-primary transition-colors">Tools</Link>
-          <Link to="/race" className="text-brand-muted hover:text-brand-primary transition-colors flex items-center gap-1">
-            <span className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-pulse inline-block" />
-            Race
+          <Link to="/games" className="text-brand-muted hover:text-brand-primary transition-colors flex items-center gap-1">
+            <span>🎮</span> Games
           </Link>
+          <Link to="/blog" className="text-brand-muted hover:text-brand-primary transition-colors">Blog</Link>
 
           {isAuthenticated ? (
             <div className="flex items-center gap-4 pl-4 border-l border-brand-muted/20">
@@ -112,6 +114,9 @@ const Navbar = () => {
           <div className="flex flex-col gap-6 text-xl font-medium">
             <Link to="/learn" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Lessons</Link>
             <Link to="/tests" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Tests</Link>
+            <Link to="/hindi-typing-test" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Hindi Typing</Link>
+            <Link to="/competitive-exam-typing" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Exam Prep</Link>
+            <Link to="/games" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">🎮 Games</Link>
             <Link to="/tools" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Tools</Link>
 
             {isAuthenticated ? (
@@ -168,6 +173,17 @@ import TypingTestForPage from './pages/TypingTestForPage';
 import MultiplayerPage from './pages/MultiplayerPage';
 import CaseConverterPage from './pages/CaseConverterPage';
 import CodingTypingPage from './pages/CodingTypingPage';
+import GamesPage from './pages/GamesPage';
+import WordRainPage from './pages/WordRainPage';
+import ZombieTypingPage from './pages/ZombieTypingPage';
+import SpeedRacerPage from './pages/SpeedRacerPage';
+import HindiTypingPage from './pages/HindiTypingPage';
+import KrutiDevPage from './pages/KrutiDevPage';
+import CompetitiveExamTypingPage from './pages/CompetitiveExamTypingPage';
+import LearnHindiTypingPage from './pages/LearnHindiTypingPage';
+import TypingCertificatesPage from './pages/TypingCertificatesPage';
+import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
 
 const AppContent = () => {
   const location = useLocation();
@@ -220,6 +236,19 @@ const AppContent = () => {
           <Route path="/typing-test-for/:profession" element={<TypingTestForPage />} />
           <Route path="/case-converter" element={<CaseConverterPage />} />
           <Route path="/coding-typing" element={<CodingTypingPage />} />
+
+          {/* Phase 5: Games + Hindi + Blog */}
+          <Route path="/games" element={<GamesPage />} />
+          <Route path="/games/word-rain" element={<WordRainPage />} />
+          <Route path="/games/zombie" element={<ZombieTypingPage />} />
+          <Route path="/games/speed-racer" element={<SpeedRacerPage />} />
+          <Route path="/hindi-typing-test" element={<HindiTypingPage />} />
+          <Route path="/kruti-dev-typing" element={<KrutiDevPage />} />
+          <Route path="/learn-hindi-typing" element={<LearnHindiTypingPage />} />
+          <Route path="/typing-certificates" element={<TypingCertificatesPage />} />
+          <Route path="/competitive-exam-typing" element={<CompetitiveExamTypingPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
         </Routes>
       </main>
     </div>

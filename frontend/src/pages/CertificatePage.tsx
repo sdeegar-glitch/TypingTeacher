@@ -3,7 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Download, Share2, CheckCircle, Award, ExternalLink, ChevronLeft, Check } from 'lucide-react';
 
-const API_URL = 'https://typingteacher-2lnd.onrender.com';
+import { API_URL } from '../lib/api';
 
 interface CertData {
   id: string;

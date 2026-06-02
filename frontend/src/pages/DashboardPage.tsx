@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Zap, Target, Flame, Trophy, Star, TrendingUp, Award, Brain, ChevronRight, Lock } from 'lucide-react';
 
-const API_URL = 'https://typingteacher-2lnd.onrender.com';
+import { API_URL } from '../lib/api';
 
 // XP needed per level
 const xpForLevel = (level: number) => level * 200;
@@ -81,6 +81,12 @@ export default function DashboardPage() {
   const [loadingAI, setLoadingAI] = useState(false);
   const [tab, setTab] = useState<'overview' | 'history' | 'achievements' | 'coach'>('overview');
 
+  // Daily reward streak
+  const [streak, setStreak] = useState(0);
+  const [rewardClaimed, setRewardClaimed] = useState(false);
+  const [rewardXP, setRewardXP] = useState(0);
+  const [showRewardBanner, setShowRewardBanner] = useState(false);
+
   useEffect(() => {
     document.title = 'Dashboard | FastTypingLab';
     setSessions(loadLocalStats());
@@ -88,7 +94,35 @@ export default function DashboardPage() {
       .then(r => r.json())
       .then(d => Array.isArray(d) && setAvailableTests(d.slice(0, 6)))
       .catch(() => {});
+
+    // Streak logic
+    const today = new Date().toDateString();
+    const lastClaim = localStorage.getItem('lastDailyReward');
+    const savedStreak = Number(localStorage.getItem('dailyStreak') || '0');
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    const claimed = lastClaim === today;
+    setRewardClaimed(claimed);
+    if (lastClaim === yesterday || lastClaim === today) {
+      setStreak(savedStreak);
+    } else if (lastClaim) {
+      // Streak broken
+      localStorage.setItem('dailyStreak', '0');
+      setStreak(0);
+    }
   }, []);
+
+  const claimDailyReward = () => {
+    const today = new Date().toDateString();
+    const newStreak = streak + 1;
+    const xp = newStreak >= 30 ? 300 : newStreak >= 7 ? 100 : newStreak >= 3 ? 50 : 25;
+    localStorage.setItem('lastDailyReward', today);
+    localStorage.setItem('dailyStreak', String(newStreak));
+    setStreak(newStreak);
+    setRewardClaimed(true);
+    setRewardXP(xp);
+    setShowRewardBanner(true);
+    setTimeout(() => setShowRewardBanner(false), 3500);
+  };
 
   const stats = computeStats(sessions);
   const xpPercent = Math.min(100, stats.xpNeeded ? Math.round((stats.xpIntoLevel / stats.xpNeeded) * 100) : 0);
@@ -123,16 +157,38 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-brand-bg text-brand-text py-6 px-4 sm:px-6">
       <div className="container mx-auto max-w-5xl">
 
+        {/* ── Daily Reward Banner ── */}
+        <AnimatePresence>
+          {showRewardBanner && (
+            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+              className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-amber-500 text-white px-6 py-3 rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-2">
+              🎁 Daily Reward Claimed! +{rewardXP} XP · Streak: {streak} days 🔥
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* ── Header ── */}
-        <div className="flex flex-wrap items-start justify-between gap-4 mb-8">
+        <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-black text-brand-text">Your Dashboard</h1>
             <p className="text-brand-text-muted text-sm mt-1">Track your progress, earn XP, unlock achievements</p>
           </div>
-          <Link to="/tests"
-            className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md shadow-brand-primary/20">
-            <Zap className="w-4 h-4" /> New Test
-          </Link>
+          <div className="flex gap-2">
+            {!rewardClaimed ? (
+              <button onClick={claimDailyReward}
+                className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md shadow-amber-500/20 animate-pulse">
+                🎁 Claim Daily Reward
+              </button>
+            ) : (
+              <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-500 px-4 py-2.5 rounded-xl text-sm font-bold">
+                🔥 {streak} Day Streak
+              </div>
+            )}
+            <Link to="/tests"
+              className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md shadow-brand-primary/20">
+              <Zap className="w-4 h-4" /> New Test
+            </Link>
+          </div>
         </div>
 
         {/* ── Level + XP Bar ── */}
