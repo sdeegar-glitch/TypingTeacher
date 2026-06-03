@@ -306,9 +306,10 @@ export default function TypingTestPage() {
                   onClick={(e) => { e.stopPropagation(); setSelectedDuration(opt.value); reset(); }}
                   className={`px-2 sm:px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
                     selectedDuration === opt.value
-                      ? 'bg-brand-primary text-white shadow'
+                      ? 'text-white shadow'
                       : 'text-brand-muted hover:text-brand-text'
                   }`}
+                  style={selectedDuration === opt.value ? { background: 'linear-gradient(135deg,#304C53,#2A9DAE)' } : {}}
                 >
                   {opt.label}
                 </button>
@@ -360,7 +361,8 @@ export default function TypingTestPage() {
       {/* Progress bar */}
       <div className="shrink-0 h-0.5 bg-brand-border">
         <motion.div
-          className="h-full bg-gradient-to-r from-brand-primary to-brand-secondary"
+          className="h-full"
+          style={{ background: 'linear-gradient(90deg, #304C53, #2A9DAE)' }}
           animate={{ width: `${stats.progress}%` }}
           transition={{ duration: 0.1 }}
         />
@@ -601,7 +603,8 @@ export default function TypingTestPage() {
                 </button>
                 <Link
                   to="/tests"
-                  className="flex-1 bg-brand-primary hover:bg-brand-secondary text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-brand-primary/20 transition-all text-center"
+                  className="flex-1 py-3 rounded-xl font-bold text-sm text-white text-center transition-all hover:opacity-90 active:scale-95"
+                  style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 14px rgba(48,76,83,.25)' }}
                 >
                   More Tests
                 </Link>
