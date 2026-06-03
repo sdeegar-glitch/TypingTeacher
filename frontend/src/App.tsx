@@ -26,6 +26,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const NAV_LINKS = [
   { to: '/tests',                  label: 'Tests' },
   { to: '/learn',                  label: 'Lessons' },
+  { to: '/hindi-lessons',            label: 'हिंदी पाठ' },
   { to: '/hindi-typing-jungle',     label: 'हिंदी जंगल' },
   { to: '/competitive-exam-typing',label: 'Exams' },
   { to: '/games',                  label: 'Games' },
@@ -213,6 +214,8 @@ import ZombieTypingPage from './pages/ZombieTypingPage';
 import SpeedRacerPage from './pages/SpeedRacerPage';
 import HindiTypingPage from './pages/HindiTypingPage';
 import HindiTypingJunglePage from './pages/HindiTypingJunglePage';
+import HindiLessonCoursePage from './pages/HindiLessonCoursePage';
+import HindiLessonPage from './pages/HindiLessonPage';
 import KrutiDevPage from './pages/KrutiDevPage';
 import CompetitiveExamTypingPage from './pages/CompetitiveExamTypingPage';
 import LearnHindiTypingPage from './pages/LearnHindiTypingPage';
@@ -279,6 +282,8 @@ const AppContent = () => {
           <Route path="/games/speed-racer" element={<SpeedRacerPage />} />
           <Route path="/hindi-typing-test" element={<HindiTypingPage />} />
           <Route path="/hindi-typing-jungle" element={<HindiTypingJunglePage />} />
+          <Route path="/hindi-lessons" element={<HindiLessonCoursePage />} />
+          <Route path="/hindi-lessons/:lessonId" element={<HindiLessonPage />} />
           <Route path="/kruti-dev-typing" element={<KrutiDevPage />} />
           <Route path="/learn-hindi-typing" element={<LearnHindiTypingPage />} />
           <Route path="/typing-certificates" element={<TypingCertificatesPage />} />
