@@ -23,137 +23,171 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const NAV_LINKS = [
+  { to: '/tests',                  label: 'Tests' },
+  { to: '/learn',                  label: 'Lessons' },
+  { to: '/hindi-typing-test',      label: 'Hindi' },
+  { to: '/competitive-exam-typing',label: 'Exams' },
+  { to: '/games',                  label: 'Games' },
+  { to: '/tools',                  label: 'Tools' },
+  { to: '/blog',                   label: 'Blog' },
+];
+
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const isAuthenticated = !!localStorage.getItem('accessToken');
   const { isDark, toggleTheme } = useTheme();
+  const location = useLocation();
 
   const closeMenu = () => setIsMobileMenuOpen(false);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => { closeMenu(); }, [location.pathname]);
+
   return (
-    <nav className="bg-brand-bg/80 backdrop-blur-xl border-b border-brand-muted/20 sticky top-0 z-50 transition-colors">
-      <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <Link 
-          to="/" 
-          onClick={closeMenu}
-          className="text-xl font-bold tracking-tight text-brand-text flex items-center gap-2 hover:opacity-80 transition-opacity z-50 relative"
-        >
-          <span className="w-8 h-8 rounded-xl bg-brand-primary text-white flex items-center justify-center font-black text-lg shadow-md shadow-brand-primary/20">
-            F
-          </span>
-          FastTypingLab
-        </Link>
-        
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link to="/learn" className="text-brand-muted hover:text-brand-primary transition-colors">Lessons</Link>
-          <Link to="/tests" className="text-brand-muted hover:text-brand-primary transition-colors">Tests</Link>
-          <Link to="/hindi-typing-test" className="text-brand-muted hover:text-brand-primary transition-colors">Hindi</Link>
-          <Link to="/competitive-exam-typing" className="text-brand-muted hover:text-brand-primary transition-colors">Exams</Link>
-          <Link to="/tools" className="text-brand-muted hover:text-brand-primary transition-colors">Tools</Link>
-          <Link to="/games" className="text-brand-muted hover:text-brand-primary transition-colors flex items-center gap-1">
-            <span>🎮</span> Games
+    <>
+      <nav className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled ? 'glass-nav shadow-lg shadow-black/5' : 'bg-transparent border-b border-transparent'
+      }`}>
+        <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+
+          {/* ── Logo ── */}
+          <Link to="/" onClick={closeMenu}
+            className="flex items-center gap-2.5 font-black text-lg tracking-tight text-brand-text hover:opacity-85 transition-opacity z-50 relative shrink-0">
+            <span className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm text-white shadow-lg"
+              style={{ background: 'linear-gradient(135deg, #304C53 0%, #2A9DAE 100%)' }}>
+              F
+            </span>
+            <span className="hidden sm:inline">FastTypingLab</span>
           </Link>
-          <Link to="/blog" className="text-brand-muted hover:text-brand-primary transition-colors">Blog</Link>
 
-          {isAuthenticated ? (
-            <div className="flex items-center gap-4 pl-4 border-l border-brand-muted/20">
-              <Link to="/dashboard" className="text-brand-muted hover:text-brand-primary transition-colors">Dashboard</Link>
-              <button 
-                onClick={() => {
-                  localStorage.removeItem('accessToken');
-                  window.location.href = '/login';
-                }}
-                className="text-brand-muted hover:text-rose-500 transition-colors"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-4 pl-4 border-l border-brand-muted/20">
-              <Link 
-                to="/login" 
-                className="text-brand-muted hover:text-brand-text transition-colors"
-              >
-                Log in
-              </Link>
-              <Link 
-                to="/signup" 
-                className="bg-brand-primary text-white hover:bg-brand-secondary px-4 py-2 rounded-lg font-semibold transition-all duration-300 shadow-sm"
-              >
-                Sign up
-              </Link>
-            </div>
-          )}
-        </div>
+          {/* ── Desktop Nav Links ── */}
+          <div className="hidden md:flex items-center gap-1 text-sm font-medium flex-1 justify-center">
+            {NAV_LINKS.map(link => {
+              const active = location.pathname === link.to || location.pathname.startsWith(link.to + '/');
+              return (
+                <Link key={link.to} to={link.to}
+                  className={`px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                    active
+                      ? 'text-brand-primary bg-brand-primary/10 font-semibold'
+                      : 'text-brand-muted hover:text-brand-text hover:bg-brand-surface-2'
+                  }`}>
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
 
-        {/* Theme Toggle + Mobile Menu Toggle Button */}
-        <div className="flex items-center gap-1">
-          <button
-            onClick={toggleTheme}
-            className="p-2 text-brand-muted hover:text-brand-text rounded-lg hover:bg-brand-surface-2 transition-all"
-            aria-label="Toggle dark mode"
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-          <button 
-            className="md:hidden z-50 relative p-2 text-brand-text"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle mobile menu"
-          >
-            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
+          {/* ── Right Side ── */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Theme toggle */}
+            <button onClick={toggleTheme} aria-label="Toggle theme"
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
+              {isDark
+                ? <Sun size={17} />
+                : <Moon size={17} />}
+            </button>
 
-        {/* Mobile Navigation Overlay */}
-        <div 
-          className={`fixed inset-0 bg-brand-bg/95 backdrop-blur-md z-40 flex flex-col pt-24 px-6 md:hidden transition-transform duration-300 ease-in-out ${
-            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
-          <div className="flex flex-col gap-6 text-xl font-medium">
-            <Link to="/learn" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Lessons</Link>
-            <Link to="/tests" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Tests</Link>
-            <Link to="/hindi-typing-test" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Hindi Typing</Link>
-            <Link to="/competitive-exam-typing" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Exam Prep</Link>
-            <Link to="/games" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">🎮 Games</Link>
-            <Link to="/tools" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Tools</Link>
-
+            {/* Auth buttons — desktop only */}
             {isAuthenticated ? (
-              <>
-                <Link to="/dashboard" onClick={closeMenu} className="text-brand-text hover:text-brand-primary transition-colors py-2 border-b border-brand-muted/10">Dashboard</Link>
-                <button 
-                  onClick={() => {
-                    localStorage.removeItem('accessToken');
-                    window.location.href = '/login';
-                  }}
-                  className="text-left text-rose-500 hover:text-rose-600 transition-colors py-2 font-bold"
-                >
+              <div className="hidden md:flex items-center gap-2">
+                <Link to="/dashboard"
+                  className="px-3 py-1.5 rounded-lg text-sm font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
+                  Dashboard
+                </Link>
+                <button onClick={() => { localStorage.removeItem('accessToken'); window.location.href = '/login'; }}
+                  className="px-3 py-1.5 rounded-lg text-sm font-semibold text-brand-muted hover:text-rose-500 transition-all duration-200">
                   Logout
                 </button>
-              </>
+              </div>
             ) : (
-              <div className="flex flex-col gap-4 mt-4">
-                <Link 
-                  to="/login" 
-                  onClick={closeMenu}
-                  className="bg-brand-surface border border-brand-muted/20 text-brand-text text-center px-4 py-3 rounded-xl font-semibold transition-all"
-                >
+              <div className="hidden md:flex items-center gap-2">
+                <Link to="/login"
+                  className="px-3 py-1.5 rounded-lg text-sm font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
                   Log in
                 </Link>
-                <Link 
-                  to="/signup" 
-                  onClick={closeMenu}
-                  className="bg-brand-primary text-white text-center px-4 py-3 rounded-xl font-semibold shadow-md shadow-brand-primary/20"
-                >
+                <Link to="/signup"
+                  className="px-4 py-1.5 rounded-xl text-sm font-bold text-white transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-px active:scale-95"
+                  style={{ background: 'linear-gradient(135deg, #BC6C50 0%, #CC7B5D 100%)', boxShadow: '0 3px 12px rgba(188,108,80,0.35)' }}>
                   Sign up
                 </Link>
               </div>
             )}
+
+            {/* Mobile hamburger */}
+            <button className="md:hidden z-50 relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-brand-surface-2 text-brand-text transition-all"
+              onClick={() => setIsMobileMenuOpen(v => !v)} aria-label="Toggle menu">
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* ── Mobile Menu Overlay ── */}
+      <div className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
+        isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      }`}>
+        {/* Backdrop */}
+        <div className="absolute inset-0 bg-brand-bg/60 backdrop-blur-sm" onClick={closeMenu} />
+
+        {/* Slide-in panel */}
+        <div className={`absolute right-0 top-0 bottom-0 w-72 transition-transform duration-300 ease-out ${
+          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`} style={{ background: 'var(--brand-surface)', borderLeft: '1px solid var(--brand-border)' }}>
+          <div className="flex flex-col h-full pt-20 pb-8 px-6 overflow-y-auto">
+            <div className="flex flex-col gap-1">
+              {NAV_LINKS.map(link => {
+                const active = location.pathname === link.to;
+                return (
+                  <Link key={link.to} to={link.to} onClick={closeMenu}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-base transition-all ${
+                      active
+                        ? 'bg-brand-primary/10 text-brand-primary'
+                        : 'text-brand-text hover:bg-brand-surface-2 hover:text-brand-primary'
+                    }`}>
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className="mt-auto pt-6 border-t border-brand-border flex flex-col gap-3">
+              {isAuthenticated ? (
+                <>
+                  <Link to="/dashboard" onClick={closeMenu}
+                    className="w-full text-center py-3 rounded-xl font-semibold border border-brand-border text-brand-text hover:bg-brand-surface-2 transition-all">
+                    Dashboard
+                  </Link>
+                  <button onClick={() => { localStorage.removeItem('accessToken'); window.location.href = '/login'; }}
+                    className="w-full py-3 rounded-xl font-semibold text-rose-500 border border-rose-200 dark:border-rose-900/40 transition-all">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" onClick={closeMenu}
+                    className="w-full text-center py-3 rounded-xl font-semibold border border-brand-border text-brand-text hover:bg-brand-surface-2 transition-all">
+                    Log in
+                  </Link>
+                  <Link to="/signup" onClick={closeMenu}
+                    className="w-full text-center py-3 rounded-xl font-bold text-white transition-all shadow-lg active:scale-95"
+                    style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.3)' }}>
+                    Sign up free
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 };
 
