@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, TrendingUp } from 'lucide-react';
+import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award } from 'lucide-react';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
@@ -278,44 +278,12 @@ export default function TypingTestPage() {
           </div>
         </div>
 
-        {/* Center: Mode + Duration selectors */}
-        {!stats.isActive && !stats.isFinished && (
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Mode */}
-            <div className="flex items-center gap-1 bg-brand-surface-2 rounded-lg p-0.5">
-              {(['article', 'words', 'quote'] as TestMode[]).map(m => (
-                <button
-                  key={m}
-                  onClick={(e) => { e.stopPropagation(); setTestMode(m); reset(); }}
-                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all capitalize ${
-                    testMode === m
-                      ? 'bg-brand-surface shadow text-brand-text'
-                      : 'text-brand-muted hover:text-brand-text'
-                  }`}
-                >
-                  {m}
-                </button>
-              ))}
-            </div>
-
-            {/* Duration */}
-            <div className="flex items-center gap-1 bg-brand-surface-2 rounded-lg p-0.5">
-              {DURATION_OPTIONS.map(opt => (
-                <button
-                  key={opt.value}
-                  onClick={(e) => { e.stopPropagation(); setSelectedDuration(opt.value); reset(); }}
-                  className={`px-2 sm:px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
-                    selectedDuration === opt.value
-                      ? 'text-white shadow'
-                      : 'text-brand-muted hover:text-brand-text'
-                  }`}
-                  style={selectedDuration === opt.value ? { background: 'linear-gradient(135deg,#304C53,#2A9DAE)' } : {}}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
+        {/* Center: live label when active, empty when setup */}
+        {stats.isActive && (
+          <span className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg"
+            style={{ background: 'rgba(48,76,83,0.12)', color: 'var(--brand-primary)' }}>
+            LIVE
+          </span>
         )}
 
         {/* Right: Stats */}
@@ -369,21 +337,80 @@ export default function TypingTestPage() {
       </div>
 
       {/* ── MAIN CONTENT ────────────────────────────── */}
-      <div className="flex-grow flex flex-col items-center justify-start gap-4 px-3 sm:px-6 py-4 sm:py-6 overflow-hidden">
+      <div className="flex-grow flex flex-col items-center justify-start gap-4 px-3 sm:px-6 py-4 sm:py-6 overflow-y-auto">
 
-        {/* Mobile: tap to start */}
-        {isMobile && !stats.isActive && !stats.isFinished && (
-          <div
-            onClick={() => hiddenInputRef.current?.focus()}
-            className="w-full max-w-2xl bg-brand-primary/10 border border-brand-primary/20 rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer"
-          >
-            <span className="text-2xl">⌨️</span>
-            <div>
-              <p className="text-sm font-bold text-brand-primary">Tap here to start typing</p>
-              <p className="text-xs text-brand-muted">Your keyboard will appear</p>
-            </div>
-          </div>
-        )}
+        {/* ── CARD SETUP PANEL (pre-test) ── */}
+        <AnimatePresence>
+          {!stats.isActive && !stats.isFinished && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="w-full max-w-2xl"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Mode row */}
+              <div className="mb-3">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2 px-1">Mode</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {([
+                    { id: 'article', label: 'Article', icon: '📄', desc: 'Real passages' },
+                    { id: 'words',   label: 'Words',   icon: '🔤', desc: 'Random words' },
+                    { id: 'quote',   label: 'Quote',   icon: '💬', desc: 'Inspirational' },
+                  ] as { id: TestMode; label: string; icon: string; desc: string }[]).map(m => (
+                    <button key={m.id}
+                      onClick={() => { setTestMode(m.id); reset(); }}
+                      className={`flex flex-col items-center gap-1 py-3 px-2 rounded-xl border font-semibold transition-all duration-200 text-center ${
+                        testMode === m.id
+                          ? 'text-white border-transparent shadow-lg scale-[1.02]'
+                          : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
+                      }`}
+                      style={testMode === m.id ? { background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 14px rgba(48,76,83,.3)' } : {}}>
+                      <span className="text-xl">{m.icon}</span>
+                      <span className="text-xs font-bold">{m.label}</span>
+                      <span className={`text-[10px] ${testMode === m.id ? 'text-white/70' : 'text-brand-muted'}`}>{m.desc}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Duration row */}
+              <div className="mb-3">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2 px-1">Duration</p>
+                <div className="grid grid-cols-6 gap-2">
+                  {DURATION_OPTIONS.map(opt => (
+                    <button key={opt.value}
+                      onClick={() => { setSelectedDuration(opt.value); reset(); }}
+                      className={`flex flex-col items-center gap-0.5 py-2.5 rounded-xl border font-bold text-sm transition-all duration-200 ${
+                        selectedDuration === opt.value
+                          ? 'text-white border-transparent shadow-lg scale-[1.02]'
+                          : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
+                      }`}
+                      style={selectedDuration === opt.value ? { background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.3)' } : {}}>
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Start hint */}
+              <div className="flex items-center justify-between px-1">
+                <p className="text-xs text-brand-muted flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse inline-block" />
+                  {isMobile ? 'Tap the text area below to start' : 'Start typing below — timer begins on first keystroke'}
+                </p>
+                {isMobile && (
+                  <button onClick={() => hiddenInputRef.current?.focus()}
+                    className="text-xs font-bold text-white px-3 py-1.5 rounded-lg transition-all"
+                    style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                    Tap to type
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ── TYPING DISPLAY ── */}
         <div className="w-full max-w-2xl">
@@ -405,7 +432,6 @@ export default function TypingTestPage() {
                 const isCorrect = index < userInput.length && !mistakes.has(index);
                 const isError = index < userInput.length && mistakes.has(index);
                 const isCurrent = index === userInput.length;
-                const isUpcoming = index > userInput.length;
 
                 return (
                   <span key={index} className="relative">
@@ -429,25 +455,12 @@ export default function TypingTestPage() {
               })}
             </div>
 
-            {/* Start overlay */}
-            <AnimatePresence>
-              {!stats.isActive && !stats.isFinished && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute inset-0 flex items-center justify-center bg-brand-surface/90 backdrop-blur-sm rounded-2xl"
-                >
-                  <div className="text-center px-6">
-                    <div className="text-4xl mb-3">{isMobile ? '📱' : '⚡'}</div>
-                    <p className="text-brand-text-muted font-semibold text-base">
-                      {isMobile ? 'Tap anywhere & type to begin' : 'Start typing to begin your test'}
-                    </p>
-                    <p className="text-brand-muted text-xs mt-1">Timer starts with your first keystroke</p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* Caret hint when idle */}
+            {!stats.isActive && !stats.isFinished && (
+              <div className="absolute bottom-3 right-4 flex items-center gap-1.5 text-[10px] text-brand-muted/60 font-mono pointer-events-none select-none">
+                <span className="typing-caret h-3 w-0.5" /> type to begin
+              </div>
+            )}
           </div>
 
           {/* Live CPM stat under the box */}

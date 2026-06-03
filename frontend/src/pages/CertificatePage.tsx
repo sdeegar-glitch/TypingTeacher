@@ -23,56 +23,59 @@ function drawCertificateOnCanvas(canvas: HTMLCanvasElement, data: CertData) {
   const W = canvas.width;
   const H = canvas.height;
 
-  // Background
-  ctx.fillStyle = '#ffffff';
+  // Background — warm sand
+  ctx.fillStyle = '#FDFAF7';
   ctx.fillRect(0, 0, W, H);
 
-  // Top gradient bar
+  // Top gradient bar — teal to aqua
   const topGrad = ctx.createLinearGradient(0, 0, W, 0);
-  topGrad.addColorStop(0, '#6366f1');
-  topGrad.addColorStop(0.5, '#a855f7');
-  topGrad.addColorStop(1, '#6366f1');
+  topGrad.addColorStop(0, '#304C53');
+  topGrad.addColorStop(0.5, '#2A9DAE');
+  topGrad.addColorStop(1, '#AFE0E7');
   ctx.fillStyle = topGrad;
   ctx.fillRect(0, 0, W, 18);
 
-  // Border frame
-  ctx.strokeStyle = '#e0e7ff';
-  ctx.lineWidth = 3;
+  // Border frame — sand tint
+  ctx.strokeStyle = '#D9D4CE';
+  ctx.lineWidth = 2;
   ctx.strokeRect(24, 24, W - 48, H - 48);
 
-  // Decorative corner dots
+  // Decorative corner dots — terracotta
   [24, W - 24].forEach(x => [24, H - 24].forEach(y => {
-    ctx.fillStyle = '#a855f7';
+    ctx.fillStyle = '#BC6C50';
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fill();
   }));
 
-  // Logo circle
-  ctx.fillStyle = '#4f46e5';
+  // Logo pill — teal gradient
+  const logoGrad = ctx.createLinearGradient(W / 2 - 28, 50, W / 2 + 28, 106);
+  logoGrad.addColorStop(0, '#304C53');
+  logoGrad.addColorStop(1, '#2A9DAE');
+  ctx.fillStyle = logoGrad;
   ctx.beginPath();
   ctx.roundRect(W / 2 - 28, 50, 56, 56, 14);
   ctx.fill();
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 32px Georgia, serif';
+  ctx.font = 'bold 30px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText('T', W / 2, 91);
+  ctx.fillText('F', W / 2, 91);
 
   // Site name
-  ctx.fillStyle = '#1e1b4b';
+  ctx.fillStyle = '#1A2C31';
   ctx.font = 'bold 22px Georgia, serif';
   ctx.textAlign = 'center';
   ctx.fillText('FastTypingLab', W / 2, 130);
 
   // Subtitle
-  ctx.fillStyle = '#9ca3af';
+  ctx.fillStyle = '#7B9BA3';
   ctx.font = '500 13px Arial, sans-serif';
   ctx.letterSpacing = '0.3em';
   ctx.fillText('CERTIFICATE OF ACHIEVEMENT', W / 2, 160);
   ctx.letterSpacing = '0';
 
-  // Divider line
-  ctx.strokeStyle = '#e5e7eb';
+  // Divider line — brand teal
+  ctx.strokeStyle = '#D9D4CE';
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(W / 2 - 160, 178);
@@ -80,17 +83,17 @@ function drawCertificateOnCanvas(canvas: HTMLCanvasElement, data: CertData) {
   ctx.stroke();
 
   // "This certifies that"
-  ctx.fillStyle = '#6b7280';
+  ctx.fillStyle = '#3E5A62';
   ctx.font = '16px Georgia, serif';
   ctx.textAlign = 'center';
   ctx.fillText('This is to certify that', W / 2, 210);
 
-  // Name
-  ctx.fillStyle = '#111827';
+  // Name — deep teal
+  ctx.fillStyle = '#1A2C31';
   ctx.font = 'bold 40px Georgia, serif';
   ctx.fillText(data.username, W / 2, 262);
 
-  ctx.fillStyle = '#6b7280';
+  ctx.fillStyle = '#3E5A62';
   ctx.font = '16px Georgia, serif';
   ctx.fillText('has successfully demonstrated typing proficiency', W / 2, 292);
 
@@ -99,70 +102,72 @@ function drawCertificateOnCanvas(canvas: HTMLCanvasElement, data: CertData) {
   const rightX = W / 2 + 120;
   const statY = 360;
 
-  // WPM box
-  ctx.fillStyle = '#eef2ff';
+  // WPM box — teal tint
+  ctx.fillStyle = 'rgba(48,76,83,0.08)';
   ctx.beginPath();
   ctx.roundRect(leftX - 80, statY - 42, 160, 90, 12);
   ctx.fill();
-  ctx.fillStyle = '#4338ca';
+  ctx.fillStyle = '#304C53';
   ctx.font = 'bold 44px monospace';
   ctx.textAlign = 'center';
   ctx.fillText(String(data.wpm), leftX, statY + 8);
-  ctx.fillStyle = '#6b7280';
+  ctx.fillStyle = '#7B9BA3';
   ctx.font = '12px Arial, sans-serif';
   ctx.fillText('WORDS PER MINUTE', leftX, statY + 34);
 
   // Divider
-  ctx.strokeStyle = '#d1d5db';
+  ctx.strokeStyle = '#D9D4CE';
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(W / 2, statY - 40);
   ctx.lineTo(W / 2, statY + 40);
   ctx.stroke();
 
-  // Accuracy box
-  ctx.fillStyle = '#ecfdf5';
+  // Accuracy box — aqua tint
+  ctx.fillStyle = 'rgba(42,157,174,0.08)';
   ctx.beginPath();
   ctx.roundRect(rightX - 80, statY - 42, 160, 90, 12);
   ctx.fill();
-  ctx.fillStyle = '#059669';
+  ctx.fillStyle = '#2A9DAE';
   ctx.font = 'bold 44px monospace';
   ctx.textAlign = 'center';
   ctx.fillText(`${data.accuracy}%`, rightX, statY + 8);
-  ctx.fillStyle = '#6b7280';
+  ctx.fillStyle = '#7B9BA3';
   ctx.font = '12px Arial, sans-serif';
   ctx.fillText('ACCURACY', rightX, statY + 34);
 
   // Test title & date
-  ctx.fillStyle = '#6b7280';
+  ctx.fillStyle = '#3E5A62';
   ctx.font = '14px Georgia, serif';
   ctx.textAlign = 'center';
   ctx.fillText(`Test: ${data.test_title}`, W / 2, 476);
-  const dateStr = data.issued_at ? new Date(data.issued_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  const dateStr = data.issued_at
+    ? new Date(data.issued_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+    : new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
   ctx.font = '13px Arial, sans-serif';
-  ctx.fillStyle = '#9ca3af';
+  ctx.fillStyle = '#7B9BA3';
   ctx.fillText(dateStr, W / 2, 498);
 
-  // Footer
-  ctx.strokeStyle = '#e5e7eb';
+  // Footer divider
+  ctx.strokeStyle = '#D9D4CE';
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(60, H - 72);
   ctx.lineTo(W - 60, H - 72);
   ctx.stroke();
 
-  ctx.fillStyle = '#9ca3af';
+  ctx.fillStyle = '#7B9BA3';
   ctx.font = '11px Arial, sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText('Verify at: fasttypinglab.com/certificate', 60, H - 48);
   ctx.textAlign = 'right';
   ctx.fillText(`ID: ${data.id.slice(0, 16)}… | FastTypingLab © 2026`, W - 60, H - 48);
 
-  // Bottom gradient bar
+  // Bottom gradient bar — terracotta to teal
   const botGrad = ctx.createLinearGradient(0, 0, W, 0);
-  botGrad.addColorStop(0, '#6366f1');
-  botGrad.addColorStop(0.5, '#a855f7');
-  botGrad.addColorStop(1, '#6366f1');
+  botGrad.addColorStop(0, '#BC6C50');
+  botGrad.addColorStop(0.5, '#2A9DAE');
+  botGrad.addColorStop(1, '#304C53');
   ctx.fillStyle = botGrad;
   ctx.fillRect(0, H - 12, W, 12);
 }

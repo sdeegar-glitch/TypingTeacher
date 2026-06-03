@@ -26,7 +26,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const NAV_LINKS = [
   { to: '/tests',                  label: 'Tests' },
   { to: '/learn',                  label: 'Lessons' },
-  { to: '/hindi-typing-test',      label: 'Hindi' },
+  { to: '/hindi-typing-jungle',     label: 'हिंदी जंगल' },
   { to: '/competitive-exam-typing',label: 'Exams' },
   { to: '/games',                  label: 'Games' },
   { to: '/tools',                  label: 'Tools' },
@@ -212,6 +212,7 @@ import WordRainPage from './pages/WordRainPage';
 import ZombieTypingPage from './pages/ZombieTypingPage';
 import SpeedRacerPage from './pages/SpeedRacerPage';
 import HindiTypingPage from './pages/HindiTypingPage';
+import HindiTypingJunglePage from './pages/HindiTypingJunglePage';
 import KrutiDevPage from './pages/KrutiDevPage';
 import CompetitiveExamTypingPage from './pages/CompetitiveExamTypingPage';
 import LearnHindiTypingPage from './pages/LearnHindiTypingPage';
@@ -277,6 +278,7 @@ const AppContent = () => {
           <Route path="/games/zombie" element={<ZombieTypingPage />} />
           <Route path="/games/speed-racer" element={<SpeedRacerPage />} />
           <Route path="/hindi-typing-test" element={<HindiTypingPage />} />
+          <Route path="/hindi-typing-jungle" element={<HindiTypingJunglePage />} />
           <Route path="/kruti-dev-typing" element={<KrutiDevPage />} />
           <Route path="/learn-hindi-typing" element={<LearnHindiTypingPage />} />
           <Route path="/typing-certificates" element={<TypingCertificatesPage />} />

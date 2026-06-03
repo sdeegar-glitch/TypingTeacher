@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Keyboard, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -9,191 +11,146 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess('');
-    
+    setLoading(true); setError(''); setSuccess('');
     try {
       const endpoint = isLogin ? '/auth/login' : '/auth/signup';
       const body = isLogin ? { email, password } : { email, password, name };
-      
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || (isLogin ? 'Login failed. Please check your email and password.' : 'Registration failed. Please try again.'));
-      }
-      
-      if (data.accessToken) {
-        localStorage.setItem('accessToken', data.accessToken);
-      }
-      
-      setSuccess(isLogin ? 'Login successful! Taking you to your dashboard...' : 'Account created! Welcome aboard!');
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}${endpoint}`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || (isLogin ? 'Login failed. Check your credentials.' : 'Registration failed. Please try again.'));
+      if (data.accessToken) localStorage.setItem('accessToken', data.accessToken);
+      setSuccess(isLogin ? 'Login successful! Redirecting…' : 'Account created! Welcome aboard!');
       setLoading(false);
-      
-      setTimeout(() => navigate('/dashboard'), 1000);
+      setTimeout(() => navigate('/dashboard'), 900);
     } catch (err: any) {
       setLoading(false);
       setError(err.message);
     }
   };
 
+  const inputCls = 'w-full px-4 py-2.5 rounded-xl text-brand-text text-sm placeholder:text-brand-muted outline-none transition-all duration-200 border bg-brand-surface-2 border-brand-border focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/15';
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f172a] py-4 px-4">
-      
-      {/* Card */}
-      <div className="max-w-sm w-full">
-        
-        {/* Logo / Brand */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-indigo-600 rounded-2xl mb-3 shadow-lg shadow-indigo-500/30">
-            <span className="text-2xl">⌨️</span>
-          </div>
-          <h1 className="text-xl font-black text-white">TypingTeacher</h1>
-          <p className="text-xs text-slate-500 mt-0.5">Improve your typing speed daily</p>
+    <div className="min-h-screen flex items-center justify-center bg-brand-bg px-4 py-8">
+
+      {/* Background blobs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-[0.06] animate-blob"
+          style={{ background: 'radial-gradient(circle,#304C53,transparent)' }} />
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full opacity-[0.05] animate-blob-r"
+          style={{ background: 'radial-gradient(circle,#BC6C50,transparent)' }} />
+      </div>
+
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }} className="w-full max-w-sm relative z-10">
+
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <Link to="/" className="inline-flex flex-col items-center gap-2">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl"
+              style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+              <Keyboard className="w-7 h-7 text-white" />
+            </div>
+            <span className="text-xl font-black text-brand-text tracking-tight">FastTypingLab</span>
+          </Link>
+          <p className="text-sm text-brand-muted mt-1.5">
+            {isLogin ? 'Welcome back! Sign in to continue.' : 'Create a free account to get started.'}
+          </p>
         </div>
 
-        {/* Toggle Tabs */}
-        <div className="flex bg-slate-800 rounded-xl p-1 mb-5 border border-white/10">
-          <button
-            onClick={() => { setIsLogin(true); setError(''); setSuccess(''); }}
-            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
-              isLogin
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Login
-          </button>
-          <button
-            onClick={() => { setIsLogin(false); setError(''); setSuccess(''); }}
-            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${
-              !isLogin
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Register
-          </button>
+        {/* Tab switcher */}
+        <div className="flex bg-brand-surface-2 rounded-xl p-1 mb-6 border border-brand-border">
+          {[{ id: true, label: 'Log In' }, { id: false, label: 'Register' }].map(tab => (
+            <button key={String(tab.id)} onClick={() => { setIsLogin(tab.id); setError(''); setSuccess(''); }}
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-200 ${
+                isLogin === tab.id
+                  ? 'text-white shadow-md'
+                  : 'text-brand-muted hover:text-brand-text'
+              }`}
+              style={isLogin === tab.id ? { background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 12px rgba(48,76,83,.3)' } : {}}>
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        {/* Form Card */}
-        <div className="bg-[#1e293b] rounded-2xl p-6 border border-white/10 shadow-2xl">
-          
-          {/* Error message - RED */}
+        {/* Card */}
+        <div className="glass-card rounded-2xl p-6 shadow-xl">
+
+          {/* Error */}
           {error && (
-            <div className="mb-4 flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/30 rounded-xl">
-              <svg className="w-4 h-4 text-red-400 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-              <p className="text-red-400 text-xs font-medium">{error}</p>
-            </div>
+            <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
+              className="mb-4 flex items-start gap-2.5 p-3 rounded-xl border"
+              style={{ background: 'rgba(224,82,82,0.08)', borderColor: 'rgba(224,82,82,0.2)' }}>
+              <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
+              <p className="text-rose-500 text-xs font-medium leading-relaxed">{error}</p>
+            </motion.div>
           )}
 
-          {/* Success message - GREEN */}
+          {/* Success */}
           {success && (
-            <div className="mb-4 flex items-start gap-2 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-              <svg className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <p className="text-emerald-400 text-xs font-medium">{success}</p>
-            </div>
+            <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
+              className="mb-4 flex items-start gap-2.5 p-3 rounded-xl border"
+              style={{ background: 'rgba(42,157,174,0.08)', borderColor: 'rgba(42,157,174,0.2)' }}>
+              <CheckCircle className="w-4 h-4 text-brand-accent mt-0.5 shrink-0" />
+              <p className="text-brand-accent text-xs font-medium leading-relaxed">{success}</p>
+            </motion.div>
           )}
 
-          <form className="space-y-3" onSubmit={handleSubmit}>
-            
-            {/* Name field (register only) */}
+          <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Your Name</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-xl text-white text-sm placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  placeholder="e.g. Raman Kumar"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <label className="block text-xs font-semibold text-brand-muted mb-1.5">Your Name</label>
+                <input type="text" required placeholder="e.g. Raman Kumar"
+                  className={inputCls} value={name} onChange={e => setName(e.target.value)} />
               </div>
             )}
-            
-            {/* Email */}
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1">Email Address</label>
-              <input
-                type="email"
-                required
-                className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-xl text-white text-sm placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <label className="block text-xs font-semibold text-brand-muted mb-1.5">Email Address</label>
+              <input type="email" required placeholder="you@example.com"
+                className={inputCls} value={email} onChange={e => setEmail(e.target.value)} />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-brand-muted mb-1.5">Password</label>
+              <input type="password" required placeholder="Enter your password"
+                className={inputCls} value={password} onChange={e => setPassword(e.target.value)} />
             </div>
 
-            {/* Password */}
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1">Password</label>
-              <input
-                type="password"
-                required
-                className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-xl text-white text-sm placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-
-            {/* Submit button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold text-white transition-all mt-2 ${
-                loading
-                  ? 'bg-indigo-600/50 cursor-not-allowed'
-                  : 'bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-500/30 active:scale-[0.98]'
-              }`}
-            >
+            <button type="submit" disabled={loading}
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold text-white transition-all duration-200 mt-2 active:scale-[0.98]"
+              style={loading
+                ? { background: 'rgba(48,76,83,0.5)', cursor: 'not-allowed' }
+                : { background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 16px rgba(48,76,83,.35)' }}>
               {loading ? (
-                <>
-                  <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Please wait...
-                </>
+                <><Loader2 className="w-4 h-4 animate-spin" /> Please wait…</>
               ) : (
-                isLogin ? 'Login to My Account' : 'Create Account'
+                isLogin ? 'Log In to My Account' : 'Create Free Account'
               )}
             </button>
           </form>
 
-          {/* Switch mode */}
-          <p className="text-center text-xs text-slate-500 mt-4">
-            {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-            <button
-              onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess(''); }}
-              className="text-indigo-400 hover:text-indigo-300 font-bold transition-colors"
-            >
-              {isLogin ? 'Register here' : 'Login here'}
+          <p className="text-center text-xs text-brand-muted mt-5">
+            {isLogin ? "Don't have an account? " : 'Already have an account? '}
+            <button onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess(''); }}
+              className="font-bold hover:opacity-80 transition-opacity" style={{ color: 'var(--brand-primary)' }}>
+              {isLogin ? 'Register free' : 'Log in here'}
             </button>
           </p>
         </div>
 
-        {/* Footer note */}
-        <p className="text-center text-[10px] text-slate-600 mt-4">
-          Your progress is saved to your account securely.
+        <p className="text-center text-[11px] text-brand-muted mt-5">
+          By continuing you agree to our{' '}
+          <Link to="/" className="hover:text-brand-primary transition-colors">Terms of Service</Link>
+          {' '}and{' '}
+          <Link to="/" className="hover:text-brand-primary transition-colors">Privacy Policy</Link>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 };
