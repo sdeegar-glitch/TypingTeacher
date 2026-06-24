@@ -129,20 +129,31 @@ export async function submit2faLogin(pendingToken: string, code: string): Promis
   return res.json();
 }
 
-// ─── AI Generator — direct Gemini fallback if the backend route fails ──
-export async function generateAIContent(topic: string, apiKey: string): Promise<{ title: string; content: string; excerpt: string; difficulty_level: string; category: string; seo_title: string; seo_description: string; tags: string[]; keywords: string[] } | null> {
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: `You are an expert educational content writer. Create a high-quality, plagiarism-free typing practice article about: "${topic}". Write ~1000 words for typing practice. Determine difficulty ('easy', 'medium', 'hard'). Return ONLY valid JSON:\n{"title":"...","content":"...","excerpt":"...","difficulty_level":"medium","category":"...","seo_title":"...","seo_description":"...","tags":[],"keywords":[]}` }] }],
-        generationConfig: { responseMimeType: 'application/json' }
-      })
-    });
-    const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) return null;
-    return JSON.parse(text);
-  } catch { return null; }
+// ─── AI Generator — trigger one slot of the real backend pipeline ──
+export type GenerationSlot = 'en' | 'hi_mangal' | 'hi_kruti';
+
+export async function triggerGeneration(slot?: GenerationSlot, count?: number): Promise<{ message: string }> {
+  const res = await fetch(`${API}/api/tests/generate`, {
+    method: 'POST',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(slot ? { slot, count } : {}),
+  });
+  if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || 'Failed to start generation');
+  return res.json();
+}
+
+export interface GenerationLogEntry {
+  id: string;
+  run_date: string;
+  slot: string;
+  topic: string | null;
+  status: 'success' | 'failed' | 'skipped_duplicate' | 'skipped_quality';
+  test_id: string | null;
+  error: string | null;
+  attempt_count: number;
+  created_at: string;
+}
+
+export async function fetchGenerationLog(): Promise<{ logs: GenerationLogEntry[]; summary: Record<string, number> }> {
+  return authedJson('/api/admin/generation-log');
 }

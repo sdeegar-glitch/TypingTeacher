@@ -20,15 +20,19 @@ router.get('/featured', async (req, res) => {
   res.json(data);
 });
 
-// GET /api/tests/latest
+// GET /api/tests/latest?language=&keyboard_layout=
 router.get('/latest', async (req, res) => {
-  const { data, error } = await supabase
+  const { language, keyboard_layout } = req.query;
+  let query = supabase
     .from('typing_test')
-    .select('id, title, slug, excerpt, difficulty_level, word_count, estimated_read_time, category, featured_image, views, created_at')
-    .eq('is_published', true)
-    .order('created_at', { ascending: false })
-    .limit(100);
-    
+    .select('id, title, slug, excerpt, difficulty_level, word_count, estimated_read_time, category, featured_image, views, created_at, language, keyboard_layout')
+    .eq('is_published', true);
+
+  if (language) query = query.eq('language', language);
+  if (keyboard_layout) query = query.eq('keyboard_layout', keyboard_layout);
+
+  const { data, error } = await query.order('created_at', { ascending: false }).limit(100);
+
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);
 });
@@ -62,16 +66,21 @@ router.get('/difficulty/:level', async (req, res) => {
   res.json(data);
 });
 
-// GET /api/tests/category/:category
+// GET /api/tests/category/:category?language=&keyboard_layout=
 router.get('/category/:category', async (req, res) => {
   const { category } = req.params;
-  const { data, error } = await supabase
+  const { language, keyboard_layout } = req.query;
+  let query = supabase
     .from('typing_test')
-    .select('id, title, slug, excerpt, difficulty_level, word_count, estimated_read_time, category, views')
+    .select('id, title, slug, excerpt, difficulty_level, word_count, estimated_read_time, category, views, language, keyboard_layout')
     .ilike('category', category)
-    .eq('is_published', true)
-    .order('created_at', { ascending: false });
-    
+    .eq('is_published', true);
+
+  if (language) query = query.eq('language', language);
+  if (keyboard_layout) query = query.eq('keyboard_layout', keyboard_layout);
+
+  const { data, error } = await query.order('created_at', { ascending: false });
+
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);
 });
@@ -96,16 +105,18 @@ router.get('/:slug', async (req, res) => {
 
 // GET /api/tests - List available tests with pagination & filters
 router.get('/', async (req, res) => {
-  const { page = 1, limit = 10, difficulty, category, sort = 'newest' } = req.query;
+  const { page = 1, limit = 10, difficulty, category, sort = 'newest', language, keyboard_layout } = req.query;
   const offset = (page - 1) * limit;
 
   let query = supabase
     .from('typing_test')
-    .select('id, title, slug, excerpt, difficulty_level, word_count, estimated_read_time, category, views, created_at', { count: 'exact' })
+    .select('id, title, slug, excerpt, difficulty_level, word_count, estimated_read_time, category, views, created_at, language, keyboard_layout', { count: 'exact' })
     .eq('is_published', true);
 
   if (difficulty) query = query.eq('difficulty_level', difficulty);
   if (category) query = query.ilike('category', category);
+  if (language) query = query.eq('language', language);
+  if (keyboard_layout) query = query.eq('keyboard_layout', keyboard_layout);
 
   if (sort === 'popular') query = query.order('views', { ascending: false });
   else query = query.order('created_at', { ascending: false });
@@ -125,12 +136,16 @@ router.get('/', async (req, res) => {
 });
 
 // POST /api/tests/generate - Trigger AI generation manually
+// Body (optional): { slot: 'en' | 'hi_mangal' | 'hi_kruti', count: number }
+// Omit body to run the full daily 12-test batch.
 router.post('/generate', requireAdmin, async (req, res) => {
   try {
+    const { slot, count } = req.body || {};
+    const options = slot ? { slot, count } : {};
     // Non-blocking background generation
-    fetchAndGenerateTests().catch(err => console.error("Manual generation failed:", err));
-    logActivity({ action: 'ai_generation_triggered', entity: 'typing_test', actor_email: req.adminUser.email, ip: req.ip, meta: { topic: req.body?.topic || null } });
-    res.status(202).json({ message: 'AI Content Generation started in the background.' });
+    fetchAndGenerateTests(options).catch(err => console.error("Manual generation failed:", err));
+    logActivity({ action: 'ai_generation_triggered', entity: 'typing_test', actor_email: req.adminUser.email, ip: req.ip, meta: { slot: slot || 'full_batch', count: count || null } });
+    res.status(202).json({ message: slot ? `Generating slot "${slot}" in the background.` : 'Full daily batch (12 tests) started in the background.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -357,6 +357,23 @@ router.get('/seo/sitemap', async (req, res) => {
   res.send(xml);
 });
 
+// GET /api/admin/generation-log — AI test-generation run history (success/
+// failed/skipped_duplicate/skipped_quality per slot), for the admin dashboard
+router.get('/generation-log', async (req, res) => {
+  const { data, error } = await supabase
+    .from('generation_log')
+    .select('id, run_date, slot, topic, status, test_id, error, attempt_count, created_at')
+    .order('created_at', { ascending: false })
+    .limit(200);
+  if (error) return res.status(500).json({ error: error.message });
+
+  const summary = { success: 0, failed: 0, skipped_duplicate: 0, skipped_quality: 0 };
+  for (const row of data || []) {
+    if (row.status in summary) summary[row.status]++;
+  }
+  res.json({ logs: data, summary });
+});
+
 // GET /api/admin/logs — real activity feed (logins, bans, deletes, AI generation)
 router.get('/logs', async (req, res) => {
   const { data, error } = await supabase
