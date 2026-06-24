@@ -2,16 +2,9 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, RotateCcw, Star, Zap, Flame } from 'lucide-react';
-import {
-  LESSONS,
-  STAGES,
-  INSCRIPT_FULL_MAP,
-  saveCourseProgress,
-  isLessonUnlocked,
-  loadCourseProgress,
-  totalXp,
-  levelForXp,
-} from '../data/hindiCourseData';
+import * as UnicodeCourse from '../data/hindiCourseData';
+import * as KrutiDevCourse from '../data/krutiDevCourseData';
+import { STAGES } from '../data/hindiCourseData';
 
 const DEVA_FONT = "'Noto Sans Devanagari', sans-serif";
 
@@ -23,10 +16,10 @@ const KEYBOARD_ROWS: string[][] = [
 
 const SHIFT_OF: Record<string, string> = { q: 'Q', w: 'W', e: 'E', r: 'R', t: 'T', y: 'Y', u: 'U', i: 'I', o: 'O', p: 'P', a: 'A', s: 'S', d: 'D', f: 'F', g: 'G', h: 'H', j: 'J', k: 'K', l: 'L', ';': ':', "'": '"', z: 'Z', x: 'X', c: 'C', v: 'V', b: 'B', n: 'N', m: 'M' };
 
-function VirtualKeyboard({ pressedKey, activeMap }: { pressedKey: string; activeMap: Record<string, string> }) {
+function VirtualKeyboard({ pressedKey, activeMap, label }: { pressedKey: string; activeMap: Record<string, string>; label: string }) {
   return (
     <div className="w-full max-w-2xl select-none">
-      <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2 px-1">INSCRIPT Keyboard Reference</p>
+      <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2 px-1">{label}</p>
       <div className="flex flex-col gap-1.5 items-center">
         {KEYBOARD_ROWS.map((row, ri) => (
           <div key={ri} className="flex gap-1.5" style={{ paddingLeft: `${ri * 14}px` }}>
@@ -60,10 +53,16 @@ export default function HindiCourseLessonPage() {
   const { layout, lessonId } = useParams<{ layout: string; lessonId: string }>();
   const navigate = useNavigate();
   const id = Number((lessonId || '').replace('lesson-', '')) || 1;
+  const isKrutiDev = layout === 'kruti-dev';
 
-  const lesson = useMemo(() => LESSONS.find(l => l.id === id) || LESSONS[0], [id]);
-  const nextLesson = LESSONS.find(l => l.id === id + 1);
+  const course = isKrutiDev ? KrutiDevCourse : UnicodeCourse;
+  const fullKeyMap = isKrutiDev ? KrutiDevCourse.KRUTI_DEV_FULL_MAP : UnicodeCourse.INSCRIPT_FULL_MAP;
+  const keyboardLabel = isKrutiDev ? 'Kruti Dev Keyboard Reference' : 'INSCRIPT Keyboard Reference';
+
+  const lesson = useMemo(() => course.LESSONS.find(l => l.id === id) || course.LESSONS[0], [id, course]);
+  const nextLesson = course.LESSONS.find(l => l.id === id + 1);
   const stageMeta = STAGES.find(s => s.id === lesson.stage);
+  const displayHindi = 'displayHindi' in lesson ? (lesson as KrutiDevCourse.KrutiDevLesson).displayHindi : null;
 
   const isMobile = useMemo(() => {
     if (typeof window === 'undefined') return false;
@@ -86,9 +85,9 @@ export default function HindiCourseLessonPage() {
   const lastMobileRef = useRef('');
 
   const target = lesson.content;
-  const progress = useMemo(() => loadCourseProgress(), []);
+  const progress = useMemo(() => course.loadCourseProgress(), [course]);
   const savedProgress = progress.lessons[id];
-  const unlocked = isLessonUnlocked(id, progress);
+  const unlocked = course.isLessonUnlocked(id, progress);
   const basePath = `/learn-hindi-typing/${layout || 'unicode'}`;
 
   useEffect(() => {
@@ -135,10 +134,10 @@ export default function HindiCourseLessonPage() {
     }
     setEarnedStars(s);
     if (s > 0) {
-      saveCourseProgress({ lessonId: id, stars: s, bestWpm: net, bestAccuracy: acc });
+      course.saveCourseProgress({ lessonId: id, stars: s, bestWpm: net, bestAccuracy: acc });
       setXpGained(savedProgress?.completed ? 0 : lesson.xp);
     }
-  }, [userInput, target, startTime, mistakes.length, id, lesson.minWpm, lesson.xp, savedProgress]);
+  }, [userInput, target, startTime, mistakes.length, id, lesson.minWpm, lesson.xp, savedProgress, course]);
 
   useEffect(() => {
     if (!startTime || isFinished || userInput.length === 0) return;
@@ -206,9 +205,9 @@ export default function HindiCourseLessonPage() {
   const progressPct = target.length > 0 ? (userInput.length / target.length) * 100 : 0;
   const formattedTime = `${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, '0')}`;
   const canPass = netWpm >= lesson.minWpm && accuracy >= 90;
-  const newProgress = isFinished ? loadCourseProgress() : null;
-  const newXp = newProgress ? totalXp(newProgress) : 0;
-  const newLevel = levelForXp(newXp);
+  const newProgress = isFinished ? course.loadCourseProgress() : null;
+  const newXp = newProgress ? course.totalXp(newProgress) : 0;
+  const newLevel = course.levelForXp(newXp);
 
   const renderText = () => target.split('').map((ch, i) => {
     const correct = i < userInput.length && !mistakes.includes(i);
@@ -256,7 +255,7 @@ export default function HindiCourseLessonPage() {
           <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-cta/20"
             style={{ background: 'rgba(188,108,80,0.07)' }}>
             <span className="text-xs text-brand-muted">Type</span>
-            <span className="font-bold text-lg" style={{ fontFamily: DEVA_FONT, color: 'var(--brand-cta)' }}>{nextChar}</span>
+            <span className="font-bold text-lg" style={{ fontFamily: displayHindi ? "'Consolas', monospace" : DEVA_FONT, color: 'var(--brand-cta)' }}>{nextChar}</span>
           </div>
         )}
 
@@ -309,12 +308,21 @@ export default function HindiCourseLessonPage() {
         )}
 
         <div className="w-full max-w-2xl">
+          {displayHindi && (
+            <div className="mb-3 bg-brand-surface-2 border border-brand-border rounded-2xl px-5 sm:px-8 py-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-1.5">Hindi Text (reference)</p>
+              <div className="text-lg sm:text-xl leading-relaxed break-words" style={{ fontFamily: DEVA_FONT }}>{displayHindi}</div>
+            </div>
+          )}
           <div className="relative bg-brand-surface border border-brand-border rounded-2xl px-5 sm:px-8 py-5 shadow-sm cursor-text"
             onClick={() => isMobile && hiddenRef.current?.focus()}>
             {startTime && !isFinished && (
               <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg,transparent,rgba(188,108,80,.5),transparent)' }} />
             )}
-            <div className="text-xl sm:text-2xl leading-[3.5rem] break-words overflow-y-auto" style={{ fontFamily: DEVA_FONT, maxHeight: isMobile ? '160px' : '200px' }}>
+            {displayHindi && (
+              <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2">Kruti Dev Keystrokes (type this)</p>
+            )}
+            <div className="text-xl sm:text-2xl leading-[3.5rem] break-words overflow-y-auto" style={{ fontFamily: displayHindi ? "'Consolas', monospace" : DEVA_FONT, maxHeight: isMobile ? '160px' : '200px' }}>
               {renderText()}
             </div>
           </div>
@@ -330,7 +338,7 @@ export default function HindiCourseLessonPage() {
           )}
         </div>
 
-        {!isFinished && <VirtualKeyboard pressedKey={pressedKey} activeMap={Object.keys(lesson.keymapHint).length ? lesson.keymapHint : INSCRIPT_FULL_MAP} />}
+        {!isFinished && <VirtualKeyboard pressedKey={pressedKey} activeMap={Object.keys(lesson.keymapHint).length ? lesson.keymapHint : fullKeyMap} label={keyboardLabel} />}
       </div>
 
       {/* ── RESULT MODAL ── */}

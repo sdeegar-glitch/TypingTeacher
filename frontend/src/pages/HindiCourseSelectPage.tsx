@@ -2,18 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, Star, Zap, Languages, CheckCircle, ChevronRight, Flame, Award, TrendingUp } from 'lucide-react';
-import {
-  LESSONS,
-  STAGES,
-  BADGES,
-  TOTAL_LESSONS,
-  loadCourseProgress,
-  isLessonUnlocked,
-  totalXp,
-  levelForXp,
-  earnedBadges,
-  type CourseProgressState,
-} from '../data/hindiCourseData';
+import { STAGES, type CourseProgressState } from '../data/hindiCourseData';
+import * as UnicodeCourse from '../data/hindiCourseData';
+import * as KrutiDevCourse from '../data/krutiDevCourseData';
 
 const DIFFICULTY_COLOR: Record<string, string> = {
   beginner: '#2A9DAE',
@@ -26,46 +17,28 @@ const DIFFICULTY_COLOR: Record<string, string> = {
 export default function HindiCourseSelectPage() {
   const { layout } = useParams<{ layout: string }>();
   const isKrutiDev = layout === 'kruti-dev';
+  const course = isKrutiDev ? KrutiDevCourse : UnicodeCourse;
+  const basePath = `/learn-hindi-typing/${isKrutiDev ? 'kruti-dev' : 'unicode'}`;
   const [progress, setProgress] = useState<CourseProgressState | null>(null);
 
   useEffect(() => {
-    document.title = 'हिंदी टाइपिंग कोर्स — 200 पाठ | FastTypingLab';
+    document.title = `हिंदी टाइपिंग कोर्स — ${isKrutiDev ? 'Kruti Dev' : 'Unicode'} | FastTypingLab`;
     const link = document.createElement('link');
     link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;900&display=swap';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
-    setProgress(loadCourseProgress());
+    setProgress(course.loadCourseProgress());
     return () => { try { document.head.removeChild(link); } catch {} };
-  }, []);
+  }, [isKrutiDev, course]);
 
-  const xp = useMemo(() => (progress ? totalXp(progress) : 0), [progress]);
-  const level = useMemo(() => levelForXp(xp), [xp]);
-  const badges = useMemo(() => (progress ? earnedBadges(progress) : []), [progress]);
+  const xp = useMemo(() => (progress ? course.totalXp(progress) : 0), [progress, course]);
+  const level = useMemo(() => course.levelForXp(xp), [xp, course]);
+  const badges = useMemo(() => (progress ? course.earnedBadges(progress) : []), [progress, course]);
   const completedCount = useMemo(
     () => (progress ? Object.values(progress.lessons).filter(l => l.completed).length : 0),
     [progress]
   );
-  const pct = Math.round((completedCount / TOTAL_LESSONS) * 100);
-
-  if (isKrutiDev) {
-    return (
-      <div className="min-h-screen bg-brand-bg text-brand-text flex items-center justify-center px-4">
-        <div className="max-w-md text-center">
-          <div className="text-5xl mb-4">🚧</div>
-          <h1 className="text-2xl font-black text-brand-text mb-2">Kruti Dev Course Coming Soon</h1>
-          <p className="text-brand-text-muted text-sm mb-6">
-            We're building an accuracy-verified Kruti Dev 010 course. In the meantime, learn the modern
-            Unicode/INSCRIPT layout — it's the standard for most current exams.
-          </p>
-          <Link to="/learn-hindi-typing/unicode"
-            className="inline-flex items-center gap-2 font-bold text-white px-6 py-3 rounded-xl transition-all hover:opacity-90"
-            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-            <Languages className="w-4 h-4" /> Start Unicode Course
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  const pct = Math.round((completedCount / course.TOTAL_LESSONS) * 100);
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text pb-24">
@@ -78,7 +51,7 @@ export default function HindiCourseSelectPage() {
             </Link>
             <span className="text-brand-muted text-sm shrink-0">/</span>
             <span className="text-sm font-semibold text-brand-cta truncate" style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>
-              हिंदी टाइपिंग कोर्स — Unicode
+              हिंदी टाइपिंग कोर्स — {isKrutiDev ? 'Kruti Dev' : 'Unicode'}
             </span>
           </div>
           <div className="flex items-center gap-3 sm:gap-4 shrink-0">
@@ -115,7 +88,7 @@ export default function HindiCourseSelectPage() {
             <Languages className="w-8 h-8 text-white" />
           </div>
           <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--brand-cta)' }}>
-            INSCRIPT — Unicode / Mangal Keyboard
+            {isKrutiDev ? 'Kruti Dev 010 — Remington Gail Keyboard' : 'INSCRIPT — Unicode / Mangal Keyboard'}
           </p>
           <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-2">
             <span style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>हिंदी टाइपिंग</span>{' '}
@@ -132,7 +105,7 @@ export default function HindiCourseSelectPage() {
             { label: 'Level', value: level.current.name, icon: TrendingUp, color: 'text-brand-cta' },
             { label: 'Total XP', value: xp, icon: Zap, color: 'text-amber-500' },
             { label: 'Streak', value: `${progress?.currentStreak || 0} days`, icon: Flame, color: 'text-orange-500' },
-            { label: 'Badges', value: `${badges.length}/${BADGES.length}`, icon: Award, color: 'text-brand-accent' },
+            { label: 'Badges', value: `${badges.length}/${course.BADGES.length}`, icon: Award, color: 'text-brand-accent' },
           ].map(s => (
             <div key={s.label} className="bg-brand-surface border border-brand-border rounded-xl p-3 text-center">
               <s.icon className={`w-4 h-4 mx-auto mb-1 ${s.color}`} />
@@ -159,7 +132,7 @@ export default function HindiCourseSelectPage() {
       {/* Stage sections */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-10">
         {STAGES.map(stage => {
-          const stageLessons = LESSONS.filter(l => l.stage === stage.id);
+          const stageLessons = course.LESSONS.filter(l => l.stage === stage.id);
           const stageDone = stageLessons.filter(l => progress?.lessons[l.id]?.completed).length;
           const stageComplete = stageDone === stageLessons.length;
 
@@ -179,7 +152,7 @@ export default function HindiCourseSelectPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {stageLessons.map(lesson => {
-                  const unlocked = progress ? isLessonUnlocked(lesson.id, progress) : lesson.id === 1;
+                  const unlocked = progress ? course.isLessonUnlocked(lesson.id, progress) : lesson.id === 1;
                   const lp = progress?.lessons[lesson.id];
                   const completed = !!lp?.completed;
                   const stars = lp?.stars || 0;
@@ -188,7 +161,7 @@ export default function HindiCourseSelectPage() {
 
                   return (
                     <Link key={lesson.id}
-                      to={unlocked ? `/learn-hindi-typing/unicode/lesson-${lesson.id}` : '#'}
+                      to={unlocked ? `${basePath}/lesson-${lesson.id}` : '#'}
                       onClick={e => !unlocked && e.preventDefault()}
                       className={`group flex items-center gap-3 p-3 rounded-2xl border transition-all duration-200 ${
                         !unlocked
