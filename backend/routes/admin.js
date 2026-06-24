@@ -2,12 +2,49 @@ import express from 'express';
 import { supabase } from '../supabaseClient.js';
 import { requireAdmin } from '../middleware/requireAdmin.js';
 import { logActivity } from '../activityLog.js';
+import { generateSecret, verifyTotp, generateQrCode, startSetup, getSetupSecret, clearSetup } from '../twofa.js';
 
 const router = express.Router();
 router.use(requireAdmin);
 
 // GET /api/admin/me — confirms the caller is a logged-in admin
 router.get('/me', (req, res) => res.json(req.adminUser));
+
+// ─── Two-Factor Auth (TOTP, authenticator-app based) ───────────────────
+router.get('/2fa/status', (req, res) => res.json({ enabled: !!req.adminUser.totp_enabled }));
+
+router.post('/2fa/setup', async (req, res) => {
+  const secret = generateSecret();
+  startSetup(req.adminUser.id, secret);
+  const qrCode = await generateQrCode(req.adminUser.email, secret);
+  res.json({ secret, qrCode });
+});
+
+router.post('/2fa/verify', async (req, res) => {
+  const { code } = req.body;
+  const secret = getSetupSecret(req.adminUser.id);
+  if (!secret) return res.status(400).json({ error: 'No 2FA setup in progress — call /2fa/setup first.' });
+  if (!verifyTotp(code, secret)) return res.status(400).json({ error: 'Invalid code. Check your authenticator app and try again.' });
+
+  const { error } = await supabase.from('users').update({ totp_secret: secret, totp_enabled: true }).eq('id', req.adminUser.id);
+  if (error) return res.status(500).json({ error: error.message });
+  clearSetup(req.adminUser.id);
+  logActivity({ action: 'twofa_enabled', entity: 'user', actor_email: req.adminUser.email, ip: req.ip });
+  res.json({ enabled: true });
+});
+
+router.post('/2fa/disable', async (req, res) => {
+  const { code } = req.body;
+  const { data: u } = await supabase.from('users').select('totp_secret').eq('id', req.adminUser.id).single();
+  if (!u?.totp_secret || !verifyTotp(code, u.totp_secret)) {
+    return res.status(400).json({ error: 'Invalid code — enter your current authenticator code to confirm disabling 2FA.' });
+  }
+
+  const { error } = await supabase.from('users').update({ totp_secret: null, totp_enabled: false }).eq('id', req.adminUser.id);
+  if (error) return res.status(500).json({ error: error.message });
+  logActivity({ action: 'twofa_disabled', entity: 'user', actor_email: req.adminUser.email, ip: req.ip, status: 'warning' });
+  res.json({ enabled: false });
+});
 
 // GET /api/admin/stats — overview dashboard numbers, derived from real tables
 router.get('/stats', async (req, res) => {

@@ -16,7 +16,7 @@ export async function requireAdmin(req, res, next) {
 
   const { data: profile, error: profileErr } = await supabase
     .from('users')
-    .select('id, email, name, role')
+    .select('id, email, name, role, totp_enabled')
     .eq('id', userData.user.id)
     .single();
 

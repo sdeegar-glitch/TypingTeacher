@@ -102,6 +102,33 @@ export async function fetchAdminLogs(): Promise<ActivityLog[]> {
   return authedJson('/api/admin/logs');
 }
 
+// ─── Two-Factor Auth (TOTP, authenticator-app based) ────────
+export async function fetch2faStatus(): Promise<{ enabled: boolean }> {
+  return authedJson('/api/admin/2fa/status');
+}
+
+export async function start2faSetup(): Promise<{ secret: string; qrCode: string }> {
+  return authedJson('/api/admin/2fa/setup', { method: 'POST' });
+}
+
+export async function verify2faSetup(code: string): Promise<{ enabled: boolean }> {
+  return authedJson('/api/admin/2fa/verify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
+}
+
+export async function disable2fa(code: string): Promise<{ enabled: boolean }> {
+  return authedJson('/api/admin/2fa/disable', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
+}
+
+export async function submit2faLogin(pendingToken: string, code: string): Promise<{ accessToken: string }> {
+  const res = await fetch(`${API}/auth/login/2fa`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pendingToken, code }),
+  });
+  if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || 'Invalid code');
+  return res.json();
+}
+
 // ─── AI Generator — direct Gemini fallback if the backend route fails ──
 export async function generateAIContent(topic: string, apiKey: string): Promise<{ title: string; content: string; excerpt: string; difficulty_level: string; category: string; seo_title: string; seo_description: string; tags: string[]; keywords: string[] } | null> {
   try {
