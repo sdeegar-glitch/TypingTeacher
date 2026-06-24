@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Users, FileText, Eye, Zap, Activity } from 'lucide-react';
 import type { DashboardStats, AnalyticsPoint, ActivityLog } from '../types';
-import { fetchOverview, MOCK_ACTIVITY_LOGS } from '../api';
+import { fetchOverview, fetchAdminLogs } from '../api';
 
 const STAT_CARDS = [
   { label: 'Total Users',   key: 'totalUsers',   icon: <Users size={20} />,    color: 'indigo' },
@@ -46,7 +46,7 @@ export default function OverviewPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [chartData, setChartData] = useState<AnalyticsPoint[]>([]);
   const [diffDist, setDiffDist] = useState({ easy: 0, medium: 0, hard: 0 });
-  const [logs] = useState<ActivityLog[]>(MOCK_ACTIVITY_LOGS);
+  const [logs, setLogs] = useState<ActivityLog[]>([]);
 
   useEffect(() => {
     fetchOverview().then(({ stats, chartData, difficultyDistribution }) => {
@@ -54,6 +54,7 @@ export default function OverviewPage() {
       setChartData(chartData);
       setDiffDist(difficultyDistribution);
     }).catch(() => {});
+    fetchAdminLogs().then(all => setLogs(all.slice(0, 8))).catch(() => {});
   }, []);
 
   if (!stats) return (
@@ -146,16 +147,17 @@ export default function OverviewPage() {
         </div>
       </div>
 
-      {/* Activity Feed (still mock — no activity_log table yet) */}
+      {/* Activity Feed (real — activity_log table) */}
       <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
         <h3 className="text-white font-bold mb-4">Live Activity Feed</h3>
         <div className="space-y-3 max-h-48 overflow-y-auto">
+          {logs.length === 0 && <p className="text-sm text-slate-500">No activity recorded yet.</p>}
           {logs.map(log => (
             <div key={log.id} className="flex items-start gap-3">
               <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${log.status === 'success' ? 'bg-emerald-400' : log.status === 'warning' ? 'bg-amber-400' : 'bg-rose-400'}`} />
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-slate-200 truncate">{log.action}</p>
-                <p className="text-xs text-slate-500">{log.user} · {formatTime(log.timestamp)}</p>
+                <p className="text-sm text-slate-200 truncate">{log.action.replace(/_/g, ' ')}</p>
+                <p className="text-xs text-slate-500">{log.actor_email || 'system'} · {formatTime(log.created_at)}</p>
               </div>
             </div>
           ))}

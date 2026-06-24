@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Search, Plus, Trash2, Star, Eye, Globe, GlobeLock, RefreshCw } from 'lucide-react';
 import type { TypingTest } from '../types';
-import { fetchAdminTests, deleteAdminTest } from '../api';
+import { fetchAdminTests, deleteAdminTest, authHeaders } from '../api';
 
 const DIFF_COLORS: Record<string, string> = {
   easy: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
@@ -48,10 +48,9 @@ export default function TestsPage() {
   const triggerGenerate = async () => {
     setGenerating(true);
     try {
-      const token = localStorage.getItem('adminToken');
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}/api/tests/generate`, {
         method: 'POST',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: authHeaders(),
       });
       if (res.ok) {
         showToast('AI generation started in background. Refresh in ~30s.');

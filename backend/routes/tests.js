@@ -2,6 +2,7 @@ import express from 'express';
 import { supabase } from '../supabaseClient.js';
 import { fetchAndGenerateTests } from '../cronService.js';
 import { requireAdmin } from '../middleware/requireAdmin.js';
+import { logActivity } from '../activityLog.js';
 
 const router = express.Router();
 
@@ -128,6 +129,7 @@ router.post('/generate', requireAdmin, async (req, res) => {
   try {
     // Non-blocking background generation
     fetchAndGenerateTests().catch(err => console.error("Manual generation failed:", err));
+    logActivity({ action: 'ai_generation_triggered', entity: 'typing_test', actor_email: req.adminUser.email, ip: req.ip, meta: { topic: req.body?.topic || null } });
     res.status(202).json({ message: 'AI Content Generation started in the background.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -138,7 +140,7 @@ router.post('/generate', requireAdmin, async (req, res) => {
 router.post('/', requireAdmin, async (req, res) => {
   try {
     const { title, slug, content, excerpt, difficulty_level, word_count, estimated_read_time, category, seo_title, seo_description, tags, keywords, typing_duration_options } = req.body;
-    
+
     const { data, error } = await supabase
       .from('typing_test')
       .insert({
@@ -148,6 +150,7 @@ router.post('/', requireAdmin, async (req, res) => {
       .select();
 
     if (error) return res.status(500).json({ error: error.message });
+    logActivity({ action: 'test_created', entity: 'typing_test', actor_email: req.adminUser.email, ip: req.ip, meta: { title: data[0]?.title } });
     res.status(201).json(data[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -1,18 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Cpu, Loader2, CheckCircle, XCircle, RefreshCw, Save } from 'lucide-react';
-import type { AIGenerationLog } from '../types';
-import { MOCK_AI_LOGS, generateAIContent } from '../api';
+import type { ActivityLog } from '../types';
+import { generateAIContent, authHeaders, fetchAdminLogs } from '../api';
 
 const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
+const GENERATION_ACTIONS = ['ai_generation_triggered', 'test_created'];
 
 export default function AIGeneratorPage() {
   const [topic, setTopic] = useState('');
   const [generating, setGenerating] = useState(false);
   const [preview, setPreview] = useState<any>(null);
   const [error, setError] = useState('');
-  const [logs] = useState<AIGenerationLog[]>(MOCK_AI_LOGS);
+  const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [saved, setSaved] = useState(false);
   const [savingToDb, setSavingToDb] = useState(false);
+
+  useEffect(() => {
+    fetchAdminLogs().then(all => setLogs(all.filter(l => GENERATION_ACTIONS.includes(l.action)).slice(0, 10))).catch(() => {});
+  }, []);
 
   const generate = async () => {
     if (!topic.trim()) return;
@@ -25,7 +30,7 @@ export default function AIGeneratorPage() {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}/api/tests/generate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
         body: JSON.stringify({ topic })
       });
       if (res.ok) {
@@ -66,7 +71,7 @@ export default function AIGeneratorPage() {
       const slug = preview.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now();
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}/api/tests`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
         body: JSON.stringify({ ...preview, slug, word_count: wordCount, estimated_read_time: Math.ceil(wordCount / 200), typing_duration_options: ['1min', '3min', '5min', '10min'] })
       });
       setSaved(res.ok);
@@ -225,23 +230,25 @@ export default function AIGeneratorPage() {
           <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
             <h3 className="text-white font-bold mb-4">Generation History</h3>
             <div className="space-y-3">
-              {logs.map(log => (
-                <div key={log.id} className="flex items-start gap-3 p-3 rounded-xl bg-white/3 hover:bg-white/5 transition-colors">
-                  <div className={`mt-0.5 w-2 h-2 rounded-full shrink-0 ${log.status === 'success' ? 'bg-emerald-400' : log.status === 'failed' ? 'bg-rose-400' : 'bg-amber-400'}`} />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm text-slate-200 font-medium truncate">{log.title}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${log.status === 'success' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>
-                        {log.status}
-                      </span>
-                      {log.tokens_used && (
-                        <span className="text-xs text-slate-500">{log.tokens_used} tokens</span>
-                      )}
+              {logs.length === 0 && <p className="text-sm text-slate-500">No generation events yet.</p>}
+              {logs.map(log => {
+                const title = (log.meta as any)?.title || (log.meta as any)?.topic || log.action.replace(/_/g, ' ');
+                return (
+                  <div key={log.id} className="flex items-start gap-3 p-3 rounded-xl bg-white/3 hover:bg-white/5 transition-colors">
+                    <div className={`mt-0.5 w-2 h-2 rounded-full shrink-0 ${log.status === 'success' ? 'bg-emerald-400' : log.status === 'error' ? 'bg-rose-400' : 'bg-amber-400'}`} />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm text-slate-200 font-medium truncate">{title}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${log.status === 'success' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>
+                          {log.action === 'ai_generation_triggered' ? 'triggered' : 'saved'}
+                        </span>
+                        <span className="text-xs text-slate-500">{log.actor_email}</span>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-1">{new Date(log.created_at).toLocaleString()}</p>
                     </div>
-                    <p className="text-xs text-slate-500 mt-1">{new Date(log.created_at).toLocaleDateString()}</p>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -252,15 +259,15 @@ export default function AIGeneratorPage() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-slate-400">Daily runs</span>
-                <span className="text-white font-semibold">00:00 & 12:00</span>
+                <span className="text-white font-semibold">8:00, 14:00, 20:00 IST</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Articles per run</span>
-                <span className="text-white font-semibold">2 articles</span>
+                <span className="text-white font-semibold">1 article (3/day total)</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Source</span>
-                <span className="text-white font-semibold">The Hindu RSS</span>
+                <span className="text-white font-semibold">Gemini Search + Wikipedia fallback</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Status</span>

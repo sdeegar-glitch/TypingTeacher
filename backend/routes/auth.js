@@ -1,5 +1,6 @@
 import express from 'express';
 import { supabase } from '../supabaseClient.js';
+import { logActivity } from '../activityLog.js';
 
 const router = express.Router();
 
@@ -37,14 +38,19 @@ router.post('/login', async (req, res) => {
     password
   });
 
-  if (error) return res.status(401).json({ error: error.message });
+  if (error) {
+    logActivity({ action: 'login_failed', entity: 'auth', actor_email: email, ip: req.ip, status: 'error' });
+    return res.status(401).json({ error: error.message });
+  }
 
   const { data: profile } = await supabase.from('users').select('is_banned').eq('id', data.user.id).maybeSingle();
   if (profile?.is_banned) {
     await supabase.auth.admin.signOut(data.session.access_token).catch(() => {});
+    logActivity({ action: 'login_blocked_banned', entity: 'auth', actor_email: email, ip: req.ip, status: 'warning' });
     return res.status(403).json({ error: 'This account has been banned.' });
   }
 
+  logActivity({ action: 'login_success', entity: 'auth', actor_email: email, ip: req.ip, status: 'success' });
   res.json({ accessToken: data.session?.access_token, user: data.user });
 });
 

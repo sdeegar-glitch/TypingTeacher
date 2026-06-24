@@ -1,34 +1,30 @@
-import { useState } from 'react';
-import { Globe, Key, Bell, Palette, Save, CheckCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Globe, Key, Save, CheckCircle, Lock } from 'lucide-react';
+import type { AppSettings } from '../types';
+import { fetchAppSettings, updateAppSettings } from '../api';
+
+const DEFAULTS: AppSettings = {
+  siteName: '', tagline: '', siteUrl: '', supportEmail: '',
+  maintenanceMode: false, twitterUrl: '', githubUrl: '',
+};
 
 export default function SettingsPage() {
+  const [settings, setSettings] = useState<AppSettings>(DEFAULTS);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [settings, setSettings] = useState({
-    siteName: 'FastTypingLab',
-    tagline: 'Master Typing. Elevate Your Speed.',
-    siteUrl: 'https://fasttypinglab.com',
-    supportEmail: 'support@fasttypinglab.com',
-    geminiApiKey: '••••••••••••••••',
-    geminiModel: 'gemini-1.5-flash',
-    articlesPerDay: '2',
-    cronSchedule: '0 0,12 * * *',
-    smtpHost: 'smtp.gmail.com',
-    smtpPort: '587',
-    smtpUser: '',
-    smtpPass: '',
-    theme: 'dark',
-    primaryColor: '#6366F1',
-    maintenanceMode: false,
-    analyticsId: '',
-    twitterUrl: 'https://twitter.com/fasttypinglab',
-    githubUrl: '',
-  });
 
-  const set = (key: string, val: string | boolean) => setSettings(prev => ({ ...prev, [key]: val }));
+  useEffect(() => {
+    fetchAppSettings().then(s => setSettings({ ...DEFAULTS, ...s })).catch(() => {}).finally(() => setLoading(false));
+  }, []);
 
-  const save = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  const set = <K extends keyof AppSettings>(key: K, val: AppSettings[K]) => setSettings(prev => ({ ...prev, [key]: val }));
+
+  const save = async () => {
+    setSaving(true);
+    const ok = await updateAppSettings(settings);
+    setSaving(false);
+    if (ok) { setSaved(true); setTimeout(() => setSaved(false), 3000); }
   };
 
   const Section = ({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) => (
@@ -59,22 +55,29 @@ export default function SettingsPage() {
     />
   );
 
+  if (loading) return (
+    <div className="p-8">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        {[...Array(2)].map((_, i) => <div key={i} className="h-64 rounded-2xl bg-white/5 animate-pulse" />)}
+      </div>
+    </div>
+  );
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-black text-white">Settings</h1>
-          <p className="text-slate-400 text-sm mt-1">Configure your platform</p>
+          <p className="text-slate-400 text-sm mt-1">Real, persisted platform configuration</p>
         </div>
-        <button onClick={save} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors">
-          {saved ? <><CheckCircle size={16} /> Saved!</> : <><Save size={16} /> Save All</>}
+        <button onClick={save} disabled={saving} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors">
+          {saved ? <><CheckCircle size={16} /> Saved!</> : <><Save size={16} /> {saving ? 'Saving…' : 'Save All'}</>}
         </button>
       </div>
 
-      {/* Maintenance Banner */}
       {settings.maintenanceMode && (
         <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl px-4 py-3 flex items-center gap-2 text-rose-400 text-sm font-semibold">
-          ⚠️ Maintenance mode is ACTIVE — site is hidden from public users
+          ⚠️ Maintenance mode is ON (this flag is saved, but no page currently checks it to actually hide the site)
         </div>
       )}
 
@@ -103,67 +106,24 @@ export default function SettingsPage() {
               <span className="text-sm text-slate-300">{settings.maintenanceMode ? 'Site offline' : 'Site online'}</span>
             </label>
           </Field>
-        </Section>
-
-        <Section icon={<Key size={16} />} title="AI & API Keys">
-          <Field label="Gemini API Key" note="Used for automatic content generation">
-            <Input value={settings.geminiApiKey} onChange={v => set('geminiApiKey', v)} type="password" />
-          </Field>
-          <Field label="Gemini Model">
-            <select value={settings.geminiModel} onChange={e => set('geminiModel', e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none">
-              <option value="gemini-1.5-flash">gemini-1.5-flash (Fast)</option>
-              <option value="gemini-1.5-pro">gemini-1.5-pro (Advanced)</option>
-            </select>
-          </Field>
-          <Field label="Articles Per Day">
-            <Input value={settings.articlesPerDay} onChange={v => set('articlesPerDay', v)} type="number" />
-          </Field>
-          <Field label="Cron Schedule" note="Unix cron format — 0 0,12 * * * = midnight and noon">
-            <Input value={settings.cronSchedule} onChange={v => set('cronSchedule', v)} placeholder="0 0,12 * * *" />
-          </Field>
-          <Field label="Google Analytics ID">
-            <Input value={settings.analyticsId} onChange={v => set('analyticsId', v)} placeholder="G-XXXXXXXXXX" />
-          </Field>
-        </Section>
-
-        <Section icon={<Bell size={16} />} title="Email / SMTP">
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="SMTP Host">
-              <Input value={settings.smtpHost} onChange={v => set('smtpHost', v)} />
-            </Field>
-            <Field label="SMTP Port">
-              <Input value={settings.smtpPort} onChange={v => set('smtpPort', v)} />
-            </Field>
-          </div>
-          <Field label="SMTP Username">
-            <Input value={settings.smtpUser} onChange={v => set('smtpUser', v)} placeholder="your@gmail.com" />
-          </Field>
-          <Field label="SMTP Password">
-            <Input value={settings.smtpPass} onChange={v => set('smtpPass', v)} type="password" placeholder="app password" />
-          </Field>
-          <button className="text-sm bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 px-4 py-2 rounded-xl transition-colors">
-            Test Email Connection
-          </button>
-        </Section>
-
-        <Section icon={<Palette size={16} />} title="Appearance & Social">
-          <Field label="Theme">
-            <select value={settings.theme} onChange={e => set('theme', e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none">
-              <option value="dark">Dark (Default)</option>
-              <option value="light">Light</option>
-            </select>
-          </Field>
-          <Field label="Primary Accent Color">
-            <div className="flex items-center gap-3">
-              <input type="color" value={settings.primaryColor} onChange={e => set('primaryColor', e.target.value)} className="w-10 h-10 rounded-xl cursor-pointer border border-white/10 bg-transparent" />
-              <span className="text-sm text-slate-400 font-mono">{settings.primaryColor}</span>
-            </div>
-          </Field>
           <Field label="Twitter / X URL">
             <Input value={settings.twitterUrl} onChange={v => set('twitterUrl', v)} placeholder="https://twitter.com/..." />
           </Field>
           <Field label="GitHub URL">
             <Input value={settings.githubUrl} onChange={v => set('githubUrl', v)} placeholder="https://github.com/..." />
+          </Field>
+        </Section>
+
+        <Section icon={<Key size={16} />} title="Secrets & API Keys">
+          <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3 text-sm text-amber-300">
+            <Lock size={16} className="shrink-0 mt-0.5" />
+            <p>These are environment variables on the Render backend (<code className="text-amber-200">GEMINI_API_KEY</code>, <code className="text-amber-200">SUPABASE_SERVICE_KEY</code>), not editable here. Storing live secrets behind a settings-page UI is a different risk tier than the rest of this form — change them in Render's dashboard instead.</p>
+          </div>
+          <Field label="Gemini Model" note="Set in backend/cronService.js — currently gemini-2.0-flash">
+            <input disabled value="gemini-2.0-flash (configured in code)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed" />
+          </Field>
+          <Field label="Generation Schedule" note="Set in backend/cronService.js">
+            <input disabled value="8:00, 14:00, 20:00 IST · 1 article per run" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed" />
           </Field>
         </Section>
       </div>

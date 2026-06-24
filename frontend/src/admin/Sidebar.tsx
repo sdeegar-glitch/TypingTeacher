@@ -2,27 +2,29 @@ import { LayoutDashboard, Users, FileText, Tag, Cpu, Search, Bell, ClipboardList
 import type { SidebarPage } from './types';
 import { useState } from 'react';
 
-const NAV_ITEMS: { id: SidebarPage; label: string; icon: React.ReactNode; badge?: string }[] = [
-  { id: 'overview',     label: 'Overview',        icon: <LayoutDashboard size={18} /> },
-  { id: 'analytics',   label: 'Analytics',        icon: <BarChart2 size={18} /> },
-  { id: 'users',       label: 'Users',            icon: <Users size={18} />,   badge: '1.2k' },
-  { id: 'tests',       label: 'Typing Tests',     icon: <FileText size={18} /> },
-  { id: 'categories',  label: 'Categories',       icon: <Tag size={18} /> },
-  { id: 'ai-generator',label: 'AI Generator',     icon: <Cpu size={18} />,     badge: 'NEW' },
-  { id: 'seo',         label: 'SEO Manager',      icon: <Search size={18} /> },
-  { id: 'notifications',label:'Notifications',    icon: <Bell size={18} />,    badge: '3' },
-  { id: 'logs',        label: 'Reports & Logs',   icon: <ClipboardList size={18} /> },
-  { id: 'security',    label: 'Security Center',  icon: <Shield size={18} /> },
-  { id: 'settings',    label: 'Settings',         icon: <Settings size={18} /> },
-];
-
 interface AdminSidebarProps {
   activePage: SidebarPage;
   onNavigate: (page: SidebarPage) => void;
   onLogout: () => void;
+  userCount?: number;
+  notificationCount?: number;
 }
 
-export default function AdminSidebar({ activePage, onNavigate, onLogout }: AdminSidebarProps) {
+export default function AdminSidebar({ activePage, onNavigate, onLogout, userCount, notificationCount }: AdminSidebarProps) {
+  const NAV_ITEMS: { id: SidebarPage; label: string; icon: React.ReactNode; badge?: string }[] = [
+    { id: 'overview',     label: 'Overview',        icon: <LayoutDashboard size={18} /> },
+    { id: 'analytics',   label: 'Analytics',        icon: <BarChart2 size={18} /> },
+    { id: 'users',       label: 'Users',            icon: <Users size={18} />,   badge: userCount != null ? String(userCount) : undefined },
+    { id: 'tests',       label: 'Typing Tests',     icon: <FileText size={18} /> },
+    { id: 'categories',  label: 'Categories',       icon: <Tag size={18} /> },
+    { id: 'ai-generator',label: 'AI Generator',     icon: <Cpu size={18} />,     badge: 'NEW' },
+    { id: 'seo',         label: 'SEO Manager',      icon: <Search size={18} /> },
+    { id: 'notifications',label:'Notifications',    icon: <Bell size={18} />,    badge: notificationCount ? String(notificationCount) : undefined },
+    { id: 'logs',        label: 'Reports & Logs',   icon: <ClipboardList size={18} /> },
+    { id: 'security',    label: 'Security Center',  icon: <Shield size={18} /> },
+    { id: 'settings',    label: 'Settings',         icon: <Settings size={18} /> },
+  ];
+
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 

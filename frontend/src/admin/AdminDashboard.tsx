@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Bell, Search, User } from 'lucide-react';
-import type { SidebarPage } from './types';
+import type { SidebarPage, ActivityLog } from './types';
+import { fetchAdminLogs } from './api';
 import AdminSidebar from './Sidebar';
 import AdminLogin from './AdminLogin';
 import OverviewPage from './pages/OverviewPage';
@@ -29,29 +30,46 @@ const PAGE_LABELS: Record<SidebarPage, string> = {
   settings:       'Settings',
 };
 
+function relativeTime(iso: string) {
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
+
 function NotificationsPanel() {
-  const NOTIFS = [
-    { id: 1, text: '2 new AI-generated tests ready to publish', time: '5m ago', type: 'info' },
-    { id: 2, text: 'Failed login attempt from 192.168.1.1', time: '3h ago', type: 'warning' },
-    { id: 3, text: 'User #482 banned for suspicious activity', time: '1d ago', type: 'error' },
-  ];
+  const [logs, setLogs] = useState<ActivityLog[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAdminLogs().then(all => setLogs(all.slice(0, 15))).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  const typeFor = (status: string) => status === 'success' ? 'info' : status === 'warning' ? 'warning' : 'error';
 
   return (
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-2xl font-black text-white">Notifications</h1>
-        <p className="text-slate-400 text-sm mt-1">{NOTIFS.length} unread notifications</p>
+        <p className="text-slate-400 text-sm mt-1">{loading ? 'Loading…' : `${logs.length} recent events`}</p>
       </div>
       <div className="space-y-3">
-        {NOTIFS.map(n => (
-          <div key={n.id} className={`flex items-start gap-4 p-4 rounded-2xl border ${n.type === 'info' ? 'bg-indigo-500/10 border-indigo-500/20' : n.type === 'warning' ? 'bg-amber-500/10 border-amber-500/20' : 'bg-rose-500/10 border-rose-500/20'}`}>
-            <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${n.type === 'info' ? 'bg-indigo-400' : n.type === 'warning' ? 'bg-amber-400' : 'bg-rose-400'}`} />
-            <div>
-              <p className="text-sm text-white">{n.text}</p>
-              <p className="text-xs text-slate-500 mt-1">{n.time}</p>
+        {!loading && logs.length === 0 && <p className="text-sm text-slate-500">No activity recorded yet.</p>}
+        {logs.map(log => {
+          const type = typeFor(log.status);
+          return (
+            <div key={log.id} className={`flex items-start gap-4 p-4 rounded-2xl border ${type === 'info' ? 'bg-indigo-500/10 border-indigo-500/20' : type === 'warning' ? 'bg-amber-500/10 border-amber-500/20' : 'bg-rose-500/10 border-rose-500/20'}`}>
+              <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${type === 'info' ? 'bg-indigo-400' : type === 'warning' ? 'bg-amber-400' : 'bg-rose-400'}`} />
+              <div>
+                <p className="text-sm text-white">{log.action.replace(/_/g, ' ')}{log.actor_email ? ` — ${log.actor_email}` : ''}</p>
+                <p className="text-xs text-slate-500 mt-1">{relativeTime(log.created_at)}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -66,6 +84,8 @@ export default function AdminDashboard() {
   const [adminUser, setAdminUser] = useState<{ email: string; name: string | null } | null>(null);
   const [activePage, setActivePage] = useState<SidebarPage>('overview');
   const [notifOpen, setNotifOpen] = useState(false);
+  const [userCount, setUserCount] = useState<number | undefined>(undefined);
+  const [recentLogCount, setRecentLogCount] = useState<number | undefined>(undefined);
 
   const verifySession = () => {
     const token = localStorage.getItem('adminToken');
@@ -77,6 +97,18 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => { verifySession(); }, []);
+
+  useEffect(() => {
+    if (session !== 'loggedIn') return;
+    const token = localStorage.getItem('adminToken');
+    const headers = { Authorization: `Bearer ${token}` };
+    fetch(`${API}/api/admin/stats`, { headers }).then(r => r.ok ? r.json() : null).then(j => j && setUserCount(j.stats?.totalUsers)).catch(() => {});
+    fetch(`${API}/api/admin/logs`, { headers }).then(r => r.ok ? r.json() : null).then(logs => {
+      if (!Array.isArray(logs)) return;
+      const dayAgo = Date.now() - 86400000;
+      setRecentLogCount(logs.filter((l: { created_at: string }) => new Date(l.created_at).getTime() >= dayAgo).length);
+    }).catch(() => {});
+  }, [session]);
 
   const logout = () => {
     localStorage.removeItem('adminToken');
@@ -111,7 +143,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-[#0a0b0f] flex">
-      <AdminSidebar activePage={activePage} onNavigate={setActivePage} onLogout={logout} />
+      <AdminSidebar activePage={activePage} onNavigate={setActivePage} onLogout={logout} userCount={userCount} notificationCount={recentLogCount} />
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-h-screen overflow-hidden">

@@ -78,13 +78,44 @@ export interface AIGenerationLog {
 }
 
 export interface ActivityLog {
-  id: string;
+  id: number;
   action: string;
-  entity: string;
-  user: string;
-  ip: string;
-  timestamp: string;
+  entity: string | null;
+  actor_email: string | null;
+  ip: string | null;
   status: 'success' | 'warning' | 'error';
+  meta?: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface AppSettings {
+  siteName: string;
+  tagline: string;
+  siteUrl: string;
+  supportEmail: string;
+  maintenanceMode: boolean;
+  twitterUrl: string;
+  githubUrl: string;
+}
+
+export interface SeoTest {
+  id: string;
+  title: string;
+  slug: string;
+  seo_title: string | null;
+  seo_description: string | null;
+  views: number;
+  is_published: boolean;
+  created_at: string;
+  score: number;
+}
+
+export interface AdminAnalytics {
+  summary: { totalSessions: number; avgDurationSec: number; avgAccuracy: number; newUsers30d: number };
+  dailySessionsChart: AnalyticsPoint[];
+  dailyWpmChart: AnalyticsPoint[];
+  sessionsByMode: { name: string; value: number }[];
+  accuracyDistribution: { name: string; value: number }[];
 }
 
 export type SidebarPage = 
