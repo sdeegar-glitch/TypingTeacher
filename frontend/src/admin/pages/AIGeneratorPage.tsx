@@ -93,7 +93,7 @@ export default function AIGeneratorPage() {
         </div>
         <div>
           <h1 className="text-2xl font-black text-white">AI Test Generator</h1>
-          <p className="text-slate-400 text-sm">Powered by Gemini 1.5 Flash · Auto-generates from The Hindu editorials</p>
+          <p className="text-slate-400 text-sm">Powered by Gemini 2.0 Flash · Auto-generates from real-time search + Wikipedia fallback</p>
         </div>
       </div>
 
