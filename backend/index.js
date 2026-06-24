@@ -37,6 +37,7 @@ import authRoutes from './routes/auth.js';
 import leaderboardRoutes from './routes/leaderboard.js';
 import aiCoachRoutes from './routes/ai-coach.js';
 import certificatesRoutes from './routes/certificates.js';
+import adminRoutes from './routes/admin.js';
 import { initCronJobs } from './cronService.js';
 
 app.use('/tests', testsRoutes);
@@ -46,6 +47,7 @@ app.use('/auth', authRoutes);
 app.use('/leaderboard', leaderboardRoutes);
 app.use('/api/ai', aiCoachRoutes);
 app.use('/api/certificates', certificatesRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

@@ -38,7 +38,7 @@ export interface Category {
   icon?: string;
   color?: string;
   test_count: number;
-  created_at: string;
+  created_at?: string;
 }
 
 export interface PlatformUser {

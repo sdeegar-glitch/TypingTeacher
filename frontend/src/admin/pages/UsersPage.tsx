@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react';
-import { Search, Ban, Trash2, Shield, Eye, ChevronDown, Download } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { Search, Ban, Trash2, Eye, ChevronDown, Download } from 'lucide-react';
 import type { PlatformUser } from '../types';
-import { MOCK_USERS } from '../api';
+import { fetchAdminUsers, deleteAdminUser } from '../api';
 
 const ROLE_COLORS: Record<string, string> = {
   admin: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
@@ -15,12 +15,17 @@ function formatDate(iso: string) {
 }
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<PlatformUser[]>(MOCK_USERS);
+  const [users, setUsers] = useState<PlatformUser[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [filterRole, setFilterRole] = useState('all');
   const [page, setPage] = useState(1);
   const PER_PAGE = 8;
+
+  useEffect(() => {
+    fetchAdminUsers().then(setUsers).catch(() => {}).finally(() => setLoading(false));
+  }, []);
 
   const filtered = useMemo(() => {
     let u = users;
@@ -30,7 +35,7 @@ export default function UsersPage() {
   }, [users, search, filterRole]);
 
   const paged = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
-  const totalPages = Math.ceil(filtered.length / PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
 
   const toggleSelect = (id: string) => {
     const next = new Set(selectedIds);
@@ -38,12 +43,11 @@ export default function UsersPage() {
     setSelectedIds(next);
   };
 
-  const banUser = (id: string) => {
-    setUsers(prev => prev.map(u => u.id === id ? { ...u, is_banned: !u.is_banned } : u));
-  };
-
-  const deleteUser = (id: string) => {
-    if (confirm('Delete this user?')) setUsers(prev => prev.filter(u => u.id !== id));
+  const deleteUser = async (id: string) => {
+    if (!confirm('Permanently delete this user? This removes their account entirely and cannot be undone.')) return;
+    const ok = await deleteAdminUser(id);
+    if (ok) setUsers(prev => prev.filter(u => u.id !== id));
+    else alert('Failed to delete user.');
   };
 
   return (
@@ -51,7 +55,7 @@ export default function UsersPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black text-white">Users Management</h1>
-          <p className="text-slate-400 text-sm mt-1">{filtered.length} users found</p>
+          <p className="text-slate-400 text-sm mt-1">{loading ? 'Loading…' : `${filtered.length} users found`}</p>
         </div>
         <button className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
           <Download size={16} /> Export CSV
@@ -120,6 +124,12 @@ export default function UsersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
+              {loading && (
+                <tr><td colSpan={8} className="px-4 py-10 text-center text-sm text-slate-500">Loading users…</td></tr>
+              )}
+              {!loading && paged.length === 0 && (
+                <tr><td colSpan={8} className="px-4 py-10 text-center text-sm text-slate-500">No users found.</td></tr>
+              )}
               {paged.map(user => (
                 <tr key={user.id} className="hover:bg-white/3 transition-colors">
                   <td className="px-4 py-3">
@@ -160,8 +170,8 @@ export default function UsersPage() {
                       <button title="View" className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
                         <Eye size={14} />
                       </button>
-                      <button title={user.is_banned ? 'Unban' : 'Ban'} onClick={() => banUser(user.id)} className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-amber-400/10 rounded-lg transition-colors">
-                        {user.is_banned ? <Shield size={14} /> : <Ban size={14} />}
+                      <button disabled title="Ban/unban needs a schema update (users.is_banned) — not wired yet" className="p-1.5 text-slate-600 opacity-40 cursor-not-allowed rounded-lg">
+                        <Ban size={14} />
                       </button>
                       <button title="Delete" onClick={() => deleteUser(user.id)} className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
                         <Trash2 size={14} />

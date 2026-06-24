@@ -2,27 +2,25 @@ import type { DashboardStats, AnalyticsPoint, PlatformUser, TypingTest, Category
 
 const API = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
 
-// ─── Stats ────────────────────────────────────────────────
-export async function fetchDashboardStats(): Promise<DashboardStats> {
-  try {
-    const [testsRes] = await Promise.allSettled([
-      fetch(`${API}/api/tests?limit=1`),
-    ]);
-    const tests = testsRes.status === 'fulfilled' ? await testsRes.value.json() : { meta: { total: 0 } };
-    return {
-      totalUsers: 1240,
-      activeUsers: 342,
-      totalTests: tests?.meta?.total ?? 48,
-      totalViews: 58320,
-      avgWpm: 67,
-      testsToday: 8,
-    };
-  } catch {
-    return { totalUsers: 1240, activeUsers: 342, totalTests: 48, totalViews: 58320, avgWpm: 67, testsToday: 8 };
-  }
+function authHeaders(): HeadersInit {
+  const token = localStorage.getItem('adminToken');
+  return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-// ─── Analytics ────────────────────────────────────────────
+// ─── Overview (real) ───────────────────────────────────────
+export interface OverviewData {
+  stats: DashboardStats;
+  chartData: AnalyticsPoint[];
+  difficultyDistribution: { easy: number; medium: number; hard: number };
+}
+
+export async function fetchOverview(): Promise<OverviewData> {
+  const res = await fetch(`${API}/api/admin/stats`, { headers: authHeaders() });
+  if (!res.ok) throw new Error('Failed to load dashboard stats');
+  return res.json();
+}
+
+// ─── Analytics (still mock — no page-view tracking infra yet) ──
 export function generateAnalyticsData(days = 30): AnalyticsPoint[] {
   const data: AnalyticsPoint[] = [];
   for (let i = days - 1; i >= 0; i--) {
@@ -36,48 +34,38 @@ export function generateAnalyticsData(days = 30): AnalyticsPoint[] {
   return data;
 }
 
-// ─── Tests ────────────────────────────────────────────────
-export async function fetchTypingTests(): Promise<TypingTest[]> {
-  try {
-    const res = await fetch(`${API}/api/tests?limit=50`);
-    const json = await res.json();
-    return json.data ?? [];
-  } catch {
-    return [];
-  }
+// ─── Tests (real) ────────────────────────────────────────────
+export async function fetchAdminTests(): Promise<TypingTest[]> {
+  const res = await fetch(`${API}/api/admin/tests`, { headers: authHeaders() });
+  if (!res.ok) throw new Error('Failed to load tests');
+  return res.json();
 }
 
-export async function deleteTypingTest(id: string): Promise<boolean> {
-  try {
-    const res = await fetch(`${API}/api/tests/${id}`, { method: 'DELETE' });
-    return res.ok;
-  } catch { return false; }
+export async function deleteAdminTest(id: string): Promise<boolean> {
+  const res = await fetch(`${API}/api/admin/tests/${id}`, { method: 'DELETE', headers: authHeaders() });
+  return res.ok;
 }
 
-// ─── Categories ────────────────────────────────────────────
-export const MOCK_CATEGORIES: Category[] = [
-  { id: '1', name: 'Beginner Typing', slug: 'beginner', icon: '🟢', color: '#10B981', test_count: 12, created_at: '2024-01-01' },
-  { id: '2', name: 'Advanced Typing', slug: 'advanced', icon: '🔴', color: '#EF4444', test_count: 8, created_at: '2024-01-01' },
-  { id: '3', name: 'Editorial Typing', slug: 'editorial', icon: '📰', color: '#6366F1', test_count: 24, created_at: '2024-01-01' },
-  { id: '4', name: 'Speed Practice', slug: 'speed', icon: '⚡', color: '#F59E0B', test_count: 6, created_at: '2024-01-01' },
-  { id: '5', name: 'Programming Typing', slug: 'programming', icon: '💻', color: '#3B82F6', test_count: 4, created_at: '2024-01-01' },
-];
+// ─── Categories (real, derived from typing_test.category — read-only) ──
+export async function fetchAdminCategories(): Promise<Category[]> {
+  const res = await fetch(`${API}/api/admin/categories`, { headers: authHeaders() });
+  if (!res.ok) throw new Error('Failed to load categories');
+  return res.json();
+}
 
-// ─── Users ────────────────────────────────────────────────
-export const MOCK_USERS: PlatformUser[] = Array.from({ length: 20 }, (_, i) => ({
-  id: `user-${i + 1}`,
-  email: `user${i + 1}@example.com`,
-  name: `User ${i + 1}`,
-  role: i === 0 ? 'admin' : 'user',
-  created_at: new Date(Date.now() - i * 86400000 * 10).toISOString(),
-  last_login: new Date(Date.now() - i * 3600000).toISOString(),
-  total_tests: Math.floor(Math.random() * 100),
-  best_wpm: Math.floor(Math.random() * 80) + 40,
-  average_accuracy: Math.floor(Math.random() * 15) + 85,
-  is_banned: i === 5,
-}));
+// ─── Users (real) ────────────────────────────────────────────
+export async function fetchAdminUsers(): Promise<PlatformUser[]> {
+  const res = await fetch(`${API}/api/admin/users`, { headers: authHeaders() });
+  if (!res.ok) throw new Error('Failed to load users');
+  return res.json();
+}
 
-// ─── AI Logs ──────────────────────────────────────────────
+export async function deleteAdminUser(id: string): Promise<boolean> {
+  const res = await fetch(`${API}/api/admin/users/${id}`, { method: 'DELETE', headers: authHeaders() });
+  return res.ok;
+}
+
+// ─── AI Logs (still mock — no ai_generation_log table yet) ──────
 export const MOCK_AI_LOGS: AIGenerationLog[] = [
   { id: '1', title: 'India Economic Growth Analysis', status: 'success', created_at: new Date().toISOString(), tokens_used: 1820, source_url: 'thehindu.com' },
   { id: '2', title: 'Climate Change Editorial', status: 'success', created_at: new Date(Date.now() - 3600000 * 12).toISOString(), tokens_used: 1540 },
@@ -85,7 +73,7 @@ export const MOCK_AI_LOGS: AIGenerationLog[] = [
   { id: '4', title: 'Education Policy Review', status: 'success', created_at: new Date(Date.now() - 86400000 * 2).toISOString(), tokens_used: 1680 },
 ];
 
-// ─── Activity Logs ─────────────────────────────────────────
+// ─── Activity Logs (still mock — no activity_log table yet) ────
 export const MOCK_ACTIVITY_LOGS: ActivityLog[] = [
   { id: '1', action: 'AI test generated', entity: 'typing_test', user: 'system', ip: '127.0.0.1', timestamp: new Date().toISOString(), status: 'success' },
   { id: '2', action: 'User banned', entity: 'user', user: 'admin@fasttypinglab.com', ip: '103.1.2.3', timestamp: new Date(Date.now() - 3600000).toISOString(), status: 'warning' },
@@ -94,7 +82,7 @@ export const MOCK_ACTIVITY_LOGS: ActivityLog[] = [
   { id: '5', action: 'Settings updated', entity: 'settings', user: 'admin@fasttypinglab.com', ip: '103.1.2.3', timestamp: new Date(Date.now() - 14400000).toISOString(), status: 'success' },
 ];
 
-// ─── AI Generator ──────────────────────────────────────────
+// ─── AI Generator (still mock save target — out of scope today) ──
 export async function generateAIContent(topic: string, apiKey: string): Promise<{ title: string; content: string; excerpt: string; difficulty_level: string; category: string; seo_title: string; seo_description: string; tags: string[]; keywords: string[] } | null> {
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {

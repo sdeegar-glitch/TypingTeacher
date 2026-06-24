@@ -1,6 +1,7 @@
 import express from 'express';
 import { supabase } from '../supabaseClient.js';
 import { fetchAndGenerateTests } from '../cronService.js';
+import { requireAdmin } from '../middleware/requireAdmin.js';
 
 const router = express.Router();
 
@@ -123,8 +124,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST /api/tests/generate - Trigger AI generation manually
-router.post('/generate', async (req, res) => {
-  // Normally protected by admin middleware
+router.post('/generate', requireAdmin, async (req, res) => {
   try {
     // Non-blocking background generation
     fetchAndGenerateTests().catch(err => console.error("Manual generation failed:", err));
@@ -135,7 +135,7 @@ router.post('/generate', async (req, res) => {
 });
 
 // POST /api/tests - Save a newly generated test
-router.post('/', async (req, res) => {
+router.post('/', requireAdmin, async (req, res) => {
   try {
     const { title, slug, content, excerpt, difficulty_level, word_count, estimated_read_time, category, seo_title, seo_description, tags, keywords, typing_duration_options } = req.body;
     

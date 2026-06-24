@@ -57,23 +57,39 @@ function NotificationsPanel() {
   );
 }
 
+const API = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
+
+type SessionState = 'checking' | 'loggedOut' | 'loggedIn';
+
 export default function AdminDashboard() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [session, setSession] = useState<SessionState>('checking');
+  const [adminUser, setAdminUser] = useState<{ email: string; name: string | null } | null>(null);
   const [activePage, setActivePage] = useState<SidebarPage>('overview');
   const [notifOpen, setNotifOpen] = useState(false);
 
-  useEffect(() => {
+  const verifySession = () => {
     const token = localStorage.getItem('adminToken');
-    if (token) setIsLoggedIn(true);
-  }, []);
+    if (!token) { setSession('loggedOut'); return; }
+    fetch(`${API}/api/admin/me`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(me => { setAdminUser(me); setSession('loggedIn'); })
+      .catch(() => { localStorage.removeItem('adminToken'); setSession('loggedOut'); });
+  };
+
+  useEffect(() => { verifySession(); }, []);
 
   const logout = () => {
     localStorage.removeItem('adminToken');
-    setIsLoggedIn(false);
+    setAdminUser(null);
+    setSession('loggedOut');
   };
 
-  if (!isLoggedIn) {
-    return <AdminLogin onLogin={() => setIsLoggedIn(true)} />;
+  if (session === 'checking') {
+    return <div className="min-h-screen bg-[#0a0b0f]" />;
+  }
+
+  if (session === 'loggedOut') {
+    return <AdminLogin onLogin={verifySession} />;
   }
 
   const renderPage = () => {
@@ -129,8 +145,8 @@ export default function AdminDashboard() {
                 <User size={12} className="text-indigo-400" />
               </div>
               <div className="hidden sm:block">
-                <div className="text-xs font-semibold text-white">Admin</div>
-                <div className="text-[10px] text-slate-500">Super Admin</div>
+                <div className="text-xs font-semibold text-white">{adminUser?.name || adminUser?.email || 'Admin'}</div>
+                <div className="text-[10px] text-slate-500">{adminUser?.email}</div>
               </div>
             </div>
           </div>
