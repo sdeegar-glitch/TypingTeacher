@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Search, Ban, Trash2, Eye, ChevronDown, Download } from 'lucide-react';
+import { Search, Ban, Shield, Trash2, Eye, ChevronDown, Download } from 'lucide-react';
 import type { PlatformUser } from '../types';
-import { fetchAdminUsers, deleteAdminUser } from '../api';
+import { fetchAdminUsers, deleteAdminUser, setUserBanned } from '../api';
 
 const ROLE_COLORS: Record<string, string> = {
   admin: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
@@ -48,6 +48,14 @@ export default function UsersPage() {
     const ok = await deleteAdminUser(id);
     if (ok) setUsers(prev => prev.filter(u => u.id !== id));
     else alert('Failed to delete user.');
+  };
+
+  const toggleBan = async (user: PlatformUser) => {
+    const next = !user.is_banned;
+    if (!confirm(`${next ? 'Ban' : 'Unban'} ${user.email}?${next ? ' They will be unable to log in.' : ''}`)) return;
+    const ok = await setUserBanned(user.id, next);
+    if (ok) setUsers(prev => prev.map(u => u.id === user.id ? { ...u, is_banned: next } : u));
+    else alert('Failed to update ban status.');
   };
 
   return (
@@ -170,8 +178,8 @@ export default function UsersPage() {
                       <button title="View" className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
                         <Eye size={14} />
                       </button>
-                      <button disabled title="Ban/unban needs a schema update (users.is_banned) — not wired yet" className="p-1.5 text-slate-600 opacity-40 cursor-not-allowed rounded-lg">
-                        <Ban size={14} />
+                      <button title={user.is_banned ? 'Unban' : 'Ban'} onClick={() => toggleBan(user)} className="p-1.5 text-slate-400 hover:text-amber-400 hover:bg-amber-400/10 rounded-lg transition-colors">
+                        {user.is_banned ? <Shield size={14} /> : <Ban size={14} />}
                       </button>
                       <button title="Delete" onClick={() => deleteUser(user.id)} className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors">
                         <Trash2 size={14} />

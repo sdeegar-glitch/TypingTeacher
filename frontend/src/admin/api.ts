@@ -65,6 +65,15 @@ export async function deleteAdminUser(id: string): Promise<boolean> {
   return res.ok;
 }
 
+export async function setUserBanned(id: string, is_banned: boolean): Promise<boolean> {
+  const res = await fetch(`${API}/api/admin/users/${id}/ban`, {
+    method: 'PATCH',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ is_banned }),
+  });
+  return res.ok;
+}
+
 // ─── AI Logs (still mock — no ai_generation_log table yet) ──────
 export const MOCK_AI_LOGS: AIGenerationLog[] = [
   { id: '1', title: 'India Economic Growth Analysis', status: 'success', created_at: new Date().toISOString(), tokens_used: 1820, source_url: 'thehindu.com' },

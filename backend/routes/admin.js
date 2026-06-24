@@ -67,7 +67,7 @@ router.get('/stats', async (req, res) => {
 router.get('/users', async (req, res) => {
   const { data: users, error } = await supabase
     .from('users')
-    .select('id, email, name, role, created_at')
+    .select('id, email, name, role, created_at, is_banned')
     .order('created_at', { ascending: false });
   if (error) return res.status(500).json({ error: error.message });
 
@@ -92,11 +92,23 @@ router.get('/users', async (req, res) => {
       total_tests: b.total_tests,
       best_wpm: b.best_wpm,
       average_accuracy: b.accCount ? Math.round(b.accSum / b.accCount) : 0,
-      // No is_banned column exists yet — always reports active. Add a schema
-      // migration (users.is_banned boolean) before wiring ban/unban for real.
-      is_banned: false,
+      is_banned: !!u.is_banned,
     };
   }));
+});
+
+// PATCH /api/admin/users/:id/ban — { is_banned: true|false }. Enforced at
+// login time (see /auth/login) — an already-active session stays valid
+// until its access token naturally expires (~1h).
+router.patch('/users/:id/ban', async (req, res) => {
+  const { id } = req.params;
+  const { is_banned } = req.body;
+  if (typeof is_banned !== 'boolean') return res.status(400).json({ error: 'is_banned must be a boolean' });
+  if (req.adminUser.id === id) return res.status(400).json({ error: "You can't ban your own admin account" });
+
+  const { error } = await supabase.from('users').update({ is_banned }).eq('id', id);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ id, is_banned });
 });
 
 // DELETE /api/admin/users/:id — removes the auth user and their profile row

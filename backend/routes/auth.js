@@ -38,6 +38,13 @@ router.post('/login', async (req, res) => {
   });
 
   if (error) return res.status(401).json({ error: error.message });
+
+  const { data: profile } = await supabase.from('users').select('is_banned').eq('id', data.user.id).maybeSingle();
+  if (profile?.is_banned) {
+    await supabase.auth.admin.signOut(data.session.access_token).catch(() => {});
+    return res.status(403).json({ error: 'This account has been banned.' });
+  }
+
   res.json({ accessToken: data.session?.access_token, user: data.user });
 });
 
