@@ -105,6 +105,7 @@ export async function generateHindiTest(layout) {
           slug,
           original_source: source.sourceUrl,
           content: finalContent,
+          display_content: layout === 'kruti_dev' ? data.content : null,
           excerpt: data.excerpt,
           difficulty_level: data.difficulty_level,
           word_count: wordCount,

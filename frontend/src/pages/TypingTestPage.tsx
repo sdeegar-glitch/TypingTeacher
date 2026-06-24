@@ -65,7 +65,7 @@ export default function TypingTestPage() {
   }, [duration, profession, language, queryDuration]);
 
   // Test content state
-  const [testContent, setTestContent] = useState({ title: sampleTexts['1'].title, content: sampleTexts['1'].content });
+  const [testContent, setTestContent] = useState<{ title: string; content: string; keyboardLayout?: string | null; displayContent?: string | null }>({ title: sampleTexts['1'].title, content: sampleTexts['1'].content });
   const [loadingTest, setLoadingTest] = useState(!!id && !sampleTexts[id || '']);
   const [testMode, setTestMode] = useState<TestMode>('article');
   const [selectedDuration, setSelectedDuration] = useState(() => {
@@ -81,7 +81,7 @@ export default function TypingTestPage() {
       fetch(`${API_URL}/${id}`)
         .then(res => res.json())
         .then(data => {
-          if (data?.content) setTestContent({ title: data.title, content: data.content });
+          if (data?.content) setTestContent({ title: data.title, content: data.content, keyboardLayout: data.keyboard_layout, displayContent: data.display_content });
           else setTestContent(sampleTexts['1']);
         })
         .catch(() => setTestContent(sampleTexts['1']))
@@ -414,6 +414,15 @@ export default function TypingTestPage() {
 
         {/* ── TYPING DISPLAY ── */}
         <div className="w-full max-w-2xl">
+          {testMode === 'article' && testContent.keyboardLayout === 'kruti_dev' && testContent.displayContent && (
+            <div className="mb-3 bg-brand-surface-2 border border-brand-border rounded-2xl px-4 sm:px-8 py-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2">Preview (how this looks in Kruti Dev font)</p>
+              <p className="text-base sm:text-lg leading-relaxed text-brand-text-muted line-clamp-3" style={{ fontFamily: 'serif' }}>
+                {testContent.displayContent}
+              </p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mt-3 mb-0">Kruti Dev keystrokes (type this)</p>
+            </div>
+          )}
           <div
             className="relative bg-brand-surface border border-brand-border rounded-2xl px-4 sm:px-8 py-5 shadow-sm cursor-text overflow-hidden"
             onClick={() => isMobile && hiddenInputRef.current?.focus()}
