@@ -28,6 +28,7 @@ const NAV_LINKS = [
   { to: '/learn',                  label: 'Lessons' },
   { to: '/hindi-lessons',            label: 'हिंदी पाठ' },
   { to: '/hindi-typing-jungle',     label: 'हिंदी जंगल' },
+  { to: '/learn-hindi-typing',      label: 'Learn Hindi Typing' },
   { to: '/competitive-exam-typing',label: 'Exams' },
   { to: '/games',                  label: 'Games' },
   { to: '/tools',                  label: 'Tools' },
@@ -219,6 +220,8 @@ import HindiLessonPage from './pages/HindiLessonPage';
 import KrutiDevPage from './pages/KrutiDevPage';
 import CompetitiveExamTypingPage from './pages/CompetitiveExamTypingPage';
 import LearnHindiTypingPage from './pages/LearnHindiTypingPage';
+import HindiCourseSelectPage from './pages/HindiCourseSelectPage';
+import HindiCourseLessonPage from './pages/HindiCourseLessonPage';
 import TypingCertificatesPage from './pages/TypingCertificatesPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
@@ -286,6 +289,8 @@ const AppContent = () => {
           <Route path="/hindi-lessons/:lessonId" element={<HindiLessonPage />} />
           <Route path="/kruti-dev-typing" element={<KrutiDevPage />} />
           <Route path="/learn-hindi-typing" element={<LearnHindiTypingPage />} />
+          <Route path="/learn-hindi-typing/:layout" element={<HindiCourseSelectPage />} />
+          <Route path="/learn-hindi-typing/:layout/:lessonId" element={<HindiCourseLessonPage />} />
           <Route path="/typing-certificates" element={<TypingCertificatesPage />} />
           <Route path="/competitive-exam-typing" element={<CompetitiveExamTypingPage />} />
           <Route path="/blog" element={<BlogPage />} />
