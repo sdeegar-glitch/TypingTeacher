@@ -4,18 +4,14 @@
   "description": "Free typing speed test, Hindi typing practice, and AI typing tutor. Practice for SSC, CPCT, and government exams.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f0f1a",
-  "theme_color": "#6366f1",
+  "background_color": "#F6F3EE",
+  "theme_color": "#304C53",
   "orientation": "portrait-primary",
   "lang": "en",
   "categories": ["education", "productivity", "utilities"],
   "icons": [
-    {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "/favicon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/favicon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
   ],
   "screenshots": [],
   "shortcuts": [

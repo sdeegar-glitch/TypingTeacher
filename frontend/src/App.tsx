@@ -64,10 +64,7 @@ const Navbar = () => {
           {/* ── Logo ── */}
           <Link to="/" onClick={closeMenu}
             className="flex items-center gap-2.5 font-black text-lg tracking-tight text-brand-text hover:opacity-85 transition-opacity z-50 relative shrink-0">
-            <span className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm text-white shadow-lg"
-              style={{ background: 'linear-gradient(135deg, #304C53 0%, #2A9DAE 100%)' }}>
-              F
-            </span>
+            <img src="/logo-icon.png" alt="FastTypingLab logo" width={32} height={32} className="w-8 h-8 shrink-0" />
             <span className="hidden sm:inline">FastTypingLab</span>
           </Link>
 
