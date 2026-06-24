@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useLocation } from 'react-router-dom';
 import { Menu, X, Moon, Sun } from 'lucide-react';
 import { useTheme } from './store/useThemeStore';
-import TypingTestPage from './pages/TypingTestPage';
-import LeaderboardPage from './pages/LeaderboardPage';
-import DashboardPage from './pages/DashboardPage';
-import LearningCoursePage from './pages/LearningCoursePage';
-import LearningInterfacePage from './pages/LearningInterfacePage';
-import AuthPage from './pages/AuthPage';
-import AdminDashboardPage from './pages/AdminDashboardPage';
+
+const TypingTestPage = lazy(() => import('./pages/TypingTestPage'));
+const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const LearningCoursePage = lazy(() => import('./pages/LearningCoursePage'));
+const LearningInterfacePage = lazy(() => import('./pages/LearningInterfacePage'));
+const AuthPage = lazy(() => import('./pages/AuthPage'));
+const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
 
 const LearningInterfacePageWithKey = () => {
   const { lessonId } = useParams();
@@ -195,36 +196,36 @@ const Navbar = () => {
 
 
 
-import HomePage from './pages/HomePage';
-import TestsListPage from './pages/TestsListPage';
-import TestConfigPage from './pages/TestConfigPage';
-import ToolsPage from './pages/ToolsPage';
-import KeyboardTesterPage from './pages/KeyboardTesterPage';
-import SpacebarCounterPage from './pages/SpacebarCounterPage';
-import CpsTestPage from './pages/CpsTestPage';
-import ExamPage from './pages/ExamPage';
-import CertificatePage from './pages/CertificatePage';
-import WordCounterPage from './pages/WordCounterPage';
-import TypingTestForPage from './pages/TypingTestForPage';
-import MultiplayerPage from './pages/MultiplayerPage';
-import CaseConverterPage from './pages/CaseConverterPage';
-import CodingTypingPage from './pages/CodingTypingPage';
-import GamesPage from './pages/GamesPage';
-import WordRainPage from './pages/WordRainPage';
-import ZombieTypingPage from './pages/ZombieTypingPage';
-import SpeedRacerPage from './pages/SpeedRacerPage';
-import HindiTypingPage from './pages/HindiTypingPage';
-import HindiTypingJunglePage from './pages/HindiTypingJunglePage';
-import HindiLessonCoursePage from './pages/HindiLessonCoursePage';
-import HindiLessonPage from './pages/HindiLessonPage';
-import KrutiDevPage from './pages/KrutiDevPage';
-import CompetitiveExamTypingPage from './pages/CompetitiveExamTypingPage';
-import LearnHindiTypingPage from './pages/LearnHindiTypingPage';
-import HindiCourseSelectPage from './pages/HindiCourseSelectPage';
-import HindiCourseLessonPage from './pages/HindiCourseLessonPage';
-import TypingCertificatesPage from './pages/TypingCertificatesPage';
-import BlogPage from './pages/BlogPage';
-import BlogPostPage from './pages/BlogPostPage';
+const HomePage = lazy(() => import('./pages/HomePage'));
+const TestsListPage = lazy(() => import('./pages/TestsListPage'));
+const TestConfigPage = lazy(() => import('./pages/TestConfigPage'));
+const ToolsPage = lazy(() => import('./pages/ToolsPage'));
+const KeyboardTesterPage = lazy(() => import('./pages/KeyboardTesterPage'));
+const SpacebarCounterPage = lazy(() => import('./pages/SpacebarCounterPage'));
+const CpsTestPage = lazy(() => import('./pages/CpsTestPage'));
+const ExamPage = lazy(() => import('./pages/ExamPage'));
+const CertificatePage = lazy(() => import('./pages/CertificatePage'));
+const WordCounterPage = lazy(() => import('./pages/WordCounterPage'));
+const TypingTestForPage = lazy(() => import('./pages/TypingTestForPage'));
+const MultiplayerPage = lazy(() => import('./pages/MultiplayerPage'));
+const CaseConverterPage = lazy(() => import('./pages/CaseConverterPage'));
+const CodingTypingPage = lazy(() => import('./pages/CodingTypingPage'));
+const GamesPage = lazy(() => import('./pages/GamesPage'));
+const WordRainPage = lazy(() => import('./pages/WordRainPage'));
+const ZombieTypingPage = lazy(() => import('./pages/ZombieTypingPage'));
+const SpeedRacerPage = lazy(() => import('./pages/SpeedRacerPage'));
+const HindiTypingPage = lazy(() => import('./pages/HindiTypingPage'));
+const HindiTypingJunglePage = lazy(() => import('./pages/HindiTypingJunglePage'));
+const HindiLessonCoursePage = lazy(() => import('./pages/HindiLessonCoursePage'));
+const HindiLessonPage = lazy(() => import('./pages/HindiLessonPage'));
+const KrutiDevPage = lazy(() => import('./pages/KrutiDevPage'));
+const CompetitiveExamTypingPage = lazy(() => import('./pages/CompetitiveExamTypingPage'));
+const LearnHindiTypingPage = lazy(() => import('./pages/LearnHindiTypingPage'));
+const HindiCourseSelectPage = lazy(() => import('./pages/HindiCourseSelectPage'));
+const HindiCourseLessonPage = lazy(() => import('./pages/HindiCourseLessonPage'));
+const TypingCertificatesPage = lazy(() => import('./pages/TypingCertificatesPage'));
+const BlogPage = lazy(() => import('./pages/BlogPage'));
+const BlogPostPage = lazy(() => import('./pages/BlogPostPage'));
 
 const AppContent = () => {
   const location = useLocation();
@@ -236,6 +237,7 @@ const AppContent = () => {
     <div className={`min-h-screen flex flex-col font-sans bg-brand-bg transition-colors ${isLearningInterface ? 'h-screen overflow-hidden' : ''}`}>
       {!isLearningInterface && <Navbar />}
       <main className={`flex-grow ${isLearningInterface ? 'overflow-hidden' : ''}`}>
+        <Suspense fallback={<div className="min-h-screen" />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           
@@ -296,6 +298,7 @@ const AppContent = () => {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
         </Routes>
+        </Suspense>
       </main>
     </div>
   );
