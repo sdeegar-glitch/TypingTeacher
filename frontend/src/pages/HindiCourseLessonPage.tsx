@@ -20,30 +20,32 @@ function VirtualKeyboard({ pressedKey, activeMap, label }: { pressedKey: string;
   return (
     <div className="w-full max-w-2xl select-none">
       <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2 px-1">{label}</p>
-      <div className="flex flex-col gap-1.5 items-center">
-        {KEYBOARD_ROWS.map((row, ri) => (
-          <div key={ri} className="flex gap-1.5" style={{ paddingLeft: `${ri * 14}px` }}>
-            {row.map(key => {
-              const shiftKey = SHIFT_OF[key];
-              const base = activeMap[key];
-              const shifted = activeMap[shiftKey];
-              const isPressed = pressedKey.toLowerCase() === key;
-              return (
-                <div key={key} className="w-9 h-11 sm:w-10 sm:h-12 rounded-lg border flex flex-col items-center justify-center transition-all"
-                  style={{
-                    borderColor: isPressed ? 'var(--brand-cta)' : 'var(--brand-border)',
-                    background: isPressed ? 'rgba(188,108,80,0.12)' : 'var(--brand-surface)',
-                    boxShadow: isPressed ? '0 0 0 2px rgba(188,108,80,0.25)' : 'none',
-                  }}>
-                  <span className="text-[9px] leading-none text-brand-muted" style={{ fontFamily: DEVA_FONT }}>{shifted || ''}</span>
-                  <span className="text-xs font-bold leading-none mt-0.5" style={{ fontFamily: DEVA_FONT, color: base ? 'var(--brand-cta)' : 'var(--brand-muted)' }}>
-                    {base || key}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        ))}
+      <div className="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
+        <div className="flex flex-col gap-1.5 items-center w-max mx-auto">
+          {KEYBOARD_ROWS.map((row, ri) => (
+            <div key={ri} className="flex gap-1.5" style={{ paddingLeft: `${ri * 14}px` }}>
+              {row.map(key => {
+                const shiftKey = SHIFT_OF[key];
+                const base = activeMap[key];
+                const shifted = activeMap[shiftKey];
+                const isPressed = pressedKey.toLowerCase() === key;
+                return (
+                  <div key={key} className="w-9 h-11 sm:w-10 sm:h-12 rounded-lg border flex flex-col items-center justify-center transition-all shrink-0"
+                    style={{
+                      borderColor: isPressed ? 'var(--brand-cta)' : 'var(--brand-border)',
+                      background: isPressed ? 'rgba(188,108,80,0.12)' : 'var(--brand-surface)',
+                      boxShadow: isPressed ? '0 0 0 2px rgba(188,108,80,0.25)' : 'none',
+                    }}>
+                    <span className="text-[9px] leading-none text-brand-muted" style={{ fontFamily: DEVA_FONT }}>{shifted || ''}</span>
+                    <span className="text-xs font-bold leading-none mt-0.5" style={{ fontFamily: DEVA_FONT, color: base ? 'var(--brand-cta)' : 'var(--brand-muted)' }}>
+                      {base || key}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
