@@ -123,7 +123,7 @@ export default function SecurityPage() {
   // express-rate-limit), plus the now-real 2FA and brute-force state.
   const securityChecks = [
     { label: 'HTTPS Enabled', status: 'ok' as const },
-    { label: 'Rate Limiting Active', status: 'ok' as const },
+    { label: 'Rate Limiting Active', status: 'ok' as const, note: '100 req/min per IP globally; login capped at 20/15min, 2FA codes at 15/5min' },
     { label: 'CORS Configured', status: 'ok' as const },
     { label: 'Helmet.js Headers', status: 'ok' as const },
     { label: 'Role-Gated Admin Routes', status: 'ok' as const },
