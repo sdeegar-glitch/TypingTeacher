@@ -460,6 +460,25 @@
   box-shadow: 0 0 8px var(--brand-accent);
 }
 
+/* High-contrast mode (typing page only) — stronger color separation for
+   low-vision users, beyond what the normal dark/light palette provides. */
+.typing-high-contrast .typing-correct      { color: #00C853 !important; }
+.typing-high-contrast .typing-error {
+  color: #FFFFFF !important;
+  background: #D32F2F !important;
+  text-decoration: none;
+}
+.typing-high-contrast .typing-upcoming { color: #888888 !important; }
+.typing-high-contrast .typing-current  { color: #000000 !important; background: #FFEB3B !important; }
+.dark.typing-high-contrast .typing-current { color: #000000 !important; background: #FFEB3B !important; }
+.typing-high-contrast .typing-caret { background: #FFEB3B; box-shadow: none; }
+
+/* Respect the OS-level reduced-motion preference: keep the caret visible
+   (just stop the blink) instead of animating it indefinitely. */
+@media (prefers-reduced-motion: reduce) {
+  .typing-caret { animation: none; opacity: 1; }
+}
+
 
 /* ─────────────────────────────────────────────────────────────
    GLOW EFFECTS

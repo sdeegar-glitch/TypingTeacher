@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award } from 'lucide-react';
+import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast } from 'lucide-react';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
 import { useTypingEngine } from '../hooks/useTypingEngine';
+import { useSoundEffects } from '../hooks/useSoundEffects';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
 
 import { API_URL as BASE_URL, saveSession } from '../lib/api';
 const API_URL = `${BASE_URL}/api/tests`;
@@ -99,6 +102,12 @@ export default function TypingTestPage() {
     return testContent.content;
   }, [testMode, testContent]);
 
+  // Accessibility & sound preferences
+  const sound = useSoundEffects();
+  const prefersReducedMotion = useReducedMotion();
+  const a11y = useTypingA11yPrefs();
+  const [srAnnouncement, setSrAnnouncement] = useState('');
+
   // Achievement keys that can be unlocked
   const [newUnlocks, setNewUnlocks] = useState<Array<{ icon: string; name: string; xp: number }>>([]);
   // Anti-cheat
@@ -122,6 +131,9 @@ export default function TypingTestPage() {
     selectedDuration,
     'timed',
     (finalStats) => {
+      sound.playComplete();
+      setSrAnnouncement(`Test complete. Net speed ${finalStats.netWpm} words per minute, accuracy ${finalStats.accuracy} percent, ${finalStats.errors} errors.`);
+
       // 1. Save to backend
       saveSession({
         test_id: Number(id) || null,
@@ -182,9 +194,18 @@ export default function TypingTestPage() {
 
   const onMobileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newVal = e.target.value;
+    if (newVal.length > mobileVal.length) {
+      const added = newVal.slice(mobileVal.length);
+      for (let i = 0; i < added.length; i++) {
+        const expected = activeText[userInput.length + i];
+        if (added[i] === expected) sound.playKey(); else sound.playError();
+      }
+    } else {
+      sound.playKey();
+    }
     handleMobileInput(newVal);
     setMobileVal(newVal);
-  }, [handleMobileInput]);
+  }, [handleMobileInput, mobileVal, activeText, userInput.length, sound]);
 
   // Desktop keyboard listener
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -192,9 +213,12 @@ export default function TypingTestPage() {
     const ignored = ['Shift','Control','Alt','Meta','CapsLock','Tab','Escape','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12'];
     if (ignored.includes(e.key)) return;
     if (e.key === ' ') e.preventDefault();
-    if (e.key === 'Backspace') processBackspace();
-    else if (e.key.length === 1) processChar(e.key);
-  }, [stats.isFinished, processChar, processBackspace]);
+    if (e.key === 'Backspace') { sound.playKey(); processBackspace(); }
+    else if (e.key.length === 1) {
+      if (e.key === activeText[userInput.length]) sound.playKey(); else sound.playError();
+      processChar(e.key);
+    }
+  }, [stats.isFinished, processChar, processBackspace, sound, activeText, userInput.length]);
 
   useEffect(() => {
     if (!isMobile) {
@@ -202,6 +226,11 @@ export default function TypingTestPage() {
       return () => window.removeEventListener('keydown', handleKeyDown);
     }
   }, [handleKeyDown, isMobile]);
+
+  // Announce test start for screen readers (completion is announced via onFinish above)
+  useEffect(() => {
+    if (stats.isActive) setSrAnnouncement('Test started. Timer is running.');
+  }, [stats.isActive]);
 
   // Auto-focus mobile input
   useEffect(() => {
@@ -236,12 +265,15 @@ export default function TypingTestPage() {
 
   return (
     <div
-      className="h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none"
+      className={`h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none ${a11y.highContrast ? 'typing-high-contrast' : ''}`}
       onClick={() => isMobile && hiddenInputRef.current?.focus()}
     >
+      {/* Screen-reader only live region — announces test start/finish without affecting sighted UI */}
+      <div role="status" aria-live="polite" className="sr-only">{srAnnouncement}</div>
+
       {/* Anti-cheat warning */}
       {cheatWarning && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-rose-600 text-white px-5 py-2.5 rounded-xl shadow-2xl font-bold text-sm flex items-center gap-2 animate-bounce">
+        <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-rose-600 text-white px-5 py-2.5 rounded-xl shadow-2xl font-bold text-sm flex items-center gap-2 ${prefersReducedMotion ? '' : 'animate-bounce'}`}>
           {cheatWarning}
         </div>
       )}
@@ -394,6 +426,51 @@ export default function TypingTestPage() {
                 </div>
               </div>
 
+              {/* Accessibility row */}
+              <div className="flex items-center gap-2 mb-3 px-1">
+                <button
+                  onClick={sound.toggle}
+                  aria-pressed={sound.enabled}
+                  aria-label={sound.enabled ? 'Disable sound effects' : 'Enable sound effects'}
+                  title={sound.enabled ? 'Sound on' : 'Sound off'}
+                  className="flex items-center gap-1.5 bg-brand-surface border border-brand-border hover:border-brand-primary/40 text-brand-muted hover:text-brand-text px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                >
+                  {sound.enabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+                </button>
+                <div className="flex items-center bg-brand-surface border border-brand-border rounded-lg overflow-hidden">
+                  <button
+                    onClick={a11y.decreaseFontSize}
+                    disabled={!a11y.canDecreaseFontSize}
+                    aria-label="Decrease typing text font size"
+                    className="px-2 py-1.5 text-brand-muted hover:text-brand-text disabled:opacity-30 transition-colors"
+                  >
+                    <Minus className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="text-[10px] font-bold text-brand-muted px-1 tabular-nums" aria-hidden="true">{a11y.fontSize}px</span>
+                  <button
+                    onClick={a11y.increaseFontSize}
+                    disabled={!a11y.canIncreaseFontSize}
+                    aria-label="Increase typing text font size"
+                    className="px-2 py-1.5 text-brand-muted hover:text-brand-text disabled:opacity-30 transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <button
+                  onClick={a11y.toggleHighContrast}
+                  aria-pressed={a11y.highContrast}
+                  aria-label={a11y.highContrast ? 'Disable high contrast mode' : 'Enable high contrast mode'}
+                  title="High contrast"
+                  className={`flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                    a11y.highContrast
+                      ? 'bg-brand-primary text-white border-transparent'
+                      : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
+                  }`}
+                >
+                  <Contrast className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
               {/* Start hint */}
               <div className="flex items-center justify-between px-1">
                 <p className="text-xs text-brand-muted flex items-center gap-1.5">
@@ -434,8 +511,8 @@ export default function TypingTestPage() {
 
             {/* Text display */}
             <div
-              className="text-lg sm:text-xl font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
-              style={{ maxHeight: isMobile ? '120px' : '160px' }}
+              className="font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
+              style={{ maxHeight: isMobile ? '120px' : '160px', fontSize: `${a11y.fontSize}px` }}
             >
               {activeText.split('').map((char, index) => {
                 const isCorrect = index < userInput.length && !mistakes.has(index);
@@ -543,9 +620,9 @@ export default function TypingTestPage() {
             className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-[100] p-4"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              initial={prefersReducedMotion ? { opacity: 0 } : { scale: 0.9, y: 20, opacity: 0 }}
+              animate={prefersReducedMotion ? { opacity: 1 } : { scale: 1, y: 0, opacity: 1 }}
+              transition={prefersReducedMotion ? { duration: 0.15 } : { type: 'spring', damping: 20, stiffness: 300 }}
               className="bg-brand-surface border border-brand-border rounded-3xl p-7 sm:p-10 max-w-sm w-full text-center shadow-2xl"
             >
               <div className="text-5xl mb-4">
