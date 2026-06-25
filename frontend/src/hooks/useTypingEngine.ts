@@ -36,6 +36,7 @@ export interface TypingEngineResult {
   processBackspace: () => void;
   handleMobileInput: (val: string) => void;
   reset: () => void;
+  finish: () => void;           // end the test now, using current progress (e.g. "Finish Early")
   pressedKey: string;          // last pressed key (for virtual keyboard highlight)
   rejectedFlash: number;       // increments each time strict mode rejects a wrong keystroke (for shake/feedback UI)
   history: TypingHistoryPoint[]; // WPM/accuracy sampled every second, for results-screen graphs
@@ -234,6 +235,7 @@ export function useTypingEngine(
     processBackspace,
     handleMobileInput,
     reset,
+    finish,
     pressedKey,
     rejectedFlash,
     history,

@@ -628,7 +628,7 @@ export default function TypingTestPage() {
         {/* Finish early */}
         {!stats.isFinished && stats.isActive && (
           <button
-            onClick={(e) => { e.stopPropagation(); engine.reset(); /* actually finish */ }}
+            onClick={(e) => { e.stopPropagation(); engine.finish(); }}
             className="flex items-center gap-2 bg-brand-surface/80 hover:bg-rose-50 dark:hover:bg-rose-900/20 border border-brand-border hover:border-rose-300 text-brand-muted hover:text-rose-500 px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all"
           >
             Finish Early
