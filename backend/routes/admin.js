@@ -282,7 +282,7 @@ router.get('/analytics', async (req, res) => {
 });
 
 // ─── Settings (non-secret fields only — API keys/SMTP stay env-managed) ──
-const SETTINGS_KEYS = ['siteName', 'tagline', 'siteUrl', 'supportEmail', 'maintenanceMode', 'twitterUrl', 'githubUrl'];
+const SETTINGS_KEYS = ['siteName', 'tagline', 'siteUrl', 'supportEmail', 'maintenanceMode', 'twitterUrl', 'githubUrl', 'mistakeHandling'];
 
 router.get('/settings', async (req, res) => {
   const { data, error } = await supabase.from('app_settings').select('key, value').in('key', SETTINGS_KEYS);

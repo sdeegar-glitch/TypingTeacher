@@ -70,3 +70,14 @@ export async function analyzeWithAI(sessions: any[]): Promise<any> {
   if (!res.ok) throw new Error('AI analyze failed');
   return res.json();
 }
+
+/** Fetch the site-wide mistake-handling mode (admin-configurable). Defaults to 'lenient' on any error. */
+export async function fetchMistakeHandlingMode(): Promise<'strict' | 'lenient'> {
+  try {
+    const res = await fetch(`${API_URL}/api/settings/public`);
+    const json = await res.json();
+    return json.mistakeHandling === 'strict' ? 'strict' : 'lenient';
+  } catch {
+    return 'lenient';
+  }
+}

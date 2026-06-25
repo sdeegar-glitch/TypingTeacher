@@ -7,6 +7,12 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
 export type TypingMode = 'timed' | 'passage';
 
+export interface TypingHistoryPoint {
+  t: number;        // seconds elapsed at this sample
+  wpm: number;       // gross WPM at this point
+  accuracy: number;  // accuracy % at this point
+}
+
 export interface TypingStats {
   wpm: number;
   netWpm: number;
@@ -31,23 +37,39 @@ export interface TypingEngineResult {
   handleMobileInput: (val: string) => void;
   reset: () => void;
   pressedKey: string;          // last pressed key (for virtual keyboard highlight)
+  rejectedFlash: number;       // increments each time strict mode rejects a wrong keystroke (for shake/feedback UI)
+  history: TypingHistoryPoint[]; // WPM/accuracy sampled every second, for results-screen graphs
 }
 
 export function useTypingEngine(
   text: string,
   durationSeconds: number,
   mode: TypingMode = 'timed',
-  onFinish?: (stats: TypingStats) => void
+  onFinish?: (stats: TypingStats) => void,
+  strictMode: boolean = false
 ): TypingEngineResult {
   const [userInput, setUserInput] = useState('');
   const [mistakes, setMistakes] = useState<Set<number>>(new Set());
+  const [strictErrorCount, setStrictErrorCount] = useState(0); // total wrong attempts in strict mode (mistakes Set stays empty there, since rejected keys never commit)
   const [startTime, setStartTime] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(durationSeconds);
   const [isFinished, setIsFinished] = useState(false);
   const [pressedKey, setPressedKey] = useState('');
+  const [rejectedFlash, setRejectedFlash] = useState(0);
+  const [history, setHistory] = useState<TypingHistoryPoint[]>([]);
   const lastMobileVal = useRef('');
   const finishedRef = useRef(false);  // avoid stale closure issues
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Refs mirroring the latest userInput/mistakes so the 1s timer tick (set up
+  // once per start/finish transition) can sample fresh values without
+  // needing to restart the interval on every keystroke.
+  const userInputRef = useRef('');
+  const mistakesRef = useRef<Set<number>>(new Set());
+  const strictErrorCountRef = useRef(0);
+  useEffect(() => { userInputRef.current = userInput; }, [userInput]);
+  useEffect(() => { mistakesRef.current = mistakes; }, [mistakes]);
+  useEffect(() => { strictErrorCountRef.current = strictErrorCount; }, [strictErrorCount]);
 
   // Derived stats
   const elapsedSeconds = startTime
@@ -58,12 +80,13 @@ export function useTypingEngine(
     const elapsed = elapsedSeconds > 0 ? elapsedSeconds : 1;
     const minutes = elapsed / 60;
     const totalChars = userInput.length;
-    const errorsCount = mistakes.size;
+    const errorsCount = strictMode ? strictErrorCount : mistakes.size;
     const cpm = Math.round(totalChars / minutes);
     const grossWpm = Math.round((totalChars / 5) / minutes);
     const netWpm = Math.max(0, Math.round(grossWpm - errorsCount / minutes));
-    const accuracy = totalChars > 0
-      ? Math.round(((totalChars - errorsCount) / totalChars) * 100)
+    const accuracyDenominator = strictMode ? totalChars + strictErrorCount : totalChars;
+    const accuracy = accuracyDenominator > 0
+      ? Math.round(((accuracyDenominator - errorsCount) / accuracyDenominator) * 100)
       : 100;
     const progress = text.length > 0
       ? Math.min(100, Math.round((userInput.length / text.length) * 100))
@@ -81,13 +104,22 @@ export function useTypingEngine(
       isActive: !!startTime && !isFinished,
       elapsedSeconds,
     };
-  }, [userInput, mistakes, elapsedSeconds, timeLeft, isFinished, startTime, text]);
+  }, [userInput, mistakes, strictErrorCount, strictMode, elapsedSeconds, timeLeft, isFinished, startTime, text]);
 
-  // Countdown timer
+  // Countdown timer — also samples a WPM/accuracy history point every tick
   useEffect(() => {
     if (!startTime || isFinished) return;
     timerRef.current = setInterval(() => {
       setTimeLeft(prev => {
+        const nextElapsed = durationSeconds - (prev - 1 >= 0 ? prev - 1 : 0);
+        const minutes = Math.max(nextElapsed, 1) / 60;
+        const totalChars = userInputRef.current.length;
+        const errorsCount = strictMode ? strictErrorCountRef.current : mistakesRef.current.size;
+        const grossWpm = Math.round((totalChars / 5) / minutes);
+        const accDenom = strictMode ? totalChars + strictErrorCountRef.current : totalChars;
+        const acc = accDenom > 0 ? Math.round(((accDenom - errorsCount) / accDenom) * 100) : 100;
+        setHistory(h => [...h, { t: nextElapsed, wpm: Math.max(0, grossWpm), accuracy: acc }]);
+
         if (prev <= 1) {
           clearInterval(timerRef.current!);
           finishedRef.current = true;
@@ -98,7 +130,7 @@ export function useTypingEngine(
       });
     }, 1000);
     return () => clearInterval(timerRef.current!);
-  }, [startTime, isFinished]);
+  }, [startTime, isFinished, durationSeconds, strictMode]);
 
   // Fire onFinish callback
   useEffect(() => {
@@ -124,7 +156,17 @@ export function useTypingEngine(
         return prev;
       }
       const expected = text[prev.length];
-      if (char !== expected) {
+      const isWrong = char !== expected;
+
+      if (isWrong && strictMode) {
+        // Reject the keystroke entirely — cursor doesn't advance until the
+        // correct character is typed. Still counted for accuracy/error stats.
+        setStrictErrorCount(c => c + 1);
+        setRejectedFlash(f => f + 1);
+        return prev;
+      }
+
+      if (isWrong) {
         setMistakes(m => { const s = new Set(m); s.add(prev.length); return s; });
       }
       const next = prev + char;
@@ -137,7 +179,7 @@ export function useTypingEngine(
 
     setPressedKey(char);
     setTimeout(() => setPressedKey(''), 100);
-  }, [text, finish]);
+  }, [text, finish, strictMode]);
 
   const processBackspace = useCallback(() => {
     if (finishedRef.current) return;
@@ -168,10 +210,12 @@ export function useTypingEngine(
   const reset = useCallback(() => {
     setUserInput('');
     setMistakes(new Set());
+    setStrictErrorCount(0);
     setStartTime(null);
     setTimeLeft(durationSeconds);
     setIsFinished(false);
     setPressedKey('');
+    setHistory([]);
     lastMobileVal.current = '';
     finishedRef.current = false;
     clearInterval(timerRef.current!);
@@ -191,5 +235,7 @@ export function useTypingEngine(
     handleMobileInput,
     reset,
     pressedKey,
+    rejectedFlash,
+    history,
   };
 }

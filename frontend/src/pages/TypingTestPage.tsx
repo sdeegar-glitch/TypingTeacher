@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast } from 'lucide-react';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
@@ -10,7 +11,7 @@ import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
 
-import { API_URL as BASE_URL, saveSession } from '../lib/api';
+import { API_URL as BASE_URL, saveSession, fetchMistakeHandlingMode } from '../lib/api';
 const API_URL = `${BASE_URL}/api/tests`;
 
 // Duration options
@@ -108,6 +109,13 @@ export default function TypingTestPage() {
   const a11y = useTypingA11yPrefs();
   const [srAnnouncement, setSrAnnouncement] = useState('');
 
+  // Admin-configurable mistake handling — defaults to lenient (existing
+  // behavior) until the setting loads, so there's no behavior flash.
+  const [strictMode, setStrictMode] = useState(false);
+  useEffect(() => {
+    fetchMistakeHandlingMode().then(mode => setStrictMode(mode === 'strict'));
+  }, []);
+
   // Achievement keys that can be unlocked
   const [newUnlocks, setNewUnlocks] = useState<Array<{ icon: string; name: string; xp: number }>>([]);
   // Anti-cheat
@@ -183,10 +191,20 @@ export default function TypingTestPage() {
         localStorage.setItem('achievementKeys', JSON.stringify(prevKeys));
         if (unlocks.length) setNewUnlocks(unlocks);
       } catch {}
-    }
+    },
+    strictMode
   );
 
-  const { stats, userInput, mistakes, nextChar, pressedKey, processChar, processBackspace, handleMobileInput, reset } = engine;
+  const { stats, userInput, mistakes, nextChar, pressedKey, processChar, processBackspace, handleMobileInput, reset, rejectedFlash, history } = engine;
+
+  // Brief shake on the typing display when strict mode rejects a keystroke
+  const [shake, setShake] = useState(false);
+  useEffect(() => {
+    if (rejectedFlash === 0) return;
+    setShake(true);
+    const t = setTimeout(() => setShake(false), 250);
+    return () => clearTimeout(t);
+  }, [rejectedFlash]);
 
   // Mobile hidden input
   const hiddenInputRef = useRef<HTMLInputElement>(null);
@@ -308,6 +326,14 @@ export default function TypingTestPage() {
           <div className="min-w-0 hidden sm:block">
             <h1 className="text-sm font-semibold text-brand-text truncate max-w-[200px]">{testContent.title}</h1>
           </div>
+          {strictMode && (
+            <span
+              title="Wrong keystrokes are rejected until corrected — set by the site admin"
+              className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg shrink-0 bg-rose-500/10 text-rose-500 border border-rose-500/20"
+            >
+              Strict
+            </span>
+          )}
         </div>
 
         {/* Center: live label when active, empty when setup */}
@@ -501,7 +527,7 @@ export default function TypingTestPage() {
             </div>
           )}
           <div
-            className="relative bg-brand-surface border border-brand-border rounded-2xl px-4 sm:px-8 py-5 shadow-sm cursor-text overflow-hidden"
+            className={`relative bg-brand-surface border border-brand-border rounded-2xl px-4 sm:px-8 py-5 shadow-sm cursor-text overflow-hidden ${shake && !prefersReducedMotion ? 'animate-error-shake' : ''}`}
             onClick={() => isMobile && hiddenInputRef.current?.focus()}
           >
             {/* Subtle top glow when active */}
@@ -623,7 +649,7 @@ export default function TypingTestPage() {
               initial={prefersReducedMotion ? { opacity: 0 } : { scale: 0.9, y: 20, opacity: 0 }}
               animate={prefersReducedMotion ? { opacity: 1 } : { scale: 1, y: 0, opacity: 1 }}
               transition={prefersReducedMotion ? { duration: 0.15 } : { type: 'spring', damping: 20, stiffness: 300 }}
-              className="bg-brand-surface border border-brand-border rounded-3xl p-7 sm:p-10 max-w-sm w-full text-center shadow-2xl"
+              className="bg-brand-surface border border-brand-border rounded-3xl p-7 sm:p-10 max-w-sm sm:max-w-md w-full text-center shadow-2xl max-h-[90vh] overflow-y-auto"
             >
               <div className="text-5xl mb-4">
                 {stats.accuracy >= 95 ? '🏆' : stats.accuracy >= 80 ? '🎉' : '💪'}
@@ -663,6 +689,54 @@ export default function TypingTestPage() {
                   <span className="font-mono font-semibold text-brand-text">{stats.elapsedSeconds}s</span>
                 </div>
               </div>
+
+              {/* Speed & accuracy over time */}
+              {history.length >= 2 && (
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  <div className="bg-brand-surface-2 border border-brand-border rounded-xl p-2">
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-brand-muted mb-1 text-left px-1">Speed (WPM)</p>
+                    <ResponsiveContainer width="100%" height={70}>
+                      <AreaChart data={history}>
+                        <defs>
+                          <linearGradient id="wpmGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#2A9DAE" stopOpacity={0.4} />
+                            <stop offset="100%" stopColor="#2A9DAE" stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <XAxis dataKey="t" hide />
+                        <YAxis hide domain={[0, 'auto']} />
+                        <Tooltip
+                          formatter={(v: any) => [`${v} WPM`, '']}
+                          labelFormatter={(t: any) => `${t}s`}
+                          contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid var(--brand-border)' }}
+                        />
+                        <Area type="monotone" dataKey="wpm" stroke="#2A9DAE" strokeWidth={2} fill="url(#wpmGrad)" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="bg-brand-surface-2 border border-brand-border rounded-xl p-2">
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-brand-muted mb-1 text-left px-1">Accuracy (%)</p>
+                    <ResponsiveContainer width="100%" height={70}>
+                      <AreaChart data={history}>
+                        <defs>
+                          <linearGradient id="accGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#BC6C50" stopOpacity={0.4} />
+                            <stop offset="100%" stopColor="#BC6C50" stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <XAxis dataKey="t" hide />
+                        <YAxis hide domain={[0, 100]} />
+                        <Tooltip
+                          formatter={(v: any) => [`${v}%`, '']}
+                          labelFormatter={(t: any) => `${t}s`}
+                          contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid var(--brand-border)' }}
+                        />
+                        <Area type="monotone" dataKey="accuracy" stroke="#BC6C50" strokeWidth={2} fill="url(#accGrad)" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              )}
 
                 {/* Achievement unlocks */}
                 <AnimatePresence>

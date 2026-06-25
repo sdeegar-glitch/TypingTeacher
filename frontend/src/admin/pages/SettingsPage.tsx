@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Globe, Key, Save, CheckCircle, Lock } from 'lucide-react';
+import { Globe, Key, Save, CheckCircle, Lock, Keyboard } from 'lucide-react';
 import type { AppSettings } from '../types';
 import { fetchAppSettings, updateAppSettings } from '../api';
 
 const DEFAULTS: AppSettings = {
   siteName: '', tagline: '', siteUrl: '', supportEmail: '',
   maintenanceMode: false, twitterUrl: '', githubUrl: '',
+  mistakeHandling: 'lenient',
 };
 
 export default function SettingsPage() {
@@ -114,16 +115,36 @@ export default function SettingsPage() {
           </Field>
         </Section>
 
+        <Section icon={<Keyboard size={16} />} title="Typing Behavior">
+          <Field label="Mistake Handling" note="Lenient: keep typing past errors, they're just marked red. Strict: a wrong keystroke is rejected — the user must correct it before continuing. Applies site-wide on the public typing test page.">
+            <div className="grid grid-cols-2 gap-2">
+              {(['lenient', 'strict'] as const).map(mode => (
+                <button
+                  key={mode}
+                  onClick={() => set('mistakeHandling', mode)}
+                  className={`py-2.5 rounded-xl text-sm font-semibold capitalize transition-colors border ${
+                    settings.mistakeHandling === mode
+                      ? 'bg-indigo-600 border-indigo-500 text-white'
+                      : 'bg-white/5 border-white/10 text-slate-300 hover:border-indigo-500/40'
+                  }`}
+                >
+                  {mode}
+                </button>
+              ))}
+            </div>
+          </Field>
+        </Section>
+
         <Section icon={<Key size={16} />} title="Secrets & API Keys">
           <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3 text-sm text-amber-300">
             <Lock size={16} className="shrink-0 mt-0.5" />
-            <p>These are environment variables on the Render backend (<code className="text-amber-200">GEMINI_API_KEY</code>, <code className="text-amber-200">SUPABASE_SERVICE_KEY</code>), not editable here. Storing live secrets behind a settings-page UI is a different risk tier than the rest of this form — change them in Render's dashboard instead.</p>
+            <p>These are environment variables on the Render backend (<code className="text-amber-200">GEMINI_API_KEY</code>, <code className="text-amber-200">GROQ_API_KEY</code>, <code className="text-amber-200">SUPABASE_SERVICE_KEY</code>), not editable here. Storing live secrets behind a settings-page UI is a different risk tier than the rest of this form — change them in Render's dashboard instead.</p>
           </div>
-          <Field label="Gemini Model" note="Set in backend/cronService.js — currently gemini-2.0-flash">
-            <input disabled value="gemini-2.0-flash (configured in code)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed" />
+          <Field label="Rewrite Model" note="Set in backend/generation/groqClient.js">
+            <input disabled value="Groq openai/gpt-oss-120b (source/dedup stay on Gemini 2.5 Flash + embeddings)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed" />
           </Field>
           <Field label="Generation Schedule" note="Set in backend/cronService.js">
-            <input disabled value="8:00, 14:00, 20:00 IST · 1 article per run" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed" />
+            <input disabled value="3:00 AM IST · 12 tests/day (4 EN + 4 HI/Mangal + 4 HI/Kruti)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed" />
           </Field>
         </Section>
       </div>

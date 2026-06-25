@@ -96,6 +96,7 @@ export interface AppSettings {
   maintenanceMode: boolean;
   twitterUrl: string;
   githubUrl: string;
+  mistakeHandling: 'strict' | 'lenient';
 }
 
 export interface SeoTest {
