@@ -5,6 +5,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast } from 'lucide-react';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
+import CharSpan from '../components/CharSpan';
 import { getFingerForKey } from '../utils/KeyboardLayout';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { useSoundEffects } from '../hooks/useSoundEffects';
@@ -540,31 +541,15 @@ export default function TypingTestPage() {
               className="font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
               style={{ maxHeight: isMobile ? '120px' : '160px', fontSize: `${a11y.fontSize}px` }}
             >
-              {activeText.split('').map((char, index) => {
-                const isCorrect = index < userInput.length && !mistakes.has(index);
-                const isError = index < userInput.length && mistakes.has(index);
-                const isCurrent = index === userInput.length;
-
-                return (
-                  <span key={index} className="relative">
-                    {/* Blinking caret before current char */}
-                    {isCurrent && (
-                      <span className="typing-caret" aria-hidden="true" />
-                    )}
-                    <span
-                      id={isCurrent ? 'current-char' : undefined}
-                      className={`transition-colors duration-75 ${
-                        isCorrect ? 'typing-correct' :
-                        isError ? 'typing-error' :
-                        isCurrent ? 'typing-current' :
-                        'typing-upcoming'
-                      }`}
-                    >
-                      {char === ' ' ? '\u00A0' : char}
-                    </span>
-                  </span>
-                );
-              })}
+              {activeText.split('').map((char, index) => (
+                <CharSpan
+                  key={index}
+                  char={char}
+                  isCorrect={index < userInput.length && !mistakes.has(index)}
+                  isError={index < userInput.length && mistakes.has(index)}
+                  isCurrent={index === userInput.length}
+                />
+              ))}
             </div>
 
             {/* Caret hint when idle */}
