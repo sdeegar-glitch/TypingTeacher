@@ -155,7 +155,7 @@ export default function HomePage() {
       <section className="relative min-h-[calc(100dvh-64px)] flex items-center justify-center overflow-hidden px-4 sm:px-6">
         <HeroBlobs />
 
-        <div className="container mx-auto max-w-5xl relative z-10 py-16 sm:py-20">
+        <div className="max-w-[1600px] mx-auto relative z-10 py-16 sm:py-20">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }} className="text-center">
 
@@ -260,7 +260,7 @@ export default function HomePage() {
          ══════════════════════════════════════════════════════════ */}
       <section className="py-12 px-4 sm:px-6 border-y border-brand-border"
         style={{ background: 'var(--brand-surface)' }}>
-        <div className="container mx-auto max-w-4xl grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+        <div className="max-w-[1600px] mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
           {STATS.map((s, i) => (
             <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.08 }}
@@ -279,7 +279,7 @@ export default function HomePage() {
           FEATURES GRID
          ══════════════════════════════════════════════════════════ */}
       <section className="py-24 px-4 sm:px-6 mesh-bg">
-        <div className="container mx-auto max-w-5xl">
+        <div className="max-w-[1600px] mx-auto">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} className="text-center mb-14">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3">Everything you need</p>
@@ -320,7 +320,7 @@ export default function HomePage() {
           HOW IT WORKS
          ══════════════════════════════════════════════════════════ */}
       <section className="py-24 px-4 sm:px-6 border-y border-brand-border" style={{ background: 'var(--brand-surface)' }}>
-        <div className="container mx-auto max-w-4xl">
+        <div className="max-w-[1600px] mx-auto">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} className="text-center mb-14">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-cta mb-3">Simple process</p>
@@ -358,7 +358,7 @@ export default function HomePage() {
           QUICK LINKS (SEO)
          ══════════════════════════════════════════════════════════ */}
       <section className="py-16 px-4 sm:px-6">
-        <div className="container mx-auto max-w-4xl">
+        <div className="max-w-[1600px] mx-auto">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} className="text-center mb-10">
             <h2 className="text-2xl font-black text-brand-text mb-2">Popular Pages</h2>
@@ -387,7 +387,7 @@ export default function HomePage() {
           TESTIMONIALS
          ══════════════════════════════════════════════════════════ */}
       <section className="py-24 px-4 sm:px-6 border-t border-brand-border mesh-bg">
-        <div className="container mx-auto max-w-5xl">
+        <div className="max-w-[1600px] mx-auto">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} className="text-center mb-14">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3">Social proof</p>
@@ -463,7 +463,7 @@ export default function HomePage() {
           FOOTER
          ══════════════════════════════════════════════════════════ */}
       <footer className="border-t border-brand-border py-10 px-4 sm:px-6" style={{ background: 'var(--brand-surface)' }}>
-        <div className="container mx-auto max-w-5xl">
+        <div className="max-w-[1600px] mx-auto">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mb-8">
             {/* Brand */}
             <div>
