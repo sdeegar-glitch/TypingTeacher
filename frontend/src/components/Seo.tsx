@@ -27,7 +27,10 @@ interface SeoProps {
  */
 export default function Seo({ title, description, canonical, image, type = 'website', noindex, jsonLd }: SeoProps) {
   const { pathname } = useLocation();
-  const path = canonical ?? pathname;
+  const raw = canonical ?? pathname;
+  // Match GitHub Pages' trailing-slash directory URLs so the canonical points at
+  // the URL actually served (it 301-redirects /tests -> /tests/).
+  const path = raw.startsWith('http') || raw === '/' || raw.endsWith('/') ? raw : `${raw}/`;
   const url = path.startsWith('http') ? path : `${SITE_URL}${path}`;
   const img = image ?? DEFAULT_IMAGE;
   const blocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];

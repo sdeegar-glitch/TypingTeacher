@@ -3,58 +3,58 @@
 
   <!-- Core pages -->
   <url><loc>https://fasttypinglab.com/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://fasttypinglab.com/tests</loc><lastmod>2026-06-26</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://fasttypinglab.com/learn</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://fasttypinglab.com/learn-hindi-typing</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://fasttypinglab.com/competitive-exam-typing</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://fasttypinglab.com/games</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://fasttypinglab.com/tools</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://fasttypinglab.com/blog</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://fasttypinglab.com/tests/</loc><lastmod>2026-06-26</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://fasttypinglab.com/learn/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://fasttypinglab.com/learn-hindi-typing/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://fasttypinglab.com/competitive-exam-typing/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://fasttypinglab.com/games/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://fasttypinglab.com/tools/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://fasttypinglab.com/blog/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
   <!-- Hindi typing -->
-  <url><loc>https://fasttypinglab.com/hindi-typing-test</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://fasttypinglab.com/kruti-dev-typing</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://fasttypinglab.com/learn-hindi-typing/unicode</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://fasttypinglab.com/learn-hindi-typing/kruti-dev</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fasttypinglab.com/hindi-typing-test/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://fasttypinglab.com/kruti-dev-typing/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fasttypinglab.com/learn-hindi-typing/unicode/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fasttypinglab.com/learn-hindi-typing/kruti-dev/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 
   <!-- Typing tests (SEO) -->
-  <url><loc>https://fasttypinglab.com/typing-test</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://fasttypinglab.com/typing-test/1</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/typing-test/2</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/typing-test/5</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/typing-test-for/students</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/typing-test-for/professionals</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/typing-test-for/government-employees</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/typing-test/</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fasttypinglab.com/typing-test/1/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/typing-test/2/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/typing-test/5/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/typing-test-for/students/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/typing-test-for/professionals/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/typing-test-for/government-employees/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Tools -->
-  <url><loc>https://fasttypinglab.com/keyboard-tester</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/cps-test</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/spacebar-counter</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/word-counter</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/case-converter</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/coding-typing</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/keyboard-tester/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/cps-test/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/spacebar-counter/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/word-counter/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/case-converter/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/coding-typing/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Games -->
-  <url><loc>https://fasttypinglab.com/games/word-rain</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/games/zombie</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/games/speed-racer</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/games/word-rain/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/games/zombie/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/games/speed-racer/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Other -->
-  <url><loc>https://fasttypinglab.com/typing-certificates</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://fasttypinglab.com/leaderboard</loc><lastmod>2026-06-26</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/race</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://fasttypinglab.com/typing-certificates/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fasttypinglab.com/leaderboard/</loc><lastmod>2026-06-26</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/race/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
 
   <!-- Exam practice -->
-  <url><loc>https://fasttypinglab.com/exam/ssc-chsl</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://fasttypinglab.com/exam/ssc-cgl</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://fasttypinglab.com/exam/hindi-typing</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://fasttypinglab.com/exam/court-typing</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fasttypinglab.com/exam/ssc-chsl/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fasttypinglab.com/exam/ssc-cgl/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fasttypinglab.com/exam/hindi-typing/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fasttypinglab.com/exam/court-typing/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- Blog posts -->
-  <url><loc>https://fasttypinglab.com/blog/how-to-type-faster-in-30-days</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/blog/best-typing-test-for-ssc-exam</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/blog/hindi-typing-tips-for-govt-exams</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/blog/touch-typing-vs-hunt-and-peck</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://fasttypinglab.com/blog/keyboard-shortcuts-every-professional-should-know</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/blog/how-to-type-faster-in-30-days/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/blog/best-typing-test-for-ssc-exam/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/blog/hindi-typing-tips-for-govt-exams/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/blog/touch-typing-vs-hunt-and-peck/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fasttypinglab.com/blog/keyboard-shortcuts-every-professional-should-know/</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
 </urlset>

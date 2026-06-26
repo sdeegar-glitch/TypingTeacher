@@ -125,7 +125,9 @@ function injectJsonLd(html, blocks) {
 
 let written = 0;
 for (const r of ROUTES) {
-  const url = `${SITE}${r.path === '/' ? '/' : r.path}`;
+  // GitHub Pages serves dist/<path>/index.html and 301-redirects /path -> /path/,
+  // so the canonical must use the trailing-slash form it actually serves.
+  const url = `${SITE}${r.path === '/' ? '/' : r.path + '/'}`;
   const type = r.type || 'website';
   let html = TEMPLATE;
   html = setTitle(html, r.title);
