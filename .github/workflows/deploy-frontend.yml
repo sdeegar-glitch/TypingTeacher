@@ -1,0 +1,50 @@
+name: Deploy frontend to GitHub Pages
+
+# Auto-build the Vite frontend and publish it to the gh-pages branch
+# (which GitHub Pages serves at fasttypinglab.com) on every push to main
+# that touches the frontend. Replaces the manual `npm run deploy` step.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
+  workflow_dispatch: {}
+
+# peaceiris/actions-gh-pages pushes a commit to the gh-pages branch.
+permissions:
+  contents: write
+
+# Never let two deploys race; keep the most recent.
+concurrency:
+  group: deploy-frontend
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: frontend/dist
+          publish_branch: gh-pages
