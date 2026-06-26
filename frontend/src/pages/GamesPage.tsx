@@ -71,7 +71,7 @@ export default function GamesPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-[1600px] mx-auto">
 
         {/* Header */}
         <PageHeader

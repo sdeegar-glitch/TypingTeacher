@@ -73,7 +73,7 @@ export default function CompetitiveExamTypingPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-[1600px] mx-auto">
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-6">

@@ -36,7 +36,7 @@ export default function LearnHindiTypingPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-8">
 
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-8">
           <Link to="/" className="hover:text-brand-primary">Home</Link><span>/</span>

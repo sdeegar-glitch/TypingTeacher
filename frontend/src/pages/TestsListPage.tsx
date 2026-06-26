@@ -87,7 +87,7 @@ export default function TestsListPage() {
   if (!selected) {
     return (
       <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:py-14 sm:px-6">
-        <div className="container mx-auto max-w-3xl">
+        <div className="max-w-[1600px] mx-auto">
           <PageHeader
             icon={Zap}
             title={<><span className="gradient-text">Typing Tests</span> Library</>}
@@ -129,7 +129,7 @@ export default function TestsListPage() {
   // ── Tests list for the selected category ──
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:py-14 sm:px-6">
-      <div className="container mx-auto max-w-3xl">
+      <div className="max-w-[1600px] mx-auto">
 
         <button onClick={() => setSelected(null)}
           className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-muted hover:text-brand-primary transition-colors mb-5">

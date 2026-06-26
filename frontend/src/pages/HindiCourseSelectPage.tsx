@@ -45,7 +45,7 @@ export default function HindiCourseSelectPage() {
     <div className="min-h-screen bg-brand-bg text-brand-text pb-24">
       {/* Sticky header */}
       <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
             <Link to="/learn-hindi-typing" className="font-black text-brand-text text-base hover:text-brand-primary transition-colors shrink-0">
               FastTypingLab
@@ -82,7 +82,7 @@ export default function HindiCourseSelectPage() {
       </div>
 
       {/* Hero / Dashboard */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-8">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 pt-10 pb-8">
         <PageHeader
           icon={Languages}
           gradient="linear-gradient(135deg,#304C53,#2A9DAE)"
@@ -123,7 +123,7 @@ export default function HindiCourseSelectPage() {
       </div>
 
       {/* Stage sections */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-10">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 space-y-10">
         {STAGES.map(stage => {
           const stageLessons = course.LESSONS.filter(l => l.stage === stage.id);
           const stageDone = stageLessons.filter(l => progress?.lessons[l.id]?.completed).length;
@@ -210,7 +210,7 @@ export default function HindiCourseSelectPage() {
         })}
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-16">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 mt-16">
         <div className="rounded-2xl p-6 text-center"
           style={{ background: 'linear-gradient(135deg,rgba(188,108,80,0.08),rgba(221,173,156,0.06))', border: '1px solid rgba(188,108,80,0.2)' }}>
           <h3 className="font-black text-brand-text text-lg mb-2" style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>

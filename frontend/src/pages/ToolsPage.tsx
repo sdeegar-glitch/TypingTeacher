@@ -121,7 +121,7 @@ export default function ToolsPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
-      <div className="container mx-auto max-w-5xl">
+      <div className="max-w-[1600px] mx-auto">
 
         {/* Header */}
         <PageHeader

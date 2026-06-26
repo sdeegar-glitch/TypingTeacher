@@ -32,7 +32,7 @@ export default function HindiLessonCoursePage() {
     <div className="min-h-screen bg-brand-bg text-brand-text pb-24">
       {/* ── Sticky header ── */}
       <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link to="/" className="font-black text-brand-text text-base hover:text-brand-primary transition-colors">
               FastTypingLab
@@ -68,7 +68,7 @@ export default function HindiLessonCoursePage() {
       </div>
 
       {/* ── Hero ── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-12">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 pt-12">
         <PageHeader
           icon={Languages}
           gradient="linear-gradient(135deg,#BC6C50,#CC7B5D)"
@@ -93,7 +93,7 @@ export default function HindiLessonCoursePage() {
       </div>
 
       {/* ── Lesson groups ── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-10">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 space-y-10">
         {HINDI_LESSON_GROUPS.map(group => {
           const groupLessons = HINDI_LESSONS.filter(l => l.id >= group.range[0] && l.id <= group.range[1]);
           const groupDone = groupLessons.filter(l => progress[l.id]?.completed).length;
@@ -219,7 +219,7 @@ export default function HindiLessonCoursePage() {
       </div>
 
       {/* Footer CTA */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-16">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 mt-16">
         <div className="rounded-2xl p-6 text-center"
           style={{ background: 'linear-gradient(135deg,rgba(188,108,80,0.08),rgba(221,173,156,0.06))', border: '1px solid rgba(188,108,80,0.2)' }}>
           <h3 className="font-black text-brand-text text-lg mb-2"
