@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, ChevronRight, Zap, Clock, BarChart2, ChevronLeft, Languages, Keyboard } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 
 import { API_URL as BASE_URL } from '../lib/api';
 const API_URL = `${BASE_URL}/api/tests`;
@@ -87,18 +88,11 @@ export default function TestsListPage() {
     return (
       <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:py-14 sm:px-6">
         <div className="container mx-auto max-w-3xl">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12">
-            <div className="inline-flex w-16 h-16 rounded-2xl items-center justify-center mb-6 icon-teal shadow-lg">
-              <Zap className="w-8 h-8" />
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
-              <span className="gradient-text">Typing Tests</span> Library
-            </h1>
-            <p className="text-brand-text-muted max-w-xl mx-auto text-base leading-relaxed">
-              Choose a track to begin. Each track keeps English, Hindi Mangal and Hindi Kruti Dev tests separate so you practice exactly what you need.
-            </p>
-          </motion.div>
+          <PageHeader
+            icon={Zap}
+            title={<><span className="gradient-text">Typing Tests</span> Library</>}
+            subtitle="Choose a track to begin. Each track keeps English, Hindi Mangal and Hindi Kruti Dev tests separate so you practice exactly what you need."
+          />
 
           <div className="grid grid-cols-1 gap-4">
             {CATEGORIES.map((cat, i) => (
@@ -138,26 +132,18 @@ export default function TestsListPage() {
       <div className="container mx-auto max-w-3xl">
 
         <button onClick={() => setSelected(null)}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-muted hover:text-brand-primary transition-colors mb-8">
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-muted hover:text-brand-primary transition-colors mb-5">
           <ChevronLeft className="w-4 h-4" /> All tracks
         </button>
 
         {/* ── Header ── */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12">
-          <div className="inline-flex w-16 h-16 rounded-2xl items-center justify-center mb-6 shadow-lg text-white"
-            style={{ background: selected.gradient }}>
-            <selected.icon className="w-8 h-8" />
-          </div>
-          <div className="text-[11px] font-bold uppercase tracking-widest text-brand-muted mb-2"
-            style={selected.devanagari ? { fontFamily: "'Noto Sans Devanagari',sans-serif" } : undefined}>
-            {selected.subtitle}
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-3">{selected.title} Tests</h1>
-          <p className="text-brand-text-muted max-w-xl mx-auto text-base leading-relaxed">
-            {selected.desc} Pick any passage and start typing — timer begins with your first keystroke.
-          </p>
-        </motion.div>
+        <PageHeader
+          icon={selected.icon}
+          gradient={selected.gradient}
+          eyebrow={selected.subtitle}
+          devanagari={selected.devanagari}
+          title={`${selected.title} Tests`}
+        />
 
         {/* ── Content ── */}
         {loading ? (

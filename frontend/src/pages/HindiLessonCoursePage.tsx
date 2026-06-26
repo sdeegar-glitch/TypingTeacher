@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, Star, Zap, Languages, CheckCircle, ChevronRight } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 import {
   HINDI_LESSONS,
   HINDI_LESSON_GROUPS,
@@ -67,26 +68,16 @@ export default function HindiLessonCoursePage() {
       </div>
 
       {/* ── Hero ── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-12 pb-10 text-center">
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="inline-flex w-16 h-16 rounded-2xl items-center justify-center mx-auto mb-5 shadow-xl"
-            style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)' }}>
-            <Languages className="w-8 h-8 text-white" />
-          </div>
-          <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--brand-cta)' }}>
-            INSCRIPT Keyboard — Mangal Unicode
-          </p>
-          <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-2">
-            <span style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>हिंदी टाइपिंग</span>{' '}
-            <span className="gradient-text-cta">सीखें</span>
-          </h1>
-          <p className="text-brand-text-muted text-sm max-w-lg mx-auto leading-relaxed mb-6">
-            30 progressive lessons — from home row to full Hindi typing mastery.
-            Designed for SSC, CPCT, UP Police, and court exam preparation.
-          </p>
-
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-12">
+        <PageHeader
+          icon={Languages}
+          gradient="linear-gradient(135deg,#BC6C50,#CC7B5D)"
+          eyebrow="INSCRIPT Keyboard — Mangal Unicode"
+          title={<><span style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>हिंदी टाइपिंग</span>{' '}<span className="gradient-text-cta">सीखें</span></>}
+          subtitle="30 progressive lessons — from home row to full Hindi typing mastery. Designed for SSC, CPCT, UP Police, and court exam preparation."
+        >
           {/* Stats */}
-          <div className="flex items-center justify-center gap-8 mt-4">
+          <div className="flex items-center justify-center gap-8 mt-6">
             {[
               { label: 'पूर्ण', value: totalDone, color: 'text-brand-cta' },
               { label: 'शेष', value: 30 - totalDone, color: 'text-brand-muted' },
@@ -98,7 +89,7 @@ export default function HindiLessonCoursePage() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </PageHeader>
       </div>
 
       {/* ── Lesson groups ── */}

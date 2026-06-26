@@ -113,7 +113,7 @@ const TESTIMONIALS = [
 ];
 
 const QUICK_LINKS = [
-  { label: 'Typing Speed Test', href: '/typing-test',           tag: 'Popular' },
+  { label: 'Typing Speed Test', href: '/tests',                 tag: 'Popular' },
   { label: 'Hindi Typing Test', href: '/hindi-typing-test',     tag: 'Govt Exam' },
   { label: 'SSC CHSL Mock Test',href: '/exam/ssc-chsl',         tag: 'Exam' },
   { label: 'Learn Hindi Typing',href: '/learn-hindi-typing',    tag: 'Course' },

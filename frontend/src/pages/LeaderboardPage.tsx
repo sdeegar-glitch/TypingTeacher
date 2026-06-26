@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Medal, Award, TrendingUp, RefreshCcw } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 
 import { API_URL } from '../lib/api';
 
@@ -63,15 +64,11 @@ export default function LeaderboardPage() {
       <div className="max-w-4xl mx-auto">
 
         {/* Header */}
-        <div className="text-center mb-10">
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <Trophy className="w-7 h-7 text-amber-400" />
-              <h1 className="text-3xl sm:text-4xl font-black text-brand-text">Global Leaderboard</h1>
-            </div>
-            <p className="text-brand-text-muted">The fastest typists on FastTypingLab. Can you make the list?</p>
-          </motion.div>
-        </div>
+        <PageHeader
+          icon={Trophy}
+          title="Global Leaderboard"
+          subtitle="The fastest typists on FastTypingLab. Can you make the list?"
+        />
 
         {/* Tabs */}
         <div className="flex gap-1 bg-brand-surface-2 rounded-xl p-1 mb-8 w-fit mx-auto">

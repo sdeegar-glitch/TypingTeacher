@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code } from 'lucide-react';
+import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 
 const TOOL_CARDS = [
   {
@@ -123,16 +124,11 @@ export default function ToolsPage() {
       <div className="container mx-auto max-w-5xl">
 
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-10"
-        >
-          <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-3">Typing Tools & Utilities</h1>
-          <p className="text-brand-text-muted max-w-2xl">
-            Free online tools for typing speed tests, keyboard diagnostics, and exam preparation. All tools work directly in your browser — no download required.
-          </p>
-        </motion.div>
+        <PageHeader
+          icon={Wrench}
+          title="Typing Tools & Utilities"
+          subtitle="Free online tools for typing speed tests, keyboard diagnostics, and exam preparation. All tools work directly in your browser — no download required."
+        />
 
         {/* Tools Section */}
         <section className="mb-12">

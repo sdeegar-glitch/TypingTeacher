@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Award, QrCode, Download, Shield, ChevronRight, CheckCircle } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 
 const CERT_FEATURES = [
   { icon: '🏆', title: 'WPM Certified', desc: 'Your words per minute score is officially recorded and displayed on the certificate.' },
@@ -41,13 +42,12 @@ export default function TypingCertificatesPage() {
         </div>
 
         {/* Hero */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-          <div className="w-16 h-16 rounded-3xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-4">
-            <Award className="w-8 h-8 text-amber-500" />
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-3">Free Typing Certificates</h1>
-          <p className="text-brand-text-muted text-lg max-w-xl mx-auto">Generate verifiable typing speed certificates instantly. Share on LinkedIn, use for government exam documentation, or keep as a personal milestone.</p>
-          <div className="flex gap-3 justify-center mt-5">
+        <PageHeader
+          icon={Award}
+          title="Free Typing Certificates"
+          subtitle="Generate verifiable typing speed certificates instantly. Share on LinkedIn, use for government exam documentation, or keep as a personal milestone."
+        >
+          <div className="flex flex-wrap gap-3 justify-center mt-5">
             <Link to="/tests" className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20">
               <Award className="w-4 h-4" /> Get Your Certificate
             </Link>
@@ -55,7 +55,7 @@ export default function TypingCertificatesPage() {
               Verify a Certificate
             </Link>
           </div>
-        </motion.div>
+        </PageHeader>
 
         {/* Score levels */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">

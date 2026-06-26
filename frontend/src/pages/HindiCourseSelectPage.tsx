@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, Star, Zap, Languages, CheckCircle, ChevronRight, Flame, Award, TrendingUp } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 import { STAGES, type CourseProgressState } from '../data/hindiCourseData';
 import * as UnicodeCourse from '../data/hindiCourseData';
 import * as KrutiDevCourse from '../data/krutiDevCourseData';
@@ -82,22 +83,14 @@ export default function HindiCourseSelectPage() {
 
       {/* Hero / Dashboard */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-8">
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <div className="inline-flex w-16 h-16 rounded-2xl items-center justify-center mx-auto mb-4 shadow-xl"
-            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-            <Languages className="w-8 h-8 text-white" />
-          </div>
-          <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--brand-cta)' }}>
-            {isKrutiDev ? 'Kruti Dev 010 — Remington Gail Keyboard' : 'INSCRIPT — Unicode / Mangal Keyboard'}
-          </p>
-          <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-2">
-            <span style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>हिंदी टाइपिंग</span>{' '}
-            <span className="gradient-text-cta">मास्टरी कोर्स</span>
-          </h1>
-          <p className="text-brand-text-muted text-sm max-w-lg mx-auto leading-relaxed">
-            200 progressive lessons across 12 stages — home row to SSC/UP Police/court exam mastery.
-          </p>
-        </motion.div>
+        <PageHeader
+          icon={Languages}
+          gradient="linear-gradient(135deg,#304C53,#2A9DAE)"
+          eyebrow={isKrutiDev ? 'Kruti Dev 010 — Remington Gail Keyboard' : 'INSCRIPT — Unicode / Mangal Keyboard'}
+          title={<><span style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>हिंदी टाइपिंग</span>{' '}<span className="gradient-text-cta">मास्टरी कोर्स</span></>}
+          subtitle="200 progressive lessons across 12 stages — home row to SSC/UP Police/court exam mastery."
+          className="mb-8"
+        />
 
         {/* Stat cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">

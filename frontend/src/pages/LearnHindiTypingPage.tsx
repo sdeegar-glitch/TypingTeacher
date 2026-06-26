@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight, Languages, Trophy, Target, Zap, Building2, Scale, Shield, GraduationCap, Star, Award, Flame } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 
 export default function LearnHindiTypingPage() {
   useEffect(() => {
@@ -43,19 +44,12 @@ export default function LearnHindiTypingPage() {
         </div>
 
         {/* ── Hero ── */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <div className="inline-flex w-16 h-16 rounded-2xl items-center justify-center mx-auto mb-5 shadow-xl"
-            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-            <Languages className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-black text-brand-text mb-3 leading-tight">
-            Learn Hindi Typing<br className="hidden sm:block" /> Online Free
-          </h1>
-          <p className="text-brand-text-muted text-sm sm:text-base max-w-xl mx-auto leading-relaxed mb-8">
-            200 gamified lessons designed for SSC, UP Police, court, and government exam preparation.
-            Pick your keyboard layout and start from home row to full exam-pattern passages.
-          </p>
-
+        <PageHeader
+          icon={Languages}
+          gradient="linear-gradient(135deg,#304C53,#2A9DAE)"
+          title="Learn Hindi Typing Online Free"
+          subtitle="200 gamified lessons designed for SSC, UP Police, court, and government exam preparation. Pick your keyboard layout and start from home row to full exam-pattern passages."
+        >
           {/* Two big buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
             <Link to="/learn-hindi-typing/unicode"
@@ -89,7 +83,7 @@ export default function LearnHindiTypingPage() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </PageHeader>
 
         {/* ── Benefits grid ── */}
         <div className="mb-12">

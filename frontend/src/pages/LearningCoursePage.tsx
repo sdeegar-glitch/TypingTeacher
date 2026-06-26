@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, Star, Zap, Keyboard, CheckCircle, ChevronRight } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 import { loadProgress } from '../utils/progressManager';
 
 const LESSON_TITLES = [
@@ -83,25 +84,16 @@ export default function LearningCoursePage() {
       </div>
 
       {/* ── Hero ── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-12 pb-10 text-center">
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="inline-flex w-16 h-16 rounded-2xl items-center justify-center mx-auto mb-5 shadow-xl"
-            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-            <Keyboard className="w-8 h-8 text-white" />
-          </div>
-          <p className="text-xs font-bold uppercase tracking-widest mb-3 text-brand-accent">
-            Structured Course
-          </p>
-          <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-2">
-            Your <span className="gradient-text">Typing Journey</span>
-          </h1>
-          <p className="text-brand-text-muted text-sm max-w-lg mx-auto leading-relaxed mb-6">
-            50 progressive lessons — from home row to full keyboard mastery.
-            Complete each lesson to unlock the next.
-          </p>
-
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-12">
+        <PageHeader
+          icon={Keyboard}
+          gradient="linear-gradient(135deg,#304C53,#2A9DAE)"
+          eyebrow="Structured Course"
+          title={<>Your <span className="gradient-text">Typing Journey</span></>}
+          subtitle="50 progressive lessons — from home row to full keyboard mastery. Complete each lesson to unlock the next."
+        >
           {/* Stats */}
-          <div className="flex items-center justify-center gap-8 mt-4">
+          <div className="flex items-center justify-center gap-8 mt-6">
             {[
               { label: 'Completed', value: totalDone, color: 'text-brand-primary' },
               { label: 'Remaining', value: 50 - totalDone, color: 'text-brand-muted' },
@@ -113,7 +105,7 @@ export default function LearningCoursePage() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </PageHeader>
       </div>
 
       {/* ── Lesson groups ── */}
@@ -237,7 +229,7 @@ export default function LearningCoursePage() {
           <p className="text-brand-text-muted text-sm mb-4">
             After completing the lessons, put your skills to the test with a real typing test.
           </p>
-          <Link to="/typing-test"
+          <Link to="/tests"
             className="inline-flex items-center gap-2 font-bold text-white px-6 py-2.5 rounded-xl transition-all hover:opacity-90 active:scale-95"
             style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 14px rgba(42,157,174,.3)' }}>
             Start a Typing Test <ChevronRight className="w-4 h-4" />

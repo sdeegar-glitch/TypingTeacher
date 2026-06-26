@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight, Gamepad2, Trophy, Zap, Star } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 
 const GAMES = [
   {
@@ -73,17 +74,11 @@ export default function GamesPage() {
       <div className="max-w-5xl mx-auto">
 
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-14 h-14 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center">
-              <Gamepad2 className="w-7 h-7 text-brand-primary" />
-            </div>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-black text-brand-text mb-3">Typing Games</h1>
-          <p className="text-brand-text-muted text-lg max-w-xl mx-auto">
-            Improve your typing speed while having fun. Earn XP and compete for high scores!
-          </p>
-        </motion.div>
+        <PageHeader
+          icon={Gamepad2}
+          title="Typing Games"
+          subtitle="Improve your typing speed while having fun. Earn XP and compete for high scores!"
+        />
 
         {/* Stats strip */}
         <div className="grid grid-cols-3 gap-4 mb-10">
