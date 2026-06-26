@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, Clock, ChevronRight, Rss } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 import { BLOG_POSTS } from '../data/blogPosts';
 
 const CATEGORIES = ['All', 'Tips & Tricks', 'Government Exams', 'Learning', 'Productivity'];
@@ -16,16 +17,12 @@ export default function BlogPage() {
       <div className="max-w-5xl mx-auto">
 
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center">
-              <Rss className="w-5 h-5 text-brand-primary" />
-            </div>
-            <span className="text-xs font-bold text-brand-primary uppercase tracking-widest bg-brand-primary/10 px-2.5 py-1 rounded-md">Blog</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-3">Typing Tips & Guides</h1>
-          <p className="text-brand-text-muted max-w-2xl">Expert articles on typing speed improvement, government exam preparation, keyboard shortcuts, and Hindi typing practice.</p>
-        </motion.div>
+        <PageHeader
+          icon={Rss}
+          eyebrow="Blog"
+          title="Typing Tips & Guides"
+          subtitle="Expert articles on typing speed improvement, government exam preparation, keyboard shortcuts, and Hindi typing practice."
+        />
 
         {/* Featured post */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="mb-8">

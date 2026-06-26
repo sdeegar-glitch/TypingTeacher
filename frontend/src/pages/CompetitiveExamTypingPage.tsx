@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight, Trophy, Clock, Target, BookOpen, Zap, Shield } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 
 const EXAMS = [
   {
@@ -82,18 +83,12 @@ export default function CompetitiveExamTypingPage() {
         </div>
 
         {/* Hero */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center">
-              <Trophy className="w-6 h-6 text-brand-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-black text-brand-text">Competitive Exam Typing Practice</h1>
-              <p className="text-brand-text-muted text-sm mt-0.5">SSC, CPCT, UP Police, Court Clerk, Railway — all exams covered</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
+        <PageHeader
+          icon={Trophy}
+          title="Competitive Exam Typing Practice"
+          subtitle="SSC, CPCT, UP Police, Court Clerk, Railway — all exams covered"
+        >
+          <div className="grid grid-cols-3 gap-3 mt-6 max-w-xl mx-auto">
             {[
               { label: 'Exams Covered', value: '10+', color: 'text-brand-primary' },
               { label: 'Min WPM Required', value: '25–35', color: 'text-brand-accent' },
@@ -105,7 +100,7 @@ export default function CompetitiveExamTypingPage() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </PageHeader>
 
         {/* Exam list */}
         <div className="mb-10">
