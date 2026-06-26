@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Lock, Star, Zap } from 'lucide-react';
+import { Lock, Star, Zap, Keyboard, CheckCircle, ChevronRight } from 'lucide-react';
 import { loadProgress } from '../utils/progressManager';
 
 const LESSON_TITLES = [
@@ -20,6 +20,14 @@ const generateLessons = () =>
 
 const LESSONS = generateLessons();
 
+const LESSON_GROUPS = [
+  { name: 'Home Row',           icon: '🏠', range: [1, 7]   as [number, number] },
+  { name: 'Top Row',            icon: '⬆️', range: [8, 12]  as [number, number] },
+  { name: 'Bottom Row',         icon: '⬇️', range: [13, 18] as [number, number] },
+  { name: 'Shift & Capitals',   icon: '⇧',  range: [19, 20] as [number, number] },
+  { name: 'Advanced Practice',  icon: '🚀', range: [21, 50] as [number, number] },
+];
+
 export default function LearningCoursePage() {
   const [progress, setProgress] = useState<Record<string, any>>({});
 
@@ -31,26 +39,28 @@ export default function LearningCoursePage() {
   const isUnlocked  = (id: number) => id === 1 || !!progress[(id - 1).toString()]?.completed;
   const isCompleted = (id: number) => !!progress[id.toString()]?.completed;
   const getStars    = (id: number) => progress[id.toString()]?.stars || 0;
+  const getBestWpm  = (id: number) => progress[id.toString()]?.bestWpm || 0;
 
-  const totalDone = Object.keys(progress).length;
+  const totalDone  = LESSONS.filter(l => isCompleted(l.id)).length;
+  const totalStars = LESSONS.reduce((sum, l) => sum + getStars(l.id), 0);
+  const pct = Math.round((totalDone / 50) * 100);
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text pb-24">
-
       {/* ── Sticky header ── */}
       <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link to="/" className="font-black text-brand-text text-base hover:text-brand-primary transition-colors">
               FastTypingLab
             </Link>
             <span className="text-brand-muted text-sm">/</span>
-            <span className="text-sm font-semibold text-brand-muted">Learn</span>
+            <span className="text-sm font-semibold text-brand-primary">Learn English</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="flex flex-col items-end">
-              <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest">Mastery</span>
-              <span className="text-base font-black text-brand-text font-mono">{totalDone} <span className="text-brand-muted font-normal text-sm">/ 50</span></span>
+            <div className="flex items-center gap-2 text-xs text-brand-muted">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span className="font-bold text-brand-text">{totalStars}</span>
             </div>
             {/* Progress ring */}
             <div className="relative w-9 h-9">
@@ -58,7 +68,7 @@ export default function LearningCoursePage() {
                 <circle cx="18" cy="18" r="14" fill="none" stroke="var(--brand-border)" strokeWidth="3" />
                 <circle cx="18" cy="18" r="14" fill="none" strokeWidth="3"
                   stroke="url(#pg)" strokeLinecap="round"
-                  strokeDasharray={`${(totalDone / 50) * 87.96} 87.96`} />
+                  strokeDasharray={`${pct * 0.879} 87.96`} />
                 <defs>
                   <linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#304C53" />
@@ -66,127 +76,172 @@ export default function LearningCoursePage() {
                   </linearGradient>
                 </defs>
               </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black text-brand-text">{Math.round((totalDone / 50) * 100)}%</span>
+              <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black text-brand-text">{pct}%</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* ── Hero ── */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-8 text-center">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-12 pb-10 text-center">
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3">Structured Course</p>
+          <div className="inline-flex w-16 h-16 rounded-2xl items-center justify-center mx-auto mb-5 shadow-xl"
+            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+            <Keyboard className="w-8 h-8 text-white" />
+          </div>
+          <p className="text-xs font-bold uppercase tracking-widest mb-3 text-brand-accent">
+            Structured Course
+          </p>
           <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-2">
             Your <span className="gradient-text">Typing Journey</span>
           </h1>
-          <p className="text-brand-muted text-sm max-w-md mx-auto">
-            50 lessons from home row to full keyboard mastery. Complete each lesson to unlock the next.
+          <p className="text-brand-text-muted text-sm max-w-lg mx-auto leading-relaxed mb-6">
+            50 progressive lessons — from home row to full keyboard mastery.
+            Complete each lesson to unlock the next.
           </p>
-        </motion.div>
 
-        {/* Stats strip */}
-        <div className="flex items-center justify-center gap-6 mt-6">
-          {[
-            { label: 'Completed', value: totalDone, color: 'text-brand-primary' },
-            { label: 'Remaining', value: 50 - totalDone, color: 'text-brand-muted' },
-            { label: 'Total XP', value: `${totalDone * 25}+`, color: 'text-brand-accent' },
-          ].map(s => (
-            <div key={s.label} className="text-center">
-              <div className={`text-xl font-black font-mono ${s.color}`}>{s.value}</div>
-              <div className="text-[10px] text-brand-muted uppercase tracking-widest">{s.label}</div>
-            </div>
-          ))}
-        </div>
+          {/* Stats */}
+          <div className="flex items-center justify-center gap-8 mt-4">
+            {[
+              { label: 'Completed', value: totalDone, color: 'text-brand-primary' },
+              { label: 'Remaining', value: 50 - totalDone, color: 'text-brand-muted' },
+              { label: 'Total XP', value: `${totalDone * 25}+`, color: 'text-brand-accent' },
+            ].map(s => (
+              <div key={s.label} className="text-center">
+                <div className={`text-xl font-black font-mono ${s.color}`}>{s.value}</div>
+                <div className="text-[10px] text-brand-muted uppercase tracking-widest">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
 
-      {/* ── Lesson path ── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 relative">
-        {/* Center spine */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2 hidden md:block"
-          style={{ background: 'linear-gradient(180deg,var(--brand-primary),var(--brand-accent),var(--brand-cta))' }} />
+      {/* ── Lesson groups ── */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-10">
+        {LESSON_GROUPS.map(group => {
+          const groupLessons = LESSONS.filter(l => l.id >= group.range[0] && l.id <= group.range[1]);
+          const groupDone = groupLessons.filter(l => isCompleted(l.id)).length;
+          const groupComplete = groupDone === groupLessons.length;
 
-        <div className="flex flex-col gap-14 relative z-10">
-          {LESSONS.map((lesson, index) => {
-            const isLeft = index % 2 === 0;
-            const unlocked = isUnlocked(lesson.id);
-            const completed = isCompleted(lesson.id);
-            const stars = getStars(lesson.id);
-            const isCurrent = unlocked && !completed;
+          return (
+            <motion.div key={group.name}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-30px' }}>
 
-            return (
-              <motion.div key={lesson.id}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: Math.min(index * 0.02, 0.3) }}
-                className={`flex flex-col md:flex-row items-center gap-4 md:gap-8 ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} justify-center group`}>
-
-                {/* Text label */}
-                <div className={`w-full md:w-5/12 ${isLeft ? 'md:text-right' : 'md:text-left'} text-center transition-all duration-300 ${!unlocked ? 'opacity-30' : ''} order-2 md:order-none`}>
-                  <span className="text-[10px] font-bold uppercase tracking-widest mb-1 block"
-                    style={{ color: completed ? 'var(--brand-accent)' : isCurrent ? 'var(--brand-cta)' : 'var(--brand-muted)' }}>
-                    Level {lesson.id} · {lesson.description}
-                  </span>
-                  <h3 className="text-lg font-black text-brand-text leading-tight">{lesson.title}</h3>
-                  {completed && stars > 0 && (
-                    <div className="flex items-center gap-0.5 mt-1 justify-center md:justify-end">
-                      {Array.from({ length: stars }).map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                  )}
-                  {isCurrent && !completed && (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold mt-1"
-                      style={{ color: 'var(--brand-cta)' }}>
-                      <Zap className="w-3 h-3" /> Start here
-                    </span>
-                  )}
+              {/* Group header */}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">{group.icon}</span>
+                <div className="flex-1">
+                  <h2 className="font-black text-brand-text text-sm sm:text-base">{group.name}</h2>
+                  <p className="text-xs text-brand-muted">{groupDone}/{groupLessons.length} completed</p>
                 </div>
+                {groupComplete && <CheckCircle className="w-5 h-5 text-brand-accent" />}
+              </div>
 
-                {/* Node button */}
-                <div className="relative order-1 md:order-none shrink-0">
-                  {isCurrent && (
-                    <div className="absolute inset-[-12px] rounded-full animate-ping opacity-25"
-                      style={{ background: 'radial-gradient(circle,rgba(188,108,80,.4),transparent)' }} />
-                  )}
+              {/* Lesson cards grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {groupLessons.map((lesson, idx) => {
+                  const unlocked = isUnlocked(lesson.id);
+                  const completed = isCompleted(lesson.id);
+                  const stars = getStars(lesson.id);
+                  const bestWpm = getBestWpm(lesson.id);
+                  const isCurrent = unlocked && !completed;
 
-                  <Link to={unlocked ? `/learn/${lesson.id}` : '#'}
-                    onClick={e => !unlocked && e.preventDefault()}
-                    className={`relative w-20 h-20 rounded-[30%] flex flex-col items-center justify-center transition-all duration-300 shadow-lg border-b-4 ${
-                      !unlocked ? 'cursor-not-allowed opacity-40' : 'hover:scale-110 active:translate-y-1 active:border-b-0'
-                    }`}
-                    style={!unlocked ? {
-                      background: 'var(--brand-surface-2)', borderColor: 'var(--brand-border)',
-                    } : completed ? {
-                      background: 'linear-gradient(135deg,#2A9DAE,#AFE0E7)', borderColor: '#1C7A87',
-                      boxShadow: '0 6px 20px rgba(42,157,174,.3)',
-                    } : {
-                      background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', borderColor: '#8B4C37',
-                      boxShadow: '0 6px 20px rgba(188,108,80,.35)',
-                    }}>
+                  return (
+                    <motion.div key={lesson.id}
+                      initial={{ opacity: 0, x: -8 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.04 }}>
+                      <Link
+                        to={unlocked ? `/learn/${lesson.id}` : '#'}
+                        onClick={e => !unlocked && e.preventDefault()}
+                        className={`group flex items-center gap-4 p-4 rounded-2xl border transition-all duration-200 ${
+                          !unlocked
+                            ? 'opacity-50 cursor-not-allowed border-brand-border bg-brand-surface'
+                            : completed
+                              ? 'border-brand-accent/30 bg-brand-accent/5 hover:shadow-lg hover:-translate-y-0.5'
+                              : isCurrent
+                                ? 'border-brand-primary/40 hover:shadow-lg hover:-translate-y-0.5'
+                                : 'border-brand-border bg-brand-surface hover:border-brand-primary/30 hover:shadow-md hover:-translate-y-0.5'
+                        }`}
+                        style={isCurrent ? { background: 'rgba(48,76,83,0.04)' } : completed ? {} : { background: 'var(--brand-surface)' }}>
 
-                    {!unlocked ? (
-                      <Lock className="w-7 h-7 text-brand-muted opacity-50" />
-                    ) : (
-                      <>
-                        <span className="text-2xl font-black text-white">{lesson.id}</span>
-                        {completed && (
-                          <span className="text-white/90 text-[9px] font-bold mt-0.5">✓ Done</span>
+                        {/* Lesson number node */}
+                        <div className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-black text-lg text-white transition-transform group-hover:scale-105"
+                          style={!unlocked ? { background: 'var(--brand-surface-2)' }
+                            : completed ? { background: 'linear-gradient(135deg,#2A9DAE,#AFE0E7)' }
+                            : isCurrent ? { background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 12px rgba(42,157,174,.3)' }
+                            : { background: 'var(--brand-surface-2)', color: 'var(--brand-muted)' }}>
+                          {!unlocked
+                            ? <Lock className="w-5 h-5 text-brand-muted" />
+                            : <span style={{ color: isCurrent || completed ? '#fff' : 'var(--brand-muted)' }}>{lesson.id}</span>
+                          }
+                        </div>
+
+                        {/* Lesson info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <span className="text-[10px] font-bold uppercase tracking-widest"
+                              style={{ color: completed ? 'var(--brand-accent)' : isCurrent ? 'var(--brand-primary)' : 'var(--brand-muted)' }}>
+                              Level {lesson.id}
+                            </span>
+                            {isCurrent && (
+                              <span className="text-[9px] font-bold text-white px-1.5 py-0.5 rounded-full animate-pulse"
+                                style={{ background: 'var(--brand-primary)' }}>Start here</span>
+                            )}
+                          </div>
+                          <h3 className="font-bold text-brand-text text-sm truncate">{lesson.title}</h3>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs px-1.5 py-0.5 rounded-md font-bold"
+                              style={{ background: 'rgba(48,76,83,0.1)', color: 'var(--brand-primary)', border: '1px solid rgba(48,76,83,0.2)' }}>
+                              {lesson.description}
+                            </span>
+                            {/* Stars */}
+                            {stars > 0 && (
+                              <div className="flex gap-0.5 ml-auto">
+                                {Array.from({ length: stars }).map((_, i) => (
+                                  <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
+                                ))}
+                              </div>
+                            )}
+                            {/* Best WPM */}
+                            {bestWpm > 0 && (
+                              <span className="text-[10px] font-bold text-brand-muted ml-auto flex items-center gap-0.5">
+                                <Zap className="w-3 h-3" />{bestWpm}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Arrow */}
+                        {unlocked && (
+                          <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all shrink-0" />
                         )}
-                        {isCurrent && (
-                          <span className="absolute -top-3 -right-3 text-white text-[8px] font-black px-2 py-0.5 rounded-full animate-bounce"
-                            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>GO!</span>
-                        )}
-                      </>
-                    )}
-                  </Link>
-                </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
 
-                {/* Right spacer */}
-                <div className="hidden md:block w-5/12 order-3 md:order-none" />
-              </motion.div>
-            );
-          })}
+      {/* Footer CTA */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-16">
+        <div className="rounded-2xl p-6 text-center"
+          style={{ background: 'linear-gradient(135deg,rgba(48,76,83,0.08),rgba(42,157,174,0.06))', border: '1px solid rgba(48,76,83,0.2)' }}>
+          <h3 className="font-black text-brand-text text-lg mb-2">Ready to test your speed?</h3>
+          <p className="text-brand-text-muted text-sm mb-4">
+            After completing the lessons, put your skills to the test with a real typing test.
+          </p>
+          <Link to="/typing-test"
+            className="inline-flex items-center gap-2 font-bold text-white px-6 py-2.5 rounded-xl transition-all hover:opacity-90 active:scale-95"
+            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 14px rgba(42,157,174,.3)' }}>
+            Start a Typing Test <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </div>
