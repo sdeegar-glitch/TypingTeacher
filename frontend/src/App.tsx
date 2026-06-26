@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const NAV_LINKS = [
   { to: '/learn',                  label: 'Learn English Typing' },
   { to: '/learn-hindi-typing',      label: 'Learn Hindi Typing' },
-  { to: '/typing-test',            label: 'Typing Test' },
+  { to: '/tests',                  label: 'Typing Test' },
   { to: '/competitive-exam-typing',label: 'Exams' },
   { to: '/games',                  label: 'Games' },
   { to: '/tools',                  label: 'Tools' },

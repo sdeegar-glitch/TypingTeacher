@@ -3,10 +3,7 @@ import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast } from 'lucide-react';
-import VirtualKeyboard from '../components/VirtualKeyboard';
-import HandGuide from '../components/HandGuide';
 import CharSpan from '../components/CharSpan';
-import { getFingerForKey } from '../utils/KeyboardLayout';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -196,7 +193,7 @@ export default function TypingTestPage() {
     strictMode
   );
 
-  const { stats, userInput, mistakes, nextChar, pressedKey, processChar, processBackspace, handleMobileInput, reset, rejectedFlash, history } = engine;
+  const { stats, userInput, mistakes, processChar, processBackspace, handleMobileInput, reset, rejectedFlash, history } = engine;
 
   // Brief shake on the typing display when strict mode rejects a keystroke
   const [shake, setShake] = useState(false);
@@ -258,7 +255,6 @@ export default function TypingTestPage() {
     }
   }, [loadingTest, isMobile]);
 
-  const activeFinger = useMemo(() => getFingerForKey(nextChar), [nextChar]);
   const formattedTime = `${Math.floor(stats.timeLeft / 60)}:${String(stats.timeLeft % 60).padStart(2, '0')}`;
 
   const handleReset = useCallback(() => {
@@ -575,40 +571,6 @@ export default function TypingTestPage() {
             </motion.div>
           )}
         </div>
-
-        {/* ── KEYBOARD + HANDS (desktop only) ── */}
-        {!isMobile && (
-          <div className="w-full flex justify-center items-end gap-1 transform scale-[0.55] sm:scale-[0.7] lg:scale-[0.82] origin-top transition-transform">
-            <div className="hidden md:block pb-2">
-              <HandGuide
-                hand="left"
-                activeFinger={activeFinger.startsWith('left') || activeFinger === 'thumb' ? activeFinger : ''}
-                status={activeFinger.startsWith('left') || activeFinger === 'thumb' ? (mistakes.has(userInput.length - 1) ? 'error' : stats.isActive ? 'correct' : 'none') : 'none'}
-              />
-            </div>
-            <div className="z-10">
-              <VirtualKeyboard activeKey={nextChar} pressedKeys={new Set([pressedKey])} />
-            </div>
-            <div className="hidden md:block pb-2">
-              <HandGuide
-                hand="right"
-                activeFinger={activeFinger.startsWith('right') ? activeFinger : ''}
-                status={activeFinger.startsWith('right') ? (mistakes.has(userInput.length - 1) ? 'error' : stats.isActive ? 'correct' : 'none') : 'none'}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Mobile: next key hint */}
-        {isMobile && nextChar && stats.isActive && (
-          <div className="flex items-center gap-3 bg-brand-surface border border-brand-border rounded-xl px-5 py-2.5 shadow-sm">
-            <span className="text-xs text-brand-muted">Next:</span>
-            <kbd className="bg-brand-primary text-white font-black px-3 py-1 rounded-lg text-lg min-w-[40px] text-center font-mono">
-              {nextChar === ' ' ? '⎵' : nextChar.toUpperCase()}
-            </kbd>
-            <span className="text-xs text-brand-muted">{activeFinger.replace('left-', 'L ').replace('right-', 'R ').replace('-', ' ')}</span>
-          </div>
-        )}
 
         {/* Finish early */}
         {!stats.isFinished && stats.isActive && (
