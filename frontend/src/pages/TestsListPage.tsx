@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, ChevronRight, Zap, Clock, BarChart2, ChevronLeft, Languages, Keyboard } from 'lucide-react';
@@ -130,6 +131,10 @@ export default function TestsListPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:py-14 sm:px-6">
       <div className="max-w-[1600px] mx-auto">
+        <Seo
+          title="Typing Speed Tests — 1, 3, 5 & 10 Minute WPM Tests | FastTypingLab"
+          description="Take free typing speed tests in English, Hindi Mangal (Unicode) and Kruti Dev. 1, 3, 5 and 10-minute WPM tests with real-time accuracy and net speed."
+        />
 
         <button onClick={() => setSelected(null)}
           className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-muted hover:text-brand-primary transition-colors mb-5">

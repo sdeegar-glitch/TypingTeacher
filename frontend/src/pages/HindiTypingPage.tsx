@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import Seo from '../components/Seo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Trophy, Award, Languages } from 'lucide-react';
@@ -117,6 +118,10 @@ export default function HindiTypingPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Hindi Typing Test — Unicode (Mangal/INSCRIPT) | FastTypingLab"
+        description="Free Hindi typing test in Unicode (Mangal/INSCRIPT). Practice Devanagari typing with real-time WPM and accuracy — ideal for SSC, CPCT and government exam prep."
+      />
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
           <Link to="/tests" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm group">

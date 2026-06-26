@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Seo from '../components/Seo';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Keyboard, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
@@ -39,6 +40,7 @@ const AuthPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-brand-bg px-4 py-8">
+      <Seo title="Log in | FastTypingLab" description="Sign in to your FastTypingLab account." noindex />
 
       {/* Background blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">

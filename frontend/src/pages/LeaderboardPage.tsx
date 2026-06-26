@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Seo from '../components/Seo';
 import { motion } from 'framer-motion';
 import { Trophy, Medal, Award, TrendingUp, RefreshCcw } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
@@ -61,6 +62,10 @@ export default function LeaderboardPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Global Typing Leaderboard | FastTypingLab"
+        description="See the fastest typists on FastTypingLab. Global typing speed leaderboard ranked by net WPM and accuracy."
+      />
       <div className="max-w-[1600px] mx-auto">
 
         {/* Header */}

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight, Languages, Trophy, Target, Zap, Building2, Scale, Shield, GraduationCap, Star, Award, Flame } from 'lucide-react';
@@ -36,6 +37,10 @@ export default function LearnHindiTypingPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text">
+      <Seo
+        title="Learn Hindi Typing Online Free — INSCRIPT & Kruti Dev | FastTypingLab"
+        description="Learn Hindi typing free with 200 gamified lessons for SSC, CPCT, UP Police and court exams. Choose INSCRIPT (Mangal/Unicode) or Kruti Dev and start from home row."
+      />
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-8">
 
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-8">

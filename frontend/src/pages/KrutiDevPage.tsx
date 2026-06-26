@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, BookOpen, Languages, Keyboard } from 'lucide-react';
 
@@ -74,6 +75,10 @@ export default function KrutiDevPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Kruti Dev Typing Test & Guide | FastTypingLab"
+        description="Free Kruti Dev Hindi typing test and guide. Practice the legacy Kruti Dev layout used by UP Police, Bihar SSC and court typing exams, with live WPM and accuracy."
+      />
       <div className="max-w-4xl mx-auto">
 
         {/* Breadcrumb */}

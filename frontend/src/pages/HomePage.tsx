@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import LearnChooserModal from '../components/LearnChooserModal';
 import VisitorCounter from '../components/VisitorCounter';
+import Seo from '../components/Seo';
 
 /* ─── Animated typing preview ──────────────────────────────────── */
 function TypingPreview() {
@@ -153,6 +154,10 @@ export default function HomePage() {
   return (
     <div className="bg-brand-bg text-brand-text overflow-x-hidden">
       <LearnChooserModal open={learnOpen} onClose={() => setLearnOpen(false)} />
+      <Seo
+        title="FastTypingLab — Free Typing Speed Test, Hindi Typing & Exam Practice"
+        description="Free online typing speed test (WPM) in English, Hindi Unicode & Kruti Dev. Practice for SSC, CPCT & UP Police exams, get AI coaching, and play typing games — no signup."
+      />
 
       {/* ══════════════════════════════════════════════════════════
           HERO

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, Star, Zap, Keyboard, CheckCircle, ChevronRight } from 'lucide-react';
@@ -48,6 +49,10 @@ export default function LearningCoursePage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text pb-24">
+      <Seo
+        title="Learn Touch Typing Free — Step-by-Step Lessons | FastTypingLab"
+        description="Learn to type without looking. A free structured touch-typing course from home row to full speed — 50 progressive lessons with live WPM and accuracy tracking."
+      />
       {/* ── Sticky header ── */}
       <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">

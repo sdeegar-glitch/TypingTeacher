@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Clock, Calendar, Share2, ExternalLink } from 'lucide-react';
 import { BLOG_POSTS } from '../data/blogPosts';
+import Seo from '../components/Seo';
 
 // Simple markdown-to-jsx renderer (no external deps)
 function renderMarkdown(md: string): React.ReactNode[] {
@@ -76,25 +76,6 @@ export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const post = BLOG_POSTS.find(p => p.slug === slug);
 
-  useEffect(() => {
-    if (post) {
-      document.title = post.seoTitle;
-      // Inject JSON-LD Article schema
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.textContent = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: post.title,
-        description: post.metaDesc,
-        datePublished: post.date,
-        publisher: { '@type': 'Organization', name: 'FastTypingLab', url: 'https://fasttypinglab.com' },
-      });
-      document.head.appendChild(script);
-      return () => { document.head.removeChild(script); };
-    }
-  }, [post]);
-
   if (!post) return <Navigate to="/blog" replace />;
 
   const relatedPosts = BLOG_POSTS.filter(p => p.slug !== slug).slice(0, 2);
@@ -102,6 +83,28 @@ export default function BlogPostPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
+        <Seo
+          title={post.seoTitle}
+          description={post.metaDesc}
+          canonical={`/blog/${post.slug}`}
+          type="article"
+          jsonLd={{
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: post.title,
+            description: post.metaDesc,
+            datePublished: post.date,
+            image: 'https://fasttypinglab.com/og-image.png',
+            author: { '@type': 'Organization', name: 'FastTypingLab' },
+            publisher: {
+              '@type': 'Organization',
+              name: 'FastTypingLab',
+              url: 'https://fasttypinglab.com',
+              logo: { '@type': 'ImageObject', url: 'https://fasttypinglab.com/favicon-512x512.png' },
+            },
+            mainEntityOfPage: `https://fasttypinglab.com/blog/${post.slug}`,
+          }}
+        />
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-6">
           <Link to="/" className="hover:text-brand-primary transition-colors">Home</Link>

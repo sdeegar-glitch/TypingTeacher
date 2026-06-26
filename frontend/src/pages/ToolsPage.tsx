@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench } from 'lucide-react';
@@ -121,6 +122,10 @@ export default function ToolsPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
+      <Seo
+        title="Keyboard Tools & Typing Utilities | FastTypingLab"
+        description="Free typing and keyboard tools — keyboard tester, CPS test, spacebar counter, word counter, case converter and coding typing practice."
+      />
       <div className="max-w-[1600px] mx-auto">
 
         {/* Header */}

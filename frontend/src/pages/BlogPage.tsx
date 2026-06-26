@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, Clock, ChevronRight, Rss } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
+import Seo from '../components/Seo';
 import { BLOG_POSTS } from '../data/blogPosts';
 
 const CATEGORIES = ['All', 'Tips & Tricks', 'Government Exams', 'Learning', 'Productivity'];
@@ -15,6 +16,10 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
       <div className="max-w-[1600px] mx-auto">
+        <Seo
+          title="Typing Blog — Tips, Guides & Exam Prep | FastTypingLab"
+          description="Typing tips, speed-improvement guides, government exam typing preparation, and Hindi typing tutorials from the FastTypingLab team."
+        />
 
         {/* Header */}
         <PageHeader

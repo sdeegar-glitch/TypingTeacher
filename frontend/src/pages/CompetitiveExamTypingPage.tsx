@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight, Trophy, Clock, Target, BookOpen, Zap, Shield } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
+import Seo from '../components/Seo';
 
 const EXAMS = [
   {
@@ -74,6 +75,19 @@ export default function CompetitiveExamTypingPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
       <div className="max-w-[1600px] mx-auto">
+        <Seo
+          title="Competitive Exam Typing Practice — SSC, CPCT, UP Police | FastTypingLab"
+          description="Free typing practice for SSC CHSL, SSC CGL, CPCT, UP Police, court clerk and railway exams. Real exam duration, WPM and accuracy — in English and Hindi."
+          jsonLd={{
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: FAQS.map(f => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+          }}
+        />
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-6">

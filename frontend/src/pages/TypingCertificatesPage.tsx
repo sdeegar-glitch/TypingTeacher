@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Award, QrCode, Download, Shield, ChevronRight, CheckCircle } from 'lucide-react';
@@ -34,6 +35,10 @@ export default function TypingCertificatesPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Free Typing Certificate — Verifiable WPM Certificate | FastTypingLab"
+        description="Earn a free, verifiable typing certificate. Take a timed WPM test and download a shareable certificate of your typing speed and accuracy."
+      />
       <div className="max-w-[1600px] mx-auto">
 
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-6">
