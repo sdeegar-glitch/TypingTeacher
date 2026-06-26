@@ -71,6 +71,53 @@ export async function analyzeWithAI(sessions: any[]): Promise<any> {
   return res.json();
 }
 
+/* ─── Visitor tracking ──────────────────────────────────────────── */
+
+const VISITOR_ID_KEY = 'ftl_visitor_id';
+
+/** Stable per-browser id used to distinguish unique visitors. */
+function getVisitorId(): string {
+  let id = localStorage.getItem(VISITOR_ID_KEY);
+  if (!id) {
+    id = (crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`);
+    localStorage.setItem(VISITOR_ID_KEY, id);
+  }
+  return id;
+}
+
+export interface VisitorCount {
+  total: number;
+  unique: number | null;
+}
+
+/** Record one visit and return updated totals. Fire-and-forget — never throws. */
+export async function trackVisit(path: string): Promise<VisitorCount> {
+  try {
+    const res = await fetch(`${API_URL}/api/visitors/track`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        visitor_id: getVisitorId(),
+        path,
+        referrer: document.referrer || null,
+      }),
+    });
+    return await res.json();
+  } catch {
+    return { total: 0, unique: null };
+  }
+}
+
+/** Fetch current visit totals. Returns zeros on error. */
+export async function fetchVisitorCount(): Promise<VisitorCount> {
+  try {
+    const res = await fetch(`${API_URL}/api/visitors/count`);
+    return await res.json();
+  } catch {
+    return { total: 0, unique: null };
+  }
+}
+
 /** Fetch the site-wide mistake-handling mode (admin-configurable). Defaults to 'lenient' on any error. */
 export async function fetchMistakeHandlingMode(): Promise<'strict' | 'lenient'> {
   try {

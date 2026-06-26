@@ -2,6 +2,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useLocation } from 'react-router-dom';
 import { Menu, X, Moon, Sun } from 'lucide-react';
 import { useTheme } from './store/useThemeStore';
+import { trackVisit } from './lib/api';
 
 const TypingTestPage = lazy(() => import('./pages/TypingTestPage'));
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
@@ -224,7 +225,15 @@ const BlogPostPage = lazy(() => import('./pages/BlogPostPage'));
 
 const AppContent = () => {
   const location = useLocation();
-  const isLearningInterface = 
+
+  // Record one visit per browser session (survives SPA navigation & remounts).
+  useEffect(() => {
+    if (sessionStorage.getItem('ftl_visit_tracked')) return;
+    sessionStorage.setItem('ftl_visit_tracked', '1');
+    trackVisit(window.location.pathname);
+  }, []);
+
+  const isLearningInterface =
     (location.pathname.startsWith('/learn/') && location.pathname !== '/learn' && location.pathname !== '/learn/') ||
     (location.pathname.startsWith('/tests/') && location.pathname !== '/tests' && location.pathname !== '/tests/' && !location.pathname.includes('/config/'));
 

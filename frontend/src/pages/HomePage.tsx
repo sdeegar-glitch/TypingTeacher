@@ -5,6 +5,8 @@ import {
   Zap, BookOpen, Trophy, ChevronRight, Target, Keyboard,
   TrendingUp, Star, ArrowRight, Languages, Gamepad2, Award, Shield,
 } from 'lucide-react';
+import LearnChooserModal from '../components/LearnChooserModal';
+import VisitorCounter from '../components/VisitorCounter';
 
 /* ─── Animated typing preview ──────────────────────────────────── */
 function TypingPreview() {
@@ -142,12 +144,15 @@ function HeroBlobs() {
 
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function HomePage() {
+  const [learnOpen, setLearnOpen] = useState(false);
+
   useEffect(() => {
     document.title = 'FastTypingLab — Free Typing Speed Test & AI Tutor';
   }, []);
 
   return (
     <div className="bg-brand-bg text-brand-text overflow-x-hidden">
+      <LearnChooserModal open={learnOpen} onClose={() => setLearnOpen(false)} />
 
       {/* ══════════════════════════════════════════════════════════
           HERO
@@ -200,12 +205,12 @@ export default function HomePage() {
                 <Languages className="w-5 h-5" />
                 Hindi Typing
               </Link>
-              <Link to="/learn"
+              <button type="button" onClick={() => setLearnOpen(true)}
                 className="inline-flex items-center gap-2.5 text-brand-text font-semibold px-8 py-4 rounded-2xl text-base transition-all duration-200 w-full sm:w-auto justify-center hover:bg-brand-surface-2 active:scale-95"
                 style={{ background: 'var(--brand-surface)', border: '1px solid var(--brand-border)' }}>
                 <BookOpen className="w-5 h-5 text-brand-muted" />
                 Start Learning
-              </Link>
+              </button>
             </div>
 
             {/* Live typing preview card */}
@@ -500,8 +505,11 @@ export default function HomePage() {
 
           <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-brand-border text-xs text-brand-muted">
             <p>© 2026 FastTypingLab. All rights reserved. Made with ❤️ for India.</p>
-            <a href="mailto:support@fasttypinglab.com"
-              className="hover:text-brand-primary transition-colors">support@fasttypinglab.com</a>
+            <div className="flex flex-wrap items-center gap-4">
+              <VisitorCounter />
+              <a href="mailto:support@fasttypinglab.com"
+                className="hover:text-brand-primary transition-colors">support@fasttypinglab.com</a>
+            </div>
           </div>
         </div>
       </footer>
