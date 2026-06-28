@@ -143,7 +143,7 @@ export default function HindiCourseSelectPage() {
                 {stageComplete && <CheckCircle className="w-5 h-5 text-brand-accent" />}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {stageLessons.map(lesson => {
                   const unlocked = progress ? course.isLessonUnlocked(lesson.id, progress) : lesson.id === 1;
                   const lp = progress?.lessons[lesson.id];
