@@ -127,6 +127,30 @@ function injectJsonLd(html, blocks) {
   return html.replace('</head>', `    ${scripts}\n  </head>`);
 }
 
+// Internal links surfaced in the static body so crawlers (and Bingbot, which
+// barely runs JS) can discover the rest of the site.
+const NAV = [
+  ['/', 'Home'], ['/tests/', 'Typing Tests'], ['/learn/', 'Learn Typing'],
+  ['/learn-hindi-typing/', 'Learn Hindi Typing'], ['/hindi-typing-test/', 'Hindi Typing Test'],
+  ['/competitive-exam-typing/', 'Exam Typing'], ['/games/', 'Typing Games'],
+  ['/tools/', 'Tools'], ['/ai-tutor/', 'AI Tutor'], ['/blog/', 'Blog'],
+];
+
+// Bake a real <h1>, intro and nav into the otherwise-empty <body>. The SPA uses
+// createRoot(), which replaces #root on mount, so users still get the full app —
+// but crawlers without JS now see a proper headline and body content.
+function injectBody(html, r) {
+  const h1 = String(r.title).split('|')[0].trim();
+  const links = NAV.map(([href, label]) => `<a href="${href}">${esc(label)}</a>`).join(' &middot; ');
+  const body =
+    '<div id="root"><div data-prerender="seo" style="max-width:1100px;margin:0 auto;padding:40px 20px;font-family:system-ui,-apple-system,sans-serif;line-height:1.6;color:#0f172a">' +
+    `<h1 style="font-size:1.9rem;font-weight:800;margin:0 0 12px">${esc(h1)}</h1>` +
+    `<p style="color:#475569;margin:0 0 22px;max-width:700px">${esc(r.description)}</p>` +
+    `<nav style="font-size:.95rem;color:#2A6A78">${links}</nav>` +
+    '</div></div>';
+  return html.replace('<div id="root"></div>', body);
+}
+
 let written = 0;
 for (const r of ROUTES) {
   // GitHub Pages serves dist/<path>/index.html and 301-redirects /path -> /path/,
@@ -144,6 +168,7 @@ for (const r of ROUTES) {
   html = setNamedMeta(html, 'twitter:title', r.title);
   html = setNamedMeta(html, 'twitter:description', r.description);
   html = injectJsonLd(html, r.jsonLd ? [r.jsonLd] : []);
+  html = injectBody(html, r);
 
   const outDir = r.path === '/' ? DIST : join(DIST, r.path);
   mkdirSync(outDir, { recursive: true });
