@@ -7,7 +7,6 @@
  * Returns: { analysis, practiceText, weakKeys, suggestions }
  */
 import express from 'express';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import rateLimit from 'express-rate-limit';
 
 const router = express.Router();
@@ -18,7 +17,32 @@ const aiLimiter = rateLimit({
   message: { error: 'Too many AI requests. Please wait a minute.' },
 });
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+// Groq (OpenAI-compatible) powers both the one-shot coach analysis and the tutor.
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+
+async function groqChat(systemPrompt, userPrompt, maxTokens = 800) {
+  const r = await fetch(GROQ_URL, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      temperature: 0.6,
+      max_tokens: maxTokens,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+    }),
+  });
+  if (!r.ok) {
+    const t = await r.text();
+    throw new Error(`Groq ${r.status}: ${t.slice(0, 200)}`);
+  }
+  const data = await r.json();
+  return (data?.choices?.[0]?.message?.content || '').trim();
+}
 
 // POST /api/ai/analyze
 router.post('/analyze', aiLimiter, async (req, res) => {
@@ -57,9 +81,11 @@ Please respond with a JSON object (no markdown, just raw JSON) with exactly thes
   "encouragement": "One motivational sentence tailored to their current level"
 }`;
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-    const result = await model.generateContent(prompt);
-    const text = result.response.text().trim();
+    const text = await groqChat(
+      'You are an expert typing coach. You always respond with valid JSON only.',
+      prompt,
+      700,
+    );
 
     // Parse JSON — strip possible markdown fences
     const cleaned = text.replace(/^```json?\s*/i, '').replace(/\s*```$/i, '').trim();
@@ -97,9 +123,6 @@ Please respond with a JSON object (no markdown, just raw JSON) with exactly thes
 // Body: { stats: { avgWpm, bestWpm, avgAccuracy, totalSessions, trend, hindiShare, goal? } }
 // Returns: { level, analysis, strengths, weakAreas, targetWpm, plan[], dailyRoutine[], practiceText, encouragement }
 // ─────────────────────────────────────────────────────────────────────────
-const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
-
 function tutorFallback(avgWpm, bestWpm, avgAccuracy) {
   return {
     avgWpm, bestWpm, avgAccuracy, trend: 'stable',
@@ -161,29 +184,11 @@ Respond with ONLY raw JSON (no markdown fences) with exactly these fields:
 }
 Make "plan" exactly 4 progressive steps.`;
 
-    const r = await fetch(GROQ_URL, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        temperature: 0.6,
-        max_tokens: 900,
-        response_format: { type: 'json_object' },
-        messages: [
-          { role: 'system', content: 'You are an expert, encouraging typing tutor. You always respond with valid JSON only.' },
-          { role: 'user', content: prompt },
-        ],
-      }),
-    });
-
-    if (!r.ok) {
-      const t = await r.text();
-      console.error('[AI Tutor] Groq error:', r.status, t.slice(0, 200));
-      return res.json(tutorFallback(avgWpm, bestWpm, avgAccuracy));
-    }
-
-    const data = await r.json();
-    const text = (data?.choices?.[0]?.message?.content || '').trim();
+    const text = await groqChat(
+      'You are an expert, encouraging typing tutor. You always respond with valid JSON only.',
+      prompt,
+      900,
+    );
     const cleaned = text.replace(/^```json?\s*/i, '').replace(/\s*```$/i, '').trim();
     const parsed = JSON.parse(cleaned);
 

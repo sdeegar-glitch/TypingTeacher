@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import Seo from '../components/Seo';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { Zap, Target, Flame, Trophy, Star, TrendingUp, Award, Brain, ChevronRight, Lock } from 'lucide-react';
+import { Zap, Target, Flame, Trophy, Star, TrendingUp, Award, Brain, ChevronRight, Lock, Sparkles } from 'lucide-react';
 
 import { API_URL } from '../lib/api';
 
@@ -152,6 +152,12 @@ export default function DashboardPage() {
     } finally {
       setLoadingAI(false);
     }
+  };
+
+  const navigate = useNavigate();
+  const practicePassage = (text: string) => {
+    sessionStorage.setItem('ftl_practice_text', text);
+    navigate('/typing-test?practice=1');
   };
 
   return (
@@ -395,6 +401,16 @@ export default function DashboardPage() {
         {/* ── AI COACH TAB ── */}
         {tab === 'coach' && (
           <div className="space-y-5">
+            <Link to="/ai-tutor"
+              className="flex items-center justify-between gap-3 rounded-2xl p-4 text-white transition-all hover:opacity-95 active:scale-[.99]"
+              style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+              <div>
+                <div className="font-bold text-sm flex items-center gap-2"><Sparkles className="w-4 h-4" /> Try the AI Typing Tutor</div>
+                <div className="text-white/75 text-xs mt-0.5">Get a full step-by-step improvement plan tailored to your stats</div>
+              </div>
+              <ChevronRight className="w-5 h-5 opacity-80 shrink-0" />
+            </Link>
+
             {sessions.length === 0 ? (
               <div className="bg-brand-surface border border-dashed border-brand-border rounded-2xl p-10 text-center">
                 <Brain className="w-10 h-10 text-brand-muted mx-auto mb-3" />
@@ -453,12 +469,12 @@ export default function DashboardPage() {
                       <Zap className="w-4 h-4 text-brand-primary" /> Custom Practice Passage
                     </h3>
                     <p className="font-mono text-sm text-brand-text-muted leading-relaxed bg-brand-surface rounded-xl p-4 border border-brand-border">{aiCoach.practiceText}</p>
-                    <Link
-                      to={`/tests`}
+                    <button
+                      onClick={() => practicePassage(aiCoach.practiceText)}
                       className="mt-3 inline-flex items-center gap-1.5 text-brand-primary text-sm font-semibold hover:underline"
                     >
-                      Practice with similar texts <ChevronRight className="w-4 h-4" />
-                    </Link>
+                      Type this passage now <ChevronRight className="w-4 h-4" />
+                    </button>
                   </div>
                 )}
 

@@ -50,6 +50,10 @@ export default function TypingTestPage() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const queryDuration = searchParams.get('duration');
+  // Optional AI-tutor practice passage, handed off via sessionStorage (?practice=1).
+  const practiceText = searchParams.get('practice')
+    ? (typeof window !== 'undefined' ? sessionStorage.getItem('ftl_practice_text') : null)
+    : null;
 
   const isMobile = useMemo(() => {
     if (typeof window === 'undefined') return false;
@@ -67,8 +71,12 @@ export default function TypingTestPage() {
   }, [duration, profession, language, queryDuration]);
 
   // Test content state
-  const [testContent, setTestContent] = useState<{ title: string; content: string; keyboardLayout?: string | null; displayContent?: string | null }>({ title: sampleTexts['1'].title, content: sampleTexts['1'].content });
-  const [loadingTest, setLoadingTest] = useState(!!id && !sampleTexts[id || '']);
+  const [testContent, setTestContent] = useState<{ title: string; content: string; keyboardLayout?: string | null; displayContent?: string | null }>(
+    practiceText
+      ? { title: 'AI Practice Passage', content: practiceText }
+      : { title: sampleTexts['1'].title, content: sampleTexts['1'].content }
+  );
+  const [loadingTest, setLoadingTest] = useState(!!id && !sampleTexts[id || ''] && !practiceText);
   const [testMode, setTestMode] = useState<TestMode>('article');
   const [selectedDuration, setSelectedDuration] = useState(() => {
     const qd = queryDuration ? parseInt(queryDuration) : NaN;
@@ -78,6 +86,11 @@ export default function TypingTestPage() {
 
   // Fetch article test from backend
   useEffect(() => {
+    if (practiceText) {
+      setTestContent({ title: 'AI Practice Passage', content: practiceText });
+      setLoadingTest(false);
+      return;
+    }
     if (id && !sampleTexts[id]) {
       setLoadingTest(true);
       fetch(`${API_URL}/${id}`)
@@ -92,7 +105,7 @@ export default function TypingTestPage() {
       setTestContent(sampleTexts[id || '1'] || sampleTexts['1']);
       setLoadingTest(false);
     }
-  }, [id]);
+  }, [id, practiceText]);
 
   // Generate text based on mode
   const activeText = useMemo(() => {

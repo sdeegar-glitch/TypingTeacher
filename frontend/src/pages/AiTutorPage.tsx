@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Sparkles, Brain, Target, Zap, TrendingUp, Award, ChevronRight,
@@ -45,6 +45,7 @@ const trendLabel: Record<TutorStats['trend'], { text: string; cls: string }> = {
 export default function AiTutorPage() {
   useEffect(() => { document.title = 'AI Typing Tutor — Personalized Improvement Plan | FastTypingLab'; }, []);
 
+  const navigate = useNavigate();
   const stats = useMemo(computeStats, []);
   const [goal, setGoal] = useState('');
   const [loading, setLoading] = useState(false);
@@ -63,6 +64,11 @@ export default function AiTutorPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function practiceThis(text: string) {
+    sessionStorage.setItem('ftl_practice_text', text);
+    navigate('/typing-test?practice=1');
   }
 
   const statCards = stats && [
@@ -228,11 +234,15 @@ export default function AiTutorPage() {
               <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-3 gap-3">
                   <h2 className="text-lg font-black text-brand-text flex items-center gap-2"><Keyboard className="w-5 h-5 text-brand-primary" /> Your custom practice passage</h2>
-                  <Link to="/tests" className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-brand-primary hover:opacity-80">
-                    Practice now <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
+                  <button onClick={() => practiceThis(plan.practiceText)} className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-brand-primary hover:opacity-80">
+                    Practice this now <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
                 <p className="font-mono text-sm leading-relaxed text-brand-text bg-brand-surface-2 rounded-xl p-4 border border-brand-border">{plan.practiceText}</p>
+                <button onClick={() => practiceThis(plan.practiceText)}
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-3 rounded-xl font-bold transition-all">
+                  <Keyboard className="w-4 h-4" /> Type this passage now
+                </button>
               </div>
             )}
 
