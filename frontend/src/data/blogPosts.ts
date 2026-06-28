@@ -518,4 +518,66 @@ Work up to the full exam duration without losing focus.
 FastTypingLab offers free Hindi Unicode (Mangal/INSCRIPT) and English typing tests with live WPM and accuracy, plus a step-by-step Learn Hindi Typing course. Practice both languages daily for 4-6 weeks and the CPCT typing section becomes very manageable.
     `,
   },
+  {
+    slug: 'up-police-typing-test-speed-and-layout',
+    title: 'UP Police Typing Test: Speed, Kruti Dev Layout & Practice (2026)',
+    seoTitle: 'UP Police Typing Test 2026 — Speed, Kruti Dev & Practice | FastTypingLab',
+    metaDesc: 'UP Police typing test guide: required Hindi speed (~25 WPM), Kruti Dev vs Mangal layout, exam format, common mistakes, and a free practice plan for Computer Operator & Clerk posts.',
+    category: 'Government Exams',
+    readTime: '6 min',
+    date: '2026-06-28',
+    emoji: '👮',
+    content: `
+## UP Police Typing Test: Overview
+
+The UP Police typing test is part of the selection process for Computer Operator, Clerk and Stenographer posts. For many candidates it is the trickiest stage, because it is in Hindi and the layout differs from what they practiced on. Clearing it comes down to two things: practicing the correct layout, and building speed under timed conditions.
+
+## Speed Required for UP Police
+
+| Post | Language | Target Speed |
+| Computer Operator / Clerk | Hindi | 25-30 WPM |
+| Stenographer | Hindi (steno) | Higher (post-specific) |
+
+Exact requirements vary by post and notification, so always confirm. Aim to comfortably beat the minimum — 30+ WPM in Hindi gives you a safe margin over the typical 25 WPM bar.
+
+## Kruti Dev vs Mangal: Which Layout?
+
+This is the single most important decision. Many UP state exams still use the **Kruti Dev** font layout, while some newer exams use **Mangal (Unicode/INSCRIPT)**. They are completely different key positions — practicing the wrong one wastes weeks.
+
+- Check your official notification for the specified layout.
+- If it is not stated, prepare on Kruti Dev (most common for UP state posts), but stay comfortable with Mangal too.
+
+## Exam Format
+
+- A Hindi passage is shown and you type it on the computer.
+- Both speed and accuracy are assessed.
+- Corrections cost time, so excessive backspacing lowers your effective speed.
+- The test is conducted on a desktop computer — practice only on a physical keyboard.
+
+## Common Mistakes
+
+- Practicing Mangal when the exam uses Kruti Dev (or vice versa).
+- Ignoring Hindi matras and half-letters, which slow most candidates.
+- Practicing only short tests and running out of stamina in the real exam.
+- Looking at the keyboard instead of building touch-typing memory.
+
+## A 4-Week Practice Plan
+
+### Week 1 — Learn the layout
+Spend the first week purely on key positions for your chosen layout.
+
+### Week 2 — Words and matras
+Drill common Hindi words and the matra/half-letter combinations you find hardest.
+
+### Week 3 — Timed tests
+Do daily timed Hindi tests in the exam format and track your WPM.
+
+### Week 4 — Push and polish
+Raise your top speed with short bursts, then settle into a steady, accurate pace.
+
+## Practice UP Police Typing Free
+
+FastTypingLab offers free Kruti Dev and Hindi Unicode (Mangal) typing tests with live WPM and accuracy, plus a step-by-step Learn Hindi Typing course. For a full breakdown of requirements and a practice test, see our UP Police typing test page. Consistent daily practice for 4-6 weeks is enough for most candidates to clear the cut-off.
+    `,
+  },
 ];

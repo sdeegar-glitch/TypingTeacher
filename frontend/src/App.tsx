@@ -317,6 +317,8 @@ const AppContent = () => {
           <Route path="/ssc-cgl-typing-test" element={<ExamLandingPage slug="ssc-cgl" />} />
           <Route path="/cpct-typing-test" element={<ExamLandingPage slug="cpct" />} />
           <Route path="/up-police-typing-test" element={<ExamLandingPage slug="up-police" />} />
+          <Route path="/railway-ntpc-typing-test" element={<ExamLandingPage slug="railway-ntpc" />} />
+          <Route path="/court-typing-test" element={<ExamLandingPage slug="court" />} />
         </Routes>
         </Suspense>
       </main>

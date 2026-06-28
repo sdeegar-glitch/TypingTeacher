@@ -170,6 +170,82 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { label: 'All Exam Typing', href: '/competitive-exam-typing' },
     ],
   },
+
+  'railway-ntpc': {
+    slug: 'railway-ntpc',
+    examName: 'Railway NTPC',
+    h1: 'Railway NTPC Typing Test — Free Practice',
+    seoTitle: 'Railway NTPC Typing Test Online — Free Practice | FastTypingLab',
+    metaDesc: 'Free RRB Railway NTPC typing skill test practice. English (30 WPM) and Hindi (25 WPM) typing with live WPM and accuracy for the Typing Skill Test (TST).',
+    eyebrow: 'RRB NTPC',
+    intro: 'The RRB Railway NTPC Typing Skill Test (TST) is a qualifying stage for posts such as Junior Clerk, Accounts Clerk and Typist. Candidates must type at the required speed in English or Hindi on a computer. As a qualifying test, clearing it reliably matters more than raw top speed — practice the exact format until it feels comfortable.',
+    requirements: [
+      { language: 'English', layout: 'QWERTY', speed: '30 WPM', duration: 'Skill test' },
+      { language: 'Hindi', layout: 'Mangal / Kruti Dev', speed: '25 WPM', duration: 'Skill test' },
+    ],
+    format: [
+      'You type a given passage on the computer at the required speed.',
+      'English requires about 30 WPM; Hindi about 25 WPM.',
+      'The test is qualifying — you must meet the speed to be selected.',
+      'Accuracy counts; corrections reduce your effective speed.',
+    ],
+    tips: [
+      'Pick your language early and practice only that one to build muscle memory.',
+      'Target 35+ WPM English or 30+ WPM Hindi so you clear the bar comfortably.',
+      'Practice formal passages similar to railway/clerical documents.',
+      'Type daily in the full skill-test format to build stamina and consistency.',
+    ],
+    faqs: [
+      { q: 'What is the typing speed required for Railway NTPC?', a: 'The RRB NTPC typing skill test requires about 30 WPM in English or 25 WPM in Hindi on a computer.' },
+      { q: 'Is the Railway NTPC typing test qualifying?', a: 'Yes, the Typing Skill Test (TST) is qualifying in nature — you must meet the speed to be selected, but it is not added to your merit score.' },
+      { q: 'Can I practice Railway NTPC typing free?', a: 'Yes. FastTypingLab offers free English and Hindi typing tests with live WPM and accuracy to prepare for the NTPC skill test.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Start Typing Practice Test',
+    related: [
+      { label: 'Typing Speed Test', href: '/tests' },
+      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
+
+  'court': {
+    slug: 'court',
+    examName: 'Court / Steno',
+    h1: 'Court & Steno Typing Test — Free Practice',
+    seoTitle: 'Court & Stenographer Typing Test Online — Free Practice | FastTypingLab',
+    metaDesc: 'Free court clerk and stenographer typing test practice in Hindi and English. Practice legal-format passages with live WPM and accuracy for high court & district court exams.',
+    eyebrow: 'Court / Stenographer',
+    intro: 'District and High Court clerk, typist and stenographer posts include a typing test, usually in Hindi and sometimes English. Court passages use formal, legal-style language — petitions, affidavits and orders — so practicing real exam-style text matters as much as raw speed. Stenographer posts require higher speeds than clerical posts.',
+    requirements: [
+      { language: 'Hindi', layout: 'Kruti Dev / Mangal', speed: '25–30 WPM (clerk)', duration: 'Skill test' },
+      { language: 'English', layout: 'QWERTY', speed: '30–40 WPM', duration: 'Skill test' },
+    ],
+    format: [
+      'A formal Hindi or English passage is typed on the computer.',
+      'Court vocabulary is legal and formal — practice that style, not casual text.',
+      'Clerk/typist posts need ~25–30 WPM; stenographer posts need higher speeds.',
+      'Layout varies by state court — confirm Kruti Dev vs Mangal from the notification.',
+    ],
+    tips: [
+      'Practice legal-format passages so the formal vocabulary feels natural.',
+      'Confirm your court uses Kruti Dev or Mangal, then drill that layout.',
+      'For steno posts, build speed well above the clerk minimum.',
+      'Keep accuracy high — legal text leaves little room for typos.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for court clerk / typist posts?', a: 'Most district/high court clerk and typist posts require around 25–30 WPM in Hindi or English. Stenographer posts require higher speeds.' },
+      { q: 'Which layout do court typing tests use?', a: 'It depends on the state court — some use Kruti Dev, others Mangal/Unicode. Always check your exam notification and practice that layout.' },
+      { q: 'How can I practice court typing test free?', a: 'FastTypingLab offers free Hindi (Kruti Dev and Mangal) and English typing practice with live WPM and accuracy.' },
+    ],
+    practiceHref: '/exam/hindi-typing',
+    practiceLabel: 'Start Hindi Typing Practice',
+    related: [
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
+      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
 };
 
 export const EXAM_LANDING_ROUTES = Object.values(EXAM_LANDINGS).map(e => ({
