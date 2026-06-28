@@ -91,4 +91,107 @@ Please respond with a JSON object (no markdown, just raw JSON) with exactly thes
   }
 });
 
+// ─────────────────────────────────────────────────────────────────────────
+// AI Tutor — one-shot personalized improvement plan, powered by Groq.
+// POST /api/ai/tutor
+// Body: { stats: { avgWpm, bestWpm, avgAccuracy, totalSessions, trend, hindiShare, goal? } }
+// Returns: { level, analysis, strengths, weakAreas, targetWpm, plan[], dailyRoutine[], practiceText, encouragement }
+// ─────────────────────────────────────────────────────────────────────────
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+
+function tutorFallback(avgWpm, bestWpm, avgAccuracy) {
+  return {
+    avgWpm, bestWpm, avgAccuracy, trend: 'stable',
+    level: avgWpm >= 60 ? 'Advanced' : avgWpm >= 35 ? 'Intermediate' : 'Beginner',
+    analysis: 'Keep practicing consistently to build speed. Prioritise accuracy first — clean, deliberate typing makes lasting speed gains far better than rushing.',
+    strengths: ['Showing up to practice', 'Willingness to improve'],
+    weakAreas: ['Finger placement / home row', 'Common letter combinations', 'Accuracy under speed'],
+    targetWpm: Math.max(30, Math.round((avgWpm || 25) + 10)),
+    plan: [
+      { title: 'Lock in the home row', detail: 'Master ASDF JKL; without looking. This is the foundation every fast typist relies on.' },
+      { title: 'Accuracy before speed', detail: 'Aim for 95%+ accuracy at a comfortable pace. Speed follows accuracy, never the other way around.' },
+      { title: 'Daily timed tests', detail: 'Take one 1-minute test daily and note your 3 slowest keys, then drill them.' },
+      { title: 'Push your ceiling', detail: 'Once accurate, do short bursts slightly faster than comfortable to raise your top speed.' },
+    ],
+    dailyRoutine: ['5 min home-row warm-up', '10 min common-words practice', '1 min timed test + review slow keys'],
+    practiceText: 'the quick brown fox jumps over the lazy dog while five wizards quietly mixed a jar of toxic liquid for the big experiment.',
+    encouragement: 'Every expert typist started exactly where you are — consistency is your superpower.',
+    model: GROQ_MODEL,
+  };
+}
+
+router.post('/tutor', aiLimiter, async (req, res) => {
+  const s = (req.body && req.body.stats) || {};
+  const avgWpm = Math.round(Number(s.avgWpm) || 0);
+  const bestWpm = Math.round(Number(s.bestWpm) || 0);
+  const avgAccuracy = Math.round(Number(s.avgAccuracy) || 0);
+  const totalSessions = Math.round(Number(s.totalSessions) || 0);
+  const trend = ['improving', 'declining', 'stable'].includes(s.trend) ? s.trend : 'stable';
+  const hindiShare = Math.max(0, Math.min(100, Math.round(Number(s.hindiShare) || 0)));
+  const goal = typeof s.goal === 'string' ? s.goal.slice(0, 120) : '';
+
+  try {
+    if (!process.env.GROQ_API_KEY) return res.json(tutorFallback(avgWpm, bestWpm, avgAccuracy));
+
+    const prompt = `Create a personalized typing-improvement plan for this student.
+
+Student data:
+- Average speed: ${avgWpm} WPM
+- Best speed: ${bestWpm} WPM
+- Average accuracy: ${avgAccuracy}%
+- Practice sessions completed: ${totalSessions}
+- Recent trend: ${trend}
+- Share of practice that is Hindi typing: ${hindiShare}%
+${goal ? `- Student's stated goal: ${goal}` : '- No specific goal stated (assume general speed + accuracy improvement, and mention govt-exam readiness if relevant).'}
+
+Context: FastTypingLab users often prepare for Indian government typing exams (SSC CHSL/CGL need ~35 WPM English, CPCT/UP Police Hindi need ~25-30 WPM). Hindi layouts are Mangal/INSCRIPT (Unicode) and Kruti Dev.
+
+Respond with ONLY raw JSON (no markdown fences) with exactly these fields:
+{
+  "level": "Beginner | Intermediate | Advanced",
+  "analysis": "2-3 sentence personalized assessment of where they are and the single biggest thing to fix",
+  "strengths": ["2-3 genuine strengths based on the data"],
+  "weakAreas": ["2-4 specific weaknesses to work on"],
+  "targetWpm": <realistic next WPM goal as a plain number>,
+  "plan": [{"title": "short step title", "detail": "1-2 sentences: exactly what to do and why"}],
+  "dailyRoutine": ["3-4 concrete daily steps, each with a time in minutes"],
+  "practiceText": "a single coherent 40-60 word English practice passage targeting their weak areas (no random word lists)",
+  "encouragement": "one short motivating sentence tailored to their level"
+}
+Make "plan" exactly 4 progressive steps.`;
+
+    const r = await fetch(GROQ_URL, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        temperature: 0.6,
+        max_tokens: 900,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: 'You are an expert, encouraging typing tutor. You always respond with valid JSON only.' },
+          { role: 'user', content: prompt },
+        ],
+      }),
+    });
+
+    if (!r.ok) {
+      const t = await r.text();
+      console.error('[AI Tutor] Groq error:', r.status, t.slice(0, 200));
+      return res.json(tutorFallback(avgWpm, bestWpm, avgAccuracy));
+    }
+
+    const data = await r.json();
+    const text = (data?.choices?.[0]?.message?.content || '').trim();
+    const cleaned = text.replace(/^```json?\s*/i, '').replace(/\s*```$/i, '').trim();
+    const parsed = JSON.parse(cleaned);
+
+    res.json({ avgWpm, bestWpm, avgAccuracy, trend, model: GROQ_MODEL, ...parsed });
+  } catch (err) {
+    console.error('[AI Tutor] Error:', err.message);
+    res.json(tutorFallback(avgWpm, bestWpm, avgAccuracy));
+  }
+});
+
 export default router;

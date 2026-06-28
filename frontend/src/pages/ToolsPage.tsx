@@ -2,10 +2,20 @@ import { useEffect } from 'react';
 import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench } from 'lucide-react';
+import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench, Sparkles } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 
 const TOOL_CARDS = [
+  {
+    icon: Sparkles,
+    title: 'AI Typing Tutor',
+    desc: 'Get a personalized improvement plan — the AI analyzes your WPM, accuracy and trend, then builds a step-by-step plan.',
+    href: '/ai-tutor',
+    tag: 'New',
+    color: 'text-brand-accent',
+    bg: 'bg-brand-accent/10 border-brand-accent/20',
+    tagColor: 'bg-brand-accent/10 text-brand-accent',
+  },
   {
     icon: Keyboard,
     title: 'Keyboard Tester',

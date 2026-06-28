@@ -222,6 +222,7 @@ const HindiCourseLessonPage = lazy(() => import('./pages/HindiCourseLessonPage')
 const TypingCertificatesPage = lazy(() => import('./pages/TypingCertificatesPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const BlogPostPage = lazy(() => import('./pages/BlogPostPage'));
+const AiTutorPage = lazy(() => import('./pages/AiTutorPage'));
 
 const AppContent = () => {
   const location = useLocation();
@@ -301,6 +302,7 @@ const AppContent = () => {
           <Route path="/competitive-exam-typing" element={<CompetitiveExamTypingPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/ai-tutor" element={<AiTutorPage />} />
         </Routes>
         </Suspense>
       </main>

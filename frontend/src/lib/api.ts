@@ -118,6 +118,47 @@ export async function fetchVisitorCount(): Promise<VisitorCount> {
   }
 }
 
+/* ─── AI Tutor (Groq) ───────────────────────────────────────────── */
+
+export interface TutorStats {
+  avgWpm: number;
+  bestWpm: number;
+  avgAccuracy: number;
+  totalSessions: number;
+  trend: 'improving' | 'declining' | 'stable';
+  hindiShare: number;
+  goal?: string;
+}
+
+export interface TutorPlan {
+  level: string;
+  analysis: string;
+  strengths: string[];
+  weakAreas: string[];
+  targetWpm: number;
+  plan: { title: string; detail: string }[];
+  dailyRoutine: string[];
+  practiceText: string;
+  encouragement: string;
+  avgWpm?: number;
+  bestWpm?: number;
+  avgAccuracy?: number;
+}
+
+/** Ask the Groq-powered AI tutor for a one-shot personalized improvement plan. */
+export async function getTutorPlan(stats: TutorStats): Promise<TutorPlan> {
+  const res = await fetch(`${API_URL}/api/ai/tutor`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ stats }),
+  });
+  if (!res.ok) {
+    const j = await res.json().catch(() => ({}));
+    throw new Error(j.error || 'The AI tutor is busy right now. Please try again in a moment.');
+  }
+  return res.json();
+}
+
 /** Fetch the site-wide mistake-handling mode (admin-configurable). Defaults to 'lenient' on any error. */
 export async function fetchMistakeHandlingMode(): Promise<'strict' | 'lenient'> {
   try {

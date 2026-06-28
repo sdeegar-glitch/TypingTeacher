@@ -121,7 +121,7 @@ const QUICK_LINKS = [
   { label: 'SSC CHSL Mock Test',href: '/exam/ssc-chsl',         tag: 'Exam' },
   { label: 'Learn Hindi Typing',href: '/learn-hindi-typing',    tag: 'Course' },
   { label: 'Kruti Dev Guide',   href: '/kruti-dev-typing',      tag: 'Guide' },
-  { label: 'Word Rain Game',    href: '/games/word-rain',       tag: 'Game' },
+  { label: 'AI Typing Tutor',   href: '/ai-tutor',              tag: 'AI' },
 ];
 
 /* ─── Floating blob bg ─────────────────────────────────────────── */
