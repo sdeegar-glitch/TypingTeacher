@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useL
 import { Menu, X, Moon, Sun } from 'lucide-react';
 import { useTheme } from './store/useThemeStore';
 import { trackVisit } from './lib/api';
+import { initAnalytics, trackPageview } from './lib/analytics';
 
 const TypingTestPage = lazy(() => import('./pages/TypingTestPage'));
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
@@ -229,10 +230,16 @@ const AppContent = () => {
 
   // Record one visit per browser session (survives SPA navigation & remounts).
   useEffect(() => {
+    initAnalytics();
     if (sessionStorage.getItem('ftl_visit_tracked')) return;
     sessionStorage.setItem('ftl_visit_tracked', '1');
     trackVisit(window.location.pathname);
   }, []);
+
+  // GA4 page view on every SPA route change.
+  useEffect(() => {
+    trackPageview(location.pathname + location.search);
+  }, [location.pathname, location.search]);
 
   const isLearningInterface =
     (location.pathname.startsWith('/learn/') && location.pathname !== '/learn' && location.pathname !== '/learn/') ||
