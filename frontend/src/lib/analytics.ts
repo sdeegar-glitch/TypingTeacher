@@ -8,7 +8,7 @@
 //
 // Until an ID is set, every function below is a no-op, so the site works fine
 // without analytics.
-export const GA_MEASUREMENT_ID = ''; // e.g. 'G-XXXXXXXXXX'
+export const GA_MEASUREMENT_ID = 'G-LVHEY3B1F0';
 
 declare global {
   interface Window {
