@@ -151,6 +151,25 @@ export default function CompetitiveExamTypingPage() {
           </div>
         </div>
 
+        {/* In-depth exam guides */}
+        <div className="mb-10">
+          <h2 className="text-xl font-black text-brand-text mb-4">In-Depth Exam Typing Guides</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
+              { label: 'SSC CGL DEST', href: '/ssc-cgl-typing-test' },
+              { label: 'CPCT Typing Test', href: '/cpct-typing-test' },
+              { label: 'UP Police Typing', href: '/up-police-typing-test' },
+            ].map(g => (
+              <Link key={g.href} to={g.href}
+                className="group flex items-center justify-between gap-2 bg-brand-surface border border-brand-border rounded-xl px-4 py-3 text-sm font-semibold text-brand-text hover:border-brand-primary/40 transition-all">
+                {g.label}
+                <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary transition-all shrink-0" />
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* Tips */}
         <div className="mb-10">
           <h2 className="text-xl font-black text-brand-text mb-4">Expert Preparation Tips</h2>

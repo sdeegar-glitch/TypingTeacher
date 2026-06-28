@@ -54,6 +54,12 @@ const examFaq = {
   ].map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
 };
 
+const faqLd = (pairs) => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: pairs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+});
+
 const ROUTES = [
   { path: '/', title: 'FastTypingLab — Free Typing Speed Test, Hindi Typing & Exam Practice', description: 'Free online typing speed test (WPM) in English, Hindi Unicode & Kruti Dev. Practice for SSC, CPCT & UP Police exams, get AI coaching, and play typing games — no signup.' },
   { path: '/tests', title: 'Typing Speed Tests — 1, 3, 5 & 10 Minute WPM Tests | FastTypingLab', description: 'Take free typing speed tests in English, Hindi Mangal (Unicode) and Kruti Dev. 1, 3, 5 and 10-minute WPM tests with real-time accuracy and net speed.' },
@@ -69,6 +75,28 @@ const ROUTES = [
   { path: '/kruti-dev-typing', title: 'Kruti Dev Typing Test & Guide | FastTypingLab', description: 'Free Kruti Dev Hindi typing test and guide. Practice the legacy Kruti Dev layout used by UP Police, Bihar SSC and court typing exams, with live WPM and accuracy.' },
   { path: '/typing-certificates', title: 'Free Typing Certificate — Verifiable WPM Certificate | FastTypingLab', description: 'Earn a free, verifiable typing certificate. Take a timed WPM test and download a shareable certificate of your typing speed and accuracy.' },
   { path: '/ai-tutor', title: 'AI Typing Tutor — Personalized Improvement Plan | FastTypingLab', description: 'Get a free, personalized typing improvement plan from our AI tutor. It analyzes your WPM, accuracy and trend, then builds a step-by-step plan and a custom practice passage.' },
+
+  // Exam typing landing pages (high-intent, with FAQ schema)
+  { path: '/ssc-chsl-typing-test', title: 'SSC CHSL Typing Test Online — Free Practice & Speed | FastTypingLab', description: 'Free SSC CHSL typing test practice online. 35 WPM English / 30 WPM Hindi in 10 minutes, with live WPM and accuracy. Prepare for the LDC & DEO skill test.', jsonLd: faqLd([
+    ['What is the typing speed required for SSC CHSL?', 'You need 35 WPM in English or 30 WPM in Hindi over 10 minutes. Aim for 40+ WPM in practice to keep a safe margin.'],
+    ['Is the SSC CHSL typing test qualifying or scored?', 'It is qualifying only — it does not add to your merit, but you must pass it to be selected for LDC/DEO posts.'],
+    ['Can I practice the SSC CHSL typing test for free?', 'Yes. FastTypingLab offers a free 10-minute SSC CHSL-style typing test in English and Hindi with live WPM and accuracy.'],
+  ]) },
+  { path: '/ssc-cgl-typing-test', title: 'SSC CGL DEST Typing Test Online — Free Practice | FastTypingLab', description: 'Free SSC CGL DEST (Data Entry Skill Test) practice. Type 2,000 key depressions in 15 minutes (~8,000 KDPH) with live speed and accuracy tracking.', jsonLd: faqLd([
+    ['What is the SSC CGL DEST requirement?', 'You must type 2,000 key depressions in 15 minutes (about 8,000 per hour), roughly 27–35 WPM sustained, for the Tax Assistant post.'],
+    ['Is DEST the same as the CHSL typing test?', 'No. CHSL measures WPM over 10 minutes; CGL DEST measures key depressions over 15 minutes. Practice the correct format.'],
+    ['How can I practice SSC CGL DEST online free?', 'Use the free SSC CGL practice test on FastTypingLab, which replicates the 15-minute format with live speed and accuracy.'],
+  ]) },
+  { path: '/cpct-typing-test', title: 'CPCT Typing Test Online — Free Hindi & English Practice | FastTypingLab', description: 'Free MP CPCT typing test practice in Hindi (Mangal/Unicode) and English. Build the speed and accuracy needed for the CPCT score card, with live tracking.', jsonLd: faqLd([
+    ['Which Hindi layout does CPCT use — Kruti Dev or Mangal?', 'CPCT uses the Unicode Mangal (INSCRIPT) layout, not Kruti Dev. Practice on Mangal/INSCRIPT for accurate preparation.'],
+    ['What typing speed is needed for CPCT?', 'Around 30 WPM in English and 20–30 WPM in Hindi, with net speed calculated after errors.'],
+    ['Where can I practice CPCT typing free?', 'FastTypingLab offers free Hindi Unicode (Mangal) and English typing tests plus a step-by-step Learn Hindi Typing course.'],
+  ]) },
+  { path: '/up-police-typing-test', title: 'UP Police Typing Test Online — Free Hindi Practice | FastTypingLab', description: 'Free UP Police typing test practice for Computer Operator & Clerk posts. Hindi (Kruti Dev / Mangal) and English, with live WPM and accuracy tracking.', jsonLd: faqLd([
+    ['What typing speed is required for UP Police?', 'Most UP Police Computer Operator/Clerk posts require around 25–30 WPM in Hindi. Aim for 30+ WPM to clear it comfortably.'],
+    ['Does UP Police typing use Kruti Dev or Mangal?', 'Many UP state exams still use Kruti Dev, while some use Mangal/Unicode. Always check your specific exam notification.'],
+    ['How do I practice UP Police typing test free?', 'FastTypingLab offers free Kruti Dev and Hindi Unicode typing practice with live WPM and accuracy.'],
+  ]) },
   { path: '/leaderboard', title: 'Global Typing Leaderboard | FastTypingLab', description: 'See the fastest typists on FastTypingLab. Global typing speed leaderboard ranked by net WPM and accuracy.' },
 
   { path: '/keyboard-tester', title: 'Online Keyboard Tester — Test Every Key | FastTypingLab', description: 'Free online keyboard tester. Press any key to check it registers correctly — test your full keyboard, function keys and modifiers in the browser.' },

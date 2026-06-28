@@ -224,6 +224,7 @@ const TypingCertificatesPage = lazy(() => import('./pages/TypingCertificatesPage
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const BlogPostPage = lazy(() => import('./pages/BlogPostPage'));
 const AiTutorPage = lazy(() => import('./pages/AiTutorPage'));
+const ExamLandingPage = lazy(() => import('./pages/ExamLandingPage'));
 
 const AppContent = () => {
   const location = useLocation();
@@ -310,6 +311,12 @@ const AppContent = () => {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
           <Route path="/ai-tutor" element={<AiTutorPage />} />
+
+          {/* Exam typing landing pages (SEO) */}
+          <Route path="/ssc-chsl-typing-test" element={<ExamLandingPage slug="ssc-chsl" />} />
+          <Route path="/ssc-cgl-typing-test" element={<ExamLandingPage slug="ssc-cgl" />} />
+          <Route path="/cpct-typing-test" element={<ExamLandingPage slug="cpct" />} />
+          <Route path="/up-police-typing-test" element={<ExamLandingPage slug="up-police" />} />
         </Routes>
         </Suspense>
       </main>
