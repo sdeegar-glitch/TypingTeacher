@@ -321,6 +321,82 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { label: 'All Exam Typing', href: '/competitive-exam-typing' },
     ],
   },
+
+  'rsmssb': {
+    slug: 'rsmssb',
+    examName: 'RSMSSB',
+    h1: 'RSMSSB Typing Test — Free Hindi & English Practice',
+    seoTitle: 'RSMSSB Typing Test Online — Rajasthan LDC Practice | FastTypingLab',
+    metaDesc: 'Free RSMSSB typing test practice for Rajasthan LDC, Junior Assistant and Informatics Assistant posts — Hindi and English, with live WPM and accuracy.',
+    eyebrow: 'RSMSSB / Rajasthan',
+    intro: 'Several RSMSSB (Rajasthan Staff Selection Board) posts — LDC, Junior Assistant and Informatics Assistant — include a typing skill test in Hindi and English. Requirements and the specified layout vary by post and notification, so always confirm. Daily timed practice on a physical keyboard is the fastest route to the required speed.',
+    requirements: [
+      { language: 'Hindi', layout: 'Kruti Dev / Mangal', speed: '20–25 WPM', duration: 'Skill test' },
+      { language: 'English', layout: 'QWERTY', speed: '20–25 WPM', duration: 'Skill test' },
+    ],
+    format: [
+      'A Hindi and/or English passage is typed on the computer within a set time.',
+      'The exact speed and layout are set in the post notification — always check.',
+      'Both speed and accuracy are assessed; errors reduce effective speed.',
+      'The test is on a desktop computer — practice only on a physical keyboard.',
+    ],
+    tips: [
+      'Confirm the required language, speed and layout from your notification.',
+      'Aim comfortably above the minimum so exam nerves do not pull you below it.',
+      'Practice Hindi matras and half-letters, which slow most candidates.',
+      'Do daily timed tests in the exam format to build stamina.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for RSMSSB LDC?', a: 'RSMSSB skill tests typically require around 20–25 WPM in Hindi and English, but always confirm the exact figure from your post notification.' },
+      { q: 'Which layout does RSMSSB use for Hindi?', a: 'It varies by post — commonly Kruti Dev or Mangal. Check your specific notification and practice that layout.' },
+      { q: 'How can I practice RSMSSB typing free?', a: 'FastTypingLab offers free Hindi (Kruti Dev and Mangal) and English typing practice with live WPM and accuracy.' },
+    ],
+    practiceHref: '/kruti-dev-typing',
+    practiceLabel: 'Start Hindi Typing Practice',
+    related: [
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
+      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
+
+  'ldc': {
+    slug: 'ldc',
+    examName: 'LDC',
+    h1: 'LDC Typing Test — Free Online Practice',
+    seoTitle: 'LDC Typing Test Online — Free Practice & Speed | FastTypingLab',
+    metaDesc: 'Free LDC (Lower Division Clerk) typing test practice in English and Hindi. Build the speed needed for SSC and state LDC skill tests, with live WPM and accuracy.',
+    eyebrow: 'Lower Division Clerk',
+    intro: 'Lower Division Clerk (LDC) posts — under SSC CHSL and many state boards — include a typing skill test. The required speed varies: SSC LDC needs 35 WPM English or 30 WPM Hindi, while state LDC posts often require 20–30 WPM. Confirm your exam and practice that format daily.',
+    requirements: [
+      { language: 'English', layout: 'QWERTY', speed: '30–35 WPM', duration: '10 minutes' },
+      { language: 'Hindi', layout: 'Kruti Dev / Mangal', speed: '25–30 WPM', duration: '10 minutes' },
+    ],
+    format: [
+      'A printed passage is typed on the computer for the set duration.',
+      'SSC LDC requires 35 WPM English / 30 WPM Hindi; state LDC posts vary.',
+      'Speed is measured in WPM (1 word = 5 key depressions); accuracy matters too.',
+      'Confirm the language and layout from your specific notification.',
+    ],
+    tips: [
+      'Find your exam’s exact requirement — SSC and state LDC posts differ.',
+      'Aim 5–10 WPM above the minimum for a safe margin.',
+      'Accuracy first; a clean pass beats a fast, error-filled one.',
+      'Practice the full timed format daily to build stamina.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for LDC?', a: 'SSC LDC requires 35 WPM in English or 30 WPM in Hindi. State LDC posts often require 20–30 WPM — always check your notification.' },
+      { q: 'Is the LDC typing test in Hindi or English?', a: 'It depends on the post — many allow either Hindi or English. Confirm the languages and layout in your exam notification.' },
+      { q: 'How can I practice the LDC typing test free?', a: 'FastTypingLab offers free English and Hindi (Kruti Dev and Mangal) typing tests with live WPM and accuracy.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Start Typing Practice Test',
+    related: [
+      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
+      { label: 'Typing Speed Test', href: '/tests' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
 };
 
 export const EXAM_LANDING_ROUTES = Object.values(EXAM_LANDINGS).map(e => ({

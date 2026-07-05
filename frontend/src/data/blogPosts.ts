@@ -877,4 +877,149 @@ FastTypingLab is a free, no-signup platform built specifically for Indian govern
 The best typing software is the one you actually use every day. Pick your exam, open the matching free test, and practice for 20–30 minutes daily. Consistency for 4–6 weeks is enough for most candidates to reach exam speed.
     `,
   },
+  {
+    slug: 'how-to-type-without-looking-touch-typing-guide',
+    title: 'How to Type Without Looking: The Touch Typing Method',
+    seoTitle: 'How to Type Without Looking — Touch Typing Guide | FastTypingLab',
+    metaDesc: 'Learn how to type without looking at the keyboard. The touch typing method, home row technique, finger placement, and drills to build muscle memory.',
+    category: 'Learning',
+    readTime: '5 min',
+    date: '2026-06-28',
+    emoji: '🙈',
+    content: `
+## Why Typing Without Looking Matters
+
+If you look at the keyboard while typing, your speed is capped at around 35 WPM forever. Touch typing — typing by muscle memory without looking — is the single skill that unlocks 60, 80, even 100+ WPM. The good news: anyone can learn it in a few weeks with the right method.
+
+## Start With the Home Row
+
+Touch typing is built on the **home row**: place your left fingers on **A S D F** and right fingers on **J K L ;**. Your thumbs rest on the spacebar.
+
+- Feel the small bumps on **F** and **J** — they let your fingers find home without looking.
+- Every key is reached from home row and your fingers return to it.
+
+## The Golden Rule: Never Look Down
+
+This is the hardest and most important part. When you do not know a key, resist looking. Pause, recall its position, and press it. Looking down retrains the wrong habit. If needed, use an on-screen keyboard instead of glancing at the real one.
+
+## Finger Assignments
+
+Each finger owns specific keys:
+
+- **Left pinky**: Q A Z
+- **Left ring**: W S X
+- **Left middle**: E D C
+- **Left index**: R F V T G B
+- **Right index**: Y H N U J M
+- **Right middle**: I K ,
+- **Right ring**: O L .
+- **Right pinky**: P ; /
+
+Learn these assignments and always use the correct finger — even when it feels slower at first.
+
+## A 3-Week Learning Plan
+
+1. **Week 1**: Home row only, until you can type home-row words at 100% accuracy without looking.
+2. **Week 2**: Add the top and bottom rows, one at a time.
+3. **Week 3**: Type full sentences; focus on accuracy, then speed.
+
+## Accuracy Before Speed
+
+Do not chase speed early. Type slowly and correctly so your fingers learn the right positions. Speed comes automatically once the positions are automatic. Rushing builds errors that are very hard to unlearn.
+
+## Practice Touch Typing Free
+
+FastTypingLab's free Learn Typing course teaches touch typing from the home row up, with an on-screen keyboard and live WPM and accuracy so you never need to look down. Practice 15–20 minutes a day and you will be typing without looking within a few weeks.
+    `,
+  },
+  {
+    slug: '5-minute-typing-test-build-stamina',
+    title: '5-Minute Typing Test: How to Build Typing Stamina',
+    seoTitle: '5 Minute Typing Test — Build Stamina for Exams | FastTypingLab',
+    metaDesc: 'Why the 5-minute typing test matters for exams, and how to build the stamina and consistency to hold your speed for the full duration.',
+    category: 'Tips & Tricks',
+    readTime: '4 min',
+    date: '2026-06-27',
+    emoji: '⏱️',
+    content: `
+## Why a 5-Minute Test Is Different
+
+Most people practice 1-minute typing tests — and then struggle when the real exam runs 5, 10 or 15 minutes. Speed over 60 seconds is not the same as sustained speed. The longer format tests something extra: **stamina and focus**.
+
+## What Happens Over 5 Minutes
+
+- **Minute 1–2**: you type at your peak — this matches a 1-minute test.
+- **Minute 3–4**: focus starts to dip; errors creep in.
+- **Minute 5**: fatigue shows — speed drops unless you have trained for it.
+
+Government typing tests (SSC, CPCT, LDC) are timed at 10–15 minutes precisely because sustained speed separates prepared candidates from unprepared ones.
+
+## How to Build Typing Stamina
+
+1. **Practice the full duration.** If your exam is 10 minutes, practice 10-minute tests, not just 1-minute ones.
+2. **Fix your posture.** Sit upright, wrists neutral, feet flat. Poor posture causes fatigue.
+3. **Breathe and relax your shoulders.** Tension slows your hands over time.
+4. **Build up gradually.** Start at 2 minutes, then 5, then your full exam length.
+
+## Use the 5-Minute Test as a Benchmark
+
+Take a 5-minute test once a week and record your WPM and accuracy. If your speed in minute 5 is much lower than minute 1, stamina is your bottleneck — do more long-format practice.
+
+## Accuracy Holds Under Fatigue
+
+As you tire, accuracy usually drops before speed. Train to keep accuracy high late in the test — that is what protects your net WPM in the real exam.
+
+## Take a Free 5-Minute Typing Test
+
+FastTypingLab offers free 1, 5 and 10-minute typing tests with live WPM and accuracy, in English and Hindi. Use the 5-minute test weekly to measure your stamina and track improvement.
+    `,
+  },
+  {
+    slug: 'remington-gail-vs-inscript-hindi-typing',
+    title: 'Remington (Gail) vs INSCRIPT: Hindi Typing Layouts Explained',
+    seoTitle: 'Remington Gail vs INSCRIPT — Hindi Typing Layouts | FastTypingLab',
+    metaDesc: 'Remington Gail vs INSCRIPT (Mangal): the difference between these Hindi typing layouts, which exams use each, and how to choose the right one.',
+    category: 'Learning',
+    readTime: '5 min',
+    date: '2026-06-26',
+    emoji: '🔤',
+    content: `
+## Two Hindi Typing Standards
+
+Beyond Kruti Dev, two layouts matter for Hindi typing exams: **Remington (Gail)** and **INSCRIPT**. Confusing them costs candidates weeks of misdirected practice, so it is worth understanding the difference.
+
+## What Is INSCRIPT?
+
+INSCRIPT (Indian Script) is the **official government standard**, built into Windows and used with the **Mangal** Unicode font. Key features:
+
+- Logical layout: vowels on the left, consonants on the right.
+- True Unicode — text works everywhere.
+- Used by SSC, CPCT and most central government exams.
+
+## What Is Remington (Gail)?
+
+Remington is the **traditional typewriter-based** layout, familiar to anyone who learned Hindi typing on a manual typewriter. **Remington Gail** is a Unicode-compatible version of it.
+
+- Key positions match old Hindi typewriters.
+- Preferred by candidates from a typewriter background.
+- Offered as an option in several state exams alongside INSCRIPT.
+
+## INSCRIPT vs Remington: Which to Choose?
+
+| Factor | INSCRIPT (Mangal) | Remington (Gail) |
+| Standard | Official govt standard | Typewriter-based |
+| Learning | Logical, easier for beginners | Familiar to typewriter users |
+| Exams | SSC, CPCT, central exams | Some state exams (as an option) |
+
+**If you are new to Hindi typing, learn INSCRIPT** — it is the standard, logical, and accepted in the most exams. Choose Remington only if your specific exam requires it or you already know the typewriter layout.
+
+## Do Not Confuse These With Kruti Dev
+
+Kruti Dev is a separate, font-based layout used by UP Police, Bihar SSC and some courts. So there are really three options — INSCRIPT (Mangal), Remington (Gail), and Kruti Dev — and your exam notification tells you which to use.
+
+## Practice Hindi Typing Free
+
+FastTypingLab offers free Hindi typing practice in Mangal (INSCRIPT) and Kruti Dev, with an on-screen keyboard and live WPM and accuracy. Pick the layout your exam requires and practice daily to build real speed.
+    `,
+  },
 ];
