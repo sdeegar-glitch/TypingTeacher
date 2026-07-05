@@ -162,6 +162,8 @@ export default function CompetitiveExamTypingPage() {
               { label: 'UP Police Typing', href: '/up-police-typing-test' },
               { label: 'Railway NTPC Typing', href: '/railway-ntpc-typing-test' },
               { label: 'Court & Steno Typing', href: '/court-typing-test' },
+              { label: 'Bihar SSC Typing', href: '/bihar-ssc-typing-test' },
+              { label: 'DEO Typing Test', href: '/deo-typing-test' },
             ].map(g => (
               <Link key={g.href} to={g.href}
                 className="group flex items-center justify-between gap-2 bg-brand-surface border border-brand-border rounded-xl px-4 py-3 text-sm font-semibold text-brand-text hover:border-brand-primary/40 transition-all">

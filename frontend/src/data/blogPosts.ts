@@ -731,4 +731,150 @@ Exact requirements and the specified layout are set in the official notification
 FastTypingLab offers free Hindi (Kruti Dev and Mangal) and English typing tests with live WPM and accuracy, plus a Learn Hindi Typing course. Practice daily for 4-6 weeks and the AHC RO/ARO typing test becomes very manageable.
     `,
   },
+  {
+    slug: 'kruti-dev-vs-mangal-which-to-learn',
+    title: 'Kruti Dev vs Mangal: Which Hindi Typing Layout Should You Learn?',
+    seoTitle: 'Kruti Dev vs Mangal — Which Hindi Layout to Learn | FastTypingLab',
+    metaDesc: 'Kruti Dev vs Mangal (Unicode/INSCRIPT): the key differences, which government exams use each, and how to choose the right Hindi typing layout to learn.',
+    category: 'Learning',
+    readTime: '5 min',
+    date: '2026-06-28',
+    emoji: '⚔️',
+    content: `
+## Kruti Dev vs Mangal: The Core Difference
+
+This is the most important decision in Hindi typing, and choosing wrong can waste weeks of practice.
+
+- **Mangal (Unicode / INSCRIPT)** is a *standardized encoding*. Text typed in Mangal displays correctly everywhere — web, WhatsApp, email, any device. It is the official government standard.
+- **Kruti Dev** is a *font-based legacy layout*. It maps English keys to Hindi glyphs through a specific font. Text only displays correctly if that font is installed, and it is not true Unicode.
+
+## Which Exams Use Which?
+
+| Layout | Used By |
+| Mangal (Unicode) | SSC CHSL, SSC CGL, CPCT, most central exams |
+| Kruti Dev | UP Police, Bihar SSC, many state courts |
+
+Because the two layouts have completely different key positions, you cannot switch between them without re-learning. Always check your exam notification first.
+
+## Pros and Cons
+
+**Mangal (Unicode / INSCRIPT)**
+- Works everywhere; future-proof standard.
+- Required by most central government exams.
+- Slightly steeper initial learning curve for some.
+
+**Kruti Dev**
+- Still required by several state exams and offices.
+- Font-dependent; not true Unicode.
+- Familiar to those from a Remington typing background.
+
+## How to Choose
+
+1. **Check your target exam's notification** — it specifies the layout.
+2. If it uses Mangal, learn INSCRIPT (built into Windows).
+3. If it uses Kruti Dev, install the font and learn that layout.
+4. If you have no specific exam, learn **Mangal/INSCRIPT** — it is the standard and works everywhere.
+
+## Practice the Right Layout Free
+
+FastTypingLab offers free practice for both — a Hindi Unicode (Mangal) typing test and a Kruti Dev typing test, each with an on-screen layout and live WPM and accuracy. Pick the one your exam requires and practice daily.
+    `,
+  },
+  {
+    slug: 'how-to-type-hindi-matras-half-letters-faster',
+    title: 'How to Type Hindi Matras and Half-Letters Faster',
+    seoTitle: 'How to Type Hindi Matras & Half-Letters Faster | FastTypingLab',
+    metaDesc: 'Struggling with Hindi matras and half-letters? Learn the technique to type conjuncts, matras and half-letters faster and more accurately for typing exams.',
+    category: 'Learning',
+    readTime: '5 min',
+    date: '2026-06-27',
+    emoji: '✍️',
+    content: `
+## Why Matras and Half-Letters Slow You Down
+
+If your Hindi typing speed is stuck, matras (vowel signs) and half-letters (conjuncts) are almost always the reason. They require combinations rather than single keys, and most learners pause to think each time. The fix is targeted practice until these become automatic.
+
+## Master the Matras First
+
+The matras — ा ि ी ु ू े ै ो ौ — attach to consonants. Two rules make them faster:
+
+- **Sequence matters**: in INSCRIPT you type the consonant, then the matra. Practice the exact order until it is muscle memory.
+- **The "i" matra (ि)**: it visually appears before the consonant but is typed after it. This trips up beginners — drill it specifically.
+
+## Then Tackle Half-Letters and Conjuncts
+
+Half-letters (क्, स्, त्) and conjuncts (क्ष, त्र, ज्ञ, श्र) use the halant (्) to join consonants.
+
+- Learn the halant key position cold.
+- Practice the most common conjuncts first: क्ष, त्र, ज्ञ, श्र, द्ध, न्न.
+- Type real words containing them, not isolated characters.
+
+## A 15-Minute Daily Drill
+
+1. **5 minutes** — matra attachment: type consonant + each matra in sequence.
+2. **5 minutes** — the 6 most common conjuncts in real words.
+3. **5 minutes** — a full passage, noting which combinations still slow you.
+
+Repeat daily. Within two weeks, the combinations that used to make you pause will feel automatic.
+
+## Common Mistakes
+
+- Practicing isolated characters instead of real words.
+- Ignoring the "i" matra order rule.
+- Chasing speed before the combinations are accurate.
+- Looking at the keyboard instead of building finger memory.
+
+## Practice Hindi Typing Free
+
+Use a free Hindi typing test with an on-screen layout so you always know which key produces each matra and conjunct. FastTypingLab tracks your WPM and accuracy in real time in both Mangal and Kruti Dev — perfect for targeting your weakest combinations.
+    `,
+  },
+  {
+    slug: 'best-free-typing-software-for-government-exams',
+    title: 'Best Free Typing Software for Government Exams in India (2026)',
+    seoTitle: 'Best Free Typing Software for Government Exams | FastTypingLab',
+    metaDesc: 'The best free typing software and websites for government exam preparation in India — SSC, CPCT, UP Police and more, in Hindi and English.',
+    category: 'Government Exams',
+    readTime: '6 min',
+    date: '2026-06-26',
+    emoji: '🖥️',
+    content: `
+## What to Look for in Typing Practice Software
+
+Not all typing tools help you clear a government exam. For exam prep specifically, the right tool should offer:
+
+- **Exam-format tests** — the exact duration (10 min, 15 min) and passage style.
+- **Both languages** — English and Hindi (Mangal and Kruti Dev).
+- **Real WPM and accuracy** — measured the way exams calculate it.
+- **On-screen keyboard** — so you learn touch typing without looking.
+- **No cost, no signup** — you should be able to practice immediately.
+
+## Free Website vs Installed Software
+
+You do not need to install anything. A good browser-based typing test works on any computer, updates automatically, and lets you practice exam passages instantly. Installed software (like old Typing Master builds) can work offline but is often outdated and English-only.
+
+For government exam prep — especially Hindi — a modern free website that supports both Mangal and Kruti Dev is usually the better choice.
+
+## What Your Practice Setup Should Include
+
+1. **English typing test** with 1, 5 and 10-minute options for SSC and DEO.
+2. **Hindi Unicode (Mangal) test** for CPCT and central exams.
+3. **Kruti Dev test** for UP Police, Bihar SSC and courts.
+4. **Progress tracking** so you can see your WPM improve week to week.
+5. **Exam-specific pages** that tell you the required speed and format.
+
+## Why FastTypingLab
+
+FastTypingLab is a free, no-signup platform built specifically for Indian government exam typing preparation:
+
+- English, Hindi Mangal (Unicode) and Kruti Dev tests with live WPM and accuracy.
+- Dedicated pages for SSC CHSL, SSC CGL, CPCT, UP Police, Railway NTPC, Bihar SSC and more.
+- A step-by-step Learn Hindi Typing course from home row to exam passages.
+- An AI Tutor that analyzes your typing and builds a personalized improvement plan.
+
+## Start Practicing Today
+
+The best typing software is the one you actually use every day. Pick your exam, open the matching free test, and practice for 20–30 minutes daily. Consistency for 4–6 weeks is enough for most candidates to reach exam speed.
+    `,
+  },
 ];

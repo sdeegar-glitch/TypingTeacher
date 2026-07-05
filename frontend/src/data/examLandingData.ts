@@ -246,6 +246,81 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { label: 'All Exam Typing', href: '/competitive-exam-typing' },
     ],
   },
+
+  'bihar-ssc': {
+    slug: 'bihar-ssc',
+    examName: 'Bihar SSC',
+    h1: 'Bihar SSC Typing Test — Free Hindi Practice',
+    seoTitle: 'Bihar SSC (BSSC) Typing Test Online — Free Practice | FastTypingLab',
+    metaDesc: 'Free Bihar SSC (BSSC) typing test practice in Hindi (Kruti Dev) and English. Build the ~30 WPM speed needed for the skill test, with live WPM and accuracy.',
+    eyebrow: 'Bihar SSC / BSSC',
+    intro: 'The Bihar SSC (BSSC) typing skill test is part of the selection for Inter-level and clerical posts. It usually requires Hindi typing, and Bihar SSC commonly uses the Kruti Dev layout — so confirm your notification and practice the correct one. Timed daily practice on a physical keyboard is the fastest route to the required speed.',
+    requirements: [
+      { language: 'Hindi', layout: 'Kruti Dev', speed: '~30 WPM', duration: 'Skill test' },
+      { language: 'English', layout: 'QWERTY', speed: '~30 WPM', duration: 'Skill test' },
+    ],
+    format: [
+      'A Hindi (and sometimes English) passage is typed on the computer.',
+      'Bihar SSC posts commonly use the Kruti Dev font layout — check your notification.',
+      'Both speed and accuracy are assessed; corrections reduce effective speed.',
+      'The test is on a desktop computer — practice only on a physical keyboard.',
+    ],
+    tips: [
+      'Confirm Kruti Dev vs Mangal from your notification, then drill that layout.',
+      'Aim for 35+ WPM in practice so you clear the ~30 WPM bar with margin.',
+      'Practice Hindi matras and half-letters, which slow most candidates.',
+      'Do daily timed tests in the exam format to build stamina.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for Bihar SSC?', a: 'Bihar SSC skill tests typically require around 30 WPM in Hindi or English. Aim for 35+ WPM to clear it comfortably.' },
+      { q: 'Does Bihar SSC use Kruti Dev or Mangal?', a: 'Bihar SSC commonly uses the Kruti Dev layout for Hindi, but always confirm from your specific exam notification.' },
+      { q: 'How can I practice Bihar SSC typing free?', a: 'FastTypingLab offers free Kruti Dev and Hindi Unicode typing practice with live WPM and accuracy.' },
+    ],
+    practiceHref: '/kruti-dev-typing',
+    practiceLabel: 'Start Kruti Dev Practice',
+    related: [
+      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing' },
+      { label: 'UP Police Typing', href: '/up-police-typing-test' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
+
+  'deo': {
+    slug: 'deo',
+    examName: 'DEO',
+    h1: 'DEO Typing Test — Free Data Entry Practice',
+    seoTitle: 'DEO Typing Test Online — Data Entry Operator Practice | FastTypingLab',
+    metaDesc: 'Free Data Entry Operator (DEO) typing test practice. Build 8,000+ key depressions per hour (~27–35 WPM) with live speed and accuracy tracking.',
+    eyebrow: 'Data Entry Operator',
+    intro: 'Data Entry Operator (DEO) posts across SSC and many departments require a data-entry speed test measured in key depressions per hour (KDPH) rather than WPM directly. The common benchmark is 8,000 KDPH, with some posts requiring more. Sustained accuracy over the full duration is what this test rewards.',
+    requirements: [
+      { language: 'English', layout: 'QWERTY', speed: '8,000 KDPH (~27–35 WPM)', duration: '15 minutes' },
+    ],
+    format: [
+      'You type a given passage on the computer at the required data-entry speed.',
+      'Speed is measured in key depressions per hour (KDPH), commonly 8,000.',
+      'That is roughly 27–35 WPM sustained for the full duration.',
+      'Accuracy matters — errors reduce your effective key-depression count.',
+    ],
+    tips: [
+      'Build endurance for the full 15-minute duration, not just short bursts.',
+      'Target 35+ WPM so you comfortably clear 8,000 KDPH.',
+      'Keep accuracy high; corrections cost you depressions and time.',
+      'Practice on formal, data-entry-style English passages.',
+    ],
+    faqs: [
+      { q: 'What is the typing speed for DEO?', a: 'Most Data Entry Operator posts require about 8,000 key depressions per hour (roughly 27–35 WPM sustained). Some posts require higher speeds.' },
+      { q: 'Is DEO speed measured in WPM or KDPH?', a: 'DEO speed is usually measured in key depressions per hour (KDPH). 8,000 KDPH is about 27–35 WPM.' },
+      { q: 'How can I practice DEO typing free?', a: 'Use the free typing tests on FastTypingLab with live WPM and accuracy to build sustained data-entry speed.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Start Typing Practice Test',
+    related: [
+      { label: 'Typing Speed Test', href: '/tests' },
+      { label: 'SSC CGL DEST', href: '/ssc-cgl-typing-test' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
 };
 
 export const EXAM_LANDING_ROUTES = Object.values(EXAM_LANDINGS).map(e => ({
