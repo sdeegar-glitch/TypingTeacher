@@ -90,6 +90,7 @@ const ROUTES = [
   { path: '/kruti-dev-typing', title: 'Kruti Dev Typing Test & Guide | FastTypingLab', description: 'Free Kruti Dev Hindi typing test and guide. Practice the legacy Kruti Dev layout used by UP Police, Bihar SSC and court typing exams, with live WPM and accuracy.' },
   { path: '/typing-certificates', title: 'Free Typing Certificate — Verifiable WPM Certificate | FastTypingLab', description: 'Earn a free, verifiable typing certificate. Take a timed WPM test and download a shareable certificate of your typing speed and accuracy.' },
   { path: '/ai-tutor', title: 'AI Typing Tutor — Personalized Improvement Plan | FastTypingLab', description: 'Get a free, personalized typing improvement plan from our AI tutor. It analyzes your WPM, accuracy and trend, then builds a step-by-step plan and a custom practice passage.' },
+  { path: '/all-pages', title: 'Site Map — All Pages | FastTypingLab', description: 'Browse every page on FastTypingLab: typing tests, Hindi typing, exam practice, learning courses, tools, games and blog articles.' },
 
   // Exam typing landing pages (high-intent, with FAQ schema)
   { path: '/ssc-chsl-typing-test', title: 'SSC CHSL Typing Test Online — Free Practice & Speed | FastTypingLab', description: 'Free SSC CHSL typing test practice online. 35 WPM English / 30 WPM Hindi in 10 minutes, with live WPM and accuracy. Prepare for the LDC & DEO skill test.', jsonLd: faqLd([

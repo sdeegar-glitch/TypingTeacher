@@ -499,6 +499,7 @@ export default function HomePage() {
                 { label: 'Leaderboard',    href: '/leaderboard' },
                 { label: 'Tools',          href: '/tools' },
                 { label: 'Certificates',   href: '/typing-certificates' },
+                { label: 'Site Map',       href: '/all-pages' },
               ].map(l => (
                 <Link key={l.href} to={l.href}
                   className="hover:text-brand-primary transition-colors duration-150">
