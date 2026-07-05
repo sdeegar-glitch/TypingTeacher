@@ -580,4 +580,155 @@ Raise your top speed with short bursts, then settle into a steady, accurate pace
 FastTypingLab offers free Kruti Dev and Hindi Unicode (Mangal) typing tests with live WPM and accuracy, plus a step-by-step Learn Hindi Typing course. For a full breakdown of requirements and a practice test, see our UP Police typing test page. Consistent daily practice for 4-6 weeks is enough for most candidates to clear the cut-off.
     `,
   },
+  {
+    slug: 'how-to-type-in-hindi-on-laptop-word-whatsapp',
+    title: 'How to Type in Hindi on Laptop, MS Word & WhatsApp (2026)',
+    seoTitle: 'How to Type in Hindi on Laptop, Word & WhatsApp | FastTypingLab',
+    metaDesc: 'Learn how to type in Hindi on a laptop, MS Word, and WhatsApp — using Mangal (INSCRIPT), Google Input Tools, and phonetic typing. Step-by-step and free.',
+    category: 'Learning',
+    readTime: '6 min',
+    date: '2026-06-28',
+    emoji: '🇮🇳',
+    content: `
+## Three Ways to Type in Hindi
+
+There are three common ways to type Hindi, and the right one depends on your goal:
+
+- **INSCRIPT (Mangal)** — the official government layout, required for most exams.
+- **Phonetic / transliteration** — type "namaste" and get नमस्ते. Easiest for casual use.
+- **Remington / Kruti Dev** — a legacy font layout still used by some state exams.
+
+For government exams, learn INSCRIPT. For chatting and everyday writing, phonetic is fastest to start with.
+
+## How to Type Hindi on a Windows Laptop
+
+Windows has Hindi built in — no software needed:
+
+1. Open **Settings → Time & Language → Language & region**.
+2. Add **Hindi (India)** as a language.
+3. Switch input using **Windows key + Spacebar**.
+4. The default Hindi keyboard is **Mangal / INSCRIPT** (Unicode), which works everywhere.
+
+For phonetic typing, install **Google Input Tools** (free) — you type Roman letters and it converts to Hindi.
+
+## How to Type Hindi in MS Word
+
+- First enable Hindi input in Windows (steps above).
+- Open Word, switch to Hindi with **Windows + Spacebar**, and start typing.
+- Set the font to **Mangal** (or Nirmala UI) for clean Unicode Devanagari.
+- For Kruti Dev documents, install the Kruti Dev font and select it — but note Kruti Dev is a font layout, not Unicode.
+
+## How to Type Hindi on WhatsApp (Mobile)
+
+On your phone, WhatsApp uses your keyboard app:
+
+- **Android**: use **Gboard** → add the Hindi language → switch with the globe key. Gboard also supports Hindi phonetic (type "kaise ho" → कैसे हो).
+- **iPhone**: Settings → General → Keyboard → add **Hindi (Devanagari)** or Hindi (Transliteration).
+
+## Which Should You Learn?
+
+If you are preparing for SSC, CPCT, UP Police or any government exam, invest in **INSCRIPT (Mangal)** — it is the standard and builds real typing speed. Casual users can start with phonetic and switch later.
+
+## Practice Hindi Typing Free
+
+Once you have Hindi input set up, build speed with a free Hindi typing test. FastTypingLab offers Mangal (Unicode) and Kruti Dev practice with live WPM and accuracy, plus a step-by-step Learn Hindi Typing course to take you from home row to exam-ready.
+    `,
+  },
+  {
+    slug: 'kruti-dev-typing-chart-keyboard-guide',
+    title: 'Kruti Dev Typing Chart & Keyboard Layout Guide (2026)',
+    seoTitle: 'Kruti Dev Typing Chart & Keyboard Layout Guide | FastTypingLab',
+    metaDesc: 'Complete Kruti Dev typing chart and keyboard layout guide. Understand key positions, matras and half-letters, with free Kruti Dev typing practice.',
+    category: 'Learning',
+    readTime: '5 min',
+    date: '2026-06-27',
+    emoji: '📋',
+    content: `
+## What Is Kruti Dev?
+
+Kruti Dev is a popular **font-based** Hindi typing layout used widely in offices and several state government exams (UP Police, Bihar SSC, some courts). Unlike Unicode Mangal, Kruti Dev is not standardized encoding — it maps English keys to Hindi glyphs through a specific font. That means you must learn its unique key positions.
+
+## How the Kruti Dev Layout Works
+
+Each English key produces a Hindi character. For example, on a standard Kruti Dev layout:
+
+- The home row keys map to common consonants.
+- Shift + key produces alternate characters and conjuncts.
+- Matras (vowel signs) and half-letters use specific key combinations.
+
+Because it is a legacy layout, the fastest way to learn is repetition on the actual layout — not memorizing a chart in isolation.
+
+## Matras and Half-Letters
+
+Most learners lose speed on:
+
+- **Matras** (ा, ि, ी, ु, ू, े, ै, ो, ौ) — practice attaching them to consonants smoothly.
+- **Half-letters / conjuncts** (क्, स्, त्र, क्ष, ज्ञ) — these need combination keys and cause the most errors.
+
+Drill these specifically; they are where most exam candidates slow down.
+
+## Kruti Dev vs Mangal — Which to Learn?
+
+- **Kruti Dev**: still used by UP Police, Bihar SSC, and some courts.
+- **Mangal (Unicode/INSCRIPT)**: used by SSC, CPCT, and most central exams.
+
+Always check your exam notification. If your target exam uses Kruti Dev, practice Kruti Dev — the layouts are completely different.
+
+## The Best Way to Learn the Kruti Dev Chart
+
+Reading a chart is not enough — you learn by typing. Use an on-screen layout while you practice so you always know which key to press, and build muscle memory with short daily sessions.
+
+## Practice Kruti Dev Typing Free
+
+FastTypingLab offers a free Kruti Dev typing test and guide with an on-screen layout, live WPM and accuracy tracking. Practice daily and the chart becomes second nature within a few weeks — exactly what you need for UP Police, Bihar SSC and court typing tests.
+    `,
+  },
+  {
+    slug: 'ahc-ro-aro-typing-test-guide',
+    title: 'AHC RO/ARO Typing Test: Speed, Rules & Practice (2026)',
+    seoTitle: 'Allahabad High Court RO/ARO Typing Test — Speed & Practice | FastTypingLab',
+    metaDesc: 'Allahabad High Court (AHC) RO/ARO typing test guide: Hindi & English speed, rules, exam format, common mistakes, and free practice to prepare.',
+    category: 'Government Exams',
+    readTime: '5 min',
+    date: '2026-06-26',
+    emoji: '⚖️',
+    content: `
+## AHC RO/ARO Typing Test: Overview
+
+The Allahabad High Court (AHC) Review Officer (RO) and Assistant Review Officer (ARO) recruitment includes a computer typing test as part of the selection process. For many candidates this stage decides the result, because it demands both speed and accuracy under timed conditions — usually in Hindi, and sometimes English.
+
+## Typing Requirement
+
+| Language | Layout | Typical Speed |
+| Hindi | Kruti Dev / Mangal | ~25 WPM |
+| English | QWERTY | ~30 WPM |
+
+Exact requirements and the specified layout are set in the official notification, so always confirm before you begin practicing. As a qualifying stage, clearing it reliably matters more than raw top speed.
+
+## Exam Format
+
+- A passage is shown and you type it on a computer within a set time.
+- Both speed and accuracy are assessed; errors reduce your effective speed.
+- The test is on a physical keyboard — practice only on a real keyboard, not a phone.
+- Confirm whether your notification specifies Kruti Dev or Mangal for Hindi.
+
+## Common Mistakes
+
+- Practicing the wrong Hindi layout (Kruti Dev vs Mangal).
+- Neglecting matras and half-letters, which slow most candidates.
+- Only doing short tests and running out of stamina in the real exam.
+- Chasing speed before accuracy — errors are costly.
+
+## How to Prepare
+
+1. Confirm the required language and layout from the notification.
+2. Spend the first week on key positions and building muscle memory.
+3. Do daily timed tests in the exam format and track your WPM.
+4. Drill your slowest characters until they are automatic.
+
+## Practice Free for AHC RO/ARO
+
+FastTypingLab offers free Hindi (Kruti Dev and Mangal) and English typing tests with live WPM and accuracy, plus a Learn Hindi Typing course. Practice daily for 4-6 weeks and the AHC RO/ARO typing test becomes very manageable.
+    `,
+  },
 ];
