@@ -60,6 +60,21 @@ const faqLd = (pairs) => ({
   mainEntity: pairs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
 });
 
+// Breadcrumb trail per page → BreadcrumbList rich result + clearer site structure.
+function breadcrumbLd(r) {
+  if (r.path === '/') return null;
+  const name = String(r.title).split('|')[0].trim();
+  const items = [{ name: 'Home', url: `${SITE}/` }];
+  if (r.path.startsWith('/blog/')) items.push({ name: 'Blog', url: `${SITE}/blog/` });
+  else if (r.path.endsWith('-typing-test') && r.path !== '/typing-test') items.push({ name: 'Exam Typing', url: `${SITE}/competitive-exam-typing/` });
+  items.push({ name, url: `${SITE}${r.path}/` });
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, name: it.name, item: it.url })),
+  };
+}
+
 const ROUTES = [
   { path: '/', title: 'FastTypingLab — Free Typing Speed Test, Hindi Typing & Exam Practice', description: 'Free online typing speed test (WPM) in English, Hindi Unicode & Kruti Dev. Practice for SSC, CPCT & UP Police exams, get AI coaching, and play typing games — no signup.' },
   { path: '/tests', title: 'Typing Speed Tests — 1, 3, 5 & 10 Minute WPM Tests | FastTypingLab', description: 'Take free typing speed tests in English, Hindi Mangal (Unicode) and Kruti Dev. 1, 3, 5 and 10-minute WPM tests with real-time accuracy and net speed.' },
@@ -206,7 +221,11 @@ for (const r of ROUTES) {
   html = setPropMeta(html, 'og:type', type);
   html = setNamedMeta(html, 'twitter:title', r.title);
   html = setNamedMeta(html, 'twitter:description', r.description);
-  html = injectJsonLd(html, r.jsonLd ? [r.jsonLd] : []);
+  const blocks = [];
+  if (r.jsonLd) blocks.push(r.jsonLd);
+  const crumb = breadcrumbLd(r);
+  if (crumb) blocks.push(crumb);
+  html = injectJsonLd(html, blocks);
   html = injectBody(html, r);
 
   const outDir = r.path === '/' ? DIST : join(DIST, r.path);
