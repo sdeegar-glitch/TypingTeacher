@@ -48,6 +48,7 @@ const LearningInterfacePage = () => {
   const [lastKeyPressStatus, setLastKeyPressStatus] = useState<'none' | 'correct' | 'error'>('none');
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
   const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const inputBoxRef = useRef<HTMLDivElement>(null);
 
   const targetContent = currentLesson.content;
 
@@ -158,6 +159,7 @@ const LearningInterfacePage = () => {
   useEffect(() => {
     const el = document.getElementById('current-char');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (inputBoxRef.current) inputBoxRef.current.scrollTop = inputBoxRef.current.scrollHeight;
   }, [userInput]);
 
   const nextChar = targetContent[userInput.length] || '';
@@ -321,7 +323,8 @@ const LearningInterfacePage = () => {
         {/* ── INPUT (type here) ── */}
         <div className="w-full max-w-2xl">
           <div
-            className="bg-white border-2 border-indigo-300 rounded-2xl px-4 sm:px-6 py-3.5 min-h-[4.25rem] text-lg sm:text-xl font-mono leading-relaxed shadow-sm cursor-text"
+            ref={inputBoxRef}
+            className="bg-white border-2 border-indigo-300 rounded-2xl px-4 sm:px-6 py-3.5 h-[4.5rem] overflow-y-auto text-lg sm:text-xl font-mono leading-relaxed shadow-sm cursor-text transition-colors"
             onClick={() => isMobile && hiddenInputRef.current?.focus()}
           >
             {userInput ? (

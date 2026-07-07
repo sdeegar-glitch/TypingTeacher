@@ -83,6 +83,7 @@ export default function HindiCourseLessonPage() {
   const [earnedStars, setEarnedStars] = useState(0);
   const [xpGained, setXpGained] = useState(0);
   const hiddenRef = useRef<HTMLInputElement>(null);
+  const inputBoxRef = useRef<HTMLDivElement>(null);
   const [mobileVal, setMobileVal] = useState('');
   const lastMobileRef = useRef('');
 
@@ -116,6 +117,10 @@ export default function HindiCourseLessonPage() {
   useEffect(() => {
     if (isMobile) setTimeout(() => hiddenRef.current?.focus(), 300);
   }, [isMobile]);
+
+  useEffect(() => {
+    if (inputBoxRef.current) inputBoxRef.current.scrollTop = inputBoxRef.current.scrollHeight;
+  }, [userInput]);
 
   useEffect(() => {
     if (userInput.length !== target.length || userInput.length === 0) return;
@@ -336,7 +341,8 @@ export default function HindiCourseLessonPage() {
           </div>
 
           {/* ── INPUT (type here) ── */}
-          <div className="mt-3 bg-brand-surface border-2 rounded-2xl px-5 sm:px-8 py-4 min-h-[4.25rem] cursor-text"
+          <div ref={inputBoxRef}
+            className="mt-3 bg-brand-surface border-2 rounded-2xl px-5 sm:px-8 py-4 h-[4.75rem] overflow-y-auto cursor-text transition-colors"
             style={{ borderColor: 'rgba(188,108,80,0.4)' }}
             onClick={() => isMobile && hiddenRef.current?.focus()}>
             {userInput ? (
