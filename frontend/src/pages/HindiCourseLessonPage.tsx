@@ -203,6 +203,11 @@ export default function HindiCourseLessonPage() {
   };
 
   const nextChar = target[userInput.length] || '';
+  // Current-word range for the exam-style yellow highlight.
+  const caretPos = userInput.length;
+  const wordStart = target.lastIndexOf(' ', caretPos - 1) + 1;
+  const wordEndRaw = target.indexOf(' ', caretPos);
+  const wordEnd = wordEndRaw === -1 ? target.length : wordEndRaw;
   const accuracy = userInput.length === 0 ? 100 : Math.round(((userInput.length - mistakes.length) / userInput.length) * 100);
   const progressPct = target.length > 0 ? (userInput.length / target.length) * 100 : 0;
   const formattedTime = `${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, '0')}`;
@@ -215,10 +220,11 @@ export default function HindiCourseLessonPage() {
     const correct = i < userInput.length && !mistakes.includes(i);
     const error = i < userInput.length && mistakes.includes(i);
     const caret = i === userInput.length;
+    const inWord = i >= wordStart && i < wordEnd && i >= userInput.length;
     return (
       <span key={i} className="relative">
         {caret && <span className="typing-caret" aria-hidden />}
-        <span className={correct ? 'typing-correct' : error ? 'typing-error' : caret ? 'typing-current' : 'typing-upcoming'}>
+        <span className={`${correct ? 'typing-correct' : error ? 'typing-error' : caret ? 'typing-current' : 'typing-upcoming'} ${caret ? 'bg-amber-300/70 rounded' : inWord ? 'bg-amber-300/45 rounded' : ''}`}>
           {ch}
         </span>
       </span>
@@ -324,9 +330,26 @@ export default function HindiCourseLessonPage() {
             {displayHindi && (
               <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2">Kruti Dev Keystrokes (type this)</p>
             )}
-            <div className="text-xl sm:text-2xl leading-[3.5rem] break-words overflow-y-auto" style={{ fontFamily: displayHindi ? "'Consolas', monospace" : DEVA_FONT, maxHeight: isMobile ? '160px' : '200px' }}>
+            <div className="text-xl sm:text-2xl leading-[3.5rem] break-words overflow-y-auto" style={{ fontFamily: displayHindi ? "'Consolas', monospace" : DEVA_FONT, maxHeight: isMobile ? '132px' : '168px' }}>
               {renderText()}
             </div>
+          </div>
+
+          {/* ── INPUT (type here) ── */}
+          <div className="mt-3 bg-brand-surface border-2 rounded-2xl px-5 sm:px-8 py-4 min-h-[4.25rem] cursor-text"
+            style={{ borderColor: 'rgba(188,108,80,0.4)' }}
+            onClick={() => isMobile && hiddenRef.current?.focus()}>
+            {userInput ? (
+              <div className="text-xl sm:text-2xl leading-relaxed break-words whitespace-pre-wrap"
+                style={{ fontFamily: displayHindi ? "'Consolas', monospace" : DEVA_FONT }}>
+                {userInput.split('').map((c, i) => (
+                  <span key={i} className={mistakes.includes(i) ? 'text-rose-500' : 'text-brand-text'}>{c}</span>
+                ))}
+                <span className="inline-block w-0.5 h-6 align-middle animate-pulse ml-px" style={{ background: 'var(--brand-cta)' }} />
+              </div>
+            ) : (
+              <p className="text-brand-muted text-base">{isMobile ? 'Tap here & type to begin…' : 'Start typing here to begin…'}</p>
+            )}
           </div>
 
           {startTime && !isFinished && (
