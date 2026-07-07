@@ -162,6 +162,11 @@ const LearningInterfacePage = () => {
 
   const nextChar = targetContent[userInput.length] || '';
   const activeFinger = useMemo(() => getFingerForKey(nextChar), [nextChar]);
+  // Current-word range for the exam-style yellow highlight.
+  const caretPos = userInput.length;
+  const wordStart = targetContent.lastIndexOf(' ', caretPos - 1) + 1;
+  const wordEndRaw = targetContent.indexOf(' ', caretPos);
+  const wordEnd = wordEndRaw === -1 ? targetContent.length : wordEndRaw;
   const accuracy = useMemo(() => {
     if (userInput.length === 0) return 100;
     return Math.round(((userInput.length - mistakes.length) / userInput.length) * 100);
@@ -282,31 +287,27 @@ const LearningInterfacePage = () => {
 
         {/* ── MULTILINE TYPING AREA ── */}
         <div className="w-full max-w-2xl">
-          <div
-            className="bg-white border border-gray-200 rounded-2xl px-4 sm:px-8 py-5 relative overflow-hidden shadow-lg cursor-text"
-            onClick={() => isMobile && hiddenInputRef.current?.focus()}
-          >
+          <div className="bg-white border border-gray-200 rounded-2xl px-4 sm:px-8 py-4 relative overflow-hidden shadow-lg">
             <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent)' }} />
 
             <div
-              className="text-lg sm:text-2xl font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
-              style={{ maxHeight: isMobile ? '130px' : '160px' }}
+              className="text-lg sm:text-2xl font-mono tracking-wide leading-relaxed break-words overflow-y-auto select-none"
+              style={{ maxHeight: isMobile ? '104px' : '132px' }}
             >
               {targetContent.split('').map((char, index) => {
                 let status = 'upcoming';
                 if (index < userInput.length) status = mistakes.includes(index) ? 'error' : 'correct';
                 else if (index === userInput.length) status = 'current';
+                const inWord = index >= wordStart && index < wordEnd && index >= userInput.length;
                 return (
                   <span
                     key={index}
                     id={status === 'current' ? 'current-char' : undefined}
-                    className={`
-                      relative transition-colors duration-75 inline
+                    className={`relative transition-colors duration-75 inline
                       ${status === 'correct' ? 'text-emerald-600' : ''}
-                      ${status === 'error' ? 'text-red-500 bg-red-50 rounded' : ''}
-                      ${status === 'upcoming' ? 'text-slate-400' : ''}
-                      ${status === 'current' ? 'text-indigo-600 border-b-2 border-indigo-500 animate-pulse' : ''}
-                    `}
+                      ${status === 'error' ? 'text-white bg-red-500 rounded' : ''}
+                      ${status === 'upcoming' ? (inWord ? 'text-slate-700 bg-amber-200/70 rounded' : 'text-slate-400') : ''}
+                      ${status === 'current' ? 'text-indigo-800 bg-amber-300/80 rounded' : ''}`}
                   >
                     {char === ' ' ? '\u00A0' : char}
                   </span>
@@ -314,15 +315,24 @@ const LearningInterfacePage = () => {
               })}
             </div>
 
-            {!startTime && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-2xl">
-                <div className="text-center px-4">
-                  <div className="text-3xl mb-2">{isMobile ? '📱' : '⌨️'}</div>
-                  <p className="text-slate-500 font-semibold text-sm">
-                    {isMobile ? 'Tap anywhere & type to begin' : 'Start typing to begin…'}
-                  </p>
-                </div>
-              </div>
+          </div>
+        </div>
+
+        {/* ── INPUT (type here) ── */}
+        <div className="w-full max-w-2xl">
+          <div
+            className="bg-white border-2 border-indigo-300 rounded-2xl px-4 sm:px-6 py-3.5 min-h-[4.25rem] text-lg sm:text-xl font-mono leading-relaxed shadow-sm cursor-text"
+            onClick={() => isMobile && hiddenInputRef.current?.focus()}
+          >
+            {userInput ? (
+              <span className="whitespace-pre-wrap break-words">
+                {userInput.split('').map((c, i) => (
+                  <span key={i} className={mistakes.includes(i) ? 'text-red-500' : 'text-slate-800'}>{c}</span>
+                ))}
+                <span className="inline-block w-0.5 h-5 align-middle bg-indigo-500 animate-pulse ml-px" />
+              </span>
+            ) : (
+              <span className="text-slate-400">{isMobile ? 'Tap here & type to begin…' : 'Start typing here to begin…'}</span>
             )}
           </div>
         </div>
