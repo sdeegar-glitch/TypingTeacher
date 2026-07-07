@@ -324,6 +324,8 @@ const AppContent = () => {
           <Route path="/deo-typing-test" element={<ExamLandingPage slug="deo" />} />
           <Route path="/rsmssb-typing-test" element={<ExamLandingPage slug="rsmssb" />} />
           <Route path="/ldc-typing-test" element={<ExamLandingPage slug="ldc" />} />
+          <Route path="/ssc-steno-typing-test" element={<ExamLandingPage slug="ssc-steno" />} />
+          <Route path="/dsssb-typing-test" element={<ExamLandingPage slug="dsssb" />} />
           <Route path="/all-pages" element={<SiteMapPage />} />
         </Routes>
         </Suspense>

@@ -397,6 +397,82 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { label: 'All Exam Typing', href: '/competitive-exam-typing' },
     ],
   },
+
+  'ssc-steno': {
+    slug: 'ssc-steno',
+    examName: 'SSC Stenographer',
+    h1: 'SSC Stenographer Typing & Transcription Practice',
+    seoTitle: 'SSC Stenographer Typing Test — Skill Test & Practice | FastTypingLab',
+    metaDesc: 'SSC Stenographer skill test guide: shorthand speed for Grade C & D, computer transcription, and free typing practice to build transcription speed and accuracy.',
+    eyebrow: 'SSC Steno Grade C & D',
+    intro: 'The SSC Stenographer skill test is not a plain typing test — it is a stenography (shorthand) dictation followed by transcription on a computer. Even so, your transcription typing speed and accuracy decide whether you finish in the allotted time, so building fast, accurate typing is essential preparation alongside shorthand.',
+    requirements: [
+      { language: 'Shorthand — Grade C', layout: 'Dictation', speed: '100 WPM', duration: 'Transcribe on PC' },
+      { language: 'Shorthand — Grade D', layout: 'Dictation', speed: '80 WPM', duration: 'Transcribe on PC' },
+    ],
+    format: [
+      'A passage is dictated at 80 WPM (Grade D) or 100 WPM (Grade C) shorthand speed.',
+      'You then transcribe your shorthand notes on a computer within a fixed time.',
+      'Transcription is done in English or Hindi depending on your choice.',
+      'Both transcription speed and accuracy determine whether you finish in time.',
+    ],
+    tips: [
+      'Practice fast, accurate transcription typing — it is the bottleneck for most candidates.',
+      'Build 35+ WPM clean typing so transcription never slows you down.',
+      'Practice formal, official-style passages similar to steno dictation content.',
+      'Confirm your transcription language (English/Hindi) and drill that layout.',
+    ],
+    faqs: [
+      { q: 'What is the speed required for SSC Stenographer?', a: 'SSC Steno Grade C requires 100 WPM shorthand and Grade D requires 80 WPM shorthand, followed by transcription on a computer within a set time.' },
+      { q: 'Is SSC Stenographer a typing test?', a: 'Not exactly — it is a shorthand dictation plus computer transcription. But fast, accurate typing is essential to complete the transcription in time.' },
+      { q: 'How can I practice for the SSC Steno transcription?', a: 'Build your typing speed and accuracy with free English and Hindi typing tests on FastTypingLab so transcription is quick and error-free.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Build Transcription Typing Speed',
+    related: [
+      { label: 'Typing Speed Test', href: '/tests' },
+      { label: 'Court & Steno Typing', href: '/court-typing-test' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
+
+  'dsssb': {
+    slug: 'dsssb',
+    examName: 'DSSSB',
+    h1: 'DSSSB Typing Test — Free Online Practice',
+    seoTitle: 'DSSSB Typing Test Online — Free Practice & Speed | FastTypingLab',
+    metaDesc: 'Free DSSSB typing test practice for Delhi LDC, Junior Assistant and Typist posts — 35 WPM English / 30 WPM Hindi, with live WPM and accuracy.',
+    eyebrow: 'DSSSB / Delhi',
+    intro: 'The DSSSB (Delhi Subordinate Services Selection Board) typing test is a qualifying skill test for LDC, Junior Assistant, Typist and similar posts. It typically requires 35 WPM in English or 30 WPM in Hindi on a computer. Requirements can vary by post, so always confirm your notification and practice the exact format daily.',
+    requirements: [
+      { language: 'English', layout: 'QWERTY', speed: '35 WPM', duration: 'Skill test' },
+      { language: 'Hindi', layout: 'Mangal / Kruti Dev', speed: '30 WPM', duration: 'Skill test' },
+    ],
+    format: [
+      'A passage is typed on the computer at the required speed.',
+      'English posts usually require 35 WPM; Hindi posts around 30 WPM.',
+      'The test is qualifying — you must meet the speed to be selected.',
+      'Confirm the language and Hindi layout from your specific notification.',
+    ],
+    tips: [
+      'Pick your language and practice only that to build muscle memory.',
+      'Aim 5–10 WPM above the requirement for a safe margin.',
+      'Accuracy first — a clean pass beats a fast, error-filled attempt.',
+      'Practice the full timed format daily to build stamina.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for DSSSB?', a: 'DSSSB typing tests typically require 35 WPM in English or 30 WPM in Hindi, though it can vary by post — always check your notification.' },
+      { q: 'Is the DSSSB typing test qualifying?', a: 'Yes, it is a qualifying skill test — you must meet the required speed to be selected, but it is not added to your merit score.' },
+      { q: 'How can I practice the DSSSB typing test free?', a: 'FastTypingLab offers free English and Hindi (Mangal and Kruti Dev) typing tests with live WPM and accuracy.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Start Typing Practice Test',
+    related: [
+      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
 };
 
 export const EXAM_LANDING_ROUTES = Object.values(EXAM_LANDINGS).map(e => ({
