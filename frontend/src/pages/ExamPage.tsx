@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Clock, Zap, Target, Award, RotateCcw, CheckCircle, XCircle, Trophy, Shield } from 'lucide-react';
 import { saveSession } from '../lib/api';
+import ExamTypingInterface, { type ExamResult } from '../components/ExamTypingInterface';
 
 // ─── Paragraph Library ──────────────────────────────────────────────────────
 
@@ -85,8 +86,6 @@ const EXAM_CONFIG: Record<string, {
   },
 };
 
-// ─── Component ──────────────────────────────────────────────────────────────
-
 type Screen = 'info' | 'countdown' | 'active' | 'finished';
 
 export default function ExamPage() {
@@ -98,45 +97,25 @@ export default function ExamPage() {
   const [screen, setScreen] = useState<Screen>('info');
   const [passageIdx, setPassageIdx] = useState(() => Math.floor(Math.random() * paragraphs.length));
   const [countdown, setCountdown] = useState(3);
-  const [userInput, setUserInput] = useState('');
-  const [mistakes, setMistakes] = useState<Set<number>>(new Set());
-  const [startTime, setStartTime] = useState<number | null>(null);
-  const [timeLeft, setTimeLeft] = useState(exam.duration);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState(100);
-  const timerRef = useRef<ReturnType<typeof setInterval>>();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const finishedRef = useRef(false);
-  const startTimeRef = useRef<number | null>(null); // ref for stale-closure-safe access
+  const [runId, setRunId] = useState(0);
+  const [result, setResult] = useState<ExamResult | null>(null);
 
   const passage = paragraphs[passageIdx];
   const isHindi = exam.language === 'Hindi';
 
-  useEffect(() => {
-    document.title = `${exam.title} Mock Test | FastTypingLab`;
-  }, [exam.title]);
+  useEffect(() => { document.title = `${exam.title} Mock Test | FastTypingLab`; }, [exam.title]);
 
-  // ── Finish ──────────────────────────────────────────────────────────────
-  const finish = useCallback((finalInput: string, finalMistakes: Set<number>, elapsed: number) => {
-    if (finishedRef.current) return;
-    finishedRef.current = true;
-    clearInterval(timerRef.current);
-    const mins = elapsed / 60;
-    const w = mins > 0 ? Math.round((finalInput.length / 5) / mins) : 0;
-    const acc = finalInput.length > 0
-      ? Math.round(((finalInput.length - finalMistakes.size) / finalInput.length) * 100) : 100;
-    setWpm(w);
-    setAccuracy(acc);
+  const handleFinish = (r: ExamResult) => {
+    setResult(r);
     setScreen('finished');
-    saveSession({ duration: elapsed, gross_wpm: w, net_wpm: w, errors: finalMistakes.size, accuracy: acc });
+    saveSession({ duration: r.elapsedSec || exam.duration, gross_wpm: r.grossWpm, net_wpm: r.netWpm, errors: r.errors, accuracy: r.accuracy });
     try {
       const hist = JSON.parse(localStorage.getItem('typingHistory') || '[]');
-      hist.push({ netWpm: w, accuracy: acc, lang: exam.language.toLowerCase(), date: new Date().toISOString() });
+      hist.push({ netWpm: r.netWpm, accuracy: r.accuracy, lang: exam.language.toLowerCase(), date: new Date().toISOString() });
       localStorage.setItem('typingHistory', JSON.stringify(hist));
     } catch {}
-  }, [exam.language]);
+  };
 
-  // ── Countdown ───────────────────────────────────────────────────────────
   const startCountdown = () => {
     setScreen('countdown');
     setCountdown(3);
@@ -144,247 +123,33 @@ export default function ExamPage() {
     const t = setInterval(() => {
       c--;
       setCountdown(c);
-      if (c <= 0) {
-        clearInterval(t);
-        beginExam();
-      }
+      if (c <= 0) { clearInterval(t); setResult(null); setRunId(r => r + 1); setScreen('active'); }
     }, 1000);
   };
 
-  const beginExam = () => {
-    finishedRef.current = false;
-    setUserInput('');
-    setMistakes(new Set());
-    setStartTime(null);
-    setTimeLeft(exam.duration);
-    setWpm(0);
-    setAccuracy(100);
-    setScreen('active');
-    setTimeout(() => containerRef.current?.focus(), 100);
-  };
+  const restart = () => { setPassageIdx(Math.floor(Math.random() * paragraphs.length)); setScreen('info'); };
+  const tryAgain = () => { setPassageIdx(Math.floor(Math.random() * paragraphs.length)); startCountdown(); };
 
-  // ── Timer ────────────────────────────────────────────────────────────────
-  useEffect(() => {
-    if (screen !== 'active' || !startTime) return;
-    timerRef.current = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timerRef.current);
-          setUserInput(inp => {
-            setMistakes(m => {
-              const elapsed = exam.duration;
-              finish(inp, m, elapsed);
-              return m;
-            });
-            return inp;
-          });
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timerRef.current);
-  }, [startTime, screen, exam.duration, finish]);
+  const wpm = result?.netWpm ?? 0;
+  const accuracy = result?.accuracy ?? 0;
+  const passed = !!result && wpm >= exam.wpmTarget && accuracy >= exam.accuracyTarget;
 
-  // ── Navigation helpers (defined before keydown effect so Tab can reference them) ──
-  const restart = useCallback(() => {
-    clearInterval(timerRef.current);
-    finishedRef.current = false;
-    startTimeRef.current = null;
-    setPassageIdx(Math.floor(Math.random() * paragraphs.length));
-    setScreen('info');
-  }, [paragraphs.length]);
-
-  const tryAgain = useCallback(() => {
-    clearInterval(timerRef.current);
-    finishedRef.current = false;
-    startTimeRef.current = null;
-    setPassageIdx(Math.floor(Math.random() * paragraphs.length));
-    startCountdown();
-  }, [paragraphs.length]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // ── Keydown handler ──────────────────────────────────────────────────────
-  useEffect(() => {
-    if (screen !== 'active') return;
-    const onKey = (e: KeyboardEvent) => {
-      // Tab = restart
-      if (e.key === 'Tab') { e.preventDefault(); tryAgain(); return; }
-      if (['Shift','Control','Alt','Meta','CapsLock','Escape','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','F1','F2','F3','F4','F5','F11','F12'].includes(e.key)) return;
-      if (e.ctrlKey || e.metaKey) return;
-      if (e.key === ' ') e.preventDefault();
-
-      if (e.key === 'Backspace') {
-        setUserInput(prev => {
-          if (prev.length === 0) return prev;
-          const newLen = prev.length - 1;
-          setMistakes(m => { const s = new Set(m); s.delete(newLen); return s; });
-          return prev.slice(0, newLen);
-        });
-        return;
-      }
-
-      if (e.key.length !== 1) return;
-
-      setUserInput(prev => {
-        if (finishedRef.current || prev.length >= passage.length) return prev;
-
-        // Start timer on first keypress — use ref to avoid stale closure
-        if (!startTimeRef.current) {
-          const now = Date.now();
-          startTimeRef.current = now;
-          setStartTime(now);
-        }
-
-        const expected = passage[prev.length];
-        const isWrong = e.key !== expected;
-        let newMistakeCount = 0;
-        if (isWrong) {
-          setMistakes(m => { const s = new Set(m); s.add(prev.length); newMistakeCount = s.size; return s; });
-        }
-
-        const next = prev + e.key;
-
-        // Live WPM & accuracy using ref (stale-closure-safe)
-        const elapsedMins = startTimeRef.current ? (Date.now() - startTimeRef.current) / 60000 : 0.01;
-        const liveWpm = Math.max(0, Math.round((next.length / 5) / elapsedMins));
-        const totalErrs = newMistakeCount || (isWrong ? 1 : 0);
-        const liveAcc = Math.max(0, Math.min(100, Math.round(((next.length - totalErrs) / next.length) * 100)));
-        setWpm(liveWpm);
-        setAccuracy(liveAcc);
-
-        // Finish when passage complete
-        if (next.length >= passage.length) {
-          const elapsedSec = startTimeRef.current ? (Date.now() - startTimeRef.current) / 1000 : exam.duration;
-          setMistakes(m => { finish(next, m, elapsedSec); return m; });
-        }
-
-        return next;
-      });
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [screen, passage, exam.duration, finish, tryAgain]);
-
-  const formattedTime = `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}`;
-  const progress = passage.length > 0 ? (userInput.length / passage.length) * 100 : 0;
-  const passed = wpm >= exam.wpmTarget && accuracy >= exam.accuracyTarget;
-
-  // ─── RENDER: passage chars ──────────────────────────────────────────────
-  const renderPassage = () => {
-    return passage.split('').map((ch, i) => {
-      const typed = i < userInput.length;
-      const correct = typed && !mistakes.has(i);
-      const wrong = typed && mistakes.has(i);
-      const isCaret = i === userInput.length;
-      return (
-        <span key={i} className="relative">
-          {isCaret && (
-            <span className="absolute -left-0.5 top-0 bottom-0 w-0.5 bg-brand-primary animate-pulse rounded-full" />
-          )}
-          <span className={
-            correct ? 'text-emerald-400' :
-            wrong ? 'text-rose-400 bg-rose-500/20 rounded-sm' :
-            isCaret ? 'text-white' :
-            'text-white/25'
-          }>
-            {ch === ' ' ? ' ' : ch}
-          </span>
-        </span>
-      );
-    });
-  };
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SCREEN: INFO
-  // ═══════════════════════════════════════════════════════════════════════════
-  if (screen === 'info') {
+  // ═══ ACTIVE (exam-style typing interface) ═══
+  if (screen === 'active') {
     return (
-      <div className="min-h-screen bg-[#0d0d14] text-white flex flex-col">
-        {/* Back nav */}
-        <div className="px-6 py-4">
-          <Link to="/competitive-exam-typing" className="flex items-center gap-1.5 text-white/40 hover:text-white/80 text-sm transition-colors w-fit">
-            <ChevronLeft className="w-4 h-4" /> All Exams
-          </Link>
-        </div>
-
-        <div className="flex-1 flex items-center justify-center px-4 py-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-2xl">
-
-            {/* Exam badge */}
-            <div className="flex items-center gap-3 mb-6">
-              <span className={`text-4xl w-14 h-14 rounded-2xl ${exam.bg} border ${exam.border} flex items-center justify-center`}>{exam.icon}</span>
-              <div>
-                <div className={`text-xs font-bold uppercase tracking-widest ${exam.color} mb-1`}>{exam.badge} Typing Test</div>
-                <h1 className="text-3xl font-black text-white">{exam.title}</h1>
-                <p className="text-white/40 text-sm mt-0.5">{exam.fullName}</p>
-              </div>
-            </div>
-
-            {/* Stats row */}
-            <div className="grid grid-cols-3 gap-3 mb-8">
-              {[
-                { label: 'Duration', value: `${exam.duration / 60} min`, icon: Clock, color: 'text-white' },
-                { label: 'Target WPM', value: `${exam.wpmTarget}+`, icon: Zap, color: exam.color },
-                { label: 'Min Accuracy', value: `${exam.accuracyTarget}%`, icon: Target, color: 'text-amber-400' },
-              ].map(s => (
-                <div key={s.label} className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center backdrop-blur">
-                  <s.icon className={`w-4 h-4 mx-auto mb-2 ${s.color}`} />
-                  <div className={`text-2xl font-black font-mono ${s.color}`}>{s.value}</div>
-                  <div className="text-xs text-white/30 mt-1 uppercase tracking-wider">{s.label}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Rules */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
-              <div className="flex items-center gap-2 text-white/60 text-xs font-bold uppercase tracking-widest mb-3">
-                <Shield className="w-3.5 h-3.5" /> Exam Rules
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                {exam.rules.map((r, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm text-white/50">
-                    <span className={`w-1.5 h-1.5 rounded-full ${exam.color.replace('text-', 'bg-')} shrink-0`} />
-                    {r}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Passage preview */}
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-8">
-              <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-3">Passage Preview</div>
-              <p className={`text-white/40 text-sm leading-relaxed line-clamp-2 ${isHindi ? '' : 'font-mono'}`}>
-                {passage}
-              </p>
-              <div className="mt-2 text-[11px] text-white/20">{passage.length} characters · {Math.round(passage.split(' ').length)} words</div>
-            </div>
-
-            {/* CTA */}
-            <motion.button
-              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-              onClick={startCountdown}
-              className={`w-full py-4 rounded-2xl font-black text-lg text-white transition-all shadow-2xl flex items-center justify-center gap-3 ${
-                exam.language === 'Hindi'
-                  ? 'bg-gradient-to-r from-orange-600 to-amber-600 shadow-orange-500/20'
-                  : 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-500/20'
-              }`}>
-              <Zap className="w-5 h-5" />
-              Start Mock Test
-            </motion.button>
-
-            <p className="text-center text-white/20 text-xs mt-3">
-              A new passage is selected randomly each attempt
-            </p>
-          </motion.div>
-        </div>
-      </div>
+      <ExamTypingInterface
+        key={runId}
+        passage={passage}
+        durationSec={exam.duration}
+        isHindi={isHindi}
+        examTitle={exam.title}
+        onFinish={handleFinish}
+        onExit={restart}
+      />
     );
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SCREEN: COUNTDOWN
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ═══ COUNTDOWN ═══
   if (screen === 'countdown') {
     return (
       <div className="h-[100dvh] bg-[#0d0d14] flex items-center justify-center">
@@ -393,11 +158,9 @@ export default function ExamPage() {
             <motion.div key={countdown}
               initial={{ scale: 1.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.35 }}>
-              {countdown > 0 ? (
-                <div className="text-[12rem] font-black text-white leading-none">{countdown}</div>
-              ) : (
-                <div className="text-7xl font-black text-emerald-400">GO!</div>
-              )}
+              {countdown > 0
+                ? <div className="text-[12rem] font-black text-white leading-none">{countdown}</div>
+                : <div className="text-7xl font-black text-emerald-400">GO!</div>}
             </motion.div>
           </AnimatePresence>
           <p className="text-white/30 text-lg mt-4">Get ready…</p>
@@ -406,228 +169,129 @@ export default function ExamPage() {
     );
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SCREEN: ACTIVE EXAM
-  // ═══════════════════════════════════════════════════════════════════════════
-  if (screen === 'active') {
-    const urgentTime = timeLeft <= 30;
-    const warningTime = timeLeft <= 60 && timeLeft > 30;
-
+  // ═══ FINISHED ═══
+  if (screen === 'finished') {
     return (
-      <div
-        ref={containerRef}
-        tabIndex={0}
-        className="h-[100dvh] bg-[#0d0d14] flex flex-col outline-none"
-        style={{ fontFamily: isHindi ? "'Noto Sans Devanagari', sans-serif" : 'inherit' }}
-      >
-        {/* ── Top bar ── */}
-        <div className="shrink-0 flex items-center justify-between px-6 py-3 border-b border-white/5">
-          {/* Left: exam name */}
-          <div className="flex items-center gap-2">
-            <span className={`text-xs font-black uppercase tracking-widest px-2.5 py-1 rounded-md ${exam.bg} ${exam.color} border ${exam.border}`}>
-              MOCK TEST
-            </span>
-            <span className="text-white/30 text-sm hidden sm:inline">{exam.title}</span>
-          </div>
-
-          {/* Center: live stats */}
-          <div className="flex items-center gap-6">
-            <div className="text-center">
-              <div className="text-[9px] text-white/20 uppercase tracking-widest">WPM</div>
-              <motion.div key={wpm} initial={{ scale: 1.3 }} animate={{ scale: 1 }}
-                className={`text-xl font-black font-mono tabular-nums ${exam.color}`}>
-                {startTime ? wpm : '—'}
-              </motion.div>
-            </div>
-            <div className="text-center">
-              <div className="text-[9px] text-white/20 uppercase tracking-widest">Accuracy</div>
-              <div className={`text-xl font-black font-mono tabular-nums ${accuracy >= exam.accuracyTarget ? 'text-emerald-400' : 'text-rose-400'}`}>
-                {startTime ? `${accuracy}%` : '—'}
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="text-[9px] text-white/20 uppercase tracking-widest">Errors</div>
-              <div className={`text-xl font-black font-mono tabular-nums ${mistakes.size > 5 ? 'text-rose-400' : 'text-white/50'}`}>
-                {mistakes.size}
-              </div>
-            </div>
-          </div>
-
-          {/* Right: timer */}
-          <div className={`text-center ${urgentTime ? 'animate-pulse' : ''}`}>
-            <div className="text-[9px] text-white/20 uppercase tracking-widest">Time</div>
-            <div className={`text-2xl font-black font-mono tabular-nums ${urgentTime ? 'text-rose-500' : warningTime ? 'text-amber-400' : 'text-white'}`}>
-              {formattedTime}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Progress bar ── */}
-        <div className="shrink-0 h-0.5 bg-white/5">
-          <motion.div
-            className={`h-full ${urgentTime ? 'bg-rose-500' : exam.color.replace('text-', 'bg-')}`}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.1 }}
-          />
-        </div>
-
-        {/* ── Typing area ── */}
-        <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-12">
-
-          {!startTime && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              className="text-white/20 text-sm mb-6 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-white/20 animate-pulse" />
-              Start typing to begin the timer
+      <div className="min-h-screen bg-[#0d0d14] text-white flex flex-col items-center justify-center px-4 py-12">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-xl">
+          <div className="text-center mb-8">
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 14, delay: 0.1 }}
+              className={`w-24 h-24 rounded-3xl mx-auto mb-5 flex items-center justify-center text-5xl ${passed ? 'bg-emerald-500/15 border border-emerald-500/30' : 'bg-rose-500/15 border border-rose-500/30'}`}>
+              {passed ? '🏆' : '💪'}
             </motion.div>
-          )}
-
-          {/* Passage */}
-          <div className="w-full max-w-3xl">
-            <div className={`text-xl sm:text-2xl leading-[3rem] tracking-wide select-none ${isHindi ? 'text-2xl leading-[3.5rem]' : 'font-mono'}`}>
-              {renderPassage()}
-            </div>
-
-            {/* Bottom bar: progress + shortcut hint */}
-            <div className="flex items-center justify-between mt-8 text-xs text-white/15">
-              <span>{userInput.length} / {passage.length} characters</span>
-              <span className="flex items-center gap-1.5">
-                <kbd className="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white/30">Tab</kbd>
-                to restart
-              </span>
-            </div>
+            <h2 className={`text-4xl font-black mb-2 ${passed ? 'text-emerald-400' : 'text-white'}`}>{passed ? 'Test Passed!' : 'Keep Pushing!'}</h2>
+            <p className="text-white/40">
+              {passed ? `You met the ${exam.title} requirements. You're exam-ready!` : `Need ${exam.wpmTarget} WPM & ${exam.accuracyTarget}% accuracy. You're getting closer!`}
+            </p>
           </div>
-        </div>
-      </div>
-    );
-  }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SCREEN: FINISHED
-  // ═══════════════════════════════════════════════════════════════════════════
-  return (
-    <div className="min-h-screen bg-[#0d0d14] text-white flex flex-col items-center justify-center px-4 py-12">
-      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-xl">
-
-        {/* Pass / Fail hero */}
-        <div className="text-center mb-8">
-          <motion.div
-            initial={{ scale: 0 }} animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 14, delay: 0.1 }}
-            className={`w-24 h-24 rounded-3xl mx-auto mb-5 flex items-center justify-center text-5xl ${
-              passed ? 'bg-emerald-500/15 border border-emerald-500/30' : 'bg-rose-500/15 border border-rose-500/30'
-            }`}>
-            {passed ? '🏆' : '💪'}
-          </motion.div>
-
-          <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}
-            className={`text-4xl font-black mb-2 ${passed ? 'text-emerald-400' : 'text-white'}`}>
-            {passed ? 'Test Passed!' : 'Keep Pushing!'}
-          </motion.h2>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
-            className="text-white/40">
-            {passed
-              ? `You met the ${exam.title} requirements. You're exam-ready!`
-              : `Need ${exam.wpmTarget} WPM & ${exam.accuracyTarget}% accuracy. You're getting closer!`}
-          </motion.p>
-        </div>
-
-        {/* Stats grid */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          className="grid grid-cols-2 gap-3 mb-6">
-          {[
-            {
-              label: 'Net WPM', value: wpm, suffix: '', target: exam.wpmTarget, targetLabel: `Need ${exam.wpmTarget}+`,
-              pass: wpm >= exam.wpmTarget, big: true,
-            },
-            {
-              label: 'Accuracy', value: accuracy, suffix: '%', target: exam.accuracyTarget, targetLabel: `Need ${exam.accuracyTarget}%+`,
-              pass: accuracy >= exam.accuracyTarget, big: true,
-            },
-            {
-              label: 'Errors', value: mistakes.size, suffix: '', target: 0, targetLabel: '',
-              pass: mistakes.size <= 5, big: false,
-            },
-            {
-              label: 'Characters', value: userInput.length, suffix: '', target: 0, targetLabel: `of ${passage.length}`,
-              pass: true, big: false,
-            },
-          ].map((s, i) => (
-            <motion.div key={s.label}
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 + i * 0.07 }}
-              className={`rounded-2xl p-5 border text-center ${
-                s.pass ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-rose-500/5 border-rose-500/20'
-              }`}>
-              <div className={`font-black font-mono ${s.big ? 'text-4xl' : 'text-2xl'} ${
-                s.pass ? 'text-emerald-400' : 'text-rose-400'
-              }`}>{s.value}{s.suffix}</div>
-              <div className="text-xs text-white/30 uppercase tracking-wider mt-1">{s.label}</div>
-              {s.target > 0 && (
-                <div className={`text-xs mt-1.5 font-semibold flex items-center justify-center gap-1 ${s.pass ? 'text-emerald-400' : 'text-rose-400'}`}>
-                  {s.pass ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
-                  {s.pass ? 'Passed' : s.targetLabel}
-                </div>
-              )}
-              {s.targetLabel && s.target === 0 && (
-                <div className="text-xs text-white/20 mt-1">{s.targetLabel}</div>
-              )}
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Comparison bar */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-          className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-white/30 uppercase tracking-wider">Your WPM vs Target</span>
-            <span className={`text-xs font-bold ${passed ? 'text-emerald-400' : 'text-rose-400'}`}>
-              {wpm} / {exam.wpmTarget} WPM
-            </span>
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            {[
+              { label: 'Net WPM', value: wpm, suffix: '', pass: wpm >= exam.wpmTarget, big: true, targetLabel: `Need ${exam.wpmTarget}+` },
+              { label: 'Accuracy', value: accuracy, suffix: '%', pass: accuracy >= exam.accuracyTarget, big: true, targetLabel: `Need ${exam.accuracyTarget}%+` },
+              { label: 'Gross WPM', value: result?.grossWpm ?? 0, suffix: '', pass: true, big: false, targetLabel: '' },
+              { label: 'Errors', value: result?.errors ?? 0, suffix: '', pass: (result?.errors ?? 0) <= 5, big: false, targetLabel: '' },
+            ].map(s => (
+              <div key={s.label} className={`rounded-2xl p-5 border text-center ${s.pass ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-rose-500/5 border-rose-500/20'}`}>
+                <div className={`font-black font-mono ${s.big ? 'text-4xl' : 'text-2xl'} ${s.pass ? 'text-emerald-400' : 'text-rose-400'}`}>{s.value}{s.suffix}</div>
+                <div className="text-xs text-white/30 uppercase tracking-wider mt-1">{s.label}</div>
+                {s.targetLabel && (
+                  <div className={`text-xs mt-1.5 font-semibold flex items-center justify-center gap-1 ${s.pass ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {s.pass ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}{s.pass ? 'Passed' : s.targetLabel}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${Math.min(100, (wpm / exam.wpmTarget) * 100)}%` }}
-              transition={{ duration: 0.8, delay: 0.65, ease: 'easeOut' }}
-              className={`h-full rounded-full ${passed ? 'bg-emerald-500' : 'bg-rose-500'}`}
-            />
+
+          {/* Backspace / delete summary */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 flex items-center justify-around text-center">
+            <div><div className="text-lg font-black font-mono text-white/80">{result?.chars ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Chars</div></div>
+            <div><div className="text-lg font-black font-mono text-white/80">{result?.backspaces ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Backspace</div></div>
+            <div><div className="text-lg font-black font-mono text-white/80">{result?.deletes ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Delete</div></div>
           </div>
-        </motion.div>
 
-        {/* Actions */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
-          className="flex gap-3">
-          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-            onClick={tryAgain}
-            className={`flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold transition-all ${
-              exam.language === 'Hindi'
-                ? 'bg-gradient-to-r from-orange-600 to-amber-600'
-                : 'bg-gradient-to-r from-blue-600 to-indigo-600'
-            } text-white shadow-lg`}>
-            <RotateCcw className="w-4 h-4" /> Try Again
-          </motion.button>
-
-          {passed && (
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+          <div className="flex gap-3">
+            <button onClick={tryAgain}
+              className={`flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-white shadow-lg ${exam.language === 'Hindi' ? 'bg-gradient-to-r from-orange-600 to-amber-600' : 'bg-gradient-to-r from-blue-600 to-indigo-600'}`}>
+              <RotateCcw className="w-4 h-4" /> Try Again
+            </button>
+            {passed && (
               <Link to={`/certificate?wpm=${wpm}&acc=${accuracy}&title=${encodeURIComponent(exam.title + ' Test')}`}
                 className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500/20 transition-all">
                 <Trophy className="w-4 h-4" /> Certificate
               </Link>
-            </motion.div>
-          )}
-
-          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-            onClick={restart}
-            className="px-5 py-3.5 rounded-xl font-bold bg-white/5 border border-white/10 text-white/50 hover:text-white/80 hover:bg-white/10 transition-all">
-            <Award className="w-4 h-4" />
-          </motion.button>
+            )}
+            <button onClick={restart} className="px-5 py-3.5 rounded-xl font-bold bg-white/5 border border-white/10 text-white/50 hover:text-white/80 hover:bg-white/10 transition-all">
+              <Award className="w-4 h-4" />
+            </button>
+          </div>
+          <p className="text-center text-white/15 text-xs mt-4">Each attempt uses a different paragraph from our exam library</p>
         </motion.div>
+      </div>
+    );
+  }
 
-        <p className="text-center text-white/15 text-xs mt-4">
-          Each attempt uses a different paragraph from our exam library
-        </p>
-      </motion.div>
+  // ═══ INFO (default) ═══
+  return (
+    <div className="min-h-screen bg-[#0d0d14] text-white flex flex-col">
+      <div className="px-6 py-4">
+        <Link to="/competitive-exam-typing" className="flex items-center gap-1.5 text-white/40 hover:text-white/80 text-sm transition-colors w-fit">
+          <ChevronLeft className="w-4 h-4" /> All Exams
+        </Link>
+      </div>
+
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-2xl">
+          <div className="flex items-center gap-3 mb-6">
+            <span className={`text-4xl w-14 h-14 rounded-2xl ${exam.bg} border ${exam.border} flex items-center justify-center`}>{exam.icon}</span>
+            <div>
+              <div className={`text-xs font-bold uppercase tracking-widest ${exam.color} mb-1`}>{exam.badge} Typing Test</div>
+              <h1 className="text-3xl font-black text-white">{exam.title}</h1>
+              <p className="text-white/40 text-sm mt-0.5">{exam.fullName}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 mb-8">
+            {[
+              { label: 'Duration', value: `${exam.duration / 60} min`, icon: Clock, color: 'text-white' },
+              { label: 'Target WPM', value: `${exam.wpmTarget}+`, icon: Zap, color: exam.color },
+              { label: 'Min Accuracy', value: `${exam.accuracyTarget}%`, icon: Target, color: 'text-amber-400' },
+            ].map(s => (
+              <div key={s.label} className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center backdrop-blur">
+                <s.icon className={`w-4 h-4 mx-auto mb-2 ${s.color}`} />
+                <div className={`text-2xl font-black font-mono ${s.color}`}>{s.value}</div>
+                <div className="text-xs text-white/30 mt-1 uppercase tracking-wider">{s.label}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
+            <div className="flex items-center gap-2 text-white/60 text-xs font-bold uppercase tracking-widest mb-3">
+              <Shield className="w-3.5 h-3.5" /> Exam Rules
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {exam.rules.map((r, i) => (
+                <div key={i} className="flex items-center gap-2 text-sm text-white/50">
+                  <span className={`w-1.5 h-1.5 rounded-full ${exam.color.replace('text-', 'bg-')} shrink-0`} />{r}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-8">
+            <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-3">Passage Preview</div>
+            <p className={`text-white/40 text-sm leading-relaxed line-clamp-2 ${isHindi ? '' : 'font-mono'}`} style={isHindi ? { fontFamily: "'Noto Sans Devanagari', sans-serif" } : undefined}>{passage}</p>
+            <div className="mt-2 text-[11px] text-white/20">{passage.length} characters · {passage.split(' ').length} words</div>
+          </div>
+
+          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={startCountdown}
+            className={`w-full py-4 rounded-2xl font-black text-lg text-white transition-all shadow-2xl flex items-center justify-center gap-3 ${exam.language === 'Hindi' ? 'bg-gradient-to-r from-orange-600 to-amber-600 shadow-orange-500/20' : 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-500/20'}`}>
+            <Zap className="w-5 h-5" /> Start Mock Test
+          </motion.button>
+          <p className="text-center text-white/20 text-xs mt-3">A new passage is selected randomly each attempt</p>
+        </motion.div>
+      </div>
     </div>
   );
 }
