@@ -7,6 +7,19 @@ import PageHeader from '../components/PageHeader';
 
 const GAMES = [
   {
+    id: 'ninja-slash',
+    title: 'Ninja Slash',
+    emoji: '🥷',
+    desc: 'Slice flying words by typing them fast. Combos, crits, slow-mo, bombs and XP — our new flagship typing game.',
+    gradient: 'from-cyan-500 to-violet-600',
+    border: 'border-cyan-500/30',
+    bg: 'bg-cyan-500/10',
+    tag: 'New',
+    tagColor: 'bg-cyan-500/20 text-cyan-300',
+    href: '/games/ninja-slash',
+    bestKey: 'ninjaslash_best',
+  },
+  {
     id: 'word-rain',
     title: 'Word Rain',
     emoji: '🌧️',

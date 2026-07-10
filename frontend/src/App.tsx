@@ -211,6 +211,7 @@ const GamesPage = lazy(() => import('./pages/GamesPage'));
 const WordRainPage = lazy(() => import('./pages/WordRainPage'));
 const ZombieTypingPage = lazy(() => import('./pages/ZombieTypingPage'));
 const SpeedRacerPage = lazy(() => import('./pages/SpeedRacerPage'));
+const NinjaSlashPage = lazy(() => import('./pages/games/NinjaSlashPage'));
 const HindiTypingPage = lazy(() => import('./pages/HindiTypingPage'));
 const HindiTypingJunglePage = lazy(() => import('./pages/HindiTypingJunglePage'));
 const HindiLessonCoursePage = lazy(() => import('./pages/HindiLessonCoursePage'));
@@ -299,6 +300,7 @@ const AppContent = () => {
           <Route path="/games/word-rain" element={<WordRainPage />} />
           <Route path="/games/zombie" element={<ZombieTypingPage />} />
           <Route path="/games/speed-racer" element={<SpeedRacerPage />} />
+          <Route path="/games/ninja-slash" element={<NinjaSlashPage />} />
           <Route path="/hindi-typing-test" element={<HindiTypingPage />} />
           <Route path="/hindi-typing-jungle" element={<HindiTypingJunglePage />} />
           <Route path="/hindi-lessons" element={<HindiLessonCoursePage />} />
