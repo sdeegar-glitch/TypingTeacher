@@ -174,6 +174,7 @@ const ROUTES = [
   { path: '/games/zombie', title: 'Zombie Typing — Typing Game | FastTypingLab', description: 'Play Zombie Typing, a free typing game. Type words to defeat zombies and improve your typing speed.' },
   { path: '/games/speed-racer', title: 'Speed Racer — Typing Game | FastTypingLab', description: 'Play Speed Racer, a free typing game. Type fast to win the race and level up your WPM.' },
   { path: '/games/ninja-slash', title: 'Ninja Slash — Typing Game | FastTypingLab', description: 'Slice flying words with lightning-fast typing. Combos, crits, slow-mo, bombs and XP — a modern typing game that makes you faster while you play.' },
+  { path: '/games/space-shooter', title: 'Space Shooter — Typing Game | FastTypingLab', description: 'Blast the alien fleet by typing enemy words to fire your laser. Waves, combos, crits and XP — a modern free typing game.' },
   { path: '/race', title: 'Multiplayer Typing Race | FastTypingLab', description: 'Race friends in a real-time multiplayer typing race. Test your speed against others, live.' },
 
   { path: '/exam/ssc-chsl', title: 'SSC CHSL Typing Test Practice | FastTypingLab', description: 'Free SSC CHSL typing test practice in exact exam conditions — 10 minutes, English, with real WPM and accuracy scoring.' },
