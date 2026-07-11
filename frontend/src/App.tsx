@@ -208,11 +208,13 @@ const MultiplayerPage = lazy(() => import('./pages/MultiplayerPage'));
 const CaseConverterPage = lazy(() => import('./pages/CaseConverterPage'));
 const CodingTypingPage = lazy(() => import('./pages/CodingTypingPage'));
 const GamesPage = lazy(() => import('./pages/GamesPage'));
-const WordRainPage = lazy(() => import('./pages/WordRainPage'));
 const SpeedRacerPage = lazy(() => import('./pages/SpeedRacerPage'));
 const NinjaSlashPage = lazy(() => import('./pages/games/NinjaSlashPage'));
 const SpaceShooterPage = lazy(() => import('./pages/games/SpaceShooterPage'));
 const ZombieArenaPage = lazy(() => import('./pages/games/ZombieArenaPage'));
+const WordRainGame = lazy(() => import('./pages/games/WordRainGame'));
+const CastleDefensePage = lazy(() => import('./pages/games/CastleDefensePage'));
+const CyberHackerPage = lazy(() => import('./pages/games/CyberHackerPage'));
 const HindiTypingPage = lazy(() => import('./pages/HindiTypingPage'));
 const HindiTypingJunglePage = lazy(() => import('./pages/HindiTypingJunglePage'));
 const HindiLessonCoursePage = lazy(() => import('./pages/HindiLessonCoursePage'));
@@ -298,11 +300,13 @@ const AppContent = () => {
 
           {/* Phase 5: Games + Hindi + Blog */}
           <Route path="/games" element={<GamesPage />} />
-          <Route path="/games/word-rain" element={<WordRainPage />} />
+          <Route path="/games/word-rain" element={<WordRainGame />} />
           <Route path="/games/zombie" element={<ZombieArenaPage />} />
           <Route path="/games/speed-racer" element={<SpeedRacerPage />} />
           <Route path="/games/ninja-slash" element={<NinjaSlashPage />} />
           <Route path="/games/space-shooter" element={<SpaceShooterPage />} />
+          <Route path="/games/castle-defense" element={<CastleDefensePage />} />
+          <Route path="/games/cyber-hacker" element={<CyberHackerPage />} />
           <Route path="/hindi-typing-test" element={<HindiTypingPage />} />
           <Route path="/hindi-typing-jungle" element={<HindiTypingJunglePage />} />
           <Route path="/hindi-lessons" element={<HindiLessonCoursePage />} />
