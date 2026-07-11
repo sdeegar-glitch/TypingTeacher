@@ -48,7 +48,7 @@ export default function NinjaSlashPage() {
 
   const g = useRef({
     orbs: [] as Orb[], parts: [] as Particle[], halves: [] as Half[], texts: [] as FloatText[],
-    buffer: '', score: 0, combo: 0, maxCombo: 0, lives: 3, shownLives: -1, keysGood: 0, keysBad: 0,
+    buffer: '', score: 0, combo: 0, maxCombo: 0, lives: 5, shownLives: -1, keysGood: 0, keysBad: 0,
     slicedChars: 0, startTime: 0, spawnTimer: 0, spawnEvery: 1.1, elapsed: 0,
     shake: 0, timeScale: 1, slowmo: 0, flash: 0, bombFlash: 0, W: 800, H: 600,
   });
@@ -89,8 +89,8 @@ export default function NinjaSlashPage() {
     o.active = true; o.sliced = false; o.word = word; o.typed = 0; o.bomb = bomb;
     o.x = 60 + Math.random() * (st.W - 120);
     o.y = st.H + 40;
-    o.vx = (Math.random() * 2 - 1) * 60;
-    o.vy = -(520 + Math.random() * 160 + level * 12);
+    o.vx = (Math.random() * 2 - 1) * 24;
+    o.vy = -(95 + Math.random() * 40 + level * 5);
     o.r = 26 + word.length * 2;
     o.hue = bomb ? 0 : (30 + Math.random() * 300);
     o.born = st.elapsed;
@@ -170,9 +170,9 @@ export default function NinjaSlashPage() {
     const st = g.current;
     st.orbs.forEach(o => o.active = false); st.parts.forEach(p => p.active = false);
     st.halves.forEach(h => h.active = false); st.texts.forEach(t => t.active = false);
-    st.buffer = ''; st.score = 0; st.combo = 0; st.maxCombo = 0; st.lives = 3; st.shownLives = -1;
-    st.keysGood = 0; st.keysBad = 0; st.slicedChars = 0; st.spawnTimer = 0; st.spawnEvery = 1.15;
-    st.elapsed = 0; st.shake = 0; st.timeScale = 1; st.slowmo = 0; st.flash = 0; st.bombFlash = 0;
+    st.buffer = ''; st.score = 0; st.combo = 0; st.maxCombo = 0; st.shownLives = -1;
+    st.keysGood = 0; st.keysBad = 0; st.slicedChars = 0; st.spawnTimer = 0.7; st.spawnEvery = 1.45;
+    st.lives = 5; st.elapsed = 0; st.shake = 0; st.timeScale = 1; st.slowmo = 0; st.flash = 0; st.bombFlash = 0;
     st.startTime = performance.now();
     setResult(null);
     screenRef.current = 'playing';
@@ -216,16 +216,16 @@ export default function NinjaSlashPage() {
         st.elapsed += sdt;
         // spawn
         st.spawnTimer -= sdt;
-        st.spawnEvery = Math.max(0.42, 1.15 - st.elapsed * 0.006 - st.score * 0.00012);
+        st.spawnEvery = Math.max(0.62, 1.45 - st.elapsed * 0.004 - st.score * 0.0001);
         if (st.spawnTimer <= 0) { spawnOrb(); st.spawnTimer = st.spawnEvery * (0.7 + Math.random() * 0.6); }
 
         // update orbs
         for (const o of st.orbs) {
           if (!o.active) continue;
-          o.vy += 720 * sdt; o.x += o.vx * sdt; o.y += o.vy * sdt;
-          if (o.y - o.r > H + 30 && o.vy > 0) {
+          o.vy += 18 * sdt; o.x += o.vx * sdt; o.y += o.vy * sdt;
+          if (o.y + o.r < -30 || o.y - o.r > H + 60) {
             o.active = false;
-            if (!o.bomb) { st.lives -= 1; st.combo = 0; st.shake = 10; sfx.miss(); floaty(o.x, H - 40, 'MISS', '#f87171', 20); if (st.lives <= 0) endGame(); }
+            if (!o.bomb) { st.lives -= 1; st.combo = 0; st.shake = 10; sfx.miss(); floaty(o.x, Math.max(40, Math.min(H - 40, o.y)), 'MISS', '#f87171', 20); if (st.lives <= 0) endGame(); }
           }
         }
       }
@@ -287,7 +287,7 @@ export default function NinjaSlashPage() {
         const mins = Math.max(0.03, (performance.now() - st.startTime) / 60000);
         if (wpmEl.current) wpmEl.current.textContent = String(Math.round((st.slicedChars / 5) / mins));
         const tk = st.keysGood + st.keysBad; if (accEl.current) accEl.current.textContent = (tk ? Math.round((st.keysGood / tk) * 100) : 100) + '%';
-        if (st.lives !== st.shownLives && livesEl.current) { st.shownLives = st.lives; livesEl.current.innerHTML = '❤️'.repeat(Math.max(0, st.lives)) + '<span style="opacity:.25">' + '🖤'.repeat(Math.max(0, 3 - st.lives)) + '</span>'; }
+        if (st.lives !== st.shownLives && livesEl.current) { st.shownLives = st.lives; livesEl.current.innerHTML = '❤️'.repeat(Math.max(0, st.lives)) + '<span style="opacity:.25">' + '🖤'.repeat(Math.max(0, 5 - st.lives)) + '</span>'; }
       }
 
       raf = requestAnimationFrame(frame);

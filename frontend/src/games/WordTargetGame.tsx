@@ -95,12 +95,12 @@ export default function WordTargetGame({ config }: { config: GameConfig }) {
     for (let i = 0; i < 8; i++) {
       const w = words[(Math.random() * words.length) | 0];
       if (w.length > maxLen) continue;
-      if (!st.targets.some(o => o.active && !o.dead && o.word[0] === w[0])) return w;
+      if (!st.targets.some(o => o.active && !o.dead && o.word && o.word[0] === w[0])) return w;
     }
     return words[(Math.random() * words.length) | 0];
   };
 
-  const spawn = () => { const t = getT(); t.active = true; t.dead = false; t.typed = 0; t.born = g.current.elapsed; t.seed = Math.random(); cfg.current.spawn(t, g.current as EngineState, pickWord); };
+  const spawn = () => { const t = getT(); t.dead = false; t.typed = 0; t.born = g.current.elapsed; t.seed = Math.random(); cfg.current.spawn(t, g.current as EngineState, pickWord); t.active = true; };
 
   const destroy = (t: GameTarget) => {
     const st = g.current; t.dead = true; t.active = false;
@@ -145,7 +145,7 @@ export default function WordTargetGame({ config }: { config: GameConfig }) {
     sfx.resume(); sfx.start(); const st = g.current;
     st.targets.forEach(o => o.active = false); st.parts.forEach(p => p.active = false); st.texts.forEach(t => t.active = false); st.beams.forEach(b => b.active = false);
     st.buffer = ''; st.score = 0; st.combo = 0; st.maxCombo = 0; st.lives = cfg.current.lives; st.shownLives = -1;
-    st.keysGood = 0; st.keysBad = 0; st.goodChars = 0; st.spawnTimer = 0; st.elapsed = 0; st.level = 1;
+    st.keysGood = 0; st.keysBad = 0; st.goodChars = 0; st.spawnTimer = 0.8; st.elapsed = 0; st.level = 1;
     st.shake = 0; st.timeScale = 1; st.slowmo = 0; st.flash = 0; st.hurtFlash = 0; st.startTime = performance.now();
     setResult(null); screenRef.current = 'playing'; setScreen('playing');
     if (isMobile) setTimeout(() => hiddenRef.current?.focus(), 100);
@@ -171,7 +171,7 @@ export default function WordTargetGame({ config }: { config: GameConfig }) {
 
       if (screenRef.current === 'playing') {
         st.elapsed += sdt; st.spawnTimer -= sdt;
-        const every = Math.max(c.minSpawn, c.spawnEvery - st.elapsed * 0.006 - st.score * 0.00012);
+        const every = Math.max(c.minSpawn, c.spawnEvery - st.elapsed * 0.004 - st.score * 0.0001);
         if (st.spawnTimer <= 0) { spawn(); st.spawnTimer = every * (0.7 + Math.random() * 0.6); }
         for (const t of st.targets) { if (!t.active) continue; if (c.update(t, sdt, st as EngineState)) { t.active = false; st.lives -= 1; st.combo = 0; st.shake = 12; st.hurtFlash = 1; sfx.miss(); floaty(t.x, t.y, 'MISS', '#f87171', 20); if (st.lives <= 0) { endGame(); } } }
       }
