@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Download, Share2, CheckCircle, Award, ExternalLink, ChevronLeft, Check } from 'lucide-react';
 
 import { API_URL } from '../lib/api';
+import SignupPromptBanner from '../components/SignupPromptBanner';
 
 interface CertData {
   id: string;
@@ -287,6 +288,11 @@ export default function CertificatePage() {
         {/* GENERATE TAB */}
         {tab === 'generate' && (
           <div className="space-y-6">
+            <SignupPromptBanner
+              dismissKey="signupPromptCertificate"
+              message="Nice work! 🎉 Create a free account to save this certificate, track your speed over time, and download it again anytime."
+            />
+
             {!certData && (
               <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
                 <h2 className="font-bold text-brand-text mb-4">Your Details</h2>

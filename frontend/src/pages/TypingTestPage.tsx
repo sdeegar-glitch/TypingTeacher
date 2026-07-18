@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast } from 'lucide-react';
 import CharSpan from '../components/CharSpan';
+import SignupPromptBanner from '../components/SignupPromptBanner';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -748,6 +749,12 @@ export default function TypingTestPage() {
               >
                 <Award className="w-4 h-4" /> Get Certificate
               </Link>
+              <div className="mt-4">
+                <SignupPromptBanner
+                  dismissKey="signupPromptResult"
+                  message="Save this result! 🚀 Create a free account to track your progress, keep your streak, and unlock the AI tutor."
+                />
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import Seo from '../components/Seo';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Keyboard, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+  const [isLogin, setIsLogin] = useState(location.pathname !== '/signup');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -19,7 +21,7 @@ const AuthPage = () => {
     setLoading(true); setError(''); setSuccess('');
     try {
       const endpoint = isLogin ? '/auth/login' : '/auth/signup';
-      const body = isLogin ? { email, password } : { email, password, name };
+      const body = isLogin ? { email, password } : { email, password, name, phone };
       const res = await fetch(
         `${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}${endpoint}`,
         { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
@@ -118,6 +120,18 @@ const AuthPage = () => {
               <input type="email" required placeholder="you@example.com"
                 className={inputCls} value={email} onChange={e => setEmail(e.target.value)} />
             </div>
+            {!isLogin && (
+              <div>
+                <label className="block text-xs font-semibold text-brand-muted mb-1.5">
+                  Mobile Number <span className="font-normal text-brand-muted/70">(optional)</span>
+                </label>
+                <input type="tel" placeholder="e.g. 98765 43210"
+                  className={inputCls} value={phone} onChange={e => setPhone(e.target.value)} />
+                <p className="text-[11px] text-brand-muted mt-1.5 leading-relaxed">
+                  📲 Add it to get free typing tips, mock-test reminders & exam notifications on WhatsApp.
+                </p>
+              </div>
+            )}
             <div>
               <label className="block text-xs font-semibold text-brand-muted mb-1.5">Password</label>
               <input type="password" required placeholder="Enter your password"

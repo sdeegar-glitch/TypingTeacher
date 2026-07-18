@@ -41,24 +41,30 @@ async function isAccountLockedOut(email) {
 }
 
 router.post('/signup', async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, phone } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+
+  // Normalise the optional phone (digits/+/spaces only, keep it lightweight).
+  const cleanPhone = typeof phone === 'string' && phone.trim() ? phone.trim().slice(0, 20) : null;
 
   // Use Supabase auth
   const { data, error } = await supabase.auth.admin.createUser({
     email,
     password,
-    user_metadata: { name },
+    user_metadata: { name, phone: cleanPhone },
     email_confirm: true
   });
 
   if (error) return res.status(400).json({ error: error.message });
 
-  // Insert into our users table
+  // Insert into our users table. Try with phone; if the column doesn't exist
+  // yet (migration not run), fall back to a row without it so signup never breaks.
   if (data?.user) {
-    await supabase.from('users').insert([
-      { id: data.user.id, email: data.user.email, name: name }
-    ]);
+    const baseRow = { id: data.user.id, email: data.user.email, name: name };
+    const { error: insErr } = await supabase.from('users').insert([{ ...baseRow, phone: cleanPhone }]);
+    if (insErr) {
+      await supabase.from('users').insert([baseRow]);
+    }
   }
 
   res.status(201).json({ user_id: data?.user?.id, email });
