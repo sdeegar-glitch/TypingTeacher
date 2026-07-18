@@ -122,6 +122,9 @@ const QUICK_LINKS = [
   { label: 'Learn Hindi Typing',href: '/learn-hindi-typing',    tag: 'Course' },
   { label: 'Kruti Dev Guide',   href: '/kruti-dev-typing',      tag: 'Guide' },
   { label: 'AI Typing Tutor',   href: '/ai-tutor',              tag: 'AI' },
+  { label: 'Type Without Looking', href: '/blog/how-to-type-without-looking-touch-typing-guide', tag: 'Guide' },
+  { label: 'Typing Posture Guide', href: '/blog/typing-posture-and-ergonomics-guide',           tag: 'Guide' },
+  { label: 'Professional Typing Test', href: '/typing-test-for/professionals',                   tag: 'Pro' },
 ];
 
 /* ─── Floating blob bg ─────────────────────────────────────────── */

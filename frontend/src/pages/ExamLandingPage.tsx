@@ -126,7 +126,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
         </section>
 
         {/* Related */}
-        <section className="mb-4">
+        <section className="mb-8">
           <h2 className="text-base font-black text-brand-text mb-3">Related practice</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {exam.related.map(r => (
@@ -136,6 +136,28 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
                 <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all" />
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* More exams — every exam page links to all the others, so authority
+            flows across the whole government-exam cluster. */}
+        <section className="mb-4">
+          <h2 className="text-base font-black text-brand-text mb-3">More Government Exam Typing Tests</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+            {Object.values(EXAM_LANDINGS)
+              .filter(e => e.slug !== exam.slug)
+              .map(e => (
+                <Link key={e.slug} to={`/${e.slug}-typing-test`}
+                  className="group flex items-center justify-between gap-2 bg-brand-surface border border-brand-border rounded-xl px-3.5 py-2.5 text-sm font-semibold text-brand-text hover:border-brand-primary/40 transition-all">
+                  <span className="truncate">{e.examName} Typing Test</span>
+                  <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all shrink-0" />
+                </Link>
+              ))}
+          </div>
+          <div className="mt-3">
+            <Link to="/competitive-exam-typing" className="text-sm font-semibold text-brand-primary hover:underline">
+              View all competitive exam typing tests →
+            </Link>
           </div>
         </section>
       </div>
