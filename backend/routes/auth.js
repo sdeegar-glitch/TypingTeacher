@@ -70,6 +70,38 @@ router.post('/signup', async (req, res) => {
   res.status(201).json({ user_id: data?.user?.id, email });
 });
 
+// POST /auth/oauth-sync — called by the frontend right after a Google (OAuth)
+// sign-in. Verifies the Supabase access token and makes sure the user has a row
+// in our `users` table (OAuth users are created in auth but not in `users`).
+router.post('/oauth-sync', async (req, res) => {
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  if (!token) return res.status(401).json({ error: 'Missing bearer token' });
+
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data?.user) return res.status(401).json({ error: 'Invalid or expired session' });
+
+  const u = data.user;
+  const { data: existing } = await supabase
+    .from('users')
+    .select('id, is_banned')
+    .eq('id', u.id)
+    .maybeSingle();
+
+  if (existing?.is_banned) return res.status(403).json({ error: 'This account has been banned.' });
+
+  if (!existing) {
+    const name =
+      u.user_metadata?.name ||
+      u.user_metadata?.full_name ||
+      (u.email ? u.email.split('@')[0] : 'User');
+    await supabase.from('users').insert([{ id: u.id, email: u.email, name }]);
+    logActivity({ action: 'signup_google', entity: 'auth', actor_email: u.email, ip: req.ip, status: 'success' });
+  }
+
+  res.json({ ok: true, user: { id: u.id, email: u.email } });
+});
+
 router.post('/login', loginLimiter, async (req, res) => {
   const { email, password } = req.body;
 
