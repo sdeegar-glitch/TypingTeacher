@@ -153,6 +153,11 @@ const ROUTES = [
     ['Is the DSSSB typing test qualifying?', 'Yes, it is a qualifying skill test — you must meet the required speed to be selected, but it is not added to your merit score.'],
     ['How can I practice the DSSSB typing test free?', 'FastTypingLab offers free English and Hindi (Mangal and Kruti Dev) typing tests with live WPM and accuracy.'],
   ]) },
+  { path: '/upsssc-typing-test', title: 'UPSSSC Typing Test Online — Junior Assistant Practice | FastTypingLab', description: 'Free UPSSSC typing test practice for Junior Assistant and clerical posts — around 25 WPM Hindi (Mangal/Kruti Dev) and 30 WPM English, with live WPM and accuracy.', jsonLd: faqLd([
+    ['What typing speed is required for UPSSSC Junior Assistant?', 'UPSSSC typing tests typically require about 25 WPM in Hindi and 30 WPM in English, though it can vary by post — always confirm from your official notification.'],
+    ['Which Hindi font does UPSSSC use for typing?', 'It is commonly Mangal (Unicode) or Kruti Dev depending on the post and year. Check your notification and practise that specific layout.'],
+    ['How can I practise the UPSSSC typing test free?', 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy, in the exam format.'],
+  ]) },
   { path: '/leaderboard', title: 'Global Typing Leaderboard | FastTypingLab', description: 'See the fastest typists on FastTypingLab. Global typing speed leaderboard ranked by net WPM and accuracy.' },
 
   { path: '/keyboard-tester', title: 'Online Keyboard Tester — Test Every Key | FastTypingLab', description: 'Free online keyboard tester. Press any key to check it registers correctly — test your full keyboard, function keys and modifiers in the browser.' },

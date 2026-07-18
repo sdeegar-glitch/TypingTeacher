@@ -473,6 +473,45 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { label: 'All Exam Typing', href: '/competitive-exam-typing' },
     ],
   },
+
+  'upsssc': {
+    slug: 'upsssc',
+    examName: 'UPSSSC',
+    h1: 'UPSSSC Typing Test — Free Hindi & English Practice',
+    seoTitle: 'UPSSSC Typing Test Online — Junior Assistant Practice | FastTypingLab',
+    metaDesc: 'Free UPSSSC typing test practice for Junior Assistant and clerical posts — around 25 WPM Hindi (Mangal/Kruti Dev) and 30 WPM English, with live WPM and accuracy.',
+    eyebrow: 'UPSSSC / Uttar Pradesh',
+    intro: 'The UPSSSC (Uttar Pradesh Subordinate Services Selection Commission) conducts a typing skill test for Junior Assistant, Lower Division Assistant and similar clerical posts. Candidates are usually required to type around 25 WPM in Hindi and 30 WPM in English on a computer. The exact speed and font can vary by post and notification, so always confirm and practise the exact format daily on a physical keyboard.',
+    requirements: [
+      { language: 'Hindi', layout: 'Mangal / Kruti Dev', speed: '25 WPM', duration: 'Qualifying skill test' },
+      { language: 'English', layout: 'QWERTY', speed: '30 WPM', duration: 'Qualifying skill test' },
+    ],
+    format: [
+      'A Hindi and/or English passage is typed on the computer within a set time.',
+      'The exact speed, font and language are set in the post notification — always check.',
+      'Both speed and accuracy are assessed; mistakes reduce your effective speed.',
+      'The test is conducted on a desktop computer — practise only on a physical keyboard.',
+    ],
+    tips: [
+      'Confirm the required language, speed and Hindi font (Mangal or Kruti Dev) from your notification.',
+      'Aim a few WPM above the minimum so exam nerves do not pull you below it.',
+      'Practise Hindi matras and half-letters, which slow most UP candidates.',
+      'Do daily 10-minute timed tests in the exam format to build stamina.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for UPSSSC Junior Assistant?', a: 'UPSSSC typing tests typically require about 25 WPM in Hindi and 30 WPM in English, though it can vary by post — always confirm from your official notification.' },
+      { q: 'Which Hindi font does UPSSSC use for typing?', a: 'It is commonly Mangal (Unicode) or Kruti Dev depending on the post and year. Check your notification and practise that specific layout.' },
+      { q: 'Is the UPSSSC typing test qualifying?', a: 'Yes, for most posts it is a qualifying skill test — you must meet the required speed and accuracy, though it may not add to your merit score.' },
+      { q: 'How can I practise the UPSSSC typing test free?', a: 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy, in the exam format.' },
+    ],
+    practiceHref: '/kruti-dev-typing',
+    practiceLabel: 'Start Hindi Typing Practice',
+    related: [
+      { label: 'UP Police Typing Test', href: '/up-police-typing-test' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
 };
 
 export const EXAM_LANDING_ROUTES = Object.values(EXAM_LANDINGS).map(e => ({
