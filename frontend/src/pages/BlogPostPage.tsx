@@ -4,6 +4,14 @@ import { ChevronLeft, Clock, Calendar, Share2, ExternalLink } from 'lucide-react
 import { BLOG_POSTS } from '../data/blogPosts';
 import Seo from '../components/Seo';
 
+// Inline formatting: links, bold, italics (links first so bold doesn't eat them)
+function inline(s: string): string {
+  return s
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-brand-primary font-semibold hover:underline">$1</a>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-brand-text font-bold">$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
 // Simple markdown-to-jsx renderer (no external deps)
 function renderMarkdown(md: string): React.ReactNode[] {
   const lines = md.trim().split('\n');
@@ -59,14 +67,13 @@ function renderMarkdown(md: string): React.ReactNode[] {
       while (i < lines.length && lines[i].startsWith('- ')) { items.push(lines[i].slice(2)); i++; }
       nodes.push(
         <ul key={`ul${i}`} className="my-3 space-y-1.5 ml-4">
-          {items.map((item, ii) => <li key={ii} className="text-brand-text-muted text-sm flex gap-2"><span className="text-brand-primary shrink-0 mt-0.5">•</span><span dangerouslySetInnerHTML={{ __html: item.replace(/\*\*(.+?)\*\*/g, '<strong class="text-brand-text">$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>') }} /></li>)}
+          {items.map((item, ii) => <li key={ii} className="text-brand-text-muted text-sm flex gap-2"><span className="text-brand-primary shrink-0 mt-0.5">•</span><span dangerouslySetInnerHTML={{ __html: inline(item) }} /></li>)}
         </ul>
       );
       continue;
     }
     // Regular paragraph
-    const html = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-brand-text font-bold">$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
-    nodes.push(<p key={i} className="text-brand-text-muted leading-relaxed my-2 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: html }} />);
+    nodes.push(<p key={i} className="text-brand-text-muted leading-relaxed my-2 text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: inline(line) }} />);
     i++;
   }
   return nodes;

@@ -13,6 +13,85 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'how-to-learn-shorthand-stenography',
+    title: 'How to Learn Shorthand (Stenography): A Beginner’s Guide',
+    seoTitle: 'How to Learn Shorthand (Stenography) for Steno Exams | FastTypingLab',
+    metaDesc: 'Learn shorthand from scratch: what stenography is, Pitman vs Gregg, SSC Steno Grade C/D speed requirements, dictation & transcription, and how to practise free.',
+    category: 'Learning',
+    readTime: '8 min',
+    date: '2026-07-18',
+    emoji: '✍️',
+    content: `
+## What Is Shorthand (Stenography)?
+
+Shorthand, or **stenography**, is a system of writing that uses simple symbols and strokes to capture speech as fast as it is spoken. Instead of writing full letters, a stenographer writes quick shapes for sounds — so a trained steno can record a speaker word for word at 80–120 words per minute. It is still a required skill for **stenographer and personal assistant jobs** in courts, government offices, and legislatures across India.
+
+A common misunderstanding: shorthand is **not typed**. It is written by hand using a shorthand system. The typing comes later, when you **transcribe** your shorthand notes back into normal text on a computer. That two-part skill — write fast, then type accurately — is exactly what steno exams test.
+
+## Why Learn Shorthand?
+
+- **Government stenographer jobs** — SSC Stenographer (Grade C & D), court/High Court steno, state PSC steno, Lok Sabha/Vidhan Sabha reporters.
+- **Court reporting & PA roles** — personal assistants and private secretaries still use shorthand for dictation.
+- **Note-taking speed** — journalists and secretaries use it to capture meetings and interviews.
+
+## Shorthand Speed Requirements for Government Exams
+
+Steno exams test **dictation speed** (how fast you can take down speech in shorthand) and then give you time to **transcribe** it by typing. Typical requirements (always confirm your official notification):
+
+| Exam / Grade | Dictation speed | Transcription |
+|---|---|---|
+| SSC Stenographer **Grade C** | ~100 WPM (10 min) | ~40 min English / 55 min Hindi |
+| SSC Stenographer **Grade D** | ~80 WPM (10 min) | ~50 min English / 65 min Hindi |
+| Many court / state steno posts | 80–100 WPM | Varies by post |
+
+So the skill has **two halves**: taking dictation in shorthand at 80–100 WPM, and then transcribing those notes into typed text quickly and accurately. Weakness in either half fails the test.
+
+## Pitman vs Gregg: Which System Should You Learn?
+
+- **Pitman** — the most widely taught system in **India**, and what almost all Indian steno coaching uses. Based on phonetics, with thick/thin strokes and positions. If you are preparing for SSC or court steno, **learn Pitman**.
+- **Gregg** — more common in the US; flowing, cursive-style strokes with no thickness distinction.
+
+For Indian government exams, Pitman is the practical choice because that is what study material, coaching, and dictation practice are built around.
+
+## The Two Halves of Steno: Writing + Transcribing
+
+1. **Shorthand writing (by hand):** Learn the Pitman alphabet, strokes, vowels, and common short forms. This is learned on paper — no app can replace daily hand practice.
+2. **Transcription (typing):** Once you have your shorthand outline, you type it into normal text under time pressure. **Your typing speed and accuracy directly decide whether you finish transcription in time.** This is where a typing site like FastTypingLab helps — you build the fast, accurate typing that transcription demands.
+
+## How to Start Learning Shorthand (Step by Step)
+
+1. **Pick Pitman** and get a standard textbook or a structured course.
+2. **Master the alphabet and strokes** — learn the consonant and vowel signs until you can write them without thinking.
+3. **Learn short forms and phrases** — the most common words have special quick outlines; these are where real speed comes from.
+4. **Take daily dictation** — start slow (40–50 WPM) and increase gradually. Record passages or use dictation audio at a fixed WPM.
+5. **Practise transcription** — read back your outlines and **type them fast and accurately**. Build typing speed to 40+ WPM so transcription is never the bottleneck.
+6. **Simulate the exam** — 10 minutes of dictation, then transcribe within the exam time limit.
+
+## How Long Does It Take?
+
+With consistent daily practice, most learners reach **80 WPM dictation in about 8–12 months**, and 100+ WPM with another few months of drilling. There is no shortcut — shorthand speed is built by daily dictation practice. The **transcription (typing) half is faster to improve**, and it is the smartest place to gain quick marks: getting your typing from 25 to 40+ WPM can be the difference between finishing transcription and running out of time.
+
+## Practise the Typing Half Free
+
+You cannot learn Pitman on a keyboard — but you *can* build the transcription typing speed that steno exams demand. Practise on FastTypingLab:
+
+- Take timed **[typing speed tests](/tests)** to raise your WPM and accuracy.
+- Practise exam-style passages on the **[SSC Stenographer typing test](/ssc-steno-typing-test)** and **[court typing test](/court-typing-test)** pages.
+- Learn **[Hindi typing](/learn-hindi-typing)** if your transcription is in Hindi (Mangal/Kruti Dev).
+
+## Common Mistakes to Avoid
+
+- **Chasing dictation speed before your outlines are accurate** — wrong outlines you cannot read back cost you at transcription.
+- **Ignoring typing speed** — many candidates take good dictation but fail transcription because they type too slowly.
+- **Skipping short forms** — they are the biggest source of real speed.
+- **Inconsistent practice** — 20 minutes daily beats a long weekend session.
+
+## Final Word
+
+Shorthand is a two-part skill: **write fast in Pitman, then transcribe fast by typing.** Learn Pitman on paper, but do not neglect the typing half — it is the quickest win and the most common reason candidates run out of transcription time. Build your typing speed daily, and your whole steno score improves.
+    `,
+  },
+  {
     slug: 'how-to-type-faster-in-30-days',
     title: 'How to Type Faster in 30 Days: A Complete Guide',
     seoTitle: 'How to Type Faster in 30 Days | FastTypingLab',
