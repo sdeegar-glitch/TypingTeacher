@@ -243,6 +243,7 @@ const TestsListPage = lazy(() => import('./pages/TestsListPage'));
 const TestConfigPage = lazy(() => import('./pages/TestConfigPage'));
 const ToolsPage = lazy(() => import('./pages/ToolsPage'));
 const KeyboardTesterPage = lazy(() => import('./pages/KeyboardTesterPage'));
+const DictationTypingPage = lazy(() => import('./pages/DictationTypingPage'));
 const SpacebarCounterPage = lazy(() => import('./pages/SpacebarCounterPage'));
 const CpsTestPage = lazy(() => import('./pages/CpsTestPage'));
 const ExamPage = lazy(() => import('./pages/ExamPage'));
@@ -328,6 +329,7 @@ const AppContent = () => {
           {/* Phase 2: Tools & Utilities */}
           <Route path="/tools" element={<ToolsPage />} />
           <Route path="/keyboard-tester" element={<KeyboardTesterPage />} />
+          <Route path="/dictation-typing-test" element={<DictationTypingPage />} />
           <Route path="/spacebar-counter" element={<SpacebarCounterPage />} />
           <Route path="/cps-test" element={<CpsTestPage />} />
 

@@ -75,6 +75,7 @@ With consistent daily practice, most learners reach **80 WPM dictation in about 
 
 You cannot learn Pitman on a keyboard — but you *can* build the transcription typing speed that steno exams demand. Practise on FastTypingLab:
 
+- Try the **[dictation typing test](/dictation-typing-test)** — listen to a passage at 60–100 WPM and transcribe it, exactly like the steno transcription round.
 - Take timed **[typing speed tests](/tests)** to raise your WPM and accuracy.
 - Practise exam-style passages on the **[SSC Stenographer typing test](/ssc-steno-typing-test)** and **[court typing test](/court-typing-test)** pages.
 - Learn **[Hindi typing](/learn-hindi-typing)** if your transcription is in Hindi (Mangal/Kruti Dev).

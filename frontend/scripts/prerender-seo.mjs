@@ -161,6 +161,7 @@ const ROUTES = [
   { path: '/leaderboard', title: 'Global Typing Leaderboard | FastTypingLab', description: 'See the fastest typists on FastTypingLab. Global typing speed leaderboard ranked by net WPM and accuracy.' },
 
   { path: '/keyboard-tester', title: 'Online Keyboard Tester — Test Every Key | FastTypingLab', description: 'Free online keyboard tester. Press any key to check it registers correctly — test your full keyboard, function keys and modifiers in the browser.' },
+  { path: '/dictation-typing-test', title: 'Dictation Typing Test — Steno Transcription Practice | FastTypingLab', description: 'Free dictation typing test for stenography practice. Listen to a passage read at 60, 80 or 100 WPM and transcribe it by typing — build the transcription speed steno exams need.' },
   { path: '/cps-test', title: 'CPS Test — Clicks Per Second Test | FastTypingLab', description: 'Free CPS (clicks per second) test. Measure your click speed over 1, 5 or 10 seconds and improve your clicking rate.' },
   { path: '/spacebar-counter', title: 'Spacebar Counter — Spacebar Clicks Per Second | FastTypingLab', description: 'Free spacebar counter and spacebar speed test. Count your spacebar presses and measure spacebar clicks per second.' },
   { path: '/word-counter', title: 'Word Counter — Words, Characters & Reading Time | FastTypingLab', description: 'Free online word counter. Count words, characters, sentences and paragraphs, with estimated reading and speaking time.' },
