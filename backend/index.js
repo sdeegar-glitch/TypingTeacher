@@ -17,7 +17,9 @@ app.use(helmet({
   crossOriginResourcePolicy: false,
 }));
 app.use(cors());
-app.use(express.json());
+// 2 MB ceiling so base64 avatar uploads (POST /api/me/avatar) fit; other
+// endpoints send tiny JSON bodies well under this.
+app.use(express.json({ limit: '2mb' }));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -37,6 +39,7 @@ import authRoutes from './routes/auth.js';
 import leaderboardRoutes from './routes/leaderboard.js';
 import aiCoachRoutes from './routes/ai-coach.js';
 import certificatesRoutes from './routes/certificates.js';
+import meRoutes from './routes/me.js';
 import adminRoutes from './routes/admin.js';
 import publicSettingsRoutes from './routes/publicSettings.js';
 import visitorsRoutes from './routes/visitors.js';
@@ -49,6 +52,7 @@ app.use('/auth', authRoutes);
 app.use('/leaderboard', leaderboardRoutes);
 app.use('/api/ai', aiCoachRoutes);
 app.use('/api/certificates', certificatesRoutes);
+app.use('/api/me', meRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/settings', publicSettingsRoutes);
 app.use('/api/visitors', visitorsRoutes);

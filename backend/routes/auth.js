@@ -95,7 +95,10 @@ router.post('/oauth-sync', async (req, res) => {
       u.user_metadata?.name ||
       u.user_metadata?.full_name ||
       (u.email ? u.email.split('@')[0] : 'User');
-    await supabase.from('users').insert([{ id: u.id, email: u.email, name }]);
+    const avatar = u.user_metadata?.avatar_url || u.user_metadata?.picture || null;
+    // Try to seed the Google photo; fall back if the avatar_url column isn't migrated.
+    const { error: insErr } = await supabase.from('users').insert([{ id: u.id, email: u.email, name, avatar_url: avatar }]);
+    if (insErr) await supabase.from('users').insert([{ id: u.id, email: u.email, name }]);
     logActivity({ action: 'signup_google', entity: 'auth', actor_email: u.email, ip: req.ip, status: 'success' });
   }
 

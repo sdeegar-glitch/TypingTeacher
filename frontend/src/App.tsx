@@ -1,6 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useLocation } from 'react-router-dom';
 import { Menu, X, Moon, Sun } from 'lucide-react';
+import { fetchMe } from './lib/user';
 import { useTheme } from './store/useThemeStore';
 import { trackVisit } from './lib/api';
 import { initAnalytics, trackPageview } from './lib/analytics';
@@ -11,6 +12,7 @@ const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const LearningCoursePage = lazy(() => import('./pages/LearningCoursePage'));
 const LearningInterfacePage = lazy(() => import('./pages/LearningInterfacePage'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
 
 const LearningInterfacePageWithKey = () => {
@@ -42,6 +44,28 @@ const Navbar = () => {
   const isAuthenticated = !!localStorage.getItem('accessToken');
   const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
+
+  // Logged-in identity for the welcome chip. Seed from cache to avoid a flash,
+  // then refresh from the server.
+  const [me, setMe] = useState<{ name: string; avatar: string | null }>(() => ({
+    name: localStorage.getItem('ftl_user_name') || '',
+    avatar: localStorage.getItem('ftl_user_avatar') || null,
+  }));
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    fetchMe().then(p => {
+      if (!p) return;
+      const name = p.name || (p.email ? p.email.split('@')[0] : '');
+      setMe({ name, avatar: p.avatar_url });
+      localStorage.setItem('ftl_user_name', name);
+      if (p.avatar_url) localStorage.setItem('ftl_user_avatar', p.avatar_url);
+      else localStorage.removeItem('ftl_user_avatar');
+    });
+  }, [isAuthenticated]);
+
+  const firstName = me.name ? me.name.trim().split(/\s+/)[0] : '';
+  const avatarInitials = (me.name || 'U').trim().slice(0, 2).toUpperCase();
 
   const closeMenu = () => setIsMobileMenuOpen(false);
 
@@ -102,7 +126,17 @@ const Navbar = () => {
                   className="px-3 py-1.5 rounded-lg text-sm font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
                   Dashboard
                 </Link>
-                <button onClick={() => { localStorage.removeItem('accessToken'); window.location.href = '/login'; }}
+                <Link to="/profile" title="View profile"
+                  className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-brand-border hover:bg-brand-surface-2 transition-all duration-200">
+                  <span className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+                    style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                    {me.avatar ? <img src={me.avatar} alt="" className="w-full h-full object-cover" /> : avatarInitials}
+                  </span>
+                  <span className="text-sm font-semibold text-brand-text max-w-[120px] truncate">
+                    {firstName ? `Hi, ${firstName}` : 'Profile'}
+                  </span>
+                </Link>
+                <button onClick={() => { localStorage.removeItem('accessToken'); localStorage.removeItem('ftl_user_name'); localStorage.removeItem('ftl_user_avatar'); window.location.href = '/login'; }}
                   className="px-3 py-1.5 rounded-lg text-sm font-semibold text-brand-muted hover:text-rose-500 transition-all duration-200">
                   Logout
                 </button>
@@ -161,11 +195,22 @@ const Navbar = () => {
             <div className="mt-auto pt-6 border-t border-brand-border flex flex-col gap-3">
               {isAuthenticated ? (
                 <>
+                  <Link to="/profile" onClick={closeMenu}
+                    className="w-full flex items-center gap-3 py-2.5 px-3 rounded-xl border border-brand-border hover:bg-brand-surface-2 transition-all">
+                    <span className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold shrink-0"
+                      style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                      {me.avatar ? <img src={me.avatar} alt="" className="w-full h-full object-cover" /> : avatarInitials}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-sm font-bold text-brand-text truncate">{firstName ? `Hi, ${firstName}` : 'My Profile'}</span>
+                      <span className="block text-xs text-brand-muted">View & edit profile</span>
+                    </span>
+                  </Link>
                   <Link to="/dashboard" onClick={closeMenu}
                     className="w-full text-center py-3 rounded-xl font-semibold border border-brand-border text-brand-text hover:bg-brand-surface-2 transition-all">
                     Dashboard
                   </Link>
-                  <button onClick={() => { localStorage.removeItem('accessToken'); window.location.href = '/login'; }}
+                  <button onClick={() => { localStorage.removeItem('accessToken'); localStorage.removeItem('ftl_user_name'); localStorage.removeItem('ftl_user_avatar'); window.location.href = '/login'; }}
                     className="w-full py-3 rounded-xl font-semibold text-rose-500 border border-rose-200 dark:border-rose-900/40 transition-all">
                     Logout
                   </button>
@@ -277,6 +322,7 @@ const AppContent = () => {
           <Route path="/signup" element={<AuthPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />
 
           {/* Phase 2: Tools & Utilities */}

@@ -192,13 +192,34 @@ export default function CertificatePage() {
     document.title = 'Typing Certificate | FastTypingLab';
   }, []);
 
+  // Deep-link: /certificate?verify=<id> (e.g. from the profile page) auto-verifies.
+  useEffect(() => {
+    const vid = searchParams.get('verify');
+    if (!vid) return;
+    setTab('verify');
+    setVerifyId(vid);
+    (async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/certificates/${vid.trim()}`);
+        const data = await res.json();
+        setVerifyResult({ valid: data.valid, data });
+      } catch {
+        setVerifyResult({ valid: false });
+      }
+    })();
+  }, [searchParams]);
+
   const issueCertificate = async () => {
     if (!username.trim()) return;
     setIsIssuing(true);
     try {
+      const token = localStorage.getItem('accessToken');
       const res = await fetch(`${API_URL}/api/certificates`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ username: username.trim(), wpm: wpm || 50, accuracy: accuracy || 90, test_title: testTitle }),
       });
       const data = await res.json();
