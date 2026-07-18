@@ -197,6 +197,12 @@ export default function HomePage() {
 
             {/* CTA row */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
+              <button type="button" onClick={() => setLearnOpen(true)}
+                className="inline-flex items-center gap-2.5 text-white font-bold px-8 py-4 rounded-2xl text-base transition-all duration-200 w-full sm:w-auto justify-center group shadow-lg active:scale-95"
+                style={{ background: 'linear-gradient(135deg, #BC6C50 0%, #CC7B5D 100%)', boxShadow: '0 6px 24px rgba(188,108,80,0.30)' }}>
+                <BookOpen className="w-5 h-5" />
+                Start Learning
+              </button>
               <Link to="/tests"
                 className="inline-flex items-center gap-2.5 text-white font-bold px-8 py-4 rounded-2xl text-base transition-all duration-200 w-full sm:w-auto justify-center group shadow-xl active:scale-95"
                 style={{ background: 'linear-gradient(135deg, #304C53 0%, #2A9DAE 100%)', boxShadow: '0 6px 24px rgba(48,76,83,0.30)' }}>
@@ -204,18 +210,6 @@ export default function HomePage() {
                 Test Your Speed
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </Link>
-              <Link to="/hindi-typing-test"
-                className="inline-flex items-center gap-2.5 font-bold px-8 py-4 rounded-2xl text-base transition-all duration-200 w-full sm:w-auto justify-center group shadow-lg active:scale-95"
-                style={{ background: 'linear-gradient(135deg, #BC6C50 0%, #CC7B5D 100%)', color: '#fff', boxShadow: '0 6px 24px rgba(188,108,80,0.30)' }}>
-                <Languages className="w-5 h-5" />
-                Hindi Typing
-              </Link>
-              <button type="button" onClick={() => setLearnOpen(true)}
-                className="inline-flex items-center gap-2.5 text-brand-text font-semibold px-8 py-4 rounded-2xl text-base transition-all duration-200 w-full sm:w-auto justify-center hover:bg-brand-surface-2 active:scale-95"
-                style={{ background: 'var(--brand-surface)', border: '1px solid var(--brand-border)' }}>
-                <BookOpen className="w-5 h-5 text-brand-muted" />
-                Start Learning
-              </button>
             </div>
 
             {/* Live typing preview card */}
