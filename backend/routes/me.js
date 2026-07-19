@@ -41,31 +41,21 @@ router.patch('/', async (req, res) => {
 });
 
 // POST /api/me/avatar — { image: 'data:image/<png|jpeg|webp>;base64,...' }
-// Uploaded via the service-role client into the public `avatars` bucket, so no
-// storage RLS policy is required.
+// The image is already compressed client-side (≤512px JPEG), so we store it
+// directly as a data URL in users.avatar_url. This avoids Supabase Storage and
+// its RLS entirely — updating the users row is all that's needed.
 router.post('/avatar', async (req, res) => {
   const { image } = req.body;
   const match = typeof image === 'string' && image.match(/^data:(image\/(png|jpe?g|webp));base64,(.+)$/);
   if (!match) return res.status(400).json({ error: 'Invalid image. Use PNG, JPG or WEBP.' });
 
-  const contentType = match[1];
-  const ext = contentType === 'image/png' ? 'png' : contentType === 'image/webp' ? 'webp' : 'jpg';
   const buffer = Buffer.from(match[3], 'base64');
-  if (buffer.length > 2 * 1024 * 1024) return res.status(413).json({ error: 'Image too large (max 2 MB).' });
+  if (buffer.length > 1024 * 1024) return res.status(413).json({ error: 'Image too large (max 1 MB). Try a smaller photo.' });
 
-  const path = `${req.profile.id}/avatar.${ext}`;
-  const { error: upErr } = await supabase.storage
-    .from('avatars')
-    .upload(path, buffer, { contentType, upsert: true });
-  if (upErr) return res.status(400).json({ error: upErr.message });
-
-  const { data: pub } = supabase.storage.from('avatars').getPublicUrl(path);
-  const url = `${pub.publicUrl}?v=${Date.now()}`; // cache-bust after re-upload
-
-  const { error: updErr } = await supabase.from('users').update({ avatar_url: url }).eq('id', req.profile.id);
+  const { error: updErr } = await supabase.from('users').update({ avatar_url: image }).eq('id', req.profile.id);
   if (updErr) return res.status(400).json({ error: updErr.message });
 
-  res.json({ avatar_url: url });
+  res.json({ avatar_url: image });
 });
 
 // GET /api/me/certificates — certificates linked to this account
