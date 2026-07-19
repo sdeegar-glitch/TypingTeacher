@@ -39,6 +39,7 @@ const AuthPage = () => {
           throw new Error(j.error || 'Google sign-in could not be completed.');
         }
         localStorage.setItem('accessToken', accessToken);
+        window.dispatchEvent(new Event('ftl-auth-change'));
         setSuccess('Signed in with Google! Redirecting…');
         setTimeout(() => navigate('/dashboard'), 700);
       } catch (err: any) {
@@ -85,7 +86,10 @@ const AuthPage = () => {
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || (isLogin ? 'Login failed. Check your credentials.' : 'Registration failed. Please try again.'));
-      if (data.accessToken) localStorage.setItem('accessToken', data.accessToken);
+      if (data.accessToken) {
+        localStorage.setItem('accessToken', data.accessToken);
+        window.dispatchEvent(new Event('ftl-auth-change'));
+      }
       setSuccess(isLogin ? 'Login successful! Redirecting…' : 'Account created! Welcome aboard!');
       setLoading(false);
       setTimeout(() => navigate('/dashboard'), 900);

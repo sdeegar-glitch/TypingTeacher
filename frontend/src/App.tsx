@@ -41,9 +41,28 @@ const NAV_LINKS = [
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const isAuthenticated = !!localStorage.getItem('accessToken');
+  // Reactive auth state — reading localStorage once at render doesn't update the
+  // navbar after an in-app login or a login in another tab. Re-check on route
+  // change, tab focus, cross-tab storage events, and our own auth-change event.
+  const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('accessToken'));
   const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
+
+  useEffect(() => {
+    const sync = () => setIsAuthenticated(!!localStorage.getItem('accessToken'));
+    sync();
+    window.addEventListener('storage', sync);
+    window.addEventListener('focus', sync);
+    window.addEventListener('ftl-auth-change', sync);
+    return () => {
+      window.removeEventListener('storage', sync);
+      window.removeEventListener('focus', sync);
+      window.removeEventListener('ftl-auth-change', sync);
+    };
+  }, []);
+
+  // Re-check whenever the route changes (e.g. redirect to /dashboard after login).
+  useEffect(() => { setIsAuthenticated(!!localStorage.getItem('accessToken')); }, [location.pathname]);
 
   // Logged-in identity for the welcome chip. Seed from cache to avoid a flash,
   // then refresh from the server.

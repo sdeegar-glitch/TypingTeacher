@@ -67,7 +67,10 @@ router.post('/signup', async (req, res) => {
     }
   }
 
-  res.status(201).json({ user_id: data?.user?.id, email });
+  // Sign the new user in immediately so signup logs them in (createUser does not
+  // create a session). Returning accessToken lets the frontend store it like login.
+  const { data: signInData } = await supabase.auth.signInWithPassword({ email, password });
+  res.status(201).json({ user_id: data?.user?.id, email, accessToken: signInData?.session?.access_token });
 });
 
 // POST /auth/oauth-sync — called by the frontend right after a Google (OAuth)
