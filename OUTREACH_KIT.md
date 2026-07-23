@@ -151,3 +151,82 @@ Free, legitimate places to get your first links:
 Do this consistently for 30 days and you'll see the site move from
 "Discovered – not indexed" to actually indexed and ranking for long-tail terms.
 There's no shortcut around authority — but this is exactly how you build it.
+
+---
+
+## PART 7 — NEW ASSETS (your best, least-competitive hooks) 🔥
+
+Your GSC data proves you rank *best* on **steno, data-entry and UP exam** queries
+(position 8–15, weakest competition). And you now have two things almost no
+competitor offers — a **free dictation typing trainer** and a **shorthand guide**.
+**Lead with these.** This is where the fastest traffic and links are.
+
+### ⭐ The dictation trainer is your unique hook
+Free dictation-to-type practice for stenographers is genuinely rare. It's the
+kind of novel free tool that gets shared in steno groups and linked by exam
+blogs. Push it hard in steno/PA/court communities.
+- Trainer: https://fasttypinglab.com/dictation-typing-test/
+- Guide:   https://fasttypinglab.com/blog/how-to-learn-shorthand-stenography/
+
+### Q5 (Quora): "How can I improve my stenography / transcription speed?"
+> Steno has two halves people forget: taking dictation in shorthand, and then
+> **transcribing it by typing** under a time limit. Most candidates drill
+> shorthand but fail transcription because their typing is too slow — SSC Steno
+> Grade C gives you a fixed window to transcribe, and slow typing eats it up.
+>
+> Fix the typing half first (it's the fastest to improve): get to 40+ WPM with
+> high accuracy, then practise real dictation → transcription.
+>
+> I use this free dictation typing trainer — it reads a passage aloud at 60/80/100
+> WPM and you transcribe it, exactly like the exam:
+> https://fasttypinglab.com/dictation-typing-test/
+> (There's also a beginner shorthand guide here:
+> https://fasttypinglab.com/blog/how-to-learn-shorthand-stenography/)
+
+### Q6 (Quora): "What is the typing speed required for UPSSSC Junior Assistant?"
+> UPSSSC typing tests usually need about **25 WPM in Hindi and 30 WPM in English**
+> on a computer (always confirm your exact post notification — it varies). The
+> Hindi part is where most UP candidates lose time, especially matras and
+> half-letters.
+>
+> Practise in the exact format daily. Free UPSSSC practice (Hindi Mangal/Kruti Dev
+> + English, live WPM/accuracy): https://fasttypinglab.com/upsssc-typing-test/
+
+### Telegram / WhatsApp — steno & UP groups
+Join **SSC Steno, PA/Stenographer, court/High Court, and UPSSSC/UP LDA** groups.
+Share the novel tool (it's genuinely useful, so it's welcome):
+> Free **dictation typing practice** for steno transcription — a passage is read
+> aloud at 60/80/100 WPM and you type it, just like the exam. No signup:
+> https://fasttypinglab.com/dictation-typing-test/
+
+> Free **UPSSSC typing test** practice — Hindi (Mangal/Kruti Dev) + English, exact
+> exam format, live WPM & accuracy: https://fasttypinglab.com/upsssc-typing-test/
+
+### Reddit variant (r/SSC, steno/stenographer subs)
+> **Title:** I made a free dictation-typing trainer for steno transcription
+> practice (reads a passage aloud, you transcribe it)
+>
+> Couldn't find a free tool that trains the *transcription* half of steno, so I
+> built one — it reads a passage at 60/80/100 WPM and you type what you hear, then
+> scores your transcription WPM + accuracy. Feedback welcome:
+> https://fasttypinglab.com/dictation-typing-test/
+
+### Backlink angle for the trainer
+Email Indian steno/SSC-prep blogs and YouTubers: *"I built a free dictation
+transcription trainer for steno aspirants — feel free to add it to your resources
+/ mention it for your audience."* A novel free tool is far more linkable than a
+generic typing test.
+
+---
+
+## START HERE THIS WEEK (highest-impact order)
+
+1. **GSC → Request Indexing** the new pages: `/upsssc-typing-test/` ·
+   `/dictation-typing-test/` · `/blog/how-to-learn-shorthand-stenography/` ·
+   `/typing-test-for/professionals/`
+2. **Add site link to 5 profile bios** (X, LinkedIn, Instagram, YouTube, GitHub) — 5 instant links.
+3. **Share the dictation trainer** in 1 steno/SSC Telegram group (novel = welcome).
+4. **Post Q5 (steno) on Quora** — least competition, you already rank pos 8.
+5. **Submit to 2 directories** (AlternativeTo, There's An AI For That → AI Tutor).
+
+Then keep the daily 20-min routine (Part 5), rotating in Q5/Q6 and the new pages.
