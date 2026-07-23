@@ -91,6 +91,10 @@ const ROUTES = [
   { path: '/typing-certificates', title: 'Free Typing Certificate — Verifiable WPM Certificate | FastTypingLab', description: 'Earn a free, verifiable typing certificate. Take a timed WPM test and download a shareable certificate of your typing speed and accuracy.' },
   { path: '/ai-tutor', title: 'AI Typing Tutor — Personalized Improvement Plan | FastTypingLab', description: 'Get a free, personalized typing improvement plan from our AI tutor. It analyzes your WPM, accuracy and trend, then builds a step-by-step plan and a custom practice passage.' },
   { path: '/all-pages', title: 'Site Map — All Pages | FastTypingLab', description: 'Browse every page on FastTypingLab: typing tests, Hindi typing, exam practice, learning courses, tools, games and blog articles.' },
+  { path: '/about', title: 'About FastTypingLab — Free Typing & Govt Exam Practice for India', description: 'FastTypingLab is a free typing platform built for India — English & Hindi typing tests, SSC/CPCT/UPSSSC exam practice, stenography, an AI tutor and games, all free.' },
+  { path: '/contact', title: 'Contact FastTypingLab — Support, Feedback & Enquiries', description: 'Get in touch with the FastTypingLab team. Email us for support, feedback, bug reports, content suggestions or partnership enquiries.' },
+  { path: '/privacy', title: 'Privacy Policy | FastTypingLab', description: 'How FastTypingLab collects, uses, and protects your data — account information, typing statistics, cookies, analytics and advertising.' },
+  { path: '/terms', title: 'Terms of Service | FastTypingLab', description: 'The terms and conditions for using FastTypingLab — a free online typing and government-exam practice platform.' },
 
   // Exam typing landing pages (high-intent, with FAQ schema)
   { path: '/ssc-chsl-typing-test', title: 'SSC CHSL Typing Test Online — Free Practice & Speed | FastTypingLab', description: 'Free SSC CHSL typing test practice online. 35 WPM English / 30 WPM Hindi in 10 minutes, with live WPM and accuracy. Prepare for the LDC & DEO skill test.', jsonLd: faqLd([

@@ -2,6 +2,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useLocation } from 'react-router-dom';
 import { Menu, X, Moon, Sun } from 'lucide-react';
 import { fetchMe } from './lib/user';
+import Footer from './components/Footer';
 import { useTheme } from './store/useThemeStore';
 import { trackVisit } from './lib/api';
 import { initAnalytics, trackPageview } from './lib/analytics';
@@ -13,6 +14,10 @@ const LearningCoursePage = lazy(() => import('./pages/LearningCoursePage'));
 const LearningInterfacePage = lazy(() => import('./pages/LearningInterfacePage'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
 const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
 
 const LearningInterfacePageWithKey = () => {
@@ -404,9 +409,14 @@ const AppContent = () => {
           <Route path="/dsssb-typing-test" element={<ExamLandingPage slug="dsssb" />} />
           <Route path="/upsssc-typing-test" element={<ExamLandingPage slug="upsssc" />} />
           <Route path="/all-pages" element={<SiteMapPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
         </Routes>
         </Suspense>
       </main>
+      {!isLearningInterface && <Footer />}
     </div>
   );
 };

@@ -6,7 +6,6 @@ import {
   TrendingUp, Star, ArrowRight, Languages, Gamepad2, Award, Shield,
 } from 'lucide-react';
 import LearnChooserModal from '../components/LearnChooserModal';
-import VisitorCounter from '../components/VisitorCounter';
 import Seo from '../components/Seo';
 
 /* ─── Animated typing preview ──────────────────────────────────── */
@@ -466,56 +465,6 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════
-          FOOTER
-         ══════════════════════════════════════════════════════════ */}
-      <footer className="border-t border-brand-border py-10 px-4 sm:px-6" style={{ background: 'var(--brand-surface)' }}>
-        <div className="max-w-[1600px] mx-auto">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 mb-8">
-            {/* Brand */}
-            <div>
-              <div className="flex items-center gap-2.5 mb-2">
-                <span className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm text-white shadow-md"
-                  style={{ background: 'linear-gradient(135deg, #304C53, #2A9DAE)' }}>F</span>
-                <span className="font-black text-brand-text text-lg">FastTypingLab</span>
-              </div>
-              <p className="text-xs text-brand-muted max-w-xs leading-relaxed">
-                India's most complete free typing platform for students, professionals, and govt exam aspirants.
-              </p>
-            </div>
-
-            {/* Links */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-3 text-sm text-brand-muted">
-              {[
-                { label: 'Typing Tests',    href: '/tests' },
-                { label: 'Hindi Typing',   href: '/hindi-typing-test' },
-                { label: 'Learn Typing',   href: '/learn' },
-                { label: 'Exam Prep',      href: '/competitive-exam-typing' },
-                { label: 'Games',          href: '/games' },
-                { label: 'Blog',           href: '/blog' },
-                { label: 'Leaderboard',    href: '/leaderboard' },
-                { label: 'Tools',          href: '/tools' },
-                { label: 'Certificates',   href: '/typing-certificates' },
-                { label: 'Site Map',       href: '/all-pages' },
-              ].map(l => (
-                <Link key={l.href} to={l.href}
-                  className="hover:text-brand-primary transition-colors duration-150">
-                  {l.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-brand-border text-xs text-brand-muted">
-            <p>© 2026 FastTypingLab. All rights reserved. Made with ❤️ for India.</p>
-            <div className="flex flex-wrap items-center gap-4">
-              <VisitorCounter />
-              <a href="mailto:support@fasttypinglab.com"
-                className="hover:text-brand-primary transition-colors">support@fasttypinglab.com</a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
