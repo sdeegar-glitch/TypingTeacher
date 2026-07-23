@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench, Sparkles } from 'lucide-react';
+import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench, Sparkles, Headphones } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 
 const TOOL_CARDS = [
@@ -15,6 +15,16 @@ const TOOL_CARDS = [
     color: 'text-brand-accent',
     bg: 'bg-brand-accent/10 border-brand-accent/20',
     tagColor: 'bg-brand-accent/10 text-brand-accent',
+  },
+  {
+    icon: Headphones,
+    title: 'Dictation Typing Test',
+    desc: 'Steno transcription practice — a passage is read aloud at 60/80/100 WPM and you type what you hear. Scores your transcription WPM & accuracy.',
+    href: '/dictation-typing-test',
+    tag: 'New',
+    color: 'text-brand-secondary',
+    bg: 'bg-brand-secondary/10 border-brand-secondary/20',
+    tagColor: 'bg-brand-secondary/10 text-brand-secondary',
   },
   {
     icon: Keyboard,

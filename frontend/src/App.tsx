@@ -33,6 +33,7 @@ const NAV_LINKS = [
   { to: '/learn-hindi-typing',      label: 'Learn Hindi Typing' },
   { to: '/tests',                  label: 'Typing Test' },
   { to: '/competitive-exam-typing',label: 'Exams' },
+  { to: '/blog/how-to-learn-shorthand-stenography', label: 'Shorthand' },
   { to: '/games',                  label: 'Games' },
   { to: '/tools',                  label: 'Tools' },
   { to: '/blog',                   label: 'Blog' },
