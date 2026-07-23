@@ -241,8 +241,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/exam/hindi-typing',
     practiceLabel: 'Start Hindi Typing Practice',
     related: [
+      { label: 'Dictation Typing Test', href: '/dictation-typing-test' },
       { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
-      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing' },
+      { label: 'Shorthand Guide', href: '/blog/how-to-learn-shorthand-stenography' },
       { label: 'All Exam Typing', href: '/competitive-exam-typing' },
     ],
   },
@@ -430,7 +431,8 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/tests',
     practiceLabel: 'Build Transcription Typing Speed',
     related: [
-      { label: 'Typing Speed Test', href: '/tests' },
+      { label: 'Dictation Typing Test', href: '/dictation-typing-test' },
+      { label: 'Shorthand Guide', href: '/blog/how-to-learn-shorthand-stenography' },
       { label: 'Court & Steno Typing', href: '/court-typing-test' },
       { label: 'All Exam Typing', href: '/competitive-exam-typing' },
     ],
