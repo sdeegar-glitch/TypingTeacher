@@ -408,120 +408,43 @@ export default function TypingTestPage() {
       {/* ── MAIN CONTENT ────────────────────────────── */}
       <div className="flex-grow flex flex-col items-center justify-start gap-4 px-3 sm:px-6 py-4 sm:py-6 overflow-y-auto">
 
-        {/* ── CARD SETUP PANEL (pre-test) ── */}
+        {/* ── LIVE STAT CARDS (WPM · Accuracy · Errors) ── */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-2xl">
+          <div className="rounded-2xl py-3 sm:py-4 text-center text-white shadow-md" style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+            <div className="text-2xl sm:text-3xl font-black font-mono leading-none">{stats.wpm}</div>
+            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/80 mt-1">WPM</div>
+          </div>
+          <div className="rounded-2xl py-3 sm:py-4 text-center text-white shadow-md" style={{ background: 'linear-gradient(135deg,#2A9DAE,#54c1cf)' }}>
+            <div className="text-2xl sm:text-3xl font-black font-mono leading-none">{stats.accuracy}%</div>
+            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/80 mt-1">Accuracy</div>
+          </div>
+          <div className="rounded-2xl py-3 sm:py-4 text-center text-white shadow-md" style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)' }}>
+            <div className="text-2xl sm:text-3xl font-black font-mono leading-none">{stats.errors}</div>
+            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/80 mt-1">Errors</div>
+          </div>
+        </div>
+
+        {/* ── Start hint (pre-test only) ── */}
         <AnimatePresence>
           {!stats.isActive && !stats.isFinished && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10, height: 0 }}
+              exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-2xl"
-              onClick={e => e.stopPropagation()}
+              className="w-full max-w-2xl flex items-center justify-center gap-3"
             >
-              {/* Mode row */}
-              <div className="mb-3">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2 px-1">Mode</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {([
-                    { id: 'article', label: 'Article', icon: '📄', desc: 'Real passages' },
-                    { id: 'words',   label: 'Words',   icon: '🔤', desc: 'Random words' },
-                    { id: 'quote',   label: 'Quote',   icon: '💬', desc: 'Inspirational' },
-                  ] as { id: TestMode; label: string; icon: string; desc: string }[]).map(m => (
-                    <button key={m.id}
-                      onClick={() => { setTestMode(m.id); reset(); }}
-                      className={`flex flex-col items-center gap-1 py-3 px-2 rounded-xl border font-semibold transition-all duration-200 text-center ${
-                        testMode === m.id
-                          ? 'text-white border-transparent shadow-lg scale-[1.02]'
-                          : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
-                      }`}
-                      style={testMode === m.id ? { background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 14px rgba(48,76,83,.3)' } : {}}>
-                      <span className="text-xl">{m.icon}</span>
-                      <span className="text-xs font-bold">{m.label}</span>
-                      <span className={`text-[10px] ${testMode === m.id ? 'text-white/70' : 'text-brand-muted'}`}>{m.desc}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Duration row */}
-              <div className="mb-3">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2 px-1">Duration</p>
-                <div className="grid grid-cols-6 gap-2">
-                  {DURATION_OPTIONS.map(opt => (
-                    <button key={opt.value}
-                      onClick={() => { setSelectedDuration(opt.value); reset(); }}
-                      className={`flex flex-col items-center gap-0.5 py-2.5 rounded-xl border font-bold text-sm transition-all duration-200 ${
-                        selectedDuration === opt.value
-                          ? 'text-white border-transparent shadow-lg scale-[1.02]'
-                          : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
-                      }`}
-                      style={selectedDuration === opt.value ? { background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.3)' } : {}}>
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Accessibility row */}
-              <div className="flex items-center gap-2 mb-3 px-1">
-                <button
-                  onClick={sound.toggle}
-                  aria-pressed={sound.enabled}
-                  aria-label={sound.enabled ? 'Disable sound effects' : 'Enable sound effects'}
-                  title={sound.enabled ? 'Sound on' : 'Sound off'}
-                  className="flex items-center gap-1.5 bg-brand-surface border border-brand-border hover:border-brand-primary/40 text-brand-muted hover:text-brand-text px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
-                >
-                  {sound.enabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+              <p className="text-xs text-brand-muted flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse inline-block" />
+                {isMobile ? 'Tap the text area below to start' : 'Start typing below — timer begins on first keystroke'}
+              </p>
+              {isMobile && (
+                <button onClick={() => hiddenInputRef.current?.focus()}
+                  className="text-xs font-bold text-white px-3 py-1.5 rounded-lg transition-all"
+                  style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                  Tap to type
                 </button>
-                <div className="flex items-center bg-brand-surface border border-brand-border rounded-lg overflow-hidden">
-                  <button
-                    onClick={a11y.decreaseFontSize}
-                    disabled={!a11y.canDecreaseFontSize}
-                    aria-label="Decrease typing text font size"
-                    className="px-2 py-1.5 text-brand-muted hover:text-brand-text disabled:opacity-30 transition-colors"
-                  >
-                    <Minus className="w-3.5 h-3.5" />
-                  </button>
-                  <span className="text-[10px] font-bold text-brand-muted px-1 tabular-nums" aria-hidden="true">{a11y.fontSize}px</span>
-                  <button
-                    onClick={a11y.increaseFontSize}
-                    disabled={!a11y.canIncreaseFontSize}
-                    aria-label="Increase typing text font size"
-                    className="px-2 py-1.5 text-brand-muted hover:text-brand-text disabled:opacity-30 transition-colors"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-                <button
-                  onClick={a11y.toggleHighContrast}
-                  aria-pressed={a11y.highContrast}
-                  aria-label={a11y.highContrast ? 'Disable high contrast mode' : 'Enable high contrast mode'}
-                  title="High contrast"
-                  className={`flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                    a11y.highContrast
-                      ? 'bg-brand-primary text-white border-transparent'
-                      : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
-                  }`}
-                >
-                  <Contrast className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* Start hint */}
-              <div className="flex items-center justify-between px-1">
-                <p className="text-xs text-brand-muted flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse inline-block" />
-                  {isMobile ? 'Tap the text area below to start' : 'Start typing below — timer begins on first keystroke'}
-                </p>
-                {isMobile && (
-                  <button onClick={() => hiddenInputRef.current?.focus()}
-                    className="text-xs font-bold text-white px-3 py-1.5 rounded-lg transition-all"
-                    style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-                    Tap to type
-                  </button>
-                )}
-              </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -562,12 +485,51 @@ export default function TypingTestPage() {
               ))}
             </div>
 
-            {/* Caret hint when idle */}
-            {!stats.isActive && !stats.isFinished && (
-              <div className="absolute bottom-3 right-4 flex items-center gap-1.5 text-[10px] text-brand-muted/60 font-mono pointer-events-none select-none">
-                <span className="typing-caret h-3 w-0.5" /> type to begin
-              </div>
-            )}
+          </div>
+
+          {/* ── Controls toolbar — below the typing window ── */}
+          <div className="flex items-center gap-2 mt-3 px-1">
+            <button
+              onClick={sound.toggle}
+              aria-pressed={sound.enabled}
+              aria-label={sound.enabled ? 'Disable sound effects' : 'Enable sound effects'}
+              title={sound.enabled ? 'Sound on' : 'Sound off'}
+              className="flex items-center gap-1.5 bg-brand-surface border border-brand-border hover:border-brand-primary/40 text-brand-muted hover:text-brand-text px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+            >
+              {sound.enabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+            </button>
+            <div className="flex items-center bg-brand-surface border border-brand-border rounded-lg overflow-hidden">
+              <button
+                onClick={a11y.decreaseFontSize}
+                disabled={!a11y.canDecreaseFontSize}
+                aria-label="Decrease typing text font size"
+                className="px-2 py-1.5 text-brand-muted hover:text-brand-text disabled:opacity-30 transition-colors"
+              >
+                <Minus className="w-3.5 h-3.5" />
+              </button>
+              <span className="text-[10px] font-bold text-brand-muted px-1 tabular-nums" aria-hidden="true">{a11y.fontSize}px</span>
+              <button
+                onClick={a11y.increaseFontSize}
+                disabled={!a11y.canIncreaseFontSize}
+                aria-label="Increase typing text font size"
+                className="px-2 py-1.5 text-brand-muted hover:text-brand-text disabled:opacity-30 transition-colors"
+              >
+                <Plus className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <button
+              onClick={a11y.toggleHighContrast}
+              aria-pressed={a11y.highContrast}
+              aria-label={a11y.highContrast ? 'Disable high contrast mode' : 'Enable high contrast mode'}
+              title="High contrast"
+              className={`flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                a11y.highContrast
+                  ? 'bg-brand-primary text-white border-transparent'
+                  : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
+              }`}
+            >
+              <Contrast className="w-3.5 h-3.5" />
+            </button>
           </div>
 
           {/* Live CPM stat under the box */}
