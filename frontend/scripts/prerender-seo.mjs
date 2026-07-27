@@ -172,6 +172,12 @@ const ROUTES = [
     ['What is a good typing speed?', 'The average is about 40 WPM; 50-65 is a solid touch-typing speed, 70-90 is professional, and 100+ is top 1%. Indian govt exams usually require 30-40 WPM.'],
     ['What is the difference between gross and net WPM?', 'Gross WPM is raw speed; net WPM subtracts mistakes, so it reflects usable speed — the number that matters for exams and real work.'],
   ]) },
+  { path: '/typing-statistics', title: 'Typing Statistics — Average Typing Speed & WPM Benchmarks (2026) | FastTypingLab', description: 'Typing statistics and average typing speed benchmarks: WPM by skill level, age, profession and country, plus accuracy, common mistakes and Indian exam speeds.', jsonLd: faqLd([
+    ['What is the average typing speed?', 'About 40 WPM for adults on a computer keyboard. Skilled touch typists reach 55-65 WPM and professionals often type 70-90 WPM.'],
+    ['What is the average typing speed by age?', 'Typing speed usually peaks between ages 20 and 35 (around 40-45 WPM) and declines gradually after that.'],
+    ['What typing speed is required for Indian government exams?', 'Most Indian government typing tests require 25-40 WPM, commonly 35 WPM in English and 25-30 WPM in Hindi.'],
+    ['What is a good typing accuracy?', 'Aim for 95%+ accuracy. Skilled typists usually stay between 92% and 98%.'],
+  ]) },
   { path: '/cps-test', title: 'CPS Test — Clicks Per Second Test | FastTypingLab', description: 'Free CPS (clicks per second) test. Measure your click speed over 1, 5 or 10 seconds and improve your clicking rate.' },
   { path: '/spacebar-counter', title: 'Spacebar Counter — Spacebar Clicks Per Second | FastTypingLab', description: 'Free spacebar counter and spacebar speed test. Count your spacebar presses and measure spacebar clicks per second.' },
   { path: '/word-counter', title: 'Word Counter — Words, Characters & Reading Time | FastTypingLab', description: 'Free online word counter. Count words, characters, sentences and paragraphs, with estimated reading and speaking time.' },

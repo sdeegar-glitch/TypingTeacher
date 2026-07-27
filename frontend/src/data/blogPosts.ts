@@ -1114,7 +1114,7 @@ FastTypingLab offers free Hindi typing practice in Mangal (INSCRIPT) and Kruti D
     content: `
 ## The Average Typing Speed
 
-The average typing speed for an adult is around 40 words per minute (WPM). Professional typists average 65 to 75 WPM, and the fastest typists exceed 100 WPM. If you type above 40 WPM, you are already faster than most people.
+The average typing speed for an adult is around 40 words per minute (WPM). Professional typists average 65 to 75 WPM, and the fastest typists exceed 100 WPM. If you type above 40 WPM, you are already faster than most people. For a full breakdown by skill level, profession, country and exam, see our **[typing statistics benchmarks](/typing-statistics)**.
 
 ## Average Typing Speed by Age
 

@@ -7,6 +7,8 @@ const PRODUCT_LINKS = [
   { label: 'Learn Typing', href: '/learn' },
   { label: 'Exam Prep', href: '/competitive-exam-typing' },
   { label: 'Shorthand', href: '/blog/how-to-learn-shorthand-stenography' },
+  { label: 'Typing Statistics', href: '/typing-statistics' },
+  { label: 'WPM Calculator', href: '/wpm-calculator' },
   { label: 'Games', href: '/games' },
   { label: 'Tools', href: '/tools' },
   { label: 'Blog', href: '/blog' },

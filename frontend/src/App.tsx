@@ -20,6 +20,7 @@ const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
 const EmbedWidgetPage = lazy(() => import('./pages/EmbedWidgetPage'));
 const WpmCalculatorPage = lazy(() => import('./pages/WpmCalculatorPage'));
+const TypingStatisticsPage = lazy(() => import('./pages/TypingStatisticsPage'));
 const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
 
 const LearningInterfacePageWithKey = () => {
@@ -418,6 +419,7 @@ const AppContent = () => {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/embed" element={<EmbedWidgetPage />} />
           <Route path="/wpm-calculator" element={<WpmCalculatorPage />} />
+          <Route path="/typing-statistics" element={<TypingStatisticsPage />} />
         </Routes>
         </Suspense>
       </main>
