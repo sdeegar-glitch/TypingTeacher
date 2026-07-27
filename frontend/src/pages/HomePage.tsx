@@ -159,6 +159,24 @@ export default function HomePage() {
       <Seo
         title="FastTypingLab — Free Typing Speed Test, Hindi Typing & Exam Practice"
         description="Free online typing speed test (WPM) in English, Hindi Unicode & Kruti Dev. Practice for SSC, CPCT & UP Police exams, get AI coaching, and play typing games — no signup."
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: 'FastTypingLab',
+          applicationCategory: 'EducationalApplication',
+          operatingSystem: 'Web',
+          url: 'https://fasttypinglab.com/',
+          description: 'Free online typing speed test and practice in English and Hindi (Unicode & Kruti Dev), with government-exam modes (SSC, CPCT, UPSSSC), an AI tutor, stenography dictation and typing games.',
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+          featureList: [
+            'Typing speed test (WPM & accuracy)',
+            'Hindi typing (Mangal / Kruti Dev)',
+            'Government exam typing practice',
+            'Stenography dictation trainer',
+            'AI typing tutor',
+            'Typing games',
+          ],
+        }}
       />
 
       {/* ══════════════════════════════════════════════════════════

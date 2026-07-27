@@ -27,6 +27,16 @@ const TOOL_CARDS = [
     tagColor: 'bg-brand-secondary/10 text-brand-secondary',
   },
   {
+    icon: Code,
+    title: 'Embed Typing Test',
+    desc: 'Add a free typing speed test to your own website or blog — copy one line of code. Free embeddable WPM widget.',
+    href: '/embed',
+    tag: 'Free',
+    color: 'text-brand-cta',
+    bg: 'bg-brand-cta/10 border-brand-cta/20',
+    tagColor: 'bg-brand-cta/10 text-brand-cta',
+  },
+  {
     icon: Keyboard,
     title: 'Keyboard Tester',
     desc: 'Test every key on your keyboard. Press keys to see if they register correctly.',

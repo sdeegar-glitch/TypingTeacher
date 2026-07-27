@@ -18,6 +18,7 @@ const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
+const EmbedWidgetPage = lazy(() => import('./pages/EmbedWidgetPage'));
 const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
 
 const LearningInterfacePageWithKey = () => {
@@ -319,6 +320,7 @@ const AppContent = () => {
   }, [location.pathname, location.search]);
 
   const isLearningInterface =
+    location.pathname.startsWith('/embed') ||
     (location.pathname.startsWith('/learn/') && location.pathname !== '/learn' && location.pathname !== '/learn/') ||
     (location.pathname.startsWith('/tests/') && location.pathname !== '/tests' && location.pathname !== '/tests/' && !location.pathname.includes('/config/'));
 
@@ -413,6 +415,7 @@ const AppContent = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/embed" element={<EmbedWidgetPage />} />
         </Routes>
         </Suspense>
       </main>
