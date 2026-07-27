@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench, Sparkles, Headphones } from 'lucide-react';
+import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench, Sparkles, Headphones, Calculator } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 
 const TOOL_CARDS = [
@@ -35,6 +35,16 @@ const TOOL_CARDS = [
     color: 'text-brand-cta',
     bg: 'bg-brand-cta/10 border-brand-cta/20',
     tagColor: 'bg-brand-cta/10 text-brand-cta',
+  },
+  {
+    icon: Calculator,
+    title: 'WPM Calculator',
+    desc: 'Calculate your typing speed from characters, time and errors. Shows gross WPM, net WPM and accuracy, with the formula explained.',
+    href: '/wpm-calculator',
+    tag: 'Tool',
+    color: 'text-brand-primary',
+    bg: 'bg-brand-primary/10 border-brand-primary/20',
+    tagColor: 'bg-brand-primary/10 text-brand-primary',
   },
   {
     icon: Keyboard,
