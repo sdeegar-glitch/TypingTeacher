@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Headphones, Play, RotateCcw, CheckCircle, ChevronLeft, Volume2, Square, AlertCircle } from 'lucide-react';
+import { Headphones, Play, RotateCcw, CheckCircle, ChevronLeft, Volume2, Square, AlertCircle, HelpCircle } from 'lucide-react';
 import Seo from '../components/Seo';
 
 // Dictation passages — office / legal / general styles suited to steno transcription.
@@ -32,6 +32,14 @@ const SPEEDS = [
   { label: 'Slow', wpm: 60, note: 'Beginner' },
   { label: 'Medium', wpm: 80, note: 'Grade D pace' },
   { label: 'Fast', wpm: 100, note: 'Grade C pace' },
+];
+
+const FAQS = [
+  { q: 'What is a dictation typing test?', a: 'A dictation typing test reads a passage aloud and you transcribe it by typing. It trains the transcription half of stenography — exactly what SSC Stenographer, court and PA candidates do after taking shorthand.' },
+  { q: 'What is an audio typing test?', a: 'An audio typing test (also called an audio dictation typing test) plays spoken text that you type out. It measures how fast and accurately you can transcribe speech — the same skill this dictation trainer builds.' },
+  { q: 'What is a transcription typing test?', a: 'A transcription typing test checks how well you can convert dictated or recorded speech into typed text within a time limit. Speed and accuracy both matter, because errors cost correction time.' },
+  { q: 'What dictation speed do I need for SSC Stenographer?', a: 'SSC Stenographer Grade C requires about 100 WPM dictation and Grade D about 80 WPM, followed by a timed transcription. Practise at those speeds here — always confirm your official notification.' },
+  { q: 'How can I practise dictation typing for free?', a: 'Use this free dictation typing test: pick 60, 80 or 100 WPM, listen to the passage read aloud, and transcribe it by typing. It scores your transcription WPM and accuracy instantly.' },
 ];
 
 // Normalise text into comparable words.
@@ -121,8 +129,12 @@ export default function DictationTypingPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
       <Seo
-        title="Dictation Typing Test — Steno Transcription Practice | FastTypingLab"
-        description="Free dictation typing test for stenography practice. Listen to a passage read at 60, 80 or 100 WPM and transcribe it by typing — build the transcription speed steno exams need."
+        title="Dictation Typing Test — Free Audio Transcription Typing Practice | FastTypingLab"
+        description="Free dictation typing test with audio. Listen to a passage read at 60/80/100 WPM and transcribe it by typing — an audio transcription typing test for SSC stenographer, court and PA exam practice."
+        jsonLd={{
+          '@context': 'https://schema.org', '@type': 'FAQPage',
+          mainEntity: FAQS.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+        }}
       />
       <div className="max-w-2xl mx-auto">
 
@@ -255,13 +267,53 @@ export default function DictationTypingPage() {
           </motion.div>
         )}
 
-        {/* SEO / context footer */}
-        <div className="mt-10 pt-6 border-t border-brand-border">
-          <h2 className="font-bold text-brand-text mb-2">What is a dictation typing test?</h2>
-          <p className="text-brand-text-muted text-sm leading-relaxed mb-3">
-            A dictation typing test trains the transcription half of stenography — the skill of listening to speech and typing it accurately and fast. It is exactly what SSC Stenographer, court and PA candidates do after taking shorthand: transcribe the dictated matter on a computer within a time limit. Practising transcription at 60–100 WPM builds the typing speed and accuracy that decide whether you finish in time.
-          </p>
-          <div className="flex flex-wrap gap-2 text-sm">
+        {/* SEO / context content */}
+        <div className="mt-10 pt-6 border-t border-brand-border space-y-6">
+          <div>
+            <h2 className="font-black text-lg text-brand-text mb-2">What is a dictation typing test?</h2>
+            <p className="text-brand-text-muted text-sm leading-relaxed">
+              A dictation typing test — also called an <strong className="text-brand-text">audio typing test</strong> or{' '}
+              <strong className="text-brand-text">transcription typing test</strong> — reads a passage aloud while you type
+              what you hear. It trains the transcription half of stenography: exactly what SSC Stenographer, court and PA
+              candidates do after taking shorthand — transcribe the dictated matter on a computer within a time limit.
+              Practising transcription at 60–100 WPM builds the typing speed and accuracy that decide whether you finish in time.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-black text-lg text-brand-text mb-2">Who is this audio typing test for?</h2>
+            <ul className="text-brand-text-muted text-sm leading-relaxed space-y-1.5">
+              <li>• <strong className="text-brand-text">SSC Stenographer</strong> (Grade C ~100 WPM, Grade D ~80 WPM) aspirants.</li>
+              <li>• <strong className="text-brand-text">Court &amp; High Court stenographer</strong> and PA / private secretary candidates.</li>
+              <li>• <strong className="text-brand-text">Medical &amp; general transcriptionists</strong> building audio-to-text speed.</li>
+              <li>• Anyone who wants to practise typing from dictation and improve listening-plus-typing speed.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="font-black text-lg text-brand-text mb-2">How the dictation typing test works</h2>
+            <ol className="text-brand-text-muted text-sm leading-relaxed space-y-1.5 list-decimal pl-5">
+              <li>Choose a dictation speed — 60, 80 or 100 WPM (Grade D / Grade C pace).</li>
+              <li>The passage is read aloud; the text stays hidden, just like a real transcription round.</li>
+              <li>Type what you hear. Submit when the dictation ends.</li>
+              <li>Get your transcription WPM and accuracy, and review the original vs your transcription.</li>
+            </ol>
+          </div>
+
+          {/* FAQ */}
+          <div>
+            <h2 className="font-black text-lg text-brand-text mb-3 flex items-center gap-2"><HelpCircle className="w-5 h-5 text-brand-primary" /> Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              {FAQS.map(f => (
+                <div key={f.q}>
+                  <h3 className="font-semibold text-sm text-brand-text mb-1">{f.q}</h3>
+                  <p className="text-brand-text-muted text-sm leading-relaxed">{f.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2 text-sm pt-2">
             <Link to="/blog/how-to-learn-shorthand-stenography" className="text-brand-primary font-semibold hover:underline">How to learn shorthand →</Link>
             <span className="text-brand-border">·</span>
             <Link to="/ssc-steno-typing-test" className="text-brand-primary font-semibold hover:underline">SSC Steno typing test →</Link>
