@@ -31,7 +31,20 @@ const CURRICULUM: [title: string, content: string][] = [
   ['The x and period', 'fox box exit taxi extra sixty oxen index. exact. relax. maxim. excel. mixture. examine.'],
   ['The z and slash', 'zap zip zoo buzz zero size zebra dozen puzzle frozen jazz crazy hazy prize amaze blaze'],
   ['Bottom row review', 'brave zinc combo vexing maze mixing zombie convex numbness vibrant becomes examines carbon'],
-  // ── Bigrams & full keyboard (18–20) ──
+  // ── Shift & capitals (18–22) ── (hold Shift with the opposite hand)
+  ['Left Shift for capitals', 'Nora Kim Yash Uma Iris Puja Hari Nita Lata Mina Luna Jaya Neel Kiran Yug Om Hana Poo'],
+  ['Right Shift for capitals', 'Amit Sam Dev Ravi Tara Bina Cara Gita Ekta Zara Vish Fern Asha Ganga Rex Waqar Ford'],
+  ['Capital cities', 'India China Japan Delhi Mumbai London Paris Rome Cairo Tokyo Berlin Ottawa Seoul Dubai'],
+  ['Names and places', 'Ram Sita Arjun Priya Kanpur Jaipur Bhopal Patna Ranchi Nagpur Indore Surat Rajkot Thane'],
+  ['Sentences with capitals', 'My name is Ravi. I live in Delhi. We visit the Taj Mahal in Agra every March with Priya.'],
+  // ── Number row (23–28) ──
+  ['Numbers 1 and 2', '111 222 12 21 1122 1212 11 22 1 2 121 212 11 22 1122 2211 12 21 1 2 12 21 11 22 121 212'],
+  ['Numbers 3 and 4', '333 444 34 43 3344 3434 33 44 3 4 343 434 33 44 3344 4433 34 43 3 4 34 43 33 44 343 434'],
+  ['Numbers 5 and 6', '555 666 56 65 5566 5656 55 66 5 6 565 656 55 66 5566 6655 56 65 5 6 56 65 55 66 565 656'],
+  ['Numbers 7 and 8', '777 888 78 87 7788 7878 77 88 7 8 787 878 77 88 7788 8877 78 87 7 8 78 87 77 88 787 878'],
+  ['Numbers 9 and 0', '999 000 90 09 9900 9090 99 00 9 0 909 090 99 00 9900 0099 90 09 9 0 90 09 99 00 909 090'],
+  ['Number practice', 'Call 555 1234. Room 402. Year 2026. Total 750 rupees. Page 18. Bus 27. Score 96 of 100.'],
+  // ── Bigrams & full keyboard ──
   ['Common letter pairs', 'th he in er an re on at en nd ti es or te of ed is it al ar st to nt ng se ha as ou io'],
   ['Common trigrams', 'the and ing her ent tha was eth for hat ion int his ter est ers ati hat ate all tio nce'],
   ['Full keyboard warmup', 'the quick brown fox jumps over a lazy dog; pack my box with five dozen liquor jugs today'],
@@ -86,7 +99,9 @@ export const ENGLISH_LESSON_GROUPS: { name: string; icon: string; range: [number
   { name: 'Home Row', icon: '🏠', range: [1, 5] },
   { name: 'Top Row', icon: '⬆️', range: [6, 11] },
   { name: 'Bottom Row', icon: '⬇️', range: [12, 17] },
-  { name: 'Words & Patterns', icon: '🔤', range: [18, 30] },
-  { name: 'Sentences', icon: '✍️', range: [31, 40] },
-  { name: 'Paragraphs & Speed', icon: '🚀', range: [41, 50] },
+  { name: 'Shift & Capitals', icon: '⇧', range: [18, 22] },
+  { name: 'Number Row', icon: '🔢', range: [23, 28] },
+  { name: 'Words & Patterns', icon: '🔤', range: [29, 41] },
+  { name: 'Sentences', icon: '✍️', range: [42, 51] },
+  { name: 'Paragraphs & Speed', icon: '🚀', range: [52, 61] },
 ];
