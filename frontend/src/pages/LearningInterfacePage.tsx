@@ -5,26 +5,9 @@ import HandGuide from '../components/HandGuide';
 import { saveProgress } from '../utils/progressManager';
 import { getFingerForKey } from '../utils/KeyboardLayout';
 
-// Comprehensive Curriculum
-const generateLessons = () => {
-  const data: Record<string, { content: string; title: string; minWpm: number }> = {
-    '1': { title: 'The f and j keys', content: 'fff jjj ff jj fj jf ffjj ffjj fjfj fff jjj fjf jfj f j f j ff jj ff jj fjf jfj', minWpm: 10 },
-    '2': { title: 'The d and k keys', content: 'ddd kkk dd kk dk kd ddd kkk dkd kdk d k d k dd kk dd kk ddd kkk dkd kdk d k d k dd kk dd kk', minWpm: 10 },
-    '3': { title: 'The s and l keys', content: 'sss lll ss ll sl ls sss lll sls lsl s l s l ss ll ss ll sss lll sls lsl s l s l ss ll ss ll', minWpm: 11 },
-    '4': { title: 'The a and ; keys', content: 'aaa ;;; aa ;; a; ;a aaa ;;; a;a ;a; a ; a ; aa ;; aa ;; aaa ;;; a;a ;a; a ; a ; aa ;; aa ;;', minWpm: 11 },
-    '5': { title: 'Home Row Basics', content: 'asdf jkl; asdf jkl; asdf jkl; a s d f j k l ; asdf jkl; asdf jkl; asdf jkl; a s d f j k l ;', minWpm: 12 },
-  };
-  for (let i = 6; i <= 50; i++) {
-    data[i.toString()] = {
-      title: `Practice Level ${i}`,
-      content: `the quick brown fox jumps over the lazy dog. focus on your accuracy and rhythm. speed will come naturally.`.repeat(2),
-      minWpm: 12 + Math.floor(i / 2),
-    };
-  }
-  return data;
-};
+import { ENGLISH_LESSON_MAP } from '../data/englishLessons';
 
-const lessonData = generateLessons();
+const lessonData = ENGLISH_LESSON_MAP;
 
 const LearningInterfacePage = () => {
   const { lessonId } = useParams();

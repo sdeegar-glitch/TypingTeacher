@@ -5,30 +5,15 @@ import { motion } from 'framer-motion';
 import { Lock, Star, Zap, Keyboard, CheckCircle, ChevronRight } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { loadProgress } from '../utils/progressManager';
+import { ENGLISH_LESSONS, ENGLISH_LESSON_GROUPS } from '../data/englishLessons';
 
-const LESSON_TITLES = [
-  'f and j Keys', 'Spacebar Power', 'd and k Keys', 'f j d k Review', 's and l Keys',
-  'a and ; Keys', 'Home Row Master', 'e and i Keys', 'r and u Keys', 't and y Keys',
-  'w and o Keys', 'q and p Keys', 'Top Row Mastery', 'v and n Keys', 'c and m Keys',
-  'x and , Keys', 'z and . Keys', 'Bottom Row Mastery', 'Shift Keys', 'Capitals Practice',
-];
+// Shared source of truth — titles/ranges always match the typing interface.
+const LESSONS = ENGLISH_LESSONS.map(l => {
+  const group = ENGLISH_LESSON_GROUPS.find(g => l.id >= g.range[0] && l.id <= g.range[1]);
+  return { id: l.id, title: l.title, description: group?.name ?? 'Practice' };
+});
 
-const generateLessons = () =>
-  Array.from({ length: 50 }, (_, i) => ({
-    id: i + 1,
-    title: LESSON_TITLES[i] || `Practice Level ${i + 1}`,
-    description: i < 7 ? 'Home Row' : i < 12 ? 'Top Row' : i < 18 ? 'Bottom Row' : i < 20 ? 'Shift & Caps' : 'Advanced',
-  }));
-
-const LESSONS = generateLessons();
-
-const LESSON_GROUPS = [
-  { name: 'Home Row',           icon: '🏠', range: [1, 7]   as [number, number] },
-  { name: 'Top Row',            icon: '⬆️', range: [8, 12]  as [number, number] },
-  { name: 'Bottom Row',         icon: '⬇️', range: [13, 18] as [number, number] },
-  { name: 'Shift & Capitals',   icon: '⇧',  range: [19, 20] as [number, number] },
-  { name: 'Advanced Practice',  icon: '🚀', range: [21, 50] as [number, number] },
-];
+const LESSON_GROUPS = ENGLISH_LESSON_GROUPS.map(g => ({ ...g, range: g.range as [number, number] }));
 
 export default function LearningCoursePage() {
   const [progress, setProgress] = useState<Record<string, any>>({});
