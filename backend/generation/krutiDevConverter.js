@@ -85,11 +85,14 @@ export function unicodeToKrutiDev(unicodeText) {
   // Reorder the i-matra (ि) to precede its consonant — Kruti Dev has no
   // automatic shaping, so it must be typed in visual (pre-consonant) order.
   let posF = s.indexOf('ि');
-  while (posF !== -1) {
+  let guardF = 0;
+  const maxIter = s.length * 4 + 100; // hard cap: this loop can never hang the event loop
+  while (posF !== -1 && guardF++ < maxIter) {
     const leftChar = s.charAt(posF - 1);
     s = s.replace(leftChar + 'ि', 'f' + leftChar);
     posF -= 1;
-    while (s.charAt(posF - 1) === '्' && posF !== 0) {
+    let inner = 0;
+    while (s.charAt(posF - 1) === '्' && posF !== 0 && inner++ < maxIter) {
       const pair = s.charAt(posF - 2) + '्';
       s = s.replace(pair + 'f', 'f' + pair);
       posF -= 2;
@@ -100,27 +103,28 @@ export function unicodeToKrutiDev(unicodeText) {
   // Reorder half-र (reph, र्) to follow the syllable it attaches to.
   s += '  ';
   let posHalfR = s.indexOf('र्');
-  while (posHalfR > 0) {
+  let guardR = 0;
+  while (posHalfR > 0 && guardR++ < maxIter) {
     let probableZ = posHalfR + 2;
     let charAfter = s.charAt(probableZ + 1);
-    while (MATRA_SET.indexOf(charAfter) !== -1) {
+    let inner = 0;
+    while (MATRA_SET.indexOf(charAfter) !== -1 && inner++ < maxIter) {
       probableZ += 1;
       charAfter = s.charAt(probableZ + 1);
     }
     const chunk = s.substr(posHalfR + 2, probableZ - posHalfR - 1);
+    const before = s;
     s = s.replace('र्' + chunk, chunk + 'Z');
+    if (s === before) break; // safety: replace made no progress — avoid infinite loop
     posHalfR = s.indexOf('र्');
   }
   s = s.substr(0, s.length - 2);
 
+  // Single-pass replaceAll per pattern (split/join) — avoids the previous
+  // re-scanning while-loop that could spin forever if a replacement contained
+  // its own pattern, and is far faster on long text.
   for (let i = 0; i < UNICODE_PATTERNS.length; i++) {
-    const pattern = UNICODE_PATTERNS[i];
-    const replacement = KEY_SEQUENCES[i];
-    let idx = s.indexOf(pattern);
-    while (idx !== -1) {
-      s = s.replace(pattern, replacement);
-      idx = s.indexOf(pattern);
-    }
+    s = s.split(UNICODE_PATTERNS[i]).join(KEY_SEQUENCES[i]);
   }
 
   return s;
