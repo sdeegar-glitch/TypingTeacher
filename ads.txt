@@ -1,0 +1,6 @@
+# FastTypingLab ads.txt
+# After Google AdSense approves this site, replace the line below with the exact
+# entry AdSense gives you (Sites -> Ads.txt), then redeploy. It authorizes Google
+# to sell ad inventory for this domain and prevents "ads.txt not found" warnings.
+#
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
