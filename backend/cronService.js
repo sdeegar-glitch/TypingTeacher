@@ -1,6 +1,7 @@
 import cron from 'node-cron';
 import { generateEnglishTest } from './generation/englishGenerator.js';
 import { generateHindiTest } from './generation/hindiGenerator.js';
+import { supabase } from './supabaseClient.js';
 
 // Guard against overlapping runs
 let isRunning = false;
@@ -73,6 +74,34 @@ export async function fetchAndGenerateTests(options = {}) {
   console.log(`========== [CronService] Done — ${successCount}/${results.length} tests saved ==========\n`);
   isRunning = false;
   return { results, successCount, total: results.length };
+}
+
+// ─── CATCH-UP GENERATION ──────────────────────────────────────────────────────
+// Render's free tier sleeps the instance when idle, so the scheduled 3 AM IST
+// cron often never fires (no traffic at that hour). This runs on incoming
+// traffic instead (throttled): if the newest test is stale, it generates a
+// batch — making generation resilient to the instance sleeping at cron time.
+let lastCatchUpCheck = 0;
+export async function maybeCatchUpGeneration() {
+  const now = Date.now();
+  if (now - lastCatchUpCheck < 60 * 60 * 1000) return; // check at most once/hour
+  lastCatchUpCheck = now;
+  if (isRunning) return;
+  try {
+    const { data } = await supabase
+      .from('typing_test')
+      .select('created_at')
+      .order('created_at', { ascending: false })
+      .limit(1);
+    const latest = data?.[0]?.created_at ? new Date(data[0].created_at).getTime() : 0;
+    const hoursSince = latest ? (now - latest) / 3600000 : 9999;
+    if (hoursSince >= 20) {
+      console.log(`[Catch-up] Newest test is ${hoursSince.toFixed(1)}h old — generating a batch.`);
+      fetchAndGenerateTests().catch(e => console.error('[Catch-up] generation failed:', e.message));
+    }
+  } catch (e) {
+    console.error('[Catch-up] check failed:', e.message);
+  }
 }
 
 // ─── CRON JOBS ────────────────────────────────────────────────────────────────
