@@ -39,6 +39,7 @@ export async function rewriteWithGroq(prompt) {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${GROQ_API_KEY}`,
       },
+      signal: AbortSignal.timeout(35000),
       body: JSON.stringify({
         model: GROQ_MODEL,
         messages: [{ role: 'user', content: prompt }],
@@ -76,6 +77,7 @@ export async function rewriteWithXai(prompt) {
     const res = await fetch(XAI_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${XAI_API_KEY}` },
+      signal: AbortSignal.timeout(35000),
       body: JSON.stringify({
         model: XAI_MODEL,
         messages: [{ role: 'user', content: prompt }],

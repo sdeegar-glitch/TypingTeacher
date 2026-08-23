@@ -12,11 +12,20 @@ const SLOTS_PER_DAY = {
   hi_kruti: 4,
 };
 
-async function runSlot(slot) {
+function runSlotInner(slot) {
   if (slot === 'en') return generateEnglishTest();
   if (slot === 'hi_mangal') return generateHindiTest('mangal_inscript');
   if (slot === 'hi_kruti') return generateHindiTest('kruti_dev');
   throw new Error(`Unknown slot: ${slot}`);
+}
+
+// Hard cap on a single generation so a hung network call can never freeze the
+// pipeline (which would leave isRunning stuck true and block all future runs).
+export async function runSlot(slot) {
+  return Promise.race([
+    runSlotInner(slot),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('generation timed out after 120s')), 120000)),
+  ]);
 }
 
 /**
