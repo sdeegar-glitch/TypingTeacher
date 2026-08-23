@@ -4,6 +4,7 @@ interface CharSpanProps {
   char: string;
   isCorrect: boolean;
   isError: boolean;
+  isSkipped: boolean;
   isCurrent: boolean;
 }
 
@@ -14,15 +15,16 @@ interface CharSpanProps {
  * React re-rendering and reconciling all ~8000 spans of a long article
  * on every single key press.
  */
-function CharSpanImpl({ char, isCorrect, isError, isCurrent }: CharSpanProps) {
+function CharSpanImpl({ char, isCorrect, isError, isSkipped, isCurrent }: CharSpanProps) {
   return (
     <span className="relative">
       {isCurrent && <span className="typing-caret" aria-hidden="true" />}
       <span
         id={isCurrent ? 'current-char' : undefined}
         className={`transition-colors duration-75 ${
-          isCorrect ? 'typing-correct' :
           isError ? 'typing-error' :
+          isSkipped ? 'typing-skipped' :
+          isCorrect ? 'typing-correct' :
           isCurrent ? 'typing-current' :
           'typing-upcoming'
         }`}

@@ -445,6 +445,16 @@
   text-decoration-color: rgba(224, 82, 82, 0.5);
 }
 
+/* Skipped letters (jumped past with space) — blue, distinct from red errors. */
+.typing-skipped {
+  color: #3B82F6;
+  background: rgba(59, 130, 246, 0.12);
+  border-radius: 2px;
+  text-decoration: underline;
+  text-decoration-color: rgba(59, 130, 246, 0.5);
+}
+.dark .typing-skipped { color: #60A5FA; }
+
 .typing-upcoming { color: var(--brand-muted); }
 .typing-current  { color: var(--brand-text); font-weight: 600; }
 
@@ -466,6 +476,11 @@
 .typing-high-contrast .typing-error {
   color: #FFFFFF !important;
   background: #D32F2F !important;
+  text-decoration: none;
+}
+.typing-high-contrast .typing-skipped {
+  color: #FFFFFF !important;
+  background: #1565C0 !important;
   text-decoration: none;
 }
 .typing-high-contrast .typing-upcoming { color: #888888 !important; }

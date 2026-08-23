@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, Clock, Zap, ChevronLeft } from 'lucide-react';
 import { API_URL as BASE_URL } from '../lib/api';
+import { getLastDuration, setLastDuration } from '../lib/testProgress';
 
 const API_URL = `${BASE_URL}/api/tests`;
 
@@ -18,7 +19,8 @@ export default function TestConfigPage() {
   const navigate = useNavigate();
   const [test, setTest] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [customMinutes, setCustomMinutes] = useState(2);
+  const lastDuration = getLastDuration(2);
+  const [customMinutes, setCustomMinutes] = useState(lastDuration);
 
   useEffect(() => {
     fetch(`${API_URL}/${slug}`)
@@ -27,7 +29,10 @@ export default function TestConfigPage() {
       .catch(() => setLoading(false));
   }, [slug]);
 
-  const startTest = (minutes: number) => navigate(`/tests/${slug}?duration=${minutes * 60}`);
+  const startTest = (minutes: number) => {
+    setLastDuration(minutes); // remember for next time
+    navigate(`/tests/${slug}?duration=${minutes * 60}`);
+  };
 
   if (loading) {
     return (
@@ -115,7 +120,7 @@ export default function TestConfigPage() {
                     (e.currentTarget as HTMLButtonElement).style.boxShadow = '';
                   }}>
                   <span className="text-base font-black">{opt.label}</span>
-                  <span className="text-[10px] opacity-60">{opt.desc}</span>
+                  <span className="text-[10px] opacity-60">{opt.value === lastDuration ? '★ Last used' : opt.desc}</span>
                 </button>
               ))}
             </div>

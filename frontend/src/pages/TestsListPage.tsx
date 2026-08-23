@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, ChevronRight, Zap, Clock, BarChart2, ChevronLeft, Languages, Keyboard } from 'lucide-react';
+import { BookOpen, ChevronRight, Zap, Clock, BarChart2, ChevronLeft, Languages, Keyboard, CheckCircle2 } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
+import { isTestCompleted, getLastTrack, setLastTrack } from '../lib/testProgress';
 
 import { API_URL as BASE_URL } from '../lib/api';
 const API_URL = `${BASE_URL}/api/tests`;
@@ -13,6 +14,12 @@ const DIFF_CONFIG: Record<string, { label: string; color: string; bg: string; bo
   medium: { label: 'Medium', color: 'text-amber-600 dark:text-amber-400',     bg: 'bg-amber-500/10',   border: 'border-amber-500/20' },
   hard:   { label: 'Hard',   color: 'text-rose-600 dark:text-rose-400',       bg: 'bg-rose-500/10',    border: 'border-rose-500/20' },
 };
+
+// Easy -> Medium -> Hard ordering (simple to difficult), as requested.
+const DIFF_ORDER: Record<string, number> = { easy: 0, medium: 1, hard: 2 };
+const byDifficulty = (a: any, b: any) =>
+  (DIFF_ORDER[(a.difficulty_level || 'medium').toLowerCase()] ?? 1) -
+  (DIFF_ORDER[(b.difficulty_level || 'medium').toLowerCase()] ?? 1);
 
 type Category = {
   id: string;
@@ -58,9 +65,15 @@ const CATEGORIES: Category[] = [
 ];
 
 export default function TestsListPage() {
-  const [selected, setSelected] = useState<Category | null>(null);
+  // Remember the last track so students don't re-pick it every visit.
+  const [selected, setSelected] = useState<Category | null>(() => {
+    const last = getLastTrack();
+    return CATEGORIES.find(c => c.id === last) || null;
+  });
   const [tests, setTests] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const chooseTrack = (cat: Category) => { setSelected(cat); setLastTrack(cat.id); };
 
   useEffect(() => {
     document.title = 'Typing Tests Library | FastTypingLab';
@@ -100,7 +113,7 @@ export default function TestsListPage() {
               <motion.button key={cat.id}
                 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
-                onClick={() => setSelected(cat)}
+                onClick={() => chooseTrack(cat)}
                 className="group text-left flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-brand-surface border border-brand-border hover:border-brand-primary/40 hover:shadow-lg hover:shadow-brand-primary/8 hover:-translate-y-0.5 transition-all duration-200">
                 <div className="shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform"
                   style={{ background: cat.gradient }}>
@@ -164,10 +177,10 @@ export default function TestsListPage() {
           </motion.div>
         ) : (
           <div className="flex flex-col gap-3">
-            {tests.map((test, i) => (
+            {[...tests].sort(byDifficulty).map((test, i) => (
               <motion.div key={test.id}
                 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04 }}>
+                transition={{ delay: Math.min(i, 12) * 0.04 }}>
                 <TestListItem test={test} devanagari={!!selected.devanagari} />
               </motion.div>
             ))}
@@ -187,17 +200,20 @@ export default function TestsListPage() {
 
 function TestListItem({ test, devanagari }: { test: any; devanagari: boolean }) {
   const diff = DIFF_CONFIG[(test.difficulty_level || 'medium').toLowerCase()] || DIFF_CONFIG.medium;
+  const done = isTestCompleted(test.slug || test.id);
   const date = test.created_at
     ? new Date(test.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
     : null;
 
   return (
     <Link to={`/tests/config/${test.slug || test.id}`}
-      className="group flex items-center gap-4 p-4 sm:p-5 rounded-2xl bg-brand-surface border border-brand-border hover:border-brand-primary/40 hover:shadow-lg hover:shadow-brand-primary/8 hover:-translate-y-0.5 transition-all duration-200">
+      className={`group flex items-center gap-4 p-4 sm:p-5 rounded-2xl border hover:border-brand-primary/40 hover:shadow-lg hover:shadow-brand-primary/8 hover:-translate-y-0.5 transition-all duration-200 ${
+        done ? 'bg-emerald-500/5 border-emerald-500/25' : 'bg-brand-surface border-brand-border'
+      }`}>
 
-      {/* Left: icon */}
-      <div className="shrink-0 w-11 h-11 rounded-xl icon-teal flex items-center justify-center group-hover:scale-105 transition-transform">
-        <BookOpen className="w-5 h-5" />
+      {/* Left: icon (green check when the passage is already done) */}
+      <div className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform ${done ? 'bg-emerald-500/15 text-emerald-500' : 'icon-teal'}`}>
+        {done ? <CheckCircle2 className="w-5 h-5" /> : <BookOpen className="w-5 h-5" />}
       </div>
 
       {/* Center: text */}
@@ -215,6 +231,13 @@ function TestListItem({ test, devanagari }: { test: any; devanagari: boolean }) 
           <span className={`px-2 py-0.5 rounded-md font-semibold border ${diff.bg} ${diff.color} ${diff.border}`}>
             {diff.label}
           </span>
+
+          {/* Completed badge */}
+          {done && (
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold border bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20">
+              <CheckCircle2 className="w-3 h-3" /> Done
+            </span>
+          )}
 
           {/* Word count */}
           <span className="flex items-center gap-1 text-brand-muted">

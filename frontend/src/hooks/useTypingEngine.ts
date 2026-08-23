@@ -29,7 +29,8 @@ export interface TypingStats {
 export interface TypingEngineResult {
   stats: TypingStats;
   userInput: string;
-  mistakes: Set<number>;       // set of indices with errors
+  mistakes: Set<number>;       // set of indices with wrong-typed chars (red)
+  skipped: Set<number>;        // set of indices skipped via space (blue)
   nextChar: string;
   caretIndex: number;
   processChar: (char: string) => void;
@@ -51,6 +52,7 @@ export function useTypingEngine(
 ): TypingEngineResult {
   const [userInput, setUserInput] = useState('');
   const [mistakes, setMistakes] = useState<Set<number>>(new Set());
+  const [skipped, setSkipped] = useState<Set<number>>(new Set()); // letters skipped via space (shown blue)
   const [strictErrorCount, setStrictErrorCount] = useState(0); // total wrong attempts in strict mode (mistakes Set stays empty there, since rejected keys never commit)
   const [startTime, setStartTime] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(durationSeconds);
@@ -67,9 +69,11 @@ export function useTypingEngine(
   // needing to restart the interval on every keystroke.
   const userInputRef = useRef('');
   const mistakesRef = useRef<Set<number>>(new Set());
+  const skippedRef = useRef<Set<number>>(new Set());
   const strictErrorCountRef = useRef(0);
   useEffect(() => { userInputRef.current = userInput; }, [userInput]);
   useEffect(() => { mistakesRef.current = mistakes; }, [mistakes]);
+  useEffect(() => { skippedRef.current = skipped; }, [skipped]);
   useEffect(() => { strictErrorCountRef.current = strictErrorCount; }, [strictErrorCount]);
 
   // Derived stats
@@ -81,7 +85,7 @@ export function useTypingEngine(
     const elapsed = elapsedSeconds > 0 ? elapsedSeconds : 1;
     const minutes = elapsed / 60;
     const totalChars = userInput.length;
-    const errorsCount = strictMode ? strictErrorCount : mistakes.size;
+    const errorsCount = strictMode ? strictErrorCount : mistakes.size + skipped.size;
     const cpm = Math.round(totalChars / minutes);
     const grossWpm = Math.round((totalChars / 5) / minutes);
     const netWpm = Math.max(0, Math.round(grossWpm - errorsCount / minutes));
@@ -105,7 +109,7 @@ export function useTypingEngine(
       isActive: !!startTime && !isFinished,
       elapsedSeconds,
     };
-  }, [userInput, mistakes, strictErrorCount, strictMode, elapsedSeconds, timeLeft, isFinished, startTime, text]);
+  }, [userInput, mistakes, skipped, strictErrorCount, strictMode, elapsedSeconds, timeLeft, isFinished, startTime, text]);
 
   // Countdown timer — also samples a WPM/accuracy history point every tick
   useEffect(() => {
@@ -115,7 +119,7 @@ export function useTypingEngine(
         const nextElapsed = durationSeconds - (prev - 1 >= 0 ? prev - 1 : 0);
         const minutes = Math.max(nextElapsed, 1) / 60;
         const totalChars = userInputRef.current.length;
-        const errorsCount = strictMode ? strictErrorCountRef.current : mistakesRef.current.size;
+        const errorsCount = strictMode ? strictErrorCountRef.current : mistakesRef.current.size + skippedRef.current.size;
         const grossWpm = Math.round((totalChars / 5) / minutes);
         const accDenom = strictMode ? totalChars + strictErrorCountRef.current : totalChars;
         const acc = accDenom > 0 ? Math.round(((accDenom - errorsCount) / accDenom) * 100) : 100;
@@ -158,6 +162,19 @@ export function useTypingEngine(
       }
       const expected = text[prev.length];
       const isWrong = char !== expected;
+
+      // Skip-word (10FastFingers style): pressing space mid-word jumps to the
+      // next word. The un-typed letters of the current word are marked "skipped"
+      // (rendered blue, counted as errors) — distinct from "wrong" letters (red).
+      if (char === ' ' && expected !== ' ' && expected !== undefined && !strictMode) {
+        const nextSpaceIdx = text.indexOf(' ', prev.length);
+        const skipTo = nextSpaceIdx === -1 ? text.length : nextSpaceIdx;
+        setSkipped(sk => { const ns = new Set(sk); for (let i = prev.length; i < skipTo; i++) ns.add(i); return ns; });
+        const advanceTo = nextSpaceIdx === -1 ? text.length : nextSpaceIdx + 1;
+        const next = prev + text.slice(prev.length, advanceTo);
+        if (next.length >= text.length) setTimeout(finish, 50);
+        return next;
+      }
 
       if (isWrong && strictMode) {
         // Reject the keystroke entirely — cursor doesn't advance until the
@@ -211,6 +228,7 @@ export function useTypingEngine(
   const reset = useCallback(() => {
     setUserInput('');
     setMistakes(new Set());
+    setSkipped(new Set());
     setStrictErrorCount(0);
     setStartTime(null);
     setTimeLeft(durationSeconds);
@@ -229,6 +247,7 @@ export function useTypingEngine(
     stats,
     userInput,
     mistakes,
+    skipped,
     nextChar,
     caretIndex,
     processChar,

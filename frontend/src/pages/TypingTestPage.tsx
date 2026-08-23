@@ -11,6 +11,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
 
 import { API_URL as BASE_URL, saveSession, fetchMistakeHandlingMode } from '../lib/api';
+import { markTestCompleted } from '../lib/testProgress';
 const API_URL = `${BASE_URL}/api/tests`;
 
 // Duration options
@@ -152,6 +153,7 @@ export default function TypingTestPage() {
     'timed',
     (finalStats) => {
       sound.playComplete();
+      markTestCompleted(id); // mark this passage "done" for the tests list
       setSrAnnouncement(`Test complete. Net speed ${finalStats.netWpm} words per minute, accuracy ${finalStats.accuracy} percent, ${finalStats.errors} errors.`);
 
       // 1. Save to backend
@@ -207,7 +209,7 @@ export default function TypingTestPage() {
     strictMode
   );
 
-  const { stats, userInput, mistakes, processChar, processBackspace, handleMobileInput, reset, rejectedFlash, history } = engine;
+  const { stats, userInput, mistakes, skipped, processChar, processBackspace, handleMobileInput, reset, rejectedFlash, history } = engine;
 
   // Brief shake on the typing display when strict mode rejects a keystroke
   const [shake, setShake] = useState(false);
@@ -478,8 +480,9 @@ export default function TypingTestPage() {
                 <CharSpan
                   key={index}
                   char={char}
-                  isCorrect={index < userInput.length && !mistakes.has(index)}
+                  isCorrect={index < userInput.length && !mistakes.has(index) && !skipped.has(index)}
                   isError={index < userInput.length && mistakes.has(index)}
+                  isSkipped={skipped.has(index)}
                   isCurrent={index === userInput.length}
                 />
               ))}
@@ -530,6 +533,12 @@ export default function TypingTestPage() {
             >
               <Contrast className="w-3.5 h-3.5" />
             </button>
+          </div>
+
+          {/* Colour legend — helps students read their errors at a glance */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-3 px-1 text-[11px] text-brand-muted">
+            <span className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: '#E05252' }} /> Wrong letter</span>
+            <span className="flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: '#3B82F6' }} /> Skipped (press <kbd className="px-1 rounded bg-brand-surface-2 border border-brand-border">space</kbd> to skip a word)</span>
           </div>
 
           {/* Live CPM stat under the box */}
