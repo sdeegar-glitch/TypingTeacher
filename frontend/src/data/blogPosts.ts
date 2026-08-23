@@ -1138,7 +1138,7 @@ These are averages — regular practice matters far more than age.
 
 ## Average Typing Speed in India
 
-For Indian government exams the benchmark is usually 30-40 WPM (SSC needs 35 WPM English, 30 WPM Hindi). Clearing these puts you comfortably around or above the average for skilled office work.
+**The average typing speed in India is about 35-40 words per minute (WPM)**, close to the global average of roughly 40 WPM. Students and beginners often type 25-35 WPM, while skilled typists reach 55-65 WPM. For Indian government exams the benchmark is usually 30-40 WPM (SSC needs 35 WPM in English and 30 WPM in Hindi). Clearing these puts you comfortably around or above the average for skilled office work. For the full India breakdown, see our **[typing statistics](/typing-statistics)**.
 
 ## What Counts as Fast?
 
