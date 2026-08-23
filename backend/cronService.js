@@ -81,26 +81,42 @@ export async function fetchAndGenerateTests(options = {}) {
 // cron often never fires (no traffic at that hour). This runs on incoming
 // traffic instead (throttled): if the newest test is stale, it generates a
 // batch — making generation resilient to the instance sleeping at cron time.
+// Generate ONE test per trigger (not a long batch) so each unit finishes within
+// seconds — resilient to the instance idling mid-run. Rotates languages and
+// stops once ~12 tests exist in the last 24h (the normal daily volume).
+const CATCHUP_SLOTS = ['en', 'hi_mangal', 'hi_kruti'];
+const DAILY_TARGET = 12;
 let lastCatchUpCheck = 0;
+let slotCursor = 0;
+
 export async function maybeCatchUpGeneration() {
   const now = Date.now();
-  if (now - lastCatchUpCheck < 60 * 60 * 1000) return; // check at most once/hour
+  if (now - lastCatchUpCheck < 6 * 60 * 1000) return; // at most once every 6 min
   lastCatchUpCheck = now;
   if (isRunning) return;
+  if (!process.env.GEMINI_API_KEY) return;
+
   try {
-    const { data } = await supabase
+    const dayAgo = new Date(now - 24 * 3600 * 1000).toISOString();
+    const { count } = await supabase
       .from('typing_test')
-      .select('created_at')
-      .order('created_at', { ascending: false })
-      .limit(1);
-    const latest = data?.[0]?.created_at ? new Date(data[0].created_at).getTime() : 0;
-    const hoursSince = latest ? (now - latest) / 3600000 : 9999;
-    if (hoursSince >= 20) {
-      console.log(`[Catch-up] Newest test is ${hoursSince.toFixed(1)}h old — generating a batch.`);
-      fetchAndGenerateTests().catch(e => console.error('[Catch-up] generation failed:', e.message));
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', dayAgo);
+    if ((count || 0) >= DAILY_TARGET) return; // enough fresh tests already
+
+    const slot = CATCHUP_SLOTS[slotCursor % CATCHUP_SLOTS.length];
+    slotCursor++;
+    isRunning = true;
+    console.log(`[Catch-up] ${count || 0}/${DAILY_TARGET} tests in last 24h — generating one "${slot}".`);
+    try {
+      const result = await runSlot(slot);
+      console.log(`[Catch-up] ${slot}: ${result?.status || 'done'}${result?.error ? ' — ' + result.error : ''}`);
+    } finally {
+      isRunning = false;
     }
   } catch (e) {
-    console.error('[Catch-up] check failed:', e.message);
+    isRunning = false;
+    console.error('[Catch-up] failed:', e.message);
   }
 }
 
