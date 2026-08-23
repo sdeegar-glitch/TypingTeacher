@@ -25,6 +25,11 @@ const XAI_MODEL = process.env.XAI_MODEL || 'grok-3'; // set XAI_MODEL if this 40
 const XAI_ENDPOINT = 'https://api.x.ai/v1/chat/completions';
 const geminiAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
+// Rewrite has 3 fallback providers, so a single provider should fail FAST rather
+// than burn withRetry's default 20s-per-attempt backoff (3 providers × ~60s each
+// = ~180s, which blew the generation timeout). One quick 3s retry, then move on.
+const fastRetry = (fn) => withRetry(fn, 2, 3000);
+
 /**
  * Sends a single-turn prompt to Groq and returns the raw text response.
  * Throws on HTTP/network failure — callers handle retry/fallback.
@@ -32,7 +37,7 @@ const geminiAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 export async function rewriteWithGroq(prompt) {
   if (!GROQ_API_KEY) throw new Error('GROQ_API_KEY not configured');
 
-  return withRetry(async () => {
+  return fastRetry(async () => {
     const res = await fetch(GROQ_ENDPOINT, {
       method: 'POST',
       headers: {
@@ -73,7 +78,7 @@ export async function rewriteWithGroq(prompt) {
 /** xAI Grok — OpenAI-compatible. Used as a fallback if Groq fails. */
 export async function rewriteWithXai(prompt) {
   if (!XAI_API_KEY) throw new Error('XAI_API_KEY not configured');
-  return withRetry(async () => {
+  return fastRetry(async () => {
     const res = await fetch(XAI_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${XAI_API_KEY}` },
@@ -99,7 +104,7 @@ export async function rewriteWithXai(prompt) {
 /** Gemini — final fallback for the rewrite step (JSON output). */
 export async function rewriteWithGemini(prompt) {
   if (!process.env.GEMINI_API_KEY) throw new Error('GEMINI_API_KEY not configured');
-  return withRetry(async () => {
+  return fastRetry(async () => {
     const model = geminiAI.getGenerativeModel({
       model: process.env.GEMINI_REWRITE_MODEL || 'gemini-2.5-flash',
       generationConfig: { responseMimeType: 'application/json' },
