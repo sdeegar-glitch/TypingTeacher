@@ -38,19 +38,6 @@ app.get('/health', (req, res) => {
 // was asleep at the scheduled cron time.
 app.use((req, res, next) => { maybeCatchUpGeneration(); next(); });
 
-// TEMP DIAGNOSTIC — runs one generation synchronously and returns the outcome
-// (incl. any error) so failures can be diagnosed. Remove after debugging.
-app.get('/debug/gen', async (req, res) => {
-  if (req.query.k !== 'ftl-debug-2026') return res.status(403).json({ error: 'forbidden' });
-  try {
-    const slot = ['en', 'hi_mangal', 'hi_kruti'].includes(req.query.slot) ? req.query.slot : 'en';
-    // Call runSlot directly to bypass the isRunning guard for diagnosis.
-    const out = await runSlot(slot);
-    res.json({ ok: true, slot, result: out });
-  } catch (e) {
-    res.status(500).json({ error: e.message, stack: (e.stack || '').split('\n').slice(0, 8) });
-  }
-});
 
 import testsRoutes from './routes/tests.js';
 import testSessionsRoutes from './routes/test_sessions.js';
@@ -62,7 +49,7 @@ import meRoutes from './routes/me.js';
 import adminRoutes from './routes/admin.js';
 import publicSettingsRoutes from './routes/publicSettings.js';
 import visitorsRoutes from './routes/visitors.js';
-import { initCronJobs, maybeCatchUpGeneration, runSlot } from './cronService.js';
+import { initCronJobs, maybeCatchUpGeneration } from './cronService.js';
 
 app.use('/tests', testsRoutes);
 app.use('/api/tests', testsRoutes);
