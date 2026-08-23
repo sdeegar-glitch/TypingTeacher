@@ -2,9 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 
 const SITE_URL = 'https://fasttypinglab.com';
-// TODO: replace with a purpose-built 1200x630 og-image.png. Points at the
-// existing logo for now so social shares don't 404 on the preview image.
-const DEFAULT_IMAGE = `${SITE_URL}/favicon-512x512.png`;
+const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;
 
 interface SeoProps {
   /** Full <title> text, e.g. "Typing Tests | FastTypingLab". */
