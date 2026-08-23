@@ -723,7 +723,12 @@ export default function TypingTestPage() {
               <div className="mt-4">
                 <SignupPromptBanner
                   dismissKey="signupPromptResult"
-                  message="Save this result! 🚀 Create a free account to track your progress, keep your streak, and unlock the AI tutor."
+                  message={
+                    stats.netWpm >= 40
+                      ? `🏆 ${stats.netWpm} WPM at ${stats.accuracy}% — that's certificate-worthy! Create a free account to save this result, download your certificate, and keep your streak.`
+                      : `Nice run — ${stats.netWpm} WPM! 🚀 Create a free account to track your progress over time, keep your streak, and unlock the AI tutor.`
+                  }
+                  cta="Save my result"
                 />
               </div>
             </motion.div>

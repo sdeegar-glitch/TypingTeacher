@@ -21,6 +21,10 @@ const AuthPage = () => {
   const navigate = useNavigate();
   const oauthHandled = useRef(false);
 
+  // Where to send the user after auth. A `?next=` param (e.g. from the certificate
+  // download gate) is honored so they return to what they were doing; else /dashboard.
+  const nextPath = new URLSearchParams(location.search).get('next') || '/dashboard';
+
   // Handle the return leg of a Google OAuth sign-in. detectSessionInUrl exchanges
   // the ?code=… on load; onAuthStateChange then fires with the session. We make
   // sure the user exists in our `users` table, mirror the token into the key the
@@ -41,7 +45,9 @@ const AuthPage = () => {
         localStorage.setItem('accessToken', accessToken);
         window.dispatchEvent(new Event('ftl-auth-change'));
         setSuccess('Signed in with Google! Redirecting…');
-        setTimeout(() => navigate('/dashboard'), 700);
+        const dest = sessionStorage.getItem('postAuthNext') || '/dashboard';
+        sessionStorage.removeItem('postAuthNext');
+        setTimeout(() => navigate(dest), 700);
       } catch (err: any) {
         oauthHandled.current = false;
         setGoogleLoading(false);
@@ -61,6 +67,9 @@ const AuthPage = () => {
 
   const handleGoogle = async () => {
     setError(''); setSuccess(''); setGoogleLoading(true);
+    // Preserve the post-auth destination across the Google round-trip (redirectTo
+    // returns to /login and drops query params, so stash it in sessionStorage).
+    try { sessionStorage.setItem('postAuthNext', nextPath); } catch { /* ignore */ }
     try {
       const { error: oauthErr } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -92,7 +101,7 @@ const AuthPage = () => {
       }
       setSuccess(isLogin ? 'Login successful! Redirecting…' : 'Account created! Welcome aboard!');
       setLoading(false);
-      setTimeout(() => navigate('/dashboard'), 900);
+      setTimeout(() => navigate(nextPath), 900);
     } catch (err: any) {
       setLoading(false);
       setError(err.message);

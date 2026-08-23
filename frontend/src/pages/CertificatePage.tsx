@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Download, Share2, CheckCircle, Award, ExternalLink, ChevronLeft, Check } from 'lucide-react';
+import { Download, Share2, CheckCircle, Award, ExternalLink, ChevronLeft, Check, Lock } from 'lucide-react';
 
 import { API_URL } from '../lib/api';
 import SignupPromptBanner from '../components/SignupPromptBanner';
+import { isLoggedIn } from '../lib/auth';
 
 interface CertData {
   id: string;
@@ -186,6 +187,7 @@ export default function CertificatePage() {
   const [isIssuing, setIsIssuing] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showLoginGate, setShowLoginGate] = useState(false);
   const [tab, setTab] = useState<'generate' | 'verify'>(wpm > 0 ? 'generate' : 'verify');
 
   useEffect(() => {
@@ -237,6 +239,13 @@ export default function CertificatePage() {
 
   const downloadCertificate = () => {
     if (!certData || !hiddenCanvasRef.current) return;
+    // Gate the download behind a free account — the certificate is the strongest
+    // reason a visitor has to sign up. Preview stays fully visible (good UX + AdSense),
+    // but saving/downloading the PNG requires logging in.
+    if (!isLoggedIn()) {
+      setShowLoginGate(true);
+      return;
+    }
     setIsDownloading(true);
     try {
       const canvas = hiddenCanvasRef.current;
@@ -357,8 +366,8 @@ export default function CertificatePage() {
                     className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all disabled:opacity-60 shadow-lg shadow-brand-primary/20">
                     {isDownloading
                       ? <div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" />
-                      : <Download className="w-4 h-4" />}
-                    {isDownloading ? 'Downloading…' : 'Download PNG'}
+                      : isLoggedIn() ? <Download className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                    {isDownloading ? 'Downloading…' : isLoggedIn() ? 'Download PNG' : 'Sign in to Download'}
                   </button>
                   <button onClick={copyLink}
                     className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text px-5 py-2.5 rounded-xl font-bold text-sm transition-all">
@@ -370,6 +379,37 @@ export default function CertificatePage() {
                     Edit Name
                   </button>
                 </div>
+
+                {/* Login gate — appears when a logged-out visitor tries to download */}
+                {showLoginGate && !isLoggedIn() && (
+                  <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                    className="mb-4 rounded-2xl p-5 border overflow-hidden"
+                    style={{ background: 'linear-gradient(135deg, rgba(48,76,83,0.10), rgba(42,157,174,0.10))', borderColor: 'rgba(42,157,174,0.25)' }}>
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white shadow-md"
+                        style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                        <Lock className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-bold text-brand-text">One quick step — create a free account</p>
+                        <p className="text-sm text-brand-text-muted mt-1 mb-3">
+                          Your certificate is saved to your profile so you can download it anytime, on any device, and share a verified link. It's free and takes 5 seconds with Google.
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          <Link to={`/signup?next=${encodeURIComponent(window.location.pathname + window.location.search)}`}
+                            className="inline-flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all active:scale-95"
+                            style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.30)' }}>
+                            Create free account
+                          </Link>
+                          <Link to={`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`}
+                            className="inline-flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text font-semibold px-5 py-2.5 rounded-xl text-sm transition-all">
+                            I already have an account
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
 
                 {/* Certificate Preview — pure white card rendered from canvas */}
                 <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
