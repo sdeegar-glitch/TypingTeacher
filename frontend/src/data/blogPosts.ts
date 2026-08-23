@@ -15,8 +15,8 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'how-to-learn-shorthand-stenography',
     title: 'How to Learn Shorthand (Stenography): A Beginner’s Guide',
-    seoTitle: 'How to Learn Shorthand (Stenography) for Steno Exams | FastTypingLab',
-    metaDesc: 'Learn shorthand from scratch: what stenography is, Pitman vs Gregg, SSC Steno Grade C/D speed requirements, dictation & transcription, and how to practise free.',
+    seoTitle: 'How to Learn Shorthand at Home — Free Beginner Guide (2026) | FastTypingLab',
+    metaDesc: 'Learn shorthand (stenography) from scratch at home: Pitman basics, SSC Steno speed targets, and free dictation practice — a simple step-by-step guide for beginners.',
     category: 'Learning',
     readTime: '8 min',
     date: '2026-07-18',
@@ -663,8 +663,8 @@ FastTypingLab offers free Kruti Dev and Hindi Unicode (Mangal) typing tests with
   {
     slug: 'how-to-type-in-hindi-on-laptop-word-whatsapp',
     title: 'How to Type in Hindi on Laptop, MS Word & WhatsApp (2026)',
-    seoTitle: 'How to Type in Hindi on Laptop, Word & WhatsApp | FastTypingLab',
-    metaDesc: 'Learn how to type in Hindi on a laptop, MS Word, and WhatsApp — using Mangal (INSCRIPT), Google Input Tools, and phonetic typing. Step-by-step and free.',
+    seoTitle: 'How to Type Hindi on Laptop, Word & WhatsApp — 3 Free Ways | FastTypingLab',
+    metaDesc: 'Type Hindi on your laptop, MS Word & WhatsApp — 3 free ways: Mangal (INSCRIPT), Google Input Tools & phonetic typing. Simple step-by-step, no software needed.',
     category: 'Learning',
     readTime: '6 min',
     date: '2026-06-28',

@@ -290,8 +290,8 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     slug: 'deo',
     examName: 'DEO',
     h1: 'DEO Typing Test — Free Data Entry Practice',
-    seoTitle: 'DEO Typing Test Online — Data Entry Operator Practice | FastTypingLab',
-    metaDesc: 'Free Data Entry Operator (DEO) typing test practice. Build 8,000+ key depressions per hour (~27–35 WPM) with live speed and accuracy tracking.',
+    seoTitle: 'DEO Typing Test — Free Data Entry Practice (8000 KDPH) | FastTypingLab',
+    metaDesc: 'Free DEO (Data Entry Operator) typing test — practise 8,000 key depressions per hour (~27-35 WPM) with live speed & accuracy, in the exact government exam format.',
     eyebrow: 'Data Entry Operator',
     intro: 'Data Entry Operator (DEO) posts across SSC and many departments require a data-entry speed test measured in key depressions per hour (KDPH) rather than WPM directly. The common benchmark is 8,000 KDPH, with some posts requiring more. Sustained accuracy over the full duration is what this test rewards.',
     requirements: [
