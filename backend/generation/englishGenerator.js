@@ -4,7 +4,7 @@ import { findSourceMaterial } from './sourceEngine.js';
 import { findSimilarTest } from './embeddings.js';
 import { validateTest, countWords, makeSlug } from './qualityGate.js';
 import { DIFFICULTY_MIX_INSTRUCTIONS, buildDifficultyJsonField, normalizeDifficultyBreakdown } from './difficultyMixer.js';
-import { rewriteWithGroq } from './groqClient.js';
+import { rewriteWithFallback } from './groqClient.js';
 
 async function rewriteToTest(topic, foundTitle, foundContent) {
   const prompt = `You are an expert educational writer creating typing practice content for a competitive-exam-style passage.
@@ -32,7 +32,7 @@ Return ONLY valid JSON:
   ${buildDifficultyJsonField()}
 }`;
 
-  const rawText = await rewriteWithGroq(prompt);
+  const rawText = await rewriteWithFallback(prompt);
   const start = rawText.indexOf('{');
   const end = rawText.lastIndexOf('}');
   const jsonString = start !== -1 && end !== -1 ? rawText.substring(start, end + 1) : rawText;

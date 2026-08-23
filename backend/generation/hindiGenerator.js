@@ -5,7 +5,7 @@ import { findSimilarTest } from './embeddings.js';
 import { validateTest, countWords, makeSlug } from './qualityGate.js';
 import { DIFFICULTY_MIX_INSTRUCTIONS, buildDifficultyJsonField, normalizeDifficultyBreakdown } from './difficultyMixer.js';
 import { unicodeToKrutiDev } from './krutiDevConverter.js';
-import { rewriteWithGroq } from './groqClient.js';
+import { rewriteWithFallback } from './groqClient.js';
 
 async function rewriteToHindiTest(topic, foundTitle, foundContent) {
   const prompt = `आप हिंदी टंकण (typing) अभ्यास के लिए मूल लेख लिखने वाले एक कुशल शिक्षण-लेखक हैं।
@@ -33,7 +33,7 @@ ${DIFFICULTY_MIX_INSTRUCTIONS}
   ${buildDifficultyJsonField()}
 }`;
 
-  const rawText = await rewriteWithGroq(prompt);
+  const rawText = await rewriteWithFallback(prompt);
   const start = rawText.indexOf('{');
   const end = rawText.lastIndexOf('}');
   const jsonString = start !== -1 && end !== -1 ? rawText.substring(start, end + 1) : rawText;
