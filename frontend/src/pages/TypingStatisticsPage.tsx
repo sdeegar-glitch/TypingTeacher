@@ -4,6 +4,7 @@ import { BarChart3, Calculator, Zap, HelpCircle } from 'lucide-react';
 import Seo from '../components/Seo';
 
 const FAQS = [
+  { q: 'What is the average typing speed in India?', a: 'The average typing speed in India is around 35–40 words per minute (WPM), close to the global average of about 40 WPM. Students and beginners often type 25–35 WPM, while government-exam typists usually train to 30–40 WPM in English and 25–30 WPM in Hindi.' },
   { q: 'What is the average typing speed?', a: 'The average typing speed is about 40 words per minute (WPM) for adults using a computer keyboard. Skilled touch typists reach 55–65 WPM, and professionals often type 70–90 WPM.' },
   { q: 'What is a good typing speed for a job?', a: 'Most office and data-entry jobs expect 40–60 WPM with high accuracy. Specialised roles like transcription or programming often require 65–90 WPM.' },
   { q: 'What is the average typing speed by age?', a: 'Typing speed usually peaks between ages 20 and 35 (around 40–45 WPM average) and declines gradually after that. Children and teenagers typically type slower as they build muscle memory.' },
@@ -82,8 +83,8 @@ export default function TypingStatisticsPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
       <Seo
-        title="Typing Statistics — Average Typing Speed & WPM Benchmarks (2026) | FastTypingLab"
-        description="Typing statistics and average typing speed benchmarks: WPM by skill level, age, profession and country, plus accuracy, common mistakes and Indian exam speeds."
+        title="Average Typing Speed in India & Worldwide — Typing Statistics (2026) | FastTypingLab"
+        description="The average typing speed in India is about 35–40 WPM. See full typing statistics — average WPM by skill level, age, profession and country, plus accuracy and Indian exam speeds."
         jsonLd={{
           '@context': 'https://schema.org', '@type': 'FAQPage',
           mainEntity: FAQS.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
@@ -94,13 +95,25 @@ export default function TypingStatisticsPage() {
           <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center">
             <BarChart3 className="w-5 h-5 text-brand-primary" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black">Typing Statistics & Average Typing Speed</h1>
+          <h1 className="text-2xl sm:text-3xl font-black">Average Typing Speed in India &amp; Typing Statistics</h1>
         </div>
+
+        {/* Direct answer — optimised for the "average typing speed in India" featured snippet */}
+        <div className="bg-brand-surface border-l-4 border-brand-primary rounded-r-2xl rounded-l-md p-5 mb-6">
+          <p className="text-brand-text text-sm sm:text-base leading-relaxed">
+            <strong className="text-brand-text">The average typing speed in India is about 35–40 words per minute (WPM)</strong>,
+            close to the global average of roughly 40 WPM. Beginners and students typically type 25–35 WPM,
+            skilled touch typists reach 55–65 WPM, and professionals often exceed 70 WPM. For Indian government
+            typing exams, the usual requirement is 30–40 WPM in English and 25–30 WPM in Hindi.
+          </p>
+        </div>
+
         <p className="text-brand-text-muted text-sm leading-relaxed mb-6">
-          How fast is the average person, and where do you stand? This page collects typing-speed
-          benchmarks — average WPM by skill level, age, profession and country — plus accuracy stats,
-          the most common typing mistakes, and the speeds required for Indian government exams.
-          Figures are compiled from widely reported typing-test benchmarks.
+          Where do you stand? This page collects typing-speed benchmarks — average WPM by skill level, age,
+          profession and country — plus accuracy stats, the most common typing mistakes, and the speeds
+          required for Indian government exams. Figures are compiled from widely reported typing-test benchmarks.
+          You can <Link to="/tests" className="text-brand-primary hover:underline">test your own typing speed free</Link> or
+          use our <Link to="/wpm-calculator" className="text-brand-primary hover:underline">WPM calculator</Link>.
         </p>
 
         <Section title="Average typing speed at a glance">

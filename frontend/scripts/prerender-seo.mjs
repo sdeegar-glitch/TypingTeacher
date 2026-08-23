@@ -172,7 +172,8 @@ const ROUTES = [
     ['What is a good typing speed?', 'The average is about 40 WPM; 50-65 is a solid touch-typing speed, 70-90 is professional, and 100+ is top 1%. Indian govt exams usually require 30-40 WPM.'],
     ['What is the difference between gross and net WPM?', 'Gross WPM is raw speed; net WPM subtracts mistakes, so it reflects usable speed — the number that matters for exams and real work.'],
   ]) },
-  { path: '/typing-statistics', title: 'Typing Statistics — Average Typing Speed & WPM Benchmarks (2026) | FastTypingLab', description: 'Typing statistics and average typing speed benchmarks: WPM by skill level, age, profession and country, plus accuracy, common mistakes and Indian exam speeds.', jsonLd: faqLd([
+  { path: '/typing-statistics', title: 'Average Typing Speed in India & Worldwide — Typing Statistics (2026) | FastTypingLab', description: 'The average typing speed in India is about 35-40 WPM. See full typing statistics — average WPM by skill level, age, profession and country, plus accuracy and Indian exam speeds.', jsonLd: faqLd([
+    ['What is the average typing speed in India?', 'The average typing speed in India is around 35-40 WPM, close to the global average of about 40 WPM. Government-exam typists usually train to 30-40 WPM in English and 25-30 WPM in Hindi.'],
     ['What is the average typing speed?', 'About 40 WPM for adults on a computer keyboard. Skilled touch typists reach 55-65 WPM and professionals often type 70-90 WPM.'],
     ['What is the average typing speed by age?', 'Typing speed usually peaks between ages 20 and 35 (around 40-45 WPM) and declines gradually after that.'],
     ['What typing speed is required for Indian government exams?', 'Most Indian government typing tests require 25-40 WPM, commonly 35 WPM in English and 25-30 WPM in Hindi.'],
