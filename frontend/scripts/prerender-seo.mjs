@@ -162,6 +162,21 @@ const ROUTES = [
     ['Which Hindi font does UPSSSC use for typing?', 'It is commonly Mangal (Unicode) or Kruti Dev depending on the post and year. Check your notification and practise that specific layout.'],
     ['How can I practise the UPSSSC typing test free?', 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy, in the exam format.'],
   ]) },
+  { path: '/ahc-ro-aro-typing-test', title: 'AHC RO/ARO Typing Test Online — Allahabad High Court Practice | FastTypingLab', description: 'Free Allahabad High Court (AHC) RO/ARO typing test practice — Hindi (Mangal/Kruti Dev) and English, with live WPM and accuracy for the RO/ARO computer typing test.', jsonLd: faqLd([
+    ['What typing speed is required for AHC RO/ARO?', 'The Allahabad High Court RO/ARO typing test commonly expects around 25 WPM in Hindi and 30 WPM in English, but the exact speed is fixed in your notification — always confirm it.'],
+    ['Which Hindi font does the AHC RO/ARO typing test use?', 'It is usually Mangal (Unicode) or Kruti Dev depending on the notification. Check yours and practise that specific layout.'],
+    ['How can I practise the AHC RO/ARO typing test free?', 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy in the exam format.'],
+  ]) },
+  { path: '/delhi-police-typing-test', title: 'Delhi Police Typing Test — Head Constable Ministerial Practice | FastTypingLab', description: 'Free Delhi Police typing test practice for Head Constable (Ministerial) — English 30 WPM / Hindi 25 WPM computer typing test, with live WPM and accuracy.', jsonLd: faqLd([
+    ['What typing speed is required for Delhi Police Head Constable?', 'Delhi Police Head Constable (Ministerial) typically requires 30 WPM in English or 25 WPM in Hindi on a computer, though always confirm from your official notification.'],
+    ['Is the Delhi Police typing test qualifying?', 'Yes, it is a qualifying skill test — you must meet the required speed and accuracy to be selected.'],
+    ['How can I practise the Delhi Police typing test free?', 'FastTypingLab offers free English and Hindi typing tests with live WPM and accuracy in the exam format.'],
+  ]) },
+  { path: '/rrb-typing-test', title: 'RRB Typing Test — Railway Clerk cum Typist Practice | FastTypingLab', description: 'Free RRB typing test practice for Railway Junior/Senior Clerk cum Typist and Typist posts — 30 WPM English / 25 WPM Hindi, with live WPM and accuracy.', jsonLd: faqLd([
+    ['What typing speed is required for RRB Clerk cum Typist?', 'RRB typist posts typically require about 30 WPM in English or 25 WPM in Hindi, but always confirm the exact figure from your notification.'],
+    ['Is the RRB typing test qualifying?', 'Yes, for typist posts it is a qualifying skill test — you must meet the required speed and accuracy to be selected.'],
+    ['How can I practise the RRB typing test free?', 'FastTypingLab offers free English and Hindi typing tests with live WPM and accuracy in the exam format.'],
+  ]) },
   { path: '/leaderboard', title: 'Global Typing Leaderboard | FastTypingLab', description: 'See the fastest typists on FastTypingLab. Global typing speed leaderboard ranked by net WPM and accuracy.' },
 
   { path: '/keyboard-tester', title: 'Online Keyboard Tester — Test Every Key | FastTypingLab', description: 'Free online keyboard tester. Press any key to check it registers correctly — test your full keyboard, function keys and modifiers in the browser.' },

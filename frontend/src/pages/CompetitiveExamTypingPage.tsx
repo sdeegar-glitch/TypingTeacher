@@ -169,6 +169,9 @@ export default function CompetitiveExamTypingPage() {
               { label: 'SSC Steno Typing', href: '/ssc-steno-typing-test' },
               { label: 'DSSSB Typing', href: '/dsssb-typing-test' },
               { label: 'UPSSSC Typing', href: '/upsssc-typing-test' },
+              { label: 'AHC RO/ARO Typing', href: '/ahc-ro-aro-typing-test' },
+              { label: 'Delhi Police Typing', href: '/delhi-police-typing-test' },
+              { label: 'RRB Typing Test', href: '/rrb-typing-test' },
             ].map(g => (
               <Link key={g.href} to={g.href}
                 className="group flex items-center justify-between gap-2 bg-brand-surface border border-brand-border rounded-xl px-4 py-3 text-sm font-semibold text-brand-text hover:border-brand-primary/40 transition-all">

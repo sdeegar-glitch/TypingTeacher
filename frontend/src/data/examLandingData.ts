@@ -514,6 +514,120 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { label: 'All Exam Typing', href: '/competitive-exam-typing' },
     ],
   },
+
+  'ahc-ro-aro': {
+    slug: 'ahc-ro-aro',
+    examName: 'AHC RO/ARO',
+    h1: 'Allahabad High Court RO/ARO Typing Test — Free Practice',
+    seoTitle: 'AHC RO/ARO Typing Test Online — Allahabad High Court Practice | FastTypingLab',
+    metaDesc: 'Free Allahabad High Court (AHC) RO/ARO typing test practice — Hindi (Mangal/Kruti Dev) and English, with live WPM and accuracy for the RO/ARO computer typing test.',
+    eyebrow: 'AHC / Allahabad High Court',
+    intro: 'The Allahabad High Court (AHC) recruitment for Review Officer (RO) and Assistant Review Officer (ARO) posts includes a computer typing test as a qualifying stage. Candidates are typically required to type in Hindi and/or English on a computer at the speed set in the notification. Speeds and the Hindi font can vary by post and year, so always confirm your official notification and practise the exact format daily.',
+    requirements: [
+      { language: 'Hindi', layout: 'Mangal / Kruti Dev', speed: '25 WPM', duration: 'Qualifying test' },
+      { language: 'English', layout: 'QWERTY', speed: '30 WPM', duration: 'Qualifying test' },
+    ],
+    format: [
+      'A Hindi and/or English passage is typed on the computer within a set time.',
+      'The exact speed, font and language are fixed in the post notification — always check.',
+      'Both speed and accuracy are assessed; mistakes reduce your effective speed.',
+      'The test runs on a desktop computer — practise only on a physical keyboard.',
+    ],
+    tips: [
+      'Confirm the required language, speed and Hindi font from your AHC notification.',
+      'Aim a few WPM above the minimum so exam nerves do not pull you below it.',
+      'Practise Hindi matras and half-letters, which slow most UP candidates.',
+      'Do daily timed tests in the exam format to build stamina.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for AHC RO/ARO?', a: 'The Allahabad High Court RO/ARO typing test commonly expects around 25 WPM in Hindi and 30 WPM in English, but the exact speed is fixed in your notification — always confirm it.' },
+      { q: 'Which Hindi font does the AHC RO/ARO typing test use?', a: 'It is usually Mangal (Unicode) or Kruti Dev depending on the notification. Check yours and practise that specific layout.' },
+      { q: 'How can I practise the AHC RO/ARO typing test free?', a: 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy in the exam format.' },
+    ],
+    practiceHref: '/kruti-dev-typing',
+    practiceLabel: 'Start Hindi Typing Practice',
+    related: [
+      { label: 'UPSSSC Typing Test', href: '/upsssc-typing-test' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
+
+  'delhi-police': {
+    slug: 'delhi-police',
+    examName: 'Delhi Police',
+    h1: 'Delhi Police Typing Test — Head Constable (Ministerial)',
+    seoTitle: 'Delhi Police Typing Test — Head Constable Ministerial Practice | FastTypingLab',
+    metaDesc: 'Free Delhi Police typing test practice for Head Constable (Ministerial) — English 30 WPM / Hindi 25 WPM computer typing test, with live WPM and accuracy.',
+    eyebrow: 'Delhi Police / SSC',
+    intro: 'The Delhi Police Head Constable (Ministerial) recruitment, conducted through SSC, includes a qualifying computer-based typing test. Candidates typically need about 30 WPM in English (around 10,500 key depressions per hour) or 25 WPM in Hindi (around 9,000 key depressions per hour). Requirements can vary by notification, so confirm yours and practise the exact format daily.',
+    requirements: [
+      { language: 'English', layout: 'QWERTY', speed: '30 WPM', duration: '10 minutes' },
+      { language: 'Hindi', layout: 'Mangal / Kruti Dev', speed: '25 WPM', duration: '10 minutes' },
+    ],
+    format: [
+      'You type a passage in English or Hindi on the computer within a set time.',
+      'English needs about 30 WPM; Hindi about 25 WPM — confirm from your notification.',
+      'It is a qualifying skill test; speed and accuracy are both assessed.',
+      'The test is on a desktop computer — practise only on a physical keyboard.',
+    ],
+    tips: [
+      'Decide your language early and practise only that one to build consistency.',
+      'Aim above the minimum so exam pressure does not pull you below the cut-off.',
+      'For Hindi, drill matras and half-letters, which slow most candidates.',
+      'Do daily 10-minute timed tests to build exam stamina.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for Delhi Police Head Constable?', a: 'Delhi Police Head Constable (Ministerial) typically requires 30 WPM in English or 25 WPM in Hindi on a computer, though always confirm from your official notification.' },
+      { q: 'Is the Delhi Police typing test qualifying?', a: 'Yes, it is a qualifying skill test — you must meet the required speed and accuracy to be selected.' },
+      { q: 'How can I practise the Delhi Police typing test free?', a: 'FastTypingLab offers free English and Hindi typing tests with live WPM and accuracy in the exam format.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Start Typing Practice',
+    related: [
+      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
+      { label: 'DEO Typing Test', href: '/deo-typing-test' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
+
+  'rrb': {
+    slug: 'rrb',
+    examName: 'RRB Typist',
+    h1: 'RRB Typing Test — Clerk cum Typist & Typist Practice',
+    seoTitle: 'RRB Typing Test — Railway Clerk cum Typist Practice | FastTypingLab',
+    metaDesc: 'Free RRB typing test practice for Railway Junior/Senior Clerk cum Typist and Typist posts — 30 WPM English / 25 WPM Hindi, with live WPM and accuracy.',
+    eyebrow: 'RRB / Railway',
+    intro: 'Several Railway Recruitment Board (RRB) posts — Junior Clerk cum Typist, Senior Clerk cum Typist and Typist — include a qualifying typing skill test. Candidates usually need about 30 WPM in English or 25 WPM in Hindi on a computer. Exact requirements vary by post and notification, so always confirm and practise the exact format daily.',
+    requirements: [
+      { language: 'English', layout: 'QWERTY', speed: '30 WPM', duration: 'Skill test' },
+      { language: 'Hindi', layout: 'Mangal / Kruti Dev', speed: '25 WPM', duration: 'Skill test' },
+    ],
+    format: [
+      'A passage is typed on the computer in English or Hindi within a set time.',
+      'Typing is a qualifying skill test — you pick English or Hindi as allowed.',
+      'Both speed and accuracy are assessed; errors reduce effective speed.',
+      'The test is on a desktop computer — practise only on a physical keyboard.',
+    ],
+    tips: [
+      'Confirm the required speed and language from your RRB notification.',
+      'Pick one language and practise it daily for consistency.',
+      'For Hindi, focus on matras and half-letters to avoid losing time.',
+      'Do daily timed tests in the exam format to build stamina.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for RRB Clerk cum Typist?', a: 'RRB typist posts typically require about 30 WPM in English or 25 WPM in Hindi, but always confirm the exact figure from your notification.' },
+      { q: 'Is the RRB typing test qualifying?', a: 'Yes, for typist posts it is a qualifying skill test — you must meet the required speed and accuracy to be selected.' },
+      { q: 'How can I practise the RRB typing test free?', a: 'FastTypingLab offers free English and Hindi typing tests with live WPM and accuracy in the exam format.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Start Typing Practice',
+    related: [
+      { label: 'Railway NTPC Typing Test', href: '/railway-ntpc-typing-test' },
+      { label: 'DEO Typing Test', href: '/deo-typing-test' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+    ],
+  },
 };
 
 export const EXAM_LANDING_ROUTES = Object.values(EXAM_LANDINGS).map(e => ({
