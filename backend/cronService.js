@@ -24,7 +24,7 @@ function runSlotInner(slot) {
 export async function runSlot(slot) {
   return Promise.race([
     runSlotInner(slot),
-    new Promise((_, reject) => setTimeout(() => reject(new Error('generation timed out after 120s')), 120000)),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('generation timed out after 180s')), 180000)),
   ]);
 }
 
