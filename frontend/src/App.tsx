@@ -15,6 +15,7 @@ const LearningInterfacePage = lazy(() => import('./pages/LearningInterfacePage')
 const AuthPage = lazy(() => import('./pages/AuthPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
+const DownloadPage = lazy(() => import('./pages/DownloadPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
@@ -418,6 +419,7 @@ const AppContent = () => {
           <Route path="/rrb-typing-test" element={<ExamLandingPage slug="rrb" />} />
           <Route path="/all-pages" element={<SiteMapPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/download" element={<DownloadPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />

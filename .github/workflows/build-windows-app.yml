@@ -1,0 +1,58 @@
+name: Build Windows App
+
+# Produces the FastTypingLab Windows installer in the cloud — no local Rust
+# toolchain needed. Run it two ways:
+#   • Actions tab → "Build Windows App" → Run workflow   (downloads from the run)
+#   • Push a tag like app-v1.0.0                          (creates a GitHub Release
+#                                                          with the installer attached)
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'app-v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: frontend/src-tauri
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build Tauri app (and Release on tags)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: frontend
+          tagName: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
+          releaseName: 'FastTypingLab ${{ github.ref_name }}'
+          releaseBody: 'Free typing practice for Windows — offline English & Hindi tests. Download the .exe below.'
+          releaseDraft: false
+          prerelease: false
+
+      - name: Upload installer artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FastTypingLab-windows-installer
+          path: |
+            frontend/src-tauri/target/release/bundle/nsis/*.exe
+            frontend/src-tauri/target/release/bundle/msi/*.msi
+          if-no-files-found: warn

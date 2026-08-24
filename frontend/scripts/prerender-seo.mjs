@@ -92,6 +92,11 @@ const ROUTES = [
   { path: '/ai-tutor', title: 'AI Typing Tutor — Personalized Improvement Plan | FastTypingLab', description: 'Get a free, personalized typing improvement plan from our AI tutor. It analyzes your WPM, accuracy and trend, then builds a step-by-step plan and a custom practice passage.' },
   { path: '/all-pages', title: 'Site Map — All Pages | FastTypingLab', description: 'Browse every page on FastTypingLab: typing tests, Hindi typing, exam practice, learning courses, tools, games and blog articles.' },
   { path: '/about', title: 'About FastTypingLab — Free Typing & Govt Exam Practice for India', description: 'FastTypingLab is a free typing platform built for India — English & Hindi typing tests, SSC/CPCT/UPSSSC exam practice, stenography, an AI tutor and games, all free.' },
+  { path: '/download', title: 'Download Free Typing Software for Windows — English & Hindi | FastTypingLab', description: 'Download the free FastTypingLab typing software for Windows. Practise English and Hindi (Mangal & Kruti Dev) typing offline, with live WPM and accuracy — great for SSC, CPCT and government exam prep.', jsonLd: faqLd([
+    ['Is the FastTypingLab Windows app free?', 'Yes. The app is completely free, just like the website. There are no charges to download or practice.'],
+    ['Does it work without internet?', 'Yes. The app ships with English and Hindi typing tests built in, so you can practise fully offline. Account features, the AI tutor and certificates need internet.'],
+    ['What are the system requirements?', 'Windows 10 or 11 (64-bit). The app is lightweight — only a few megabytes — and installs in seconds.'],
+  ]) },
   { path: '/contact', title: 'Contact FastTypingLab — Support, Feedback & Enquiries', description: 'Get in touch with the FastTypingLab team. Email us for support, feedback, bug reports, content suggestions or partnership enquiries.' },
   { path: '/privacy', title: 'Privacy Policy | FastTypingLab', description: 'How FastTypingLab collects, uses, and protects your data — account information, typing statistics, cookies, analytics and advertising.' },
   { path: '/terms', title: 'Terms of Service | FastTypingLab', description: 'The terms and conditions for using FastTypingLab — a free online typing and government-exam practice platform.' },
