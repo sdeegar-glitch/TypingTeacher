@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import VisitorCounter from './VisitorCounter';
+import TelegramCTA from './TelegramCTA';
 
 const PRODUCT_LINKS = [
   { label: 'Typing Tests', href: '/tests' },
@@ -35,9 +36,10 @@ export default function Footer() {
                 style={{ background: 'linear-gradient(135deg, #304C53, #2A9DAE)' }}>F</span>
               <span className="font-black text-brand-text text-lg">FastTypingLab</span>
             </div>
-            <p className="text-xs text-brand-muted max-w-xs leading-relaxed">
+            <p className="text-xs text-brand-muted max-w-xs leading-relaxed mb-4">
               India's most complete free typing platform for students, professionals, and govt exam aspirants.
             </p>
+            <TelegramCTA variant="inline" />
           </div>
 
           {/* Product links */}

@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import { generateEnglishTest } from './generation/englishGenerator.js';
 import { generateHindiTest } from './generation/hindiGenerator.js';
 import { supabase } from './supabaseClient.js';
-import { postTestToTelegram } from './services/telegram.js';
+import { postTestToTelegram, postLeaderboardToTelegram } from './services/telegram.js';
 
 // Guard against overlapping runs
 let isRunning = false;
@@ -132,6 +132,35 @@ export async function maybeCatchUpGeneration() {
   }
 }
 
+// ─── WEEKLY LEADERBOARD POST ──────────────────────────────────────────────────
+// Pulls the top 5 net-WPM sessions from the last 7 days and posts them to the
+// Telegram community. No-op (quietly) if Telegram isn't configured or there are
+// no sessions yet.
+export async function postWeeklyLeaderboard() {
+  try {
+    const weekAgo = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
+    const { data, error } = await supabase
+      .from('test_sessions')
+      .select('net_wpm, accuracy, started_at, users ( name )')
+      .gte('started_at', weekAgo)
+      .order('net_wpm', { ascending: false })
+      .limit(5);
+    if (error) { console.warn('[Leaderboard] query failed:', error.message); return { error: error.message }; }
+    if (!data || data.length === 0) { console.log('[Leaderboard] no sessions this week — skipping post.'); return { skipped: 'no-data' }; }
+
+    const rows = data.map((s, i) => ({
+      rank: i + 1,
+      user: s.users?.name || 'Anonymous',
+      net_wpm: s.net_wpm,
+      accuracy: s.accuracy,
+    }));
+    return await postLeaderboardToTelegram(rows);
+  } catch (e) {
+    console.error('[Leaderboard] failed:', e.message);
+    return { error: e.message };
+  }
+}
+
 // ─── CRON JOBS ────────────────────────────────────────────────────────────────
 export const initCronJobs = () => {
   // Production: once daily at 3:00 AM IST (= 21:30 UTC previous day), generates
@@ -142,6 +171,11 @@ export const initCronJobs = () => {
     fetchAndGenerateTests();
   });
   console.log('[CronService] Scheduled: daily at 3:00 AM IST — 12 tests (4 EN + 4 HI/Mangal + 4 HI/KrutiDev).');
+
+  // Weekly leaderboard to Telegram — Sunday 7:00 PM IST (= 13:30 UTC), when
+  // Indian users are active so the free-tier instance is most likely awake.
+  cron.schedule('30 13 * * 0', () => { postWeeklyLeaderboard(); });
+  console.log('[CronService] Scheduled: weekly leaderboard to Telegram — Sunday 7:00 PM IST.');
 
   // Keep-alive: ping /health every 14 min to prevent Render free-tier cold starts
   const BACKEND_URL = process.env.BACKEND_URL || 'https://typingteacher-2lnd.onrender.com';

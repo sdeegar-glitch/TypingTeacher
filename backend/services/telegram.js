@@ -22,6 +22,42 @@ function escapeHtml(s = '') {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/**
+ * Low-level sender. Returns { skipped } when unconfigured, { ok:true } on
+ * success, or { ok:false, error } on failure — never throws.
+ */
+async function sendMessage({ text, replyMarkup, disablePreview = false }) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return { skipped: 'not-configured' };
+
+  const body = {
+    chat_id: chatId,
+    text,
+    parse_mode: 'HTML',
+    disable_web_page_preview: disablePreview,
+    ...(replyMarkup ? { reply_markup: replyMarkup } : {}),
+  };
+
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(15000),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!json.ok) {
+      console.warn('[Telegram] post failed:', json.description || res.status);
+      return { ok: false, error: json.description };
+    }
+    return { ok: true };
+  } catch (err) {
+    console.warn('[Telegram] post error:', err.message);
+    return { ok: false, error: err.message };
+  }
+}
+
 function buildMessage(test) {
   const lang = test.language === 'hi' ? 'hi' : 'en';
   const intro = LANG_INTRO[lang];
@@ -46,40 +82,48 @@ function buildMessage(test) {
  *           wordCount?:number, language?:string, layout?:string }} test
  */
 export async function postTestToTelegram(test) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) return { skipped: 'not-configured' };
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) return { skipped: 'not-configured' };
   if (!test || !test.slug) return { skipped: 'no-slug' };
 
   const url = `${SITE}/tests/${test.slug}`;
-  const body = {
-    chat_id: chatId,
+  const result = await sendMessage({
     text: buildMessage(test),
-    parse_mode: 'HTML',
-    disable_web_page_preview: false,
-    reply_markup: {
+    replyMarkup: {
       inline_keyboard: [[
         { text: test.language === 'hi' ? '🚀 टेस्ट दें' : '🚀 Take the Test', url },
       ]],
     },
-  };
+  });
+  if (result.ok) console.log(`[Telegram] Posted new test → ${test.slug}`);
+  return result;
+}
 
-  try {
-    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(15000),
-    });
-    const json = await res.json().catch(() => ({}));
-    if (!json.ok) {
-      console.warn('[Telegram] post failed:', json.description || res.status);
-      return { ok: false, error: json.description };
-    }
-    console.log(`[Telegram] Posted new test → ${test.slug}`);
-    return { ok: true };
-  } catch (err) {
-    console.warn('[Telegram] post error:', err.message);
-    return { ok: false, error: err.message };
-  }
+const MEDALS = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+
+/**
+ * Post the weekly WPM leaderboard to the community. Keeps the group active with
+ * real, competitive content (not just new-test spam) and nudges people back to
+ * the site to climb the ranks.
+ * @param {Array<{rank:number,user:string,net_wpm:number,accuracy:number}>} rows
+ */
+export async function postLeaderboardToTelegram(rows) {
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) return { skipped: 'not-configured' };
+  if (!Array.isArray(rows) || rows.length === 0) return { skipped: 'no-data' };
+
+  const lines = rows.slice(0, 5).map((r, i) =>
+    `${MEDALS[i] || `${i + 1}.`} <b>${escapeHtml(r.user || 'Anonymous')}</b> — ${r.net_wpm} WPM · ${r.accuracy}% acc`
+  );
+
+  const text =
+    `🏆 <b>Weekly WPM Leaderboard</b>\n` +
+    `<i>Top typists on FastTypingLab this week</i>\n\n` +
+    lines.join('\n') +
+    `\n\n💪 Think you can beat them? Take a test and climb the ranks!\n#TypingChallenge #FastTypingLab`;
+
+  const result = await sendMessage({
+    text,
+    replyMarkup: { inline_keyboard: [[{ text: '⌨️ Beat the leaderboard', url: `${SITE}/tests` }]] },
+  });
+  if (result.ok) console.log('[Telegram] Posted weekly leaderboard.');
+  return result;
 }
