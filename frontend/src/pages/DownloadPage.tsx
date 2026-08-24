@@ -1,11 +1,16 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Download, WifiOff, Languages, Shield, Zap, CheckCircle2, Monitor } from 'lucide-react';
+import { Download, WifiOff, Languages, Shield, Zap, CheckCircle2, Monitor, ScanSearch } from 'lucide-react';
 import Seo from '../components/Seo';
 
 // Points at the latest GitHub Release. After you push a tag (e.g. app-v1.0.0),
 // the Windows installer is attached there automatically by the build workflow.
 const WINDOWS_DOWNLOAD_URL = 'https://github.com/sdeegar-glitch/TypingTeacher/releases/latest';
+
+// Free trust signal: scan the installer at virustotal.com, then paste the
+// report URL here (e.g. https://www.virustotal.com/gui/file/<hash>/detection).
+// Leave empty to hide the badge until a scan is linked.
+const VIRUSTOTAL_SCAN_URL = '';
 
 const FEATURES = [
   { icon: WifiOff, title: 'Works Offline', desc: 'Practice typing with no internet — tests are built into the app. Perfect for unstable or expensive connections.' },
@@ -57,6 +62,13 @@ export default function DownloadPage() {
             <Download className="w-5 h-5" /> Download for Windows (Free)
           </a>
           <p className="text-xs text-brand-muted mt-3">Windows 10 &amp; 11 · 64-bit · Only a few MB</p>
+
+          {VIRUSTOTAL_SCAN_URL && (
+            <a href={VIRUSTOTAL_SCAN_URL} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-accent hover:underline mt-2">
+              <ScanSearch className="w-3.5 h-3.5" /> Scanned clean on VirusTotal — view report
+            </a>
+          )}
         </div>
 
         {/* Features */}
@@ -86,6 +98,11 @@ export default function DownloadPage() {
               </li>
             ))}
           </ol>
+          <p className="text-xs text-brand-muted mt-4 pt-4 border-t border-brand-border">
+            Want to verify it's safe first? The full source code is public on{' '}
+            <a href="https://github.com/sdeegar-glitch/TypingTeacher" target="_blank" rel="noopener noreferrer" className="text-brand-primary font-semibold hover:underline">GitHub</a>,
+            and the installer is built automatically from that exact code via GitHub Actions — nothing hidden.
+          </p>
         </div>
 
         {/* Prefer the browser */}
