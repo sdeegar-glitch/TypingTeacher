@@ -6,8 +6,7 @@ import { BookOpen, ChevronRight, Zap, Clock, BarChart2, ChevronLeft, Languages, 
 import PageHeader from '../components/PageHeader';
 import { isTestCompleted, getLastTrack, setLastTrack } from '../lib/testProgress';
 
-import { API_URL as BASE_URL } from '../lib/api';
-const API_URL = `${BASE_URL}/api/tests`;
+import { fetchTestList } from '../lib/api';
 
 const DIFF_CONFIG: Record<string, { label: string; color: string; bg: string; border: string }> = {
   easy:   { label: 'Easy',   color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
@@ -105,9 +104,7 @@ export default function TestsListPage() {
     if (!selected) return;
     setLoading(true);
     setTests([]);
-    const params = new URLSearchParams(selected.query).toString();
-    fetch(`${API_URL}/latest?${params}`)
-      .then(r => r.json())
+    fetchTestList(selected.query)
       .then(d => { if (Array.isArray(d)) setTests(d); })
       .catch(() => {})
       .finally(() => setLoading(false));

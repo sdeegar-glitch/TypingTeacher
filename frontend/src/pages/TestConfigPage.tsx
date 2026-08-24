@@ -2,10 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, Clock, Zap, ChevronLeft } from 'lucide-react';
-import { API_URL as BASE_URL } from '../lib/api';
+import { fetchTestBySlug } from '../lib/api';
 import { getLastDuration, setLastDuration } from '../lib/testProgress';
-
-const API_URL = `${BASE_URL}/api/tests`;
 
 const DURATION_OPTIONS = [
   { label: '1 Min',  value: 1,  desc: 'Quick warm-up' },
@@ -23,8 +21,7 @@ export default function TestConfigPage() {
   const [customMinutes, setCustomMinutes] = useState(lastDuration);
 
   useEffect(() => {
-    fetch(`${API_URL}/${slug}`)
-      .then(r => r.json())
+    fetchTestBySlug(slug!)
       .then(data => { setTest(data); setLoading(false); })
       .catch(() => setLoading(false));
   }, [slug]);

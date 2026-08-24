@@ -11,9 +11,8 @@ import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
 
-import { API_URL as BASE_URL, saveSession, fetchMistakeHandlingMode } from '../lib/api';
+import { saveSession, fetchMistakeHandlingMode, fetchTestBySlug } from '../lib/api';
 import { markTestCompleted } from '../lib/testProgress';
-const API_URL = `${BASE_URL}/api/tests`;
 
 // Duration options
 const DURATION_OPTIONS = [
@@ -96,8 +95,7 @@ export default function TypingTestPage() {
     }
     if (id && !sampleTexts[id]) {
       setLoadingTest(true);
-      fetch(`${API_URL}/${id}`)
-        .then(res => res.json())
+      fetchTestBySlug(id)
         .then(data => {
           if (data?.content) setTestContent({ title: data.title, content: data.content, keyboardLayout: data.keyboard_layout, displayContent: data.display_content });
           else setTestContent(sampleTexts['1']);

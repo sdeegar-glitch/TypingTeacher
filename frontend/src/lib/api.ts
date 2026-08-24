@@ -1,5 +1,42 @@
 export const API_URL = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
 
+import { isTauri, offlineList, offlineBySlug } from './offlineTests';
+
+/**
+ * Fetch a track's test list. Tries the network first (short timeout) and falls
+ * back to the bundled offline tests when the request fails, is empty, or when
+ * running in the desktop app with no connection. Never throws.
+ */
+// In the desktop app we want a snappy fall-through to bundled content when
+// offline. On the web we keep a generous timeout so a slow Render cold-start
+// still resolves to the full catalogue instead of the small bundled subset.
+const NET_TIMEOUT = () => (isTauri() ? 4000 : 60000);
+
+export async function fetchTestList(query: Record<string, string> = {}): Promise<any[]> {
+  const params = new URLSearchParams(query).toString();
+  try {
+    const res = await fetch(`${API_URL}/api/tests/latest?${params}`, { signal: AbortSignal.timeout(NET_TIMEOUT()) });
+    const json = await res.json();
+    if (Array.isArray(json) && json.length) return json;
+    return offlineList(query);
+  } catch {
+    return offlineList(query);
+  }
+}
+
+/** Fetch a single test by slug/id, falling back to the bundled offline copy. */
+export async function fetchTestBySlug(slug: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_URL}/api/tests/${encodeURIComponent(slug)}`, { signal: AbortSignal.timeout(NET_TIMEOUT()) });
+    if (!res.ok) throw new Error('not ok');
+    const json = await res.json();
+    if (json && json.content) return json;
+    return offlineBySlug(slug);
+  } catch {
+    return offlineBySlug(slug);
+  }
+}
+
 interface SessionPayload {
   user_id?: string | null;
   test_id?: number | null;
