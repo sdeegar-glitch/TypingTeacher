@@ -3,7 +3,7 @@ import { supabase } from '../supabaseClient.js';
 import { fetchAndGenerateTests, postWeeklyLeaderboard } from '../cronService.js';
 import { requireAdmin } from '../middleware/requireAdmin.js';
 import { logActivity } from '../activityLog.js';
-import { postTestToTelegram } from '../services/telegram.js';
+import { postTestToTelegram, postPollToTelegram } from '../services/telegram.js';
 
 const router = express.Router();
 
@@ -189,6 +189,18 @@ router.post('/leaderboard-post', requireAdmin, async (req, res) => {
     if (result?.skipped === 'not-configured') return res.status(400).json({ error: 'Telegram not configured (set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID).' });
     if (result?.error || result?.ok === false) return res.status(502).json({ error: result.error || 'Post failed' });
     res.json({ message: 'Weekly leaderboard posted to Telegram.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/tests/poll-post - Manually post an engagement poll now.
+router.post('/poll-post', requireAdmin, async (req, res) => {
+  try {
+    const result = await postPollToTelegram();
+    if (result?.skipped === 'not-configured') return res.status(400).json({ error: 'Telegram not configured (set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID).' });
+    if (!result?.ok) return res.status(502).json({ error: result?.error || 'Poll post failed' });
+    res.json({ message: 'Poll posted to Telegram.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

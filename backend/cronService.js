@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import { generateEnglishTest } from './generation/englishGenerator.js';
 import { generateHindiTest } from './generation/hindiGenerator.js';
 import { supabase } from './supabaseClient.js';
-import { postTestToTelegram, postLeaderboardToTelegram } from './services/telegram.js';
+import { postTestToTelegram, postLeaderboardToTelegram, postPollToTelegram } from './services/telegram.js';
 
 // Guard against overlapping runs
 let isRunning = false;
@@ -176,6 +176,11 @@ export const initCronJobs = () => {
   // Indian users are active so the free-tier instance is most likely awake.
   cron.schedule('30 13 * * 0', () => { postWeeklyLeaderboard(); });
   console.log('[CronService] Scheduled: weekly leaderboard to Telegram — Sunday 7:00 PM IST.');
+
+  // Engagement poll to Telegram — Wednesday 7:00 PM IST (= 13:30 UTC). Rotates
+  // through a pool of questions so the group stays active mid-week.
+  cron.schedule('30 13 * * 3', () => { postPollToTelegram(); });
+  console.log('[CronService] Scheduled: engagement poll to Telegram — Wednesday 7:00 PM IST.');
 
   // Keep-alive: ping /health every 14 min to prevent Render free-tier cold starts
   const BACKEND_URL = process.env.BACKEND_URL || 'https://typingteacher-2lnd.onrender.com';

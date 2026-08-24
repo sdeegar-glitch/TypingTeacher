@@ -127,3 +127,61 @@ export async function postLeaderboardToTelegram(rows) {
   if (result.ok) console.log('[Telegram] Posted weekly leaderboard.');
   return result;
 }
+
+// A rotating pool of engagement polls. Telegram polls are the single biggest
+// driver of group activity — one vote surfaces the group in every member's chat
+// list and pulls lurkers in. Rotated by ISO-week so the same one doesn't repeat.
+const POLLS = [
+  { question: '⌨️ What is your target typing speed for govt exams?', options: ['25–30 WPM', '30–35 WPM (SSC/CPCT pass)', '35–40 WPM', '40+ WPM (topper zone)'] },
+  { question: '🖥️ Which typing do you practice most?', options: ['English typing', 'Hindi Mangal (Inscript)', 'Hindi Kruti Dev', 'All of them'] },
+  { question: '🎯 Which exam are you preparing for?', options: ['SSC CHSL / CGL', 'CPCT (MP)', 'Court / RO-ARO', 'Bank / RRB / Other'] },
+  { question: '⏱️ How much do you practice typing daily?', options: ['Less than 15 min', '15–30 min', '30–60 min', 'More than 1 hour'] },
+  { question: '😤 What slows your typing down the most?', options: ['Accuracy / mistakes', 'Number row', 'Special symbols', 'Speed under time pressure'] },
+  { question: '📈 What is your current typing speed?', options: ['Below 25 WPM', '25–35 WPM', '35–45 WPM', '45+ WPM'] },
+];
+
+function isoWeek(d = new Date()) {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = (date.getUTCDay() + 6) % 7;
+  date.setUTCDate(date.getUTCDate() - dayNum + 3);
+  const firstThursday = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
+  return 1 + Math.round(((date - firstThursday) / 86400000 - 3 + ((firstThursday.getUTCDay() + 6) % 7)) / 7);
+}
+
+/**
+ * Post an engagement poll to the community. Rotates through POLLS by ISO week.
+ * No-op when Telegram isn't configured. Uses the Bot API sendPoll method.
+ */
+export async function postPollToTelegram() {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return { skipped: 'not-configured' };
+
+  const poll = POLLS[isoWeek() % POLLS.length];
+  const body = {
+    chat_id: chatId,
+    question: poll.question,
+    options: JSON.stringify(poll.options),
+    is_anonymous: true,
+    allows_multiple_answers: false,
+  };
+
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendPoll`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(15000),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!json.ok) {
+      console.warn('[Telegram] poll failed:', json.description || res.status);
+      return { ok: false, error: json.description };
+    }
+    console.log('[Telegram] Posted poll:', poll.question);
+    return { ok: true };
+  } catch (err) {
+    console.warn('[Telegram] poll error:', err.message);
+    return { ok: false, error: err.message };
+  }
+}

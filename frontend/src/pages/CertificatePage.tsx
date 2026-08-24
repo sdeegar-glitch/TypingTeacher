@@ -5,6 +5,7 @@ import { Download, Share2, CheckCircle, Award, ExternalLink, ChevronLeft, Check,
 
 import { API_URL } from '../lib/api';
 import SignupPromptBanner from '../components/SignupPromptBanner';
+import TelegramCTA from '../components/TelegramCTA';
 import { isLoggedIn } from '../lib/auth';
 
 interface CertData {
@@ -419,6 +420,11 @@ export default function CertificatePage() {
                       drawCertificateOnCanvas(node, certData);
                     }
                   }} className="w-full h-auto" style={{ maxHeight: 480 }} />
+                </div>
+
+                {/* Invite into the community after they've earned a certificate */}
+                <div className="mt-4">
+                  <TelegramCTA message="Share your achievement and challenge others — join our typing community for daily tests and weekly leaderboards." />
                 </div>
               </motion.div>
             )}
