@@ -13,6 +13,184 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'what-does-wpm-mean',
+    title: 'What Does WPM Mean? Words Per Minute Explained',
+    seoTitle: 'What Does WPM Mean? Words Per Minute Explained (2026) | FastTypingLab',
+    metaDesc: 'WPM means "words per minute" — the standard measure of typing speed. Learn how WPM is calculated, what net vs gross WPM means, and what a good WPM score is.',
+    category: 'Basics',
+    readTime: '5 min',
+    date: '2026-08-22',
+    emoji: '⏱️',
+    content: `
+## What Does WPM Mean?
+
+**WPM stands for "words per minute."** It is the standard way to measure how fast someone types (or reads). When a typing test says you scored "50 WPM," it means that at your current pace you would type the equivalent of 50 words in one minute.
+
+Because real words vary in length, typing tests do not count actual words. Instead, the industry uses a fixed definition: **one "word" equals five characters, including spaces.** This keeps scores fair and comparable no matter what text you type. You can measure your own WPM in a minute with a [free typing speed test](/tests).
+
+## How Is WPM Calculated?
+
+The formula is straightforward:
+
+- **Count the characters** you typed (letters, spaces and punctuation).
+- **Divide by 5** to convert characters into standardised "words."
+- **Divide by the minutes** you spent typing.
+
+So if you typed 250 characters in one minute: 250 ÷ 5 = 50 words ÷ 1 minute = **50 WPM**. If you want to run the numbers yourself, our [WPM calculator](/wpm-calculator) does it instantly from your character count and time.
+
+## Gross WPM vs Net WPM
+
+This is the part most people miss — and it matters a lot:
+
+| Term | What it measures |
+|---|---|
+| **Gross WPM** | Your raw speed, before mistakes are counted |
+| **Net WPM** | Your real speed after subtracting errors |
+
+**Net WPM is the number that counts.** It takes your gross speed and penalises the mistakes you made, because typing fast is useless if the text is full of errors. Most good typing tests — including ours — report net WPM, so your score already reflects accuracy. That is why racing recklessly lowers your result: every error is deducted.
+
+## What Is a Good WPM?
+
+Here is a quick reference for typing speed:
+
+| Level | WPM |
+|---|---|
+| Beginner | 15–25 WPM |
+| Average adult | 35–45 WPM |
+| Good / professional | 55–70 WPM |
+| Fast / expert | 80+ WPM |
+
+The **average typing speed is around 40 WPM**. Most office and data-entry jobs are happy with **40–50 WPM at high accuracy**. For a deeper breakdown, see our guide on [how many WPM is a good typing speed](/blog/how-many-wpm-is-good-typing-speed-benchmarks) and the [average typing speed by age and profession](/blog/average-typing-speed-by-age-and-profession).
+
+## Does WPM Measure Typing or Reading?
+
+Both — the term is used in two places. For **typing**, WPM is how fast you enter text. For **reading**, WPM is how fast you read (the average adult reads 200–300 WPM). On a typing site like this one, WPM always refers to typing speed.
+
+## How to Improve Your WPM
+
+- **Learn touch typing** so you stop looking at the keyboard — start with our [free lessons](/learn).
+- **Prioritise accuracy**; since net WPM subtracts errors, clean typing raises your score more than raw speed.
+- **Practise a few minutes daily** — consistency beats occasional long sessions.
+
+Ready to see your number? [Take a free WPM test now](/tests) and find out where you stand.
+`,
+  },
+  {
+    slug: 'typing-test-for-nurses-healthcare',
+    title: 'Typing Test for Nurses & Healthcare Jobs',
+    seoTitle: 'Typing Test for Nurses — WPM Needed for Healthcare Jobs (2026) | FastTypingLab',
+    metaDesc: 'Nurses and healthcare workers type constantly into EHR systems. Learn the typing speed expected for nursing and medical jobs, and practice free to pass a healthcare typing test.',
+    category: 'Careers',
+    readTime: '6 min',
+    date: '2026-08-21',
+    emoji: '🩺',
+    content: `
+## Why Nurses Need to Type Well
+
+Modern healthcare runs on documentation. Nurses, medical assistants, and administrative staff spend a large part of every shift entering notes into **electronic health record (EHR) systems** — patient assessments, medication records, care plans and discharge notes. The faster and more accurately you can type, the more time you spend with patients and the less time you spend fighting the keyboard after your shift ends.
+
+That is why many nursing and healthcare employers include a **typing test** in hiring, especially for roles like medical records clerks, unit secretaries, medical scribes and telehealth nurses. You can [check your current typing speed](/tests) free in a couple of minutes.
+
+## Typing Speed Expected in Healthcare Roles
+
+Requirements vary by employer and role, but these are the typical expectations:
+
+| Role | Typical WPM | Accuracy |
+|---|---|---|
+| Registered nurse (EHR charting) | 30–45 WPM | 95%+ |
+| Medical assistant / unit secretary | 40–50 WPM | 97%+ |
+| Medical scribe | 60–80 WPM | 98%+ |
+| Medical transcriptionist | 65–90 WPM | 98%+ |
+| Medical records / billing clerk | 45–60 WPM | 98%+ |
+
+For most bedside nursing roles, **35–45 WPM with strong accuracy** is perfectly adequate. Scribe and transcription roles — where typing *is* the job — expect much more.
+
+## Why Accuracy Matters More in Healthcare
+
+In most jobs a typo is harmless. In healthcare, documentation errors can affect patient safety, billing, and legal records. That is why healthcare typing tests weigh **accuracy heavily** — often demanding 97–98%+. The right habit is to type at a controlled, steady pace you can sustain cleanly, rather than sprinting and correcting. Our tests report **net WPM** (speed after errors), which trains exactly this discipline.
+
+## Medical Terminology Makes It Harder
+
+Healthcare typing has a twist ordinary typing tests ignore: **long, unfamiliar medical words** and abbreviations — "acetaminophen," "tachycardia," "subcutaneous," "PRN," "BID." These break your rhythm and invite errors. The fix is the same as for coders and any specialist typist: solid **touch-typing fundamentals** so your fingers keep flowing even through unfamiliar words. Build that foundation with our [free touch-typing course](/learn).
+
+## How to Prepare for a Healthcare Typing Test
+
+1. **Master touch typing first.** If you look at the keyboard, that is your ceiling. Our [structured lessons](/learn) fix technique from the home row.
+2. **Practise at test length.** Most pre-employment tests run 1–5 minutes — practise at that duration with our [timed tests](/tests) to build focus and stamina.
+3. **Train for accuracy, not just speed.** Aim for 97%+ before pushing WPM. Read [how to improve typing speed and accuracy](/blog/how-to-improve-typing-speed-and-accuracy).
+4. **Warm up before the test.** A couple of minutes of typing beforehand meaningfully lifts your score.
+5. **Mind your posture.** Long charting shifts cause fatigue and strain; good [ergonomics](/blog/typing-posture-and-ergonomics-guide) keep you fast and comfortable.
+
+## Show Your Speed
+
+If a nursing or medical-admin application lets you provide evidence of your typing ability, you can generate a free, verifiable [typing certificate](/typing-certificates) after a test — a simple way to prove 45 WPM at 98% accuracy before your interview.
+
+## Start Practising
+
+Whether you are charting at the bedside or aiming for a medical scribe role, faster and cleaner typing gives you back time and reduces stress. [Take a free typing test](/tests) to see your baseline, then spend a few short sessions a week on the [lessons](/learn) that will get you there.
+`,
+  },
+  {
+    slug: 'how-to-type-faster',
+    title: 'How to Type Faster: Proven Techniques That Work',
+    seoTitle: 'How to Type Faster — 9 Proven Techniques to Boost Your WPM (2026) | FastTypingLab',
+    metaDesc: 'Want to type faster? Learn the proven techniques — touch typing, correct finger placement, accuracy first, and daily drills — that raise your WPM in weeks, not years.',
+    category: 'Skills',
+    readTime: '7 min',
+    date: '2026-08-19',
+    emoji: '🚀',
+    content: `
+## Can You Really Learn to Type Faster?
+
+Yes — and faster than most people expect. Typing speed is not a fixed talent; it is a **trainable motor skill**, like playing an instrument. With the right technique and a little consistent practice, most people can add 10–20 WPM within a few weeks. The catch is that speed comes from *technique and habit*, not from trying to move your fingers faster. Push for raw speed and you just make more mistakes. Below are the techniques that actually work. First, [check your starting speed](/tests) so you can measure progress.
+
+## 1. Learn to Touch Type
+
+This is the big one. **Touch typing** means typing without looking at the keyboard, using all ten fingers, each responsible for its own set of keys. Hunt-and-peck typists top out around 30–40 WPM because they waste time searching for keys; touch typists reach 60, 80, even 100+ WPM. If you take only one action from this article, make it this. Our [free touch-typing course](/learn) rebuilds your technique from scratch.
+
+## 2. Start From the Home Row
+
+Touch typing is built on the **home row** — your left fingers rest on A-S-D-F and your right on J-K-L-;. The F and J keys have small bumps so you can find this position without looking. Every other key is learned as a movement *from* the home row and back. Getting this anchor solid is what lets your fingers eventually move on autopilot.
+
+## 3. Put Accuracy Before Speed
+
+This feels backwards, but it is the fastest route: **slow down until you are accurate, then let speed build naturally.** Errors are expensive — most tests report net WPM, which subtracts them, and correcting mistakes wastes more time than typing slowly would have. Aim for **95%+ accuracy first**; speed follows almost on its own.
+
+## 4. Stop Looking at Your Hands
+
+The moment you can, force yourself to keep your eyes on the screen, not the keyboard. It will feel slower at first — that is the skill forming. Looking down breaks your rhythm and prevents the muscle memory that real speed depends on. Our guide on [typing without looking](/blog/how-to-type-without-looking-touch-typing-guide) walks through the transition.
+
+## 5. Use All Ten Fingers
+
+Two-finger typing has a hard ceiling. Spreading the work across all ten fingers means shorter movements and far more keys reachable at once. Even if it slows you down for a week, the payoff is a much higher long-term speed.
+
+## 6. Practise a Little Every Day
+
+Consistency beats marathons. **10–15 minutes daily** builds muscle memory far better than one long weekend session. Short, regular practice is how the movements become automatic.
+
+## 7. Type Real Text, Not Just Drills
+
+Once fundamentals are in place, practise on real sentences and paragraphs — the kind of text you actually type. It trains rhythm, punctuation and capitalisation together. Our [typing tests](/tests) use real editorial passages for exactly this.
+
+## 8. Learn the Number and Symbol Rows
+
+Most people are fast on letters but crawl on numbers, punctuation and symbols. If your work involves data, code or forms, drilling the [number and symbol rows](/learn) removes a hidden bottleneck.
+
+## 9. Fix Your Posture
+
+Speed and comfort go together. Sit upright, wrists floating (not resting hard), screen at eye level, feet flat. Good [posture and ergonomics](/blog/typing-posture-and-ergonomics-guide) prevent the fatigue and strain that quietly cap your speed.
+
+## A Simple Plan to Get Started
+
+1. Take a [typing test](/tests) to record your baseline WPM and accuracy.
+2. Do the [touch-typing lessons](/learn) 10–15 minutes a day.
+3. Keep accuracy above 95%; let speed rise on its own.
+4. Retest every week and watch the number climb.
+
+Want a structured schedule? Follow our [how to type faster in 30 days](/blog/how-to-type-faster-in-30-days) plan. Start today — [take your free typing test](/tests) and see how fast you already are.
+`,
+  },
+  {
     slug: 'typing-test-for-jobs',
     title: 'Typing Test for Jobs: Data Entry, Admin & Remote Work',
     seoTitle: 'Typing Test for Jobs — Free Practice for Data Entry & Admin Roles (2026) | FastTypingLab',

@@ -122,7 +122,12 @@ const QUICK_LINKS = [
   { label: 'Kruti Dev Guide',   href: '/kruti-dev-typing',      tag: 'Guide' },
   { label: 'AI Typing Tutor',   href: '/ai-tutor',              tag: 'AI' },
   { label: 'Type Without Looking', href: '/blog/how-to-type-without-looking-touch-typing-guide', tag: 'Guide' },
-  { label: 'Typing Posture Guide', href: '/blog/typing-posture-and-ergonomics-guide',           tag: 'Guide' },
+  { label: 'How to Type Faster',   href: '/blog/how-to-type-faster',                             tag: 'Guide' },
+  { label: 'What Does WPM Mean?',  href: '/blog/what-does-wpm-mean',                             tag: 'Basics' },
+  { label: 'Typing Test for Jobs', href: '/blog/typing-test-for-jobs',                          tag: 'Careers' },
+  { label: 'Typing Test for Nurses', href: '/blog/typing-test-for-nurses-healthcare',           tag: 'Careers' },
+  { label: 'Typing Games for Kids', href: '/blog/best-typing-games-for-kids',                   tag: 'Kids' },
+  { label: 'Typing for Programmers', href: '/blog/typing-practice-for-programmers-coders',      tag: 'Coding' },
   { label: 'Professional Typing Test', href: '/typing-test-for/professionals',                   tag: 'Pro' },
 ];
 
