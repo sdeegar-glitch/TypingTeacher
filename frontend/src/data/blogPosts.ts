@@ -13,6 +13,184 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'how-to-pass-a-typing-test',
+    title: 'How to Pass a Typing Test: 8 Tips That Work',
+    seoTitle: 'How to Pass a Typing Test — 8 Proven Tips (2026) | FastTypingLab',
+    metaDesc: 'Nervous about a pre-employment typing test? These 8 proven tips help you pass — from warming up and pacing to prioritising accuracy over raw speed. Practice free.',
+    category: 'Careers',
+    readTime: '6 min',
+    date: '2026-08-24',
+    emoji: '✅',
+    content: `
+## Passing a Typing Test Is a Skill You Can Practise
+
+A pre-employment or certification typing test can feel high-pressure — a few minutes decide whether you clear the bar for a data entry, admin or customer service role. The good news is that passing is very learnable. The people who pass aren't always the fastest typists; they're the ones who **pace themselves, stay accurate, and don't panic**. Here are eight tips that genuinely move your score. First, [take a free practice test](/tests) to see where you stand today.
+
+## 1. Know the Passing Score Before You Start
+
+Find out the exact requirement — most jobs want **35–50 WPM at 95%+ accuracy**, but data entry and transcription want more. Knowing your target lets you pace instead of guessing. See typical [typing speeds by job](/blog/typing-test-for-jobs).
+
+## 2. Warm Up First
+
+Cold hands are slow hands. Two to three minutes of typing right before the test raises your speed and accuracy noticeably. Never let the *real* test be your first typing of the day — do a quick [warm-up test](/tests) beforehand.
+
+## 3. Prioritise Accuracy Over Speed
+
+Almost every test reports **net WPM** — your speed *after* mistakes are subtracted, and some tests penalise errors twice. Racing recklessly backfires. Type at about **90% of your top speed** so your hands stay in control and your accuracy stays high. A clean 45 WPM beats a sloppy 65 WPM on most tests.
+
+## 4. Don't Stop to Fix Every Mistake
+
+Unless the test *requires* corrections, constantly hitting backspace destroys your rhythm and wastes time. Keep moving forward and let net WPM do the accounting. Learn your test's rules first — some allow errors, some don't.
+
+## 5. Keep Your Eyes on the Screen
+
+Looking down at the keyboard breaks your flow and slows you dramatically. If you can't yet type without looking, that's the single biggest thing to fix — our [touch-typing course](/learn) rebuilds the habit from the home row.
+
+## 6. Sit Properly
+
+Feet flat, back supported, wrists floating, screen at eye level. Good [posture](/blog/typing-posture-and-ergonomics-guide) keeps you from tensing up and fumbling mid-test.
+
+## 7. Simulate the Real Conditions
+
+Practise at the **same length** as the real test (most run 1–5 minutes), in a quiet space, on the same kind of keyboard. Familiarity kills nerves. Build stamina with a [5-minute test](/tests).
+
+## 8. Practise Daily in the Run-Up
+
+Ten to fifteen minutes a day for a week or two typically adds 10–15 WPM — often the exact margin between fail and pass. Consistency beats cramming. Track progress by retesting every few days.
+
+## What "Passing" Usually Looks Like
+
+For most administrative and customer-facing roles, **40–50 WPM at 95%+ accuracy** clears the bar comfortably. Data entry and transcription want **60+ WPM at 98%+**. If you're below the target, don't panic — a short, focused practice run closes the gap fast.
+
+## Prove It
+
+Some applications let you attach evidence of your typing ability. After a test you can generate a free, verifiable [typing certificate](/typing-certificates) showing your WPM and accuracy. [Start practising now](/tests) and walk into your test ready to pass.
+`,
+  },
+  {
+    slug: 'home-row-keys-finger-placement',
+    title: 'Home Row Keys: Correct Finger Placement for Fast Typing',
+    seoTitle: 'Home Row Keys — Correct Finger Placement Guide (2026) | FastTypingLab',
+    metaDesc: 'The home row is the foundation of touch typing. Learn which finger goes on which key (ASDF JKL;), how to use the F and J bumps, and drills to build the habit.',
+    category: 'Basics',
+    readTime: '6 min',
+    date: '2026-08-23',
+    emoji: '🖐️',
+    content: `
+## What Are the Home Row Keys?
+
+The **home row** is the middle row of letter keys where your fingers rest between keystrokes. On a standard QWERTY keyboard, the home row keys are **A S D F** for your left hand and **J K L ;** for your right. This row is the "home base" of touch typing: your fingers start here, reach out to press other keys, and return here. Master the home row and everything else in touch typing builds on top of it. [Start free lessons](/learn) that begin exactly here.
+
+## Correct Finger Placement (Which Finger on Which Key)
+
+Each finger owns a home key and is responsible for the keys above and below it. Here's the resting position:
+
+| Hand | Finger | Home key |
+|---|---|---|
+| Left | Pinky | A |
+| Left | Ring | S |
+| Left | Middle | D |
+| Left | Index | F |
+| Right | Index | J |
+| Right | Middle | K |
+| Right | Ring | L |
+| Right | Pinky | ; |
+
+Your two **thumbs** rest on (or just above) the **space bar**. From this position, every other key on the keyboard is a short, learnable movement out and back.
+
+## The F and J Bumps: Your Anchors
+
+Look closely at the **F** and **J** keys — each has a small raised bump. These let you find the home row **by touch alone**, without looking down. Rest your left index finger on the F bump and right index on the J bump, and your other six fingers fall naturally into place. Getting used to finding these bumps is the first real step to typing without looking.
+
+## Why the Home Row Matters So Much
+
+Hunt-and-peck typists have no home base — their hands drift around the keyboard and they must look down to reorient constantly. That's why they top out around 30–40 WPM. Touch typists always return to the home row, so their fingers *know* where every key is relative to it. This is the difference between 40 WPM and 80+ WPM. Read more on [touch typing vs hunt-and-peck](/blog/touch-typing-vs-hunt-and-peck).
+
+## How to Practise the Home Row
+
+1. **Place your fingers on ASDF JKL;** using the F and J bumps — no looking.
+2. **Drill the home keys** first: type sequences like \`asdf jkl; fjfj dkdk\` until they're automatic.
+3. **Add one reach at a time** — learn G and H (index-finger reaches), then the top and bottom rows, always returning to home.
+4. **Don't look down.** Cover your hands if you must. Feeling for keys is how the memory forms.
+5. **Keep sessions short and daily** — 10–15 minutes builds the habit fast.
+
+Our [free typing course](/learn) drills exactly this progression, from home row to full keyboard, with live accuracy feedback.
+
+## Common Mistakes to Avoid
+
+- **Resting the wrong fingers** on the home keys — each finger has its own; don't improvise.
+- **Looking at the keyboard** — it feels faster now but caps your speed forever.
+- **Skipping ahead** to full words before the home keys are automatic.
+- **Tensing your hands** — keep them relaxed and floating, wrists neutral.
+
+## The Foundation of Everything
+
+Every fast typist you've ever seen is anchored to the home row without thinking about it. Spend a little focused time here and the rest of touch typing falls into place. [Start with the home-row lessons](/learn), then [test your speed](/tests) and watch it climb.
+`,
+  },
+  {
+    slug: 'ten-key-typing-test-data-entry',
+    title: '10-Key Typing Test: Numeric Data Entry Speed (KPH)',
+    seoTitle: '10-Key Typing Test — Numeric Data Entry Speed & KPH Explained (2026) | FastTypingLab',
+    metaDesc: '10-key (numeric keypad) speed is measured in KPH, not WPM. Learn what a 10-key typing test is, what KPH employers expect for data entry, and how to practise.',
+    category: 'Careers',
+    readTime: '6 min',
+    date: '2026-08-22',
+    emoji: '🔢',
+    content: `
+## What Is a 10-Key Typing Test?
+
+A **10-key typing test** measures how fast and accurately you can enter **numbers** using the numeric keypad — the block of number keys on the right side of a full-size keyboard. It's a different skill from regular typing: instead of letters and words, you're entering figures like amounts, account numbers, quantities and codes. Many **data entry, accounting, banking, billing and finance jobs** test 10-key speed because those roles involve heavy numeric input. Regular [typing tests](/tests) build the touch-typing foundation this skill sits on.
+
+## KPH vs WPM: Why 10-Key Uses a Different Unit
+
+Regular typing speed is measured in **WPM** (words per minute). But numbers aren't words, so 10-key speed is measured in **KPH — keystrokes per hour** (sometimes KPM, keystrokes per minute). Each digit you press is one keystroke.
+
+| Unit | Measures | Used for |
+|---|---|---|
+| WPM | Words per minute (5 chars = 1 word) | General typing |
+| KPH | Keystrokes per hour | 10-key / numeric data entry |
+| KPM | Keystrokes per minute | Short numeric tests |
+
+To get a rough KPH from a keystrokes-per-minute figure, multiply by 60. For example, 150 keystrokes per minute ≈ **9,000 KPH**.
+
+## What KPH Do Employers Expect?
+
+Requirements vary by role, but here are typical benchmarks:
+
+| Level | 10-key speed |
+|---|---|
+| Entry-level acceptable | 6,000–8,000 KPH |
+| Solid / competitive | 8,000–10,000 KPH |
+| Fast / specialist | 10,000–12,000+ KPH |
+
+Most data entry roles look for around **8,000–10,000 KPH at high accuracy**. As with regular typing, **accuracy is critical** in numeric work — a single wrong digit in an amount or account number is a serious error, so employers weigh it heavily.
+
+## Correct Finger Placement on the Numeric Keypad
+
+The 10-key pad has its own "home row," just like the main keyboard:
+
+- Rest your **index finger on 4**, **middle finger on 5**, and **ring finger on 6**.
+- The **5 key has a small bump** so you can find home position by touch.
+- Your **thumb** handles 0; your **pinky** handles Enter and the + key.
+- From 4-5-6, reach up to 7-8-9 and down to 1-2-3 without looking.
+
+Learning to enter numbers **without looking** is exactly what separates fast 10-key operators from slow ones — the same touch-typing principle as the main keyboard.
+
+## How to Practise 10-Key Data Entry
+
+1. **Anchor on 4-5-6** using the bump on 5. Never look at the keypad.
+2. **Drill columns** — type sequences up and down (456, 789, 123, 0) until automatic.
+3. **Practise real data** — enter strings of amounts and account-style numbers.
+4. **Prioritise accuracy** — build to 98%+ before pushing speed; wrong digits are costly.
+5. **Build regular typing too** — strong touch typing on the main keyboard transfers directly. Use our [free lessons](/learn) and [typing tests](/tests).
+
+## Why It's Worth Learning
+
+Fast, accurate 10-key skills open doors in **accounting, banking, insurance, billing and data entry** — fields where numeric input is the core of the job. Combined with solid regular typing, it makes you a far stronger candidate for office and finance roles. Build your typing foundation with a [free test](/tests), then drill the numeric keypad the same disciplined way.
+`,
+  },
+  {
     slug: 'typing-test-for-students',
     title: 'Typing Test for Students: Practice for School & College',
     seoTitle: 'Typing Test for Students — Free Practice for School & College (2026) | FastTypingLab',
