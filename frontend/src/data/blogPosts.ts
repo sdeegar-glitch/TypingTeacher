@@ -13,6 +13,171 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'typing-test-for-students',
+    title: 'Typing Test for Students: Practice for School & College',
+    seoTitle: 'Typing Test for Students — Free Practice for School & College (2026) | FastTypingLab',
+    metaDesc: 'Typing is an essential skill for students. See the typing speed students should aim for by grade, why it matters for school and college, and practice free.',
+    category: 'Learning',
+    readTime: '6 min',
+    date: '2026-08-24',
+    emoji: '🎓',
+    content: `
+## Why Typing Matters for Students
+
+From online assignments and coding classes to timed exams and note-taking, students spend more time at a keyboard every year. A student who types quickly and accurately finishes work faster, makes fewer mistakes, and can focus on *thinking* instead of hunting for keys. Yet most students are never actually taught to type — they pick up slow, two-finger habits that hold them back for years.
+
+The good news: typing is easy to learn at any age, and a few minutes of practice a week makes a big difference. You can [take a free typing test](/tests) right now to see where you stand.
+
+## Typing Speed Goals for Students by Level
+
+There's no single "required" speed, but these are healthy targets:
+
+| Level | Target WPM | Note |
+|---|---|---|
+| Primary (ages 8–10) | 15–25 WPM | Focus on correct fingers, not speed |
+| Middle school (11–13) | 25–35 WPM | Start touch typing, stop looking down |
+| High school (14–18) | 35–50 WPM | Fast enough for essays & online exams |
+| College / university | 50–65 WPM | Keeps up with notes, coding, research |
+
+If you're a younger learner, our guide to [typing games for kids](/blog/best-typing-games-for-kids) makes the early stage fun. Older students can jump straight into structured practice.
+
+## How Fast Should a Student Type?
+
+For most schoolwork, **40 WPM at high accuracy is comfortable** — you can write an essay or answer an online exam without the keyboard slowing you down. College students juggling lecture notes, code, and research benefit from **50–65 WPM**. Speed beyond that is a bonus, not a necessity. Curious how you compare to others your age? See the [average typing speed by age and profession](/blog/average-typing-speed-by-age-and-profession).
+
+## Why Accuracy Beats Speed for Students
+
+In exams and assignments, mistakes cost you — a typo in an answer or a bug in your code wastes time and marks. That's why it's smarter to build **accuracy first**, then let speed grow. Our typing tests report **net WPM** (speed after subtracting errors), which trains the exact discipline exams reward. Aim for 95%+ accuracy before chasing a bigger number.
+
+## How Students Can Practise Typing
+
+1. **Learn touch typing.** This is the foundation — typing without looking, using all ten fingers. Start with our [free lessons](/learn), which build from the home row.
+2. **Practise little and often.** 10–15 minutes a few times a week beats one long session. Muscle memory forms through repetition.
+3. **Use real text.** Practise on sentences and paragraphs like the ones you actually type for school. Our [typing tests](/tests) use real editorial passages.
+4. **Sit properly.** Good [posture and ergonomics](/blog/typing-posture-and-ergonomics-guide) prevent fatigue during long study sessions.
+5. **Track your progress.** Retest weekly and watch your WPM climb — visible progress keeps you motivated.
+
+## A Skill That Pays Off Every Year
+
+Unlike cramming for one exam, learning to type is a skill that helps with *everything* a student does — and keeps paying off into university and work. A term of light practice now saves countless hours later. [Take a free typing test](/tests) to find your speed, then start the [free lessons](/learn) to improve it.
+`,
+  },
+  {
+    slug: 'why-is-keyboard-qwerty',
+    title: 'Why Is the Keyboard QWERTY? History & Layout Explained',
+    seoTitle: 'Why Is the Keyboard QWERTY? The History Explained (2026) | FastTypingLab',
+    metaDesc: 'Why are the letters on your keyboard arranged QWERTY and not ABC? Learn the real history behind the QWERTY layout, the jam-prevention myth, and whether alternatives are faster.',
+    category: 'Basics',
+    readTime: '6 min',
+    date: '2026-08-23',
+    emoji: '⌨️',
+    content: `
+## Why Are the Letters Arranged QWERTY?
+
+Look at the top-left row of your keyboard and you'll see the letters **Q-W-E-R-T-Y** — which is where the layout gets its name. It seems random, even deliberately awkward. So why isn't the keyboard just in ABC order? The answer goes back to the **1870s and the mechanical typewriter**, and it's a mix of clever engineering and historical accident.
+
+## The Typewriter Origin Story
+
+The QWERTY layout was designed by **Christopher Latham Sholes**, the inventor of the first commercially successful typewriter, and refined through the early 1870s before the machine was sold to Remington in 1873. Early typewriters had metal type bars that swung up to strike the paper. When two neighbouring bars were pressed in quick succession, they **jammed**.
+
+Sholes' solution was to rearrange the keys so that letters commonly typed together were **spread apart**, reducing the chance of adjacent type bars clashing. QWERTY wasn't designed to slow typists down (a common myth) — it was designed to keep the *machine* from jamming, which in turn let typists go faster without constant jams.
+
+## The "Slow You Down" Myth
+
+You'll often read that QWERTY was made to *slow typists down*. That's not quite right. The real goal was **jam prevention** — separating frequent letter pairs so the mechanism kept working. The side effect was smoother, faster typing on those early machines. So the layout that looks inefficient today was actually a speed *improvement* for 1870s hardware.
+
+## Why We Still Use QWERTY Today
+
+Modern keyboards are digital — there are no type bars to jam — so the original reason for QWERTY is long gone. We keep it for one simple reason: **network effect**. By the time computers arrived, hundreds of millions of people had already learned QWERTY, every keyboard shipped with it, and every typing course taught it. Switching the whole world to a new layout would cost far more than any efficiency gain. QWERTY won not because it's optimal, but because it got there first and everyone standardised on it.
+
+## Are Other Layouts Faster? (Dvorak & Colemak)
+
+A few alternative layouts claim to be more efficient:
+
+| Layout | Idea | Reality |
+|---|---|---|
+| **Dvorak** | Most-used letters on the home row | Small gains for some; huge relearning cost |
+| **Colemak** | Efficient but close to QWERTY | Easier switch than Dvorak; niche following |
+| **QWERTY** | The universal standard | Not optimal, but everywhere |
+
+Studies broadly show that for most people, the **speed difference is small** — and nowhere near enough to justify relearning typing from scratch and living with QWERTY on every other computer you touch. The bigger driver of speed isn't your layout; it's your **technique**.
+
+## What Actually Makes You Type Faster
+
+Here's the practical takeaway: don't switch layouts — **learn to touch type on QWERTY**. The vast majority of slow typists aren't held back by the layout; they're held back by looking at the keyboard and using two fingers. Fixing that is worth far more than any alternative layout. Start with our [free touch-typing course](/learn), and see your current speed with a quick [typing test](/tests). If you want the fundamentals, read [how to type faster](/blog/how-to-type-faster) and [what WPM means](/blog/what-does-wpm-mean).
+
+## The Bottom Line
+
+QWERTY is a 150-year-old solution to a mechanical problem that no longer exists — kept alive by the fact that we all already know it. It's not perfect, but it's universal, and with good touch-typing technique it's more than fast enough. The keyboard isn't your limit; your technique is.
+`,
+  },
+  {
+    slug: 'best-keyboard-for-typing-fast',
+    title: 'Best Keyboard for Typing Fast: What Actually Matters',
+    seoTitle: 'Best Keyboard for Typing Fast (2026) — Mechanical vs Membrane | FastTypingLab',
+    metaDesc: 'Does your keyboard make you type faster? Learn what really matters — mechanical vs membrane, key travel, layout and ergonomics — and how to choose a keyboard for speed.',
+    category: 'Skills',
+    readTime: '7 min',
+    date: '2026-08-22',
+    emoji: '🖥️',
+    content: `
+## Does the Keyboard Really Affect Typing Speed?
+
+Partly. A good keyboard won't turn a slow typist into a fast one — **technique matters far more than hardware** — but the right keyboard makes fast, accurate typing more *comfortable* and sustainable, especially over long sessions. A bad keyboard, on the other hand, causes mistakes and fatigue that quietly drag your speed down. So it's worth understanding what actually matters before you spend money. First, [test your current speed](/tests) so you know your baseline regardless of hardware.
+
+## Mechanical vs Membrane Keyboards
+
+This is the biggest choice, and it comes down to how each key registers a press:
+
+| Type | Feel | Best for |
+|---|---|---|
+| **Membrane** | Soft, mushy, quiet | Casual use, quiet offices, low budget |
+| **Mechanical** | Crisp, tactile, defined feedback | Fast typing, long sessions, gaming |
+
+**Mechanical keyboards** use individual switches under each key, giving a clear, consistent "actuation point" so you feel exactly when a keypress registers. Many fast typists prefer them because that feedback helps them type confidently without bottoming out every key. **Membrane keyboards** are cheaper and quieter but can feel vague, which invites more errors. For pure typing speed and comfort, most people prefer a mechanical board — but it's a preference, not a rule.
+
+## Switch Types (If You Go Mechanical)
+
+Mechanical switches come in three broad families:
+
+- **Linear** (e.g. "red") — smooth, no bump; quiet and fast-feeling.
+- **Tactile** (e.g. "brown") — a small bump at the actuation point; popular for typing because you feel each keypress.
+- **Clicky** (e.g. "blue") — a bump *and* an audible click; satisfying but loud (bad for shared offices).
+
+For typing, **tactile switches are the usual sweet spot** — you get feedback without the noise complaints.
+
+## What Actually Matters for Speed
+
+Beyond mechanical vs membrane, these factors have a real effect:
+
+- **Key travel & actuation** — consistent, comfortable travel lets you type in rhythm.
+- **Layout & size** — a full layout with a number pad helps data entry; a compact board saves desk space. Avoid cramped or oddly-placed keys.
+- **Stability & build** — a keyboard that doesn't flex or slide keeps your accuracy up.
+- **Ergonomics** — split or tented designs can reduce strain if you type all day.
+- **Familiarity** — you're fastest on a layout your hands know; a radical new shape slows you down at first.
+
+## What *Doesn't* Matter as Much as You Think
+
+- **RGB lighting** — looks nice, does nothing for speed.
+- **Price** — a mid-range mechanical board types as fast as a premium one; you're paying for build and features past a point.
+- **"Gaming" branding** — marketing, not speed.
+
+## The Honest Truth: Technique > Hardware
+
+Here's what keyboard marketing won't tell you: **the fastest upgrade isn't a keyboard — it's your technique.** A touch typist on a cheap membrane board will out-type a hunt-and-peck typist on a £200 mechanical every time. If you're serious about speed, spend your energy on learning to touch type before spending money on hardware. Our [free touch-typing course](/learn) and [how to type faster](/blog/how-to-type-faster) guide will do far more for your WPM than any keyboard.
+
+## How to Choose
+
+1. **Fix your technique first** — [learn touch typing](/learn). This is the real speed unlock.
+2. If buying, **try a mechanical board with tactile switches** for typing comfort.
+3. **Match the layout to your work** — number pad for data entry, compact for portability.
+4. **Prioritise comfort and ergonomics** for long sessions over flashy features.
+5. **Test your speed on it** with a [typing test](/tests) — the best keyboard is the one *you* type fastest and most comfortably on.
+
+A good keyboard is a nice-to-have. Good technique is the game-changer. Start with a [free typing test](/tests) and build from there.
+`,
+  },
+  {
     slug: 'what-does-wpm-mean',
     title: 'What Does WPM Mean? Words Per Minute Explained',
     seoTitle: 'What Does WPM Mean? Words Per Minute Explained (2026) | FastTypingLab',

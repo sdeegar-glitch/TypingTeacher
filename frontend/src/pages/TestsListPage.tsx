@@ -21,6 +21,19 @@ const byDifficulty = (a: any, b: any) =>
   (DIFF_ORDER[(a.difficulty_level || 'medium').toLowerCase()] ?? 1) -
   (DIFF_ORDER[(b.difficulty_level || 'medium').toLowerCase()] ?? 1);
 
+// Contextual guides surfaced on the tests hub so visitors discover our articles
+// (more pageviews per session) and internal link equity flows to newer content.
+const RELATED_GUIDES: { label: string; href: string }[] = [
+  { label: 'What does WPM mean?', href: '/blog/what-does-wpm-mean' },
+  { label: 'How to type faster', href: '/blog/how-to-type-faster' },
+  { label: 'Typing test for jobs', href: '/blog/typing-test-for-jobs' },
+  { label: 'Typing test for students', href: '/blog/typing-test-for-students' },
+  { label: 'What is a good typing speed?', href: '/blog/how-many-wpm-is-good-typing-speed-benchmarks' },
+  { label: 'Type without looking', href: '/blog/how-to-type-without-looking-touch-typing-guide' },
+  { label: 'Best keyboard for typing', href: '/blog/best-keyboard-for-typing-fast' },
+  { label: 'Why is the keyboard QWERTY?', href: '/blog/why-is-keyboard-qwerty' },
+];
+
 type Category = {
   id: string;
   title: string;
@@ -134,6 +147,20 @@ export default function TestsListPage() {
                 </div>
               </motion.button>
             ))}
+          </div>
+
+          {/* ── Helpful guides (discovery + internal linking) ── */}
+          <div className="mt-12 pt-8 border-t border-brand-border">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-brand-muted mb-4">Helpful typing guides</h2>
+            <div className="flex flex-wrap gap-2.5">
+              {RELATED_GUIDES.map(g => (
+                <Link key={g.href} to={g.href}
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-text bg-brand-surface border border-brand-border hover:border-brand-primary/40 hover:text-brand-primary px-4 py-2 rounded-xl transition-all duration-150">
+                  {g.label}
+                  <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
