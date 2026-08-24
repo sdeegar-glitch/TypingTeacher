@@ -34,3 +34,16 @@ yarn-debug.log*
 yarn-error.log*
 logs/
 *.log
+
+# Internal strategy/planning docs — kept locally only (repo is public).
+# See /d/TypingTeacher-private-docs for the working copies.
+ACTION_PLAN_30_DAYS.md
+GROWTH.md
+OUTREACH_KIT.md
+SEO_30DAY_PLAN_DATA_DRIVEN.md
+SEO_PLAYBOOK.md
+SOCIAL_ACCOUNTS_CHECKLIST.md
+WEEK1_EXECUTION_PLAN.md
+deep-research-report.md
+pending.md
+FastTypingLab Master Plan.pdf
