@@ -59,6 +59,21 @@ export default function AboutPage() {
           </ul>
         </div>
 
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-8">
+          <h2 className="font-bold text-lg mb-2">Our editorial standards</h2>
+          <p className="text-brand-text-muted text-sm leading-relaxed mb-3">
+            We care about getting things right, because people rely on our practice material for real exams and jobs.
+            Here is how our content is made and maintained:
+          </p>
+          <ul className="text-brand-text-muted text-sm leading-relaxed space-y-2">
+            <li>• <strong className="text-brand-text">Human-reviewed.</strong> Our guides and exam pages are written and edited by our team, who follow Indian government typing exams and typing pedagogy closely.</li>
+            <li>• <strong className="text-brand-text">Practice passages are curated.</strong> Typing test passages are drawn from public-domain and openly-licensed material and AI-assisted rewriting, then screened for quality, readability and appropriateness before they go live — never published unchecked.</li>
+            <li>• <strong className="text-brand-text">Verify official rules.</strong> Exam requirements (speed, duration, error rules) change between notifications, so we clearly tell readers to confirm the current official notification for their exam.</li>
+            <li>• <strong className="text-brand-text">Kept up to date.</strong> When exam patterns, layouts or best practices change, we revise the affected pages rather than leaving stale information online.</li>
+            <li>• <strong className="text-brand-text">Corrections welcome.</strong> Spotted a mistake? <Link to="/contact" className="text-brand-primary hover:underline">Tell us</Link> and we will fix it.</li>
+          </ul>
+        </div>
+
         <div className="flex flex-wrap gap-3">
           <Link to="/tests" className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-6 py-3 rounded-xl font-bold text-sm transition-all">
             <Zap className="w-4 h-4" /> Start a Free Test
