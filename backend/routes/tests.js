@@ -86,37 +86,6 @@ router.get('/category/:category', async (req, res) => {
   res.json(data);
 });
 
-// GET /api/tests/telegram-status - TEMPORARY read-only diagnostic. Reports whether
-// the bot token + chat id are set and whether the bot can see the group and is an
-// admin there. Sends NO message and exposes no secrets (only the public bot
-// username / public group title). Must sit ABOVE /:slug so it isn't caught as a
-// slug lookup. Remove after verifying setup.
-router.get('/telegram-status', async (req, res) => {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) return res.json({ configured: false, hint: 'Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID.' });
-
-  const api = (m, q = '') => fetch(`https://api.telegram.org/bot${token}/${m}${q}`, { signal: AbortSignal.timeout(15000) }).then(r => r.json()).catch(e => ({ ok: false, description: e.message }));
-  try {
-    const me = await api('getMe');
-    const chat = await api('getChat', `?chat_id=${encodeURIComponent(chatId)}`);
-    let membership = null;
-    if (me.ok && chat.ok) {
-      const m = await api('getChatMember', `?chat_id=${encodeURIComponent(chatId)}&user_id=${me.result.id}`);
-      membership = m.ok ? m.result.status : m.description;
-    }
-    res.json({
-      configured: true,
-      bot: me.ok ? { ok: true, username: me.result.username } : { ok: false, error: me.description },
-      chat: chat.ok ? { ok: true, title: chat.result.title, type: chat.result.type } : { ok: false, error: chat.description },
-      botMembership: membership,
-      canPost: membership === 'administrator' || membership === 'creator',
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // GET /api/tests/:slug
 router.get('/:slug', async (req, res) => {
   const { slug } = req.params;
