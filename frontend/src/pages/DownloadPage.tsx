@@ -66,7 +66,7 @@ export default function DownloadPage() {
           {VIRUSTOTAL_SCAN_URL && (
             <a href={VIRUSTOTAL_SCAN_URL} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-accent hover:underline mt-2">
-              <ScanSearch className="w-3.5 h-3.5" /> Scanned clean on VirusTotal — view report
+              <ScanSearch className="w-3.5 h-3.5" /> View VirusTotal scan report
             </a>
           )}
         </div>
