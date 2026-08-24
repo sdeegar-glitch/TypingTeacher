@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient.js';
 import { fetchAndGenerateTests } from '../cronService.js';
 import { requireAdmin } from '../middleware/requireAdmin.js';
 import { logActivity } from '../activityLog.js';
+import { postTestToTelegram } from '../services/telegram.js';
 
 const router = express.Router();
 
@@ -146,6 +147,34 @@ router.post('/generate', requireAdmin, async (req, res) => {
     fetchAndGenerateTests(options).catch(err => console.error("Manual generation failed:", err));
     logActivity({ action: 'ai_generation_triggered', entity: 'typing_test', actor_email: req.adminUser.email, ip: req.ip, meta: { slot: slot || 'full_batch', count: count || null } });
     res.status(202).json({ message: slot ? `Generating slot "${slot}" in the background.` : 'Full daily batch (12 tests) started in the background.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/tests/telegram-test - Verify the Telegram bot is wired up correctly.
+// Posts a sample "new test" message to the configured group/channel so you can
+// confirm TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID + admin rights are all correct.
+router.post('/telegram-test', requireAdmin, async (req, res) => {
+  try {
+    const result = await postTestToTelegram({
+      slug: 'wpm-typing-speed-test',
+      title: 'Sample Test — Telegram bot is working! ✅',
+      category: 'Setup',
+      difficulty: 'easy',
+      wordCount: 300,
+      language: 'en',
+    });
+    if (result?.skipped) {
+      return res.status(400).json({
+        error: 'Telegram not configured',
+        detail: result.skipped === 'not-configured'
+          ? 'Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in the backend environment.'
+          : result.skipped,
+      });
+    }
+    if (!result?.ok) return res.status(502).json({ error: result?.error || 'Telegram post failed' });
+    res.json({ message: 'Posted a test message to your Telegram group.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

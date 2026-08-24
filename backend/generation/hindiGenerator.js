@@ -132,7 +132,11 @@ export async function generateHindiTest(layout) {
       }
 
       await logAttempt({ slot, topic, status: 'success', testId: inserted.id, attemptCount: attempt });
-      return { status: 'success', testId: inserted.id, topic };
+      return {
+        status: 'success', testId: inserted.id, topic,
+        slug, title: data.title, category: data.category,
+        difficulty: data.difficulty_level, wordCount, language: 'hi', layout,
+      };
     } catch (err) {
       lastError = err.message;
       await logAttempt({ slot, topic, status: 'failed', error: lastError, attemptCount: attempt });

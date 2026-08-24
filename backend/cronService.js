@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import { generateEnglishTest } from './generation/englishGenerator.js';
 import { generateHindiTest } from './generation/hindiGenerator.js';
 import { supabase } from './supabaseClient.js';
+import { postTestToTelegram } from './services/telegram.js';
 
 // Guard against overlapping runs
 let isRunning = false;
@@ -72,6 +73,7 @@ export async function fetchAndGenerateTests(options = {}) {
         const result = await runSlot(slot);
         results.push({ slot, ...result });
         console.log(`  ${result.status === 'success' ? '✅' : '⚠️'} ${slot}: ${result.status}${result.error ? ' — ' + result.error : ''}`);
+        if (result.status === 'success') await postTestToTelegram(result);
       } catch (err) {
         console.error(`  ❌ ${slot} threw unexpectedly:`, err.message);
         results.push({ slot, status: 'failed', error: err.message });
@@ -120,6 +122,7 @@ export async function maybeCatchUpGeneration() {
     try {
       const result = await runSlot(slot);
       console.log(`[Catch-up] ${slot}: ${result?.status || 'done'}${result?.error ? ' — ' + result.error : ''}`);
+      if (result?.status === 'success') await postTestToTelegram(result);
     } finally {
       isRunning = false;
     }
