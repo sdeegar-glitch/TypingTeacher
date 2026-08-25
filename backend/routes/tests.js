@@ -185,7 +185,7 @@ router.post('/telegram-test', requireAdmin, async (req, res) => {
 router.post('/leaderboard-post', requireAdmin, async (req, res) => {
   try {
     const result = await postDailyLeaderboard();
-    if (result?.skipped === 'no-data') return res.status(400).json({ error: 'No test sessions in the last 24 hours to rank yet.' });
+    if (result?.skipped === 'no-data') return res.status(400).json({ error: 'No test sessions yesterday to rank yet.' });
     if (result?.skipped === 'not-configured') return res.status(400).json({ error: 'Telegram not configured (set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID).' });
     if (result?.error || result?.ok === false) return res.status(502).json({ error: result.error || 'Post failed' });
     res.json({ message: 'Daily leaderboard posted to Telegram.' });

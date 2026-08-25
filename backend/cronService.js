@@ -132,21 +132,33 @@ export async function maybeCatchUpGeneration() {
   }
 }
 
+// Midnight-to-midnight IST bounds for "yesterday" (or N days ago), returned as
+// UTC Date objects for querying started_at (stored in UTC).
+const IST_OFFSET_MS = 5.5 * 3600 * 1000;
+function istDayBoundsUTC(daysAgo = 1) {
+  const istNow = new Date(Date.now() + IST_OFFSET_MS);
+  const istMidnightTodayUTC = new Date(Date.UTC(istNow.getUTCFullYear(), istNow.getUTCMonth(), istNow.getUTCDate())) - IST_OFFSET_MS;
+  const start = new Date(istMidnightTodayUTC - daysAgo * 24 * 3600 * 1000);
+  const end = new Date(istMidnightTodayUTC - (daysAgo - 1) * 24 * 3600 * 1000);
+  return { start, end };
+}
+
 // ─── DAILY LEADERBOARD POST ────────────────────────────────────────────────────
-// Pulls the top 5 net-WPM sessions from the last 24 hours and posts them to the
-// Telegram community. No-op (quietly) if Telegram isn't configured or there are
-// no sessions yet.
+// Pulls the top 5 net-WPM sessions from the previous IST calendar day (midnight
+// to midnight) and posts them to the Telegram community. No-op (quietly) if
+// Telegram isn't configured or there are no sessions yet.
 export async function postDailyLeaderboard() {
   try {
-    const dayAgo = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+    const { start, end } = istDayBoundsUTC(1);
     const { data, error } = await supabase
       .from('test_sessions')
       .select('net_wpm, accuracy, started_at, users ( name )')
-      .gte('started_at', dayAgo)
+      .gte('started_at', start.toISOString())
+      .lt('started_at', end.toISOString())
       .order('net_wpm', { ascending: false })
       .limit(5);
     if (error) { console.warn('[Leaderboard] query failed:', error.message); return { error: error.message }; }
-    if (!data || data.length === 0) { console.log('[Leaderboard] no sessions today — skipping post.'); return { skipped: 'no-data' }; }
+    if (!data || data.length === 0) { console.log('[Leaderboard] no sessions yesterday — skipping post.'); return { skipped: 'no-data' }; }
 
     const rows = data.map((s, i) => ({
       rank: i + 1,

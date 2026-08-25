@@ -116,7 +116,7 @@ export async function postLeaderboardToTelegram(rows) {
 
   const text =
     `🏆 <b>Daily WPM Leaderboard</b>\n` +
-    `<i>Top typists on FastTypingLab today</i>\n\n` +
+    `<i>Top typists on FastTypingLab yesterday</i>\n\n` +
     lines.join('\n') +
     `\n\n💪 Think you can beat them? Take a test and climb the ranks!\n#TypingChallenge #FastTypingLab`;
 
