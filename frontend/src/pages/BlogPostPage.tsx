@@ -4,6 +4,7 @@ import { ChevronLeft, Clock, Calendar, Share2, ExternalLink } from 'lucide-react
 import { BLOG_POSTS } from '../data/blogPosts';
 import Seo from '../components/Seo';
 import TelegramCTA from '../components/TelegramCTA';
+import WhatsAppCTA from '../components/WhatsAppCTA';
 
 // Inline formatting: links, bold, italics (links first so bold doesn't eat them)
 function inline(s: string): string {
@@ -152,9 +153,10 @@ export default function BlogPostPage() {
             </Link>
           </div>
 
-          {/* Telegram — keep readers engaged beyond this one article */}
-          <div className="mb-8">
+          {/* Telegram + WhatsApp — keep readers engaged beyond this one article */}
+          <div className="mb-8 space-y-3">
             <TelegramCTA />
+            <WhatsAppCTA />
           </div>
 
           {/* Related posts */}

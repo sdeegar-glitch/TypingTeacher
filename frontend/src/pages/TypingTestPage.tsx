@@ -6,6 +6,7 @@ import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, V
 import CharSpan from '../components/CharSpan';
 import SignupPromptBanner from '../components/SignupPromptBanner';
 import TelegramCTA from '../components/TelegramCTA';
+import WhatsAppCTA from '../components/WhatsAppCTA';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -730,8 +731,9 @@ export default function TypingTestPage() {
                   cta="Save my result"
                 />
               </div>
-              <div className="mt-3">
+              <div className="mt-3 space-y-2.5">
                 <TelegramCTA />
+                <WhatsAppCTA />
               </div>
             </motion.div>
           </motion.div>

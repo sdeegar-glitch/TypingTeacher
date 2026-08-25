@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import VisitorCounter from './VisitorCounter';
 import TelegramCTA from './TelegramCTA';
+import WhatsAppCTA from './WhatsAppCTA';
 
 const PRODUCT_LINKS = [
   { label: 'Typing Tests', href: '/tests' },
@@ -40,7 +41,10 @@ export default function Footer() {
             <p className="text-xs text-brand-muted max-w-xs leading-relaxed mb-4">
               India's most complete free typing platform for students, professionals, and govt exam aspirants.
             </p>
-            <TelegramCTA variant="inline" />
+            <div className="flex flex-wrap gap-2.5">
+              <TelegramCTA variant="inline" />
+              <WhatsAppCTA variant="inline" />
+            </div>
           </div>
 
           {/* Product links */}

@@ -4,6 +4,7 @@ import { Trophy, ChevronRight, Target, Clock, CheckCircle2, Lightbulb, Keyboard 
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
 import TelegramCTA from '../components/TelegramCTA';
+import WhatsAppCTA from '../components/WhatsAppCTA';
 import { EXAM_LANDINGS } from '../data/examLandingData';
 
 export default function ExamLandingPage({ slug }: { slug: string }) {
@@ -126,9 +127,10 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
           </div>
         </section>
 
-        {/* Telegram — daily exam-relevant test practice + updates */}
-        <div className="mb-10">
+        {/* Telegram + WhatsApp — daily exam-relevant test practice + updates */}
+        <div className="mb-10 space-y-3">
           <TelegramCTA message={`Get daily ${exam.examName} typing practice, exam-date alerts, and a weekly WPM leaderboard — free.`} />
+          <WhatsAppCTA message={`Follow for daily ${exam.examName} typing practice and exam-date alerts.`} />
         </div>
 
         {/* Related */}
