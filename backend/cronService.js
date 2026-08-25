@@ -172,10 +172,10 @@ export const initCronJobs = () => {
   });
   console.log('[CronService] Scheduled: daily at 3:00 AM IST — 12 tests (4 EN + 4 HI/Mangal + 4 HI/KrutiDev).');
 
-  // Daily leaderboard to Telegram — every day 7:00 PM IST (= 13:30 UTC), when
-  // Indian users are active so the free-tier instance is most likely awake.
-  cron.schedule('30 13 * * *', () => { postDailyLeaderboard(); });
-  console.log('[CronService] Scheduled: daily leaderboard to Telegram — every day 7:00 PM IST.');
+  // Daily leaderboard to Telegram — every day 9:00 AM IST (= 03:30 UTC),
+  // ranking the previous day's top typists.
+  cron.schedule('30 3 * * *', () => { postDailyLeaderboard(); });
+  console.log('[CronService] Scheduled: daily leaderboard to Telegram — every day 9:00 AM IST.');
 
   // Engagement poll to Telegram — Wednesday 7:00 PM IST (= 13:30 UTC). Rotates
   // through a pool of questions so the group stays active mid-week.
