@@ -85,7 +85,7 @@ export async function postTestToTelegram(test) {
   if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) return { skipped: 'not-configured' };
   if (!test || !test.slug) return { skipped: 'no-slug' };
 
-  const url = `${SITE}/tests/${test.slug}`;
+  const url = `${SITE}/tests/config/${test.slug}`;
   const result = await sendMessage({
     text: buildMessage(test),
     replyMarkup: {
