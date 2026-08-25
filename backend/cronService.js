@@ -173,6 +173,76 @@ export async function postDailyLeaderboard() {
   }
 }
 
+// ─── TELEGRAM POST CATCH-UP ────────────────────────────────────────────────────
+// Render's free tier sleeps the instance when idle, so a cron tick scheduled
+// for a quiet hour (e.g. 9 AM leaderboard) can simply never fire if nothing
+// woke the instance up in time. This mirrors maybeCatchUpGeneration: on
+// incoming traffic, check whether today's leaderboard / this week's poll is
+// overdue and post it if so. "Already posted" is tracked in app_settings
+// (not in-memory) so it survives instance restarts and isn't duplicated by
+// both the cron tick and a catch-up check firing close together.
+const LEADERBOARD_MARKER_KEY = 'telegram_last_leaderboard_ist_date';
+const POLL_MARKER_KEY = 'telegram_last_poll_iso_week';
+
+async function getMarker(key) {
+  const { data } = await supabase.from('app_settings').select('value').eq('key', key).maybeSingle();
+  return data?.value || null;
+}
+async function setMarker(key, value) {
+  await supabase.from('app_settings').upsert({ key, value, updated_at: new Date().toISOString() });
+}
+
+function istNow() { return new Date(Date.now() + IST_OFFSET_MS); }
+function istDateKey(d) { return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`; }
+// ISO 8601 week number, computed on the IST-shifted date so it matches the IST calendar day.
+function istIsoWeekKey(d) {
+  const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  const dayNum = (date.getUTCDay() + 6) % 7;
+  date.setUTCDate(date.getUTCDate() - dayNum + 3);
+  const firstThursday = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
+  const week = 1 + Math.round(((date - firstThursday) / 86400000 - 3 + ((firstThursday.getUTCDay() + 6) % 7)) / 7);
+  return `${date.getUTCFullYear()}-W${week}`;
+}
+
+let lastTelegramCatchUpCheck = 0;
+
+export async function maybeCatchUpTelegramPosts() {
+  const now = Date.now();
+  if (now - lastTelegramCatchUpCheck < 6 * 60 * 1000) return; // at most once every 6 min
+  lastTelegramCatchUpCheck = now;
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) return;
+
+  try {
+    const ist = istNow();
+    const todayKey = istDateKey(ist);
+    const hour = ist.getUTCHours(); // ist is already shifted, so getUTCHours() reads as IST hour
+
+    // Daily leaderboard: due any time from 9:00 AM IST onward, once per IST day.
+    if (hour >= 9) {
+      const lastPosted = await getMarker(LEADERBOARD_MARKER_KEY);
+      if (lastPosted !== todayKey) {
+        console.log('[Telegram catch-up] Daily leaderboard overdue — posting now.');
+        const result = await postDailyLeaderboard();
+        if (result?.ok || result?.skipped === 'no-data') await setMarker(LEADERBOARD_MARKER_KEY, todayKey);
+      }
+    }
+
+    // Wednesday poll: due any time from 7:00 PM IST onward on a Wednesday, once per ISO week.
+    const isWednesday = ist.getUTCDay() === 3;
+    if (isWednesday && hour >= 19) {
+      const weekKey = istIsoWeekKey(ist);
+      const lastPolled = await getMarker(POLL_MARKER_KEY);
+      if (lastPolled !== weekKey) {
+        console.log('[Telegram catch-up] Weekly poll overdue — posting now.');
+        const result = await postPollToTelegram();
+        if (result?.ok) await setMarker(POLL_MARKER_KEY, weekKey);
+      }
+    }
+  } catch (e) {
+    console.error('[Telegram catch-up] failed:', e.message);
+  }
+}
+
 // ─── CRON JOBS ────────────────────────────────────────────────────────────────
 export const initCronJobs = () => {
   // Production: once daily at 3:00 AM IST (= 21:30 UTC previous day), generates
@@ -185,13 +255,21 @@ export const initCronJobs = () => {
   console.log('[CronService] Scheduled: daily at 3:00 AM IST — 12 tests (4 EN + 4 HI/Mangal + 4 HI/KrutiDev).');
 
   // Daily leaderboard to Telegram — every day 9:00 AM IST (= 03:30 UTC),
-  // ranking the previous day's top typists.
-  cron.schedule('30 3 * * *', () => { postDailyLeaderboard(); });
+  // ranking the previous day's top typists. Marks app_settings on success so
+  // maybeCatchUpTelegramPosts() doesn't re-post the same day if it also fires.
+  cron.schedule('30 3 * * *', async () => {
+    const result = await postDailyLeaderboard();
+    if (result?.ok || result?.skipped === 'no-data') await setMarker(LEADERBOARD_MARKER_KEY, istDateKey(istNow()));
+  });
   console.log('[CronService] Scheduled: daily leaderboard to Telegram — every day 9:00 AM IST.');
 
   // Engagement poll to Telegram — Wednesday 7:00 PM IST (= 13:30 UTC). Rotates
-  // through a pool of questions so the group stays active mid-week.
-  cron.schedule('30 13 * * 3', () => { postPollToTelegram(); });
+  // through a pool of questions so the group stays active mid-week. Marks
+  // app_settings on success for the same reason as the leaderboard above.
+  cron.schedule('30 13 * * 3', async () => {
+    const result = await postPollToTelegram();
+    if (result?.ok) await setMarker(POLL_MARKER_KEY, istIsoWeekKey(istNow()));
+  });
   console.log('[CronService] Scheduled: engagement poll to Telegram — Wednesday 7:00 PM IST.');
 
   // Keep-alive: ping /health every 14 min to prevent Render free-tier cold starts

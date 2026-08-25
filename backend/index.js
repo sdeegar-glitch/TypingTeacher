@@ -36,7 +36,7 @@ app.get('/health', (req, res) => {
 // Catch-up generation on incoming traffic (fire-and-forget, self-throttled to
 // once/hour). Ensures new tests keep generating even when the free-tier instance
 // was asleep at the scheduled cron time.
-app.use((req, res, next) => { maybeCatchUpGeneration(); next(); });
+app.use((req, res, next) => { maybeCatchUpGeneration(); maybeCatchUpTelegramPosts(); next(); });
 
 
 import testsRoutes from './routes/tests.js';
@@ -49,7 +49,7 @@ import meRoutes from './routes/me.js';
 import adminRoutes from './routes/admin.js';
 import publicSettingsRoutes from './routes/publicSettings.js';
 import visitorsRoutes from './routes/visitors.js';
-import { initCronJobs, maybeCatchUpGeneration } from './cronService.js';
+import { initCronJobs, maybeCatchUpGeneration, maybeCatchUpTelegramPosts } from './cronService.js';
 
 app.use('/tests', testsRoutes);
 app.use('/api/tests', testsRoutes);
