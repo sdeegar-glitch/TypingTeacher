@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, Clock, Calendar, Share2, ExternalLink } from 'lucide-react';
 import { BLOG_POSTS } from '../data/blogPosts';
 import Seo from '../components/Seo';
+import TelegramCTA from '../components/TelegramCTA';
 
 // Inline formatting: links, bold, italics (links first so bold doesn't eat them)
 function inline(s: string): string {
@@ -149,6 +150,11 @@ export default function BlogPostPage() {
               className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2 rounded-xl text-sm font-bold transition-all shadow-md shadow-brand-primary/20">
               <ExternalLink className="w-4 h-4" /> Practice Now
             </Link>
+          </div>
+
+          {/* Telegram — keep readers engaged beyond this one article */}
+          <div className="mb-8">
+            <TelegramCTA />
           </div>
 
           {/* Related posts */}

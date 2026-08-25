@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Trophy, ChevronRight, Target, Clock, CheckCircle2, Lightbulb, Keyboard } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
+import TelegramCTA from '../components/TelegramCTA';
 import { EXAM_LANDINGS } from '../data/examLandingData';
 
 export default function ExamLandingPage({ slug }: { slug: string }) {
@@ -124,6 +125,11 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
             ))}
           </div>
         </section>
+
+        {/* Telegram — daily exam-relevant test practice + updates */}
+        <div className="mb-10">
+          <TelegramCTA message={`Get daily ${exam.examName} typing practice, exam-date alerts, and a weekly WPM leaderboard — free.`} />
+        </div>
 
         {/* Related */}
         <section className="mb-8">
