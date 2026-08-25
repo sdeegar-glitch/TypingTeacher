@@ -3,10 +3,19 @@
 // generated. Configured entirely via environment variables so it degrades to a
 // no-op (never throws) when not set up:
 //
-//   TELEGRAM_BOT_TOKEN   token from @BotFather
-//   TELEGRAM_CHAT_ID     the group/channel to post to. For a public group or
-//                        channel use its @username (e.g. "@fasttypinglab").
-//                        For a private supergroup use its numeric -100… id.
+//   TELEGRAM_BOT_TOKEN     token from @BotFather
+//   TELEGRAM_CHAT_ID       the group/channel to post to. For a public group or
+//                          channel use its @username (e.g. "@fasttypinglab").
+//                          For a private supergroup use its numeric -100… id.
+//   TELEGRAM_ADMIN_CHAT_ID optional — your personal Telegram numeric id. When
+//                          set, every group post also gets DM'd to you as a
+//                          plain-text, WhatsApp-ready copy (WhatsApp has no
+//                          public API for posting to Channels, so this is the
+//                          fast path: read the DM on your phone, tap the copy
+//                          block, paste into your WhatsApp channel).
+//                          To get it: DM your own bot once (so it's allowed to
+//                          message you back), then DM @userinfobot — it replies
+//                          with your numeric user id, which is also your chat id.
 //
 // Setup: create a bot with @BotFather, add it to the group, and make it an
 // admin (bots can only post to groups/channels where they're an admin).
@@ -25,14 +34,16 @@ function escapeHtml(s = '') {
 /**
  * Low-level sender. Returns { skipped } when unconfigured, { ok:true } on
  * success, or { ok:false, error } on failure — never throws.
+ * @param {{ text:string, replyMarkup?:object, disablePreview?:boolean, chatId?:string }} opts
+ *   chatId overrides the default group/channel target (used for the admin DM).
  */
-async function sendMessage({ text, replyMarkup, disablePreview = false }) {
+async function sendMessage({ text, replyMarkup, disablePreview = false, chatId }) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) return { skipped: 'not-configured' };
+  const target = chatId || process.env.TELEGRAM_CHAT_ID;
+  if (!token || !target) return { skipped: 'not-configured' };
 
   const body = {
-    chat_id: chatId,
+    chat_id: target,
     text,
     parse_mode: 'HTML',
     disable_web_page_preview: disablePreview,
@@ -75,6 +86,30 @@ function buildMessage(test) {
   return `${intro}\n\n📝 <b>${title}</b>\n🏷️ ${bits}\n\n${cta}\n\n#TypingTest #FastTypingLab${layoutTag}`;
 }
 
+// Converts our Telegram HTML (<b>, <i>, escaped entities) into WhatsApp's
+// plain-text markdown (*bold*, _italic_) and appends the link, since WhatsApp
+// has no inline buttons — the URL just needs to sit in the text itself.
+function toWhatsAppText(html, url, urlLabel) {
+  const plain = html
+    .replace(/<b>(.*?)<\/b>/gs, '*$1*')
+    .replace(/<i>(.*?)<\/i>/gs, '_$1_')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  return url ? `${plain}\n\n${urlLabel ? urlLabel + '\n' : ''}${url}` : plain;
+}
+
+/**
+ * DMs a copy-ready WhatsApp version of a post to the admin's personal Telegram
+ * chat. No-op when TELEGRAM_ADMIN_CHAT_ID isn't set. Wrapped in <pre> so a
+ * single tap on the message copies the whole block on Telegram mobile.
+ */
+async function sendWhatsAppCopyToAdmin(whatsappText, label) {
+  const adminChatId = process.env.TELEGRAM_ADMIN_CHAT_ID;
+  if (!adminChatId) return;
+  const text = `📋 <b>Copy for WhatsApp — ${escapeHtml(label)}</b>\n<i>Tap the block below to copy, then paste into your WhatsApp channel.</i>\n\n<pre>${escapeHtml(whatsappText)}</pre>`;
+  await sendMessage({ text, chatId: adminChatId, disablePreview: true });
+}
+
 /**
  * Post a newly generated test to the Telegram community.
  * Safe to call unconditionally — returns quietly when unconfigured or on error.
@@ -86,15 +121,19 @@ export async function postTestToTelegram(test) {
   if (!test || !test.slug) return { skipped: 'no-slug' };
 
   const url = `${SITE}/tests/config/${test.slug}`;
+  const messageHtml = buildMessage(test);
   const result = await sendMessage({
-    text: buildMessage(test),
+    text: messageHtml,
     replyMarkup: {
       inline_keyboard: [[
         { text: test.language === 'hi' ? '🚀 टेस्ट दें' : '🚀 Take the Test', url },
       ]],
     },
   });
-  if (result.ok) console.log(`[Telegram] Posted new test → ${test.slug}`);
+  if (result.ok) {
+    console.log(`[Telegram] Posted new test → ${test.slug}`);
+    await sendWhatsAppCopyToAdmin(toWhatsAppText(messageHtml, url), 'New Test');
+  }
   return result;
 }
 
@@ -120,11 +159,15 @@ export async function postLeaderboardToTelegram(rows) {
     lines.join('\n') +
     `\n\n💪 Think you can beat them? Take a test and climb the ranks!\n#TypingChallenge #FastTypingLab`;
 
+  const leaderboardUrl = `${SITE}/tests`;
   const result = await sendMessage({
     text,
-    replyMarkup: { inline_keyboard: [[{ text: '⌨️ Beat the leaderboard', url: `${SITE}/tests` }]] },
+    replyMarkup: { inline_keyboard: [[{ text: '⌨️ Beat the leaderboard', url: leaderboardUrl }]] },
   });
-  if (result.ok) console.log('[Telegram] Posted daily leaderboard.');
+  if (result.ok) {
+    console.log('[Telegram] Posted daily leaderboard.');
+    await sendWhatsAppCopyToAdmin(toWhatsAppText(text, leaderboardUrl), 'Daily Leaderboard');
+  }
   return result;
 }
 
@@ -179,6 +222,10 @@ export async function postPollToTelegram() {
       return { ok: false, error: json.description };
     }
     console.log('[Telegram] Posted poll:', poll.question);
+    // WhatsApp Channels support native polls too, but there's no API to post one —
+    // DM the admin the question + options as plain text to recreate manually.
+    const whatsappPollText = `${poll.question}\n\n${poll.options.map((o, i) => `${i + 1}) ${o}`).join('\n')}\n\n(Recreate this as a WhatsApp poll, or post as a text question.)`;
+    await sendWhatsAppCopyToAdmin(whatsappPollText, 'Weekly Poll');
     return { ok: true };
   } catch (err) {
     console.warn('[Telegram] poll error:', err.message);
