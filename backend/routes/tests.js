@@ -1,6 +1,6 @@
 import express from 'express';
 import { supabase } from '../supabaseClient.js';
-import { fetchAndGenerateTests, postWeeklyLeaderboard } from '../cronService.js';
+import { fetchAndGenerateTests, postDailyLeaderboard } from '../cronService.js';
 import { requireAdmin } from '../middleware/requireAdmin.js';
 import { logActivity } from '../activityLog.js';
 import { postTestToTelegram, postPollToTelegram } from '../services/telegram.js';
@@ -180,15 +180,15 @@ router.post('/telegram-test', requireAdmin, async (req, res) => {
   }
 });
 
-// POST /api/tests/leaderboard-post - Manually post the weekly leaderboard now
-// (also used to preview/verify it without waiting for Sunday).
+// POST /api/tests/leaderboard-post - Manually post the daily leaderboard now
+// (also used to preview/verify it without waiting for the scheduled time).
 router.post('/leaderboard-post', requireAdmin, async (req, res) => {
   try {
-    const result = await postWeeklyLeaderboard();
-    if (result?.skipped === 'no-data') return res.status(400).json({ error: 'No test sessions in the last 7 days to rank yet.' });
+    const result = await postDailyLeaderboard();
+    if (result?.skipped === 'no-data') return res.status(400).json({ error: 'No test sessions in the last 24 hours to rank yet.' });
     if (result?.skipped === 'not-configured') return res.status(400).json({ error: 'Telegram not configured (set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID).' });
     if (result?.error || result?.ok === false) return res.status(502).json({ error: result.error || 'Post failed' });
-    res.json({ message: 'Weekly leaderboard posted to Telegram.' });
+    res.json({ message: 'Daily leaderboard posted to Telegram.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

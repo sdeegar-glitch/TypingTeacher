@@ -132,21 +132,21 @@ export async function maybeCatchUpGeneration() {
   }
 }
 
-// ─── WEEKLY LEADERBOARD POST ──────────────────────────────────────────────────
-// Pulls the top 5 net-WPM sessions from the last 7 days and posts them to the
+// ─── DAILY LEADERBOARD POST ────────────────────────────────────────────────────
+// Pulls the top 5 net-WPM sessions from the last 24 hours and posts them to the
 // Telegram community. No-op (quietly) if Telegram isn't configured or there are
 // no sessions yet.
-export async function postWeeklyLeaderboard() {
+export async function postDailyLeaderboard() {
   try {
-    const weekAgo = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
+    const dayAgo = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
     const { data, error } = await supabase
       .from('test_sessions')
       .select('net_wpm, accuracy, started_at, users ( name )')
-      .gte('started_at', weekAgo)
+      .gte('started_at', dayAgo)
       .order('net_wpm', { ascending: false })
       .limit(5);
     if (error) { console.warn('[Leaderboard] query failed:', error.message); return { error: error.message }; }
-    if (!data || data.length === 0) { console.log('[Leaderboard] no sessions this week — skipping post.'); return { skipped: 'no-data' }; }
+    if (!data || data.length === 0) { console.log('[Leaderboard] no sessions today — skipping post.'); return { skipped: 'no-data' }; }
 
     const rows = data.map((s, i) => ({
       rank: i + 1,
@@ -172,10 +172,10 @@ export const initCronJobs = () => {
   });
   console.log('[CronService] Scheduled: daily at 3:00 AM IST — 12 tests (4 EN + 4 HI/Mangal + 4 HI/KrutiDev).');
 
-  // Weekly leaderboard to Telegram — Sunday 7:00 PM IST (= 13:30 UTC), when
+  // Daily leaderboard to Telegram — every day 7:00 PM IST (= 13:30 UTC), when
   // Indian users are active so the free-tier instance is most likely awake.
-  cron.schedule('30 13 * * 0', () => { postWeeklyLeaderboard(); });
-  console.log('[CronService] Scheduled: weekly leaderboard to Telegram — Sunday 7:00 PM IST.');
+  cron.schedule('30 13 * * *', () => { postDailyLeaderboard(); });
+  console.log('[CronService] Scheduled: daily leaderboard to Telegram — every day 7:00 PM IST.');
 
   // Engagement poll to Telegram — Wednesday 7:00 PM IST (= 13:30 UTC). Rotates
   // through a pool of questions so the group stays active mid-week.

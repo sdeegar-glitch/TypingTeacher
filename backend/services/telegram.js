@@ -115,8 +115,8 @@ export async function postLeaderboardToTelegram(rows) {
   );
 
   const text =
-    `🏆 <b>Weekly WPM Leaderboard</b>\n` +
-    `<i>Top typists on FastTypingLab this week</i>\n\n` +
+    `🏆 <b>Daily WPM Leaderboard</b>\n` +
+    `<i>Top typists on FastTypingLab today</i>\n\n` +
     lines.join('\n') +
     `\n\n💪 Think you can beat them? Take a test and climb the ranks!\n#TypingChallenge #FastTypingLab`;
 
@@ -124,7 +124,7 @@ export async function postLeaderboardToTelegram(rows) {
     text,
     replyMarkup: { inline_keyboard: [[{ text: '⌨️ Beat the leaderboard', url: `${SITE}/tests` }]] },
   });
-  if (result.ok) console.log('[Telegram] Posted weekly leaderboard.');
+  if (result.ok) console.log('[Telegram] Posted daily leaderboard.');
   return result;
 }
 
