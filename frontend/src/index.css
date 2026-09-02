@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+/* Google Fonts is loaded via a <link> in index.html instead of @import here —
+   @import inside CSS is render-blocking and forces a serial chain (HTML → our
+   CSS bundle → discover the font URL → fetch fonts), whereas a <link> in the
+   HTML head is discovered immediately by the browser's preload scanner. */
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────
