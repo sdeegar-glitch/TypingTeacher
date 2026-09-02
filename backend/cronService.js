@@ -272,15 +272,16 @@ export const initCronJobs = () => {
   });
   console.log('[CronService] Scheduled: engagement poll to Telegram — Wednesday 7:00 PM IST.');
 
-  // Keep-alive: ping /health every 14 min to prevent Render free-tier cold starts
-  const BACKEND_URL = process.env.BACKEND_URL || 'https://typingteacher-2lnd.onrender.com';
-  cron.schedule('*/14 * * * *', async () => {
-    try {
-      const res = await fetch(`${BACKEND_URL}/health`);
-      console.log(`[Keep-alive] /health → ${res.status}`);
-    } catch (err) {
-      console.warn(`[Keep-alive] Ping failed: ${err.message}`);
-    }
-  });
-  console.log(`[Keep-alive] Pinging ${BACKEND_URL}/health every 14 min (prevents cold starts).`);
+  // No self-ping keep-alive here on purpose. Render's free tier grants 750
+  // instance-hours/month per workspace, and a spun-down (sleeping) service
+  // consumes NONE of that — only active/awake time counts. Pinging every
+  // 14 minutes to prevent sleep meant the service ran ~24/7, which eats
+  // roughly 720-744 of the 750 hours in a given month, leaving almost no
+  // margin before every free service on the account gets suspended for the
+  // rest of the month. Instead we let the instance sleep naturally when
+  // idle (spin-down costs nothing) and rely on maybeCatchUpGeneration() /
+  // maybeCatchUpTelegramPosts() — both run on the next real incoming
+  // request and post/generate anything that's overdue within minutes.
+  // Trade-off: the first visitor after 15+ idle minutes eats a ~1 min cold
+  // start; that's cheap compared to risking the whole backend going dark.
 };
