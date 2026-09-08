@@ -16,6 +16,7 @@ const AuthPage = lazy(() => import('./pages/AuthPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const DownloadPage = lazy(() => import('./pages/DownloadPage'));
+const TypingDrillsPage = lazy(() => import('./pages/TypingDrillsPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
@@ -420,6 +421,7 @@ const AppContent = () => {
           <Route path="/all-pages" element={<SiteMapPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/download" element={<DownloadPage />} />
+          <Route path="/typing-drills" element={<TypingDrillsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />

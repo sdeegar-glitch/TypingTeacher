@@ -97,6 +97,10 @@ const ROUTES = [
     ['Does it work without internet?', 'Yes. The app ships with English and Hindi typing tests built in, so you can practise fully offline. Account features, the AI tutor and certificates need internet.'],
     ['What are the system requirements?', 'Windows 10 or 11 (64-bit). The app is lightweight — only a few megabytes — and installs in seconds.'],
   ]) },
+  { path: '/typing-drills', title: 'Typing Drills — Number (10-Key), Punctuation & Custom Text Practice | FastTypingLab', description: 'Free typing drills: number typing test for 10-key & data entry (KDPH), punctuation practice, top-200 common words, and custom text mode. Live WPM and accuracy.', jsonLd: faqLd([
+    ['What is a 10-key or number typing drill?', 'It is focused practice on digits and numeric groups, building the speed data-entry roles and DEO exams measure in keystrokes per hour (KDPH).'],
+    ['Can I practice my own text?', 'Yes — the custom text mode lets you paste any passage (exam material, legal text, transcription practice) and drill it with live WPM and accuracy.'],
+  ]) },
   { path: '/contact', title: 'Contact FastTypingLab — Support, Feedback & Enquiries', description: 'Get in touch with the FastTypingLab team. Email us for support, feedback, bug reports, content suggestions or partnership enquiries.' },
   { path: '/privacy', title: 'Privacy Policy | FastTypingLab', description: 'How FastTypingLab collects, uses, and protects your data — account information, typing statistics, cookies, analytics and advertising.' },
   { path: '/terms', title: 'Terms of Service | FastTypingLab', description: 'The terms and conditions for using FastTypingLab — a free online typing and government-exam practice platform.' },
