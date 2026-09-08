@@ -203,7 +203,7 @@ export default function HomePage() {
                 <span className="animate-ping absolute inset-0 rounded-full bg-brand-accent opacity-70" />
                 <span className="relative rounded-full h-2 w-2 bg-brand-accent" />
               </span>
-              <span className="text-brand-muted">3 new AI-generated tests added today</span>
+              <span className="text-brand-muted">New typing tests added daily</span>
             </motion.div>
 
             {/* Headline */}
