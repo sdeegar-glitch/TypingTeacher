@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize } from 'lucide-react';
+import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize, Share2 } from 'lucide-react';
 import CharSpan from '../components/CharSpan';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
@@ -26,6 +26,25 @@ const INSCRIPT_CHAR_TO_KEY: Record<string, string> = Object.entries(INSCRIPT_FUL
   (acc, [key, ch]) => { if (!(ch in acc)) acc[ch] = key; return acc; },
   {} as Record<string, string>
 );
+
+// Approximate percentile for a net WPM, from published typing-speed
+// distributions (average adult ≈ 40 WPM). Piecewise-linear between anchors.
+const WPM_PERCENTILE_ANCHORS: Array<[number, number]> = [
+  [0, 1], [10, 3], [20, 15], [30, 32], [40, 52], [50, 70], [60, 82], [70, 90], [80, 95], [90, 97], [100, 99],
+];
+function wpmPercentile(wpm: number): number {
+  if (wpm <= 0) return 1;
+  const a = WPM_PERCENTILE_ANCHORS;
+  if (wpm >= a[a.length - 1][0]) return 99;
+  for (let i = 1; i < a.length; i++) {
+    if (wpm <= a[i][0]) {
+      const [x0, y0] = a[i - 1];
+      const [x1, y1] = a[i];
+      return Math.round(y0 + ((wpm - x0) / (x1 - x0)) * (y1 - y0));
+    }
+  }
+  return 99;
+}
 
 // Duration options
 const DURATION_OPTIONS = [
@@ -263,6 +282,45 @@ export default function TypingTestPage() {
     document.addEventListener('fullscreenchange', onFs);
     return () => document.removeEventListener('fullscreenchange', onFs);
   }, []);
+
+  // ── Results extras: consistency, weak keys, share ──
+  // Consistency = how steady the WPM stayed (100 - coefficient of variation).
+  const consistency = useMemo(() => {
+    if (!stats.isFinished || history.length < 3) return null;
+    const samples = history.slice(1).map((h: any) => h.wpm).filter((w: number) => w > 0);
+    if (samples.length < 2) return null;
+    const mean = samples.reduce((a: number, b: number) => a + b, 0) / samples.length;
+    if (mean <= 0) return null;
+    const variance = samples.reduce((a: number, b: number) => a + (b - mean) ** 2, 0) / samples.length;
+    return Math.max(0, Math.min(100, Math.round(100 - (Math.sqrt(variance) / mean) * 100)));
+  }, [stats.isFinished, history]);
+
+  // Which expected characters were mistyped most — derived from mistake indices.
+  const weakKeys = useMemo(() => {
+    if (!stats.isFinished || mistakes.size === 0) return [];
+    const counts = new Map<string, number>();
+    mistakes.forEach((idx: number) => {
+      const ch = activeText[idx];
+      if (!ch) return;
+      const key = ch === ' ' ? '␣' : ch;
+      counts.set(key, (counts.get(key) || 0) + 1);
+    });
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 4);
+  }, [stats.isFinished, mistakes, activeText]);
+
+  const [shareCopied, setShareCopied] = useState(false);
+  const shareResult = useCallback(async () => {
+    const msg = `I just scored ${stats.netWpm} WPM with ${stats.accuracy}% accuracy on FastTypingLab! Can you beat me? 🏁 https://fasttypinglab.com${window.location.pathname}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ text: msg });
+      } else {
+        await navigator.clipboard.writeText(msg);
+        setShareCopied(true);
+        setTimeout(() => setShareCopied(false), 2000);
+      }
+    } catch { /* user dismissed share sheet */ }
+  }, [stats.netWpm, stats.accuracy]);
 
   // Brief shake on the typing display when strict mode rejects a keystroke
   const [shake, setShake] = useState(false);
@@ -716,11 +774,17 @@ export default function TypingTestPage() {
                 {stats.accuracy >= 95 ? '🏆' : stats.accuracy >= 80 ? '🎉' : '💪'}
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-brand-text mb-1">Test Complete!</h2>
-              <p className="text-brand-muted text-sm mb-7">
+              <p className="text-brand-muted text-sm mb-4">
                 {stats.netWpm >= 80 ? "Blazing fast! You're in the top tier." :
                  stats.netWpm >= 50 ? "Great speed! Keep practicing to push further." :
                  "Good effort! Consistent practice builds speed."}
               </p>
+
+              {/* Percentile benchmark */}
+              <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold text-white"
+                style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                ⚡ Faster than ~{wpmPercentile(stats.netWpm)}% of typists
+              </div>
 
               <div className="grid grid-cols-3 gap-3 mb-7">
                 <div className="bg-brand-surface-2 border border-brand-border p-4 rounded-2xl">
@@ -749,7 +813,28 @@ export default function TypingTestPage() {
                   <span>Time</span>
                   <span className="font-mono font-semibold text-brand-text">{stats.elapsedSeconds}s</span>
                 </div>
+                {consistency !== null && (
+                  <div className="bg-brand-surface-2 rounded-xl px-3 py-2 flex justify-between items-center col-span-2"
+                    title="How steady your speed stayed through the test">
+                    <span>Consistency</span>
+                    <span className="font-mono font-semibold text-brand-text">{consistency}%</span>
+                  </div>
+                )}
               </div>
+
+              {/* Weakest keys — derived from this test's mistakes */}
+              {weakKeys.length > 0 && (
+                <div className="mb-6 text-left bg-brand-surface-2 border border-brand-border rounded-xl px-4 py-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2">Keys to practice</p>
+                  <div className="flex flex-wrap gap-2">
+                    {weakKeys.map(([ch, count]) => (
+                      <span key={ch} className="inline-flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 text-rose-500 px-2.5 py-1 rounded-lg text-sm font-mono font-bold">
+                        {ch}<span className="text-[10px] font-sans font-semibold opacity-70">×{count}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Speed & accuracy over time */}
               {history.length >= 2 && (
@@ -843,6 +928,13 @@ export default function TypingTestPage() {
                   More Tests
                 </Link>
               </div>
+              <button
+                onClick={shareResult}
+                className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all border"
+                style={{ background: 'rgba(42,157,174,0.08)', borderColor: 'rgba(42,157,174,0.3)', color: '#2A9DAE' }}
+              >
+                <Share2 className="w-4 h-4" /> {shareCopied ? 'Copied to clipboard!' : 'Share my result'}
+              </button>
               <Link
                 to={`/certificate?wpm=${stats.netWpm}&acc=${stats.accuracy}&title=${encodeURIComponent(testContent.title)}`}
                 className="mt-2 w-full flex items-center justify-center gap-2 text-brand-muted hover:text-brand-primary text-sm font-semibold transition-colors"
