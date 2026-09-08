@@ -192,7 +192,7 @@ export default function DashboardPage() {
                 🔥 {streak} Day Streak
               </div>
             )}
-            <Link to="/tests"
+            <Link to="/tests/"
               className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md shadow-brand-primary/20">
               <Zap className="w-4 h-4" /> New Test
             </Link>
@@ -287,7 +287,7 @@ export default function DashboardPage() {
               <div className="bg-brand-surface border border-dashed border-brand-border rounded-2xl p-8 text-center">
                 <TrendingUp className="w-8 h-8 text-brand-muted mx-auto mb-3" />
                 <p className="text-brand-text-muted text-sm">Complete at least 2 tests to see your WPM progress chart.</p>
-                <Link to="/tests" className="mt-3 inline-block text-sm font-semibold text-brand-primary hover:underline">Start a test →</Link>
+                <Link to="/tests/" className="mt-3 inline-block text-sm font-semibold text-brand-primary hover:underline">Start a test →</Link>
               </div>
             )}
 
@@ -320,7 +320,7 @@ export default function DashboardPage() {
             <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-brand-text">Available Tests</h2>
-                <Link to="/tests" className="text-sm text-brand-primary font-semibold hover:underline">View all →</Link>
+                <Link to="/tests/" className="text-sm text-brand-primary font-semibold hover:underline">View all →</Link>
               </div>
               <div className="space-y-2">
                 {availableTests.length === 0 ? (
@@ -349,7 +349,7 @@ export default function DashboardPage() {
             </div>
             {sessions.length === 0 ? (
               <div className="p-10 text-center">
-                <p className="text-brand-muted text-sm">No sessions yet. <Link to="/tests" className="text-brand-primary font-semibold">Take a test</Link> to start tracking!</p>
+                <p className="text-brand-muted text-sm">No sessions yet. <Link to="/tests/" className="text-brand-primary font-semibold">Take a test</Link> to start tracking!</p>
               </div>
             ) : (
               <div className="divide-y divide-brand-border">
@@ -401,7 +401,7 @@ export default function DashboardPage() {
         {/* ── AI COACH TAB ── */}
         {tab === 'coach' && (
           <div className="space-y-5">
-            <Link to="/ai-tutor"
+            <Link to="/ai-tutor/"
               className="flex items-center justify-between gap-3 rounded-2xl p-4 text-white transition-all hover:opacity-95 active:scale-[.99]"
               style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
               <div>
@@ -416,7 +416,7 @@ export default function DashboardPage() {
                 <Brain className="w-10 h-10 text-brand-muted mx-auto mb-3" />
                 <p className="text-brand-text font-semibold mb-2">Complete some tests first</p>
                 <p className="text-brand-muted text-sm mb-4">The AI coach needs at least 1 session to analyze your performance.</p>
-                <Link to="/tests" className="bg-brand-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm">Take a Test</Link>
+                <Link to="/tests/" className="bg-brand-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm">Take a Test</Link>
               </div>
             ) : loadingAI ? (
               <div className="bg-brand-surface border border-brand-border rounded-2xl p-10 text-center">

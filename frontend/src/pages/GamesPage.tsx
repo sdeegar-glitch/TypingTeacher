@@ -16,7 +16,7 @@ const GAMES = [
     bg: 'bg-cyan-500/10',
     tag: 'New',
     tagColor: 'bg-cyan-500/20 text-cyan-300',
-    href: '/games/ninja-slash',
+    href: '/games/ninja-slash/',
     bestKey: 'ninjaslash_best',
   },
   {
@@ -29,7 +29,7 @@ const GAMES = [
     bg: 'bg-cyan-500/10',
     tag: 'New',
     tagColor: 'bg-cyan-500/20 text-cyan-300',
-    href: '/games/space-shooter',
+    href: '/games/space-shooter/',
     bestKey: 'spaceshooter_best',
   },
   {
@@ -42,7 +42,7 @@ const GAMES = [
     bg: 'bg-blue-500/10',
     tag: 'Redesigned',
     tagColor: 'bg-blue-500/20 text-blue-400',
-    href: '/games/word-rain',
+    href: '/games/word-rain/',
     bestKey: 'wordrain_best',
   },
   {
@@ -55,7 +55,7 @@ const GAMES = [
     bg: 'bg-emerald-500/10',
     tag: 'Redesigned',
     tagColor: 'bg-emerald-500/20 text-emerald-400',
-    href: '/games/zombie',
+    href: '/games/zombie/',
     bestKey: 'zombie_best',
   },
   {
@@ -68,7 +68,7 @@ const GAMES = [
     bg: 'bg-amber-500/10',
     tag: 'New',
     tagColor: 'bg-amber-500/20 text-amber-300',
-    href: '/games/castle-defense',
+    href: '/games/castle-defense/',
     bestKey: 'castledefense_best',
   },
   {
@@ -81,7 +81,7 @@ const GAMES = [
     bg: 'bg-emerald-500/10',
     tag: 'New',
     tagColor: 'bg-emerald-500/20 text-emerald-300',
-    href: '/games/cyber-hacker',
+    href: '/games/cyber-hacker/',
     bestKey: 'cyberhacker_best',
   },
   {
@@ -94,7 +94,7 @@ const GAMES = [
     bg: 'bg-amber-500/10',
     tag: 'Race Mode',
     tagColor: 'bg-amber-500/20 text-amber-400',
-    href: '/games/speed-racer',
+    href: '/games/speed-racer/',
     bestKey: 'speedracer_best',
   },
   {
@@ -107,7 +107,7 @@ const GAMES = [
     bg: 'bg-violet-500/10',
     tag: 'Coming Soon',
     tagColor: 'bg-violet-500/20 text-violet-400',
-    href: '/games',
+    href: '/games/',
     bestKey: '',
   },
 ];

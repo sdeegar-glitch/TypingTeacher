@@ -23,17 +23,17 @@ const byDifficulty = (a: any, b: any) =>
 // Contextual guides surfaced on the tests hub so visitors discover our articles
 // (more pageviews per session) and internal link equity flows to newer content.
 const RELATED_GUIDES: { label: string; href: string }[] = [
-  { label: 'What does WPM mean?', href: '/blog/what-does-wpm-mean' },
-  { label: 'How to type faster', href: '/blog/how-to-type-faster' },
-  { label: 'How to pass a typing test', href: '/blog/how-to-pass-a-typing-test' },
-  { label: 'Home row keys', href: '/blog/home-row-keys-finger-placement' },
-  { label: 'Typing test for jobs', href: '/blog/typing-test-for-jobs' },
-  { label: '10-key data entry test', href: '/blog/ten-key-typing-test-data-entry' },
-  { label: 'Typing test for students', href: '/blog/typing-test-for-students' },
-  { label: 'What is a good typing speed?', href: '/blog/how-many-wpm-is-good-typing-speed-benchmarks' },
-  { label: 'Type without looking', href: '/blog/how-to-type-without-looking-touch-typing-guide' },
-  { label: 'Best keyboard for typing', href: '/blog/best-keyboard-for-typing-fast' },
-  { label: 'Why is the keyboard QWERTY?', href: '/blog/why-is-keyboard-qwerty' },
+  { label: 'What does WPM mean?', href: '/blog/what-does-wpm-mean/' },
+  { label: 'How to type faster', href: '/blog/how-to-type-faster/' },
+  { label: 'How to pass a typing test', href: '/blog/how-to-pass-a-typing-test/' },
+  { label: 'Home row keys', href: '/blog/home-row-keys-finger-placement/' },
+  { label: 'Typing test for jobs', href: '/blog/typing-test-for-jobs/' },
+  { label: '10-key data entry test', href: '/blog/ten-key-typing-test-data-entry/' },
+  { label: 'Typing test for students', href: '/blog/typing-test-for-students/' },
+  { label: 'What is a good typing speed?', href: '/blog/how-many-wpm-is-good-typing-speed-benchmarks/' },
+  { label: 'Type without looking', href: '/blog/how-to-type-without-looking-touch-typing-guide/' },
+  { label: 'Best keyboard for typing', href: '/blog/best-keyboard-for-typing-fast/' },
+  { label: 'Why is the keyboard QWERTY?', href: '/blog/why-is-keyboard-qwerty/' },
 ];
 
 type Category = {

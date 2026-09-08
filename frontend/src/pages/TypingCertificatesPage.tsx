@@ -17,8 +17,8 @@ const CERT_FEATURES = [
 ];
 
 const HOW_STEPS = [
-  { step: '1', title: 'Take a Typing Test', desc: 'Complete any typing test on FastTypingLab — 1 min, 5 min, or exam mode.', link: '/tests', cta: 'Start Test' },
-  { step: '2', title: 'View Your Results', desc: 'After the test ends, you\'ll see your WPM, accuracy, and a certificate button.', link: '/tests', cta: 'Try It' },
+  { step: '1', title: 'Take a Typing Test', desc: 'Complete any typing test on FastTypingLab — 1 min, 5 min, or exam mode.', link: '/tests/', cta: 'Start Test' },
+  { step: '2', title: 'View Your Results', desc: 'After the test ends, you\'ll see your WPM, accuracy, and a certificate button.', link: '/tests/', cta: 'Try It' },
   { step: '3', title: 'Generate Certificate', desc: 'Click "Get Certificate", enter your name, and it generates instantly.', link: '/certificate', cta: 'See Example' },
   { step: '4', title: 'Download & Share', desc: 'Download the certificate PNG and share it — it\'s free, instant, and verifiable.', link: '/certificate', cta: 'Download' },
 ];
@@ -55,7 +55,7 @@ export default function TypingCertificatesPage() {
           subtitle="Generate verifiable typing speed certificates instantly. Share on LinkedIn, use for government exam documentation, or keep as a personal milestone."
         >
           <div className="flex flex-wrap gap-3 justify-center mt-5">
-            <Link to="/tests" className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20">
+            <Link to="/tests/" className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20">
               <Award className="w-4 h-4" /> Get Your Certificate
             </Link>
             <Link to="/certificate" className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border text-brand-text px-6 py-3 rounded-xl font-bold hover:bg-brand-border transition-all">

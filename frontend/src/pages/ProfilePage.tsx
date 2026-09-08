@@ -197,7 +197,7 @@ export default function ProfilePage() {
             <div className="text-center py-8">
               <Award className="w-8 h-8 text-brand-muted mx-auto mb-3" />
               <p className="text-brand-text-muted text-sm">No certificates yet.</p>
-              <Link to="/tests" className="mt-2 inline-block text-sm font-semibold text-brand-primary hover:underline">
+              <Link to="/tests/" className="mt-2 inline-block text-sm font-semibold text-brand-primary hover:underline">
                 Take a test to earn one →
               </Link>
             </div>

@@ -57,14 +57,14 @@ export default function LearnHindiTypingPage() {
         >
           {/* Two big buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-            <Link to="/learn-hindi-typing/unicode"
+            <Link to="/learn-hindi-typing/unicode/"
               className="group flex items-center gap-3 w-full sm:w-auto justify-center px-8 py-4 rounded-2xl font-bold text-white text-base transition-all hover:opacity-90 active:scale-95 shadow-xl"
               style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 8px 24px rgba(42,157,174,0.3)' }}>
               <Languages className="w-5 h-5" />
               Learn Unicode (Mangal)
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </Link>
-            <Link to="/learn-hindi-typing/kruti-dev"
+            <Link to="/learn-hindi-typing/kruti-dev/"
               className="group flex items-center gap-3 w-full sm:w-auto justify-center px-8 py-4 rounded-2xl font-bold text-white text-base transition-all hover:opacity-90 active:scale-95 shadow-xl"
               style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 8px 24px rgba(188,108,80,0.3)' }}>
               <Languages className="w-5 h-5" />
@@ -170,7 +170,7 @@ export default function LearnHindiTypingPage() {
             <h2 className="font-black text-brand-text text-lg mb-1">Start Lesson 1 Right Now</h2>
             <p className="text-brand-text-muted text-sm">No signup needed — your progress saves automatically in this browser.</p>
           </div>
-          <Link to="/learn-hindi-typing/unicode"
+          <Link to="/learn-hindi-typing/unicode/"
             className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20 shrink-0">
             <Languages className="w-4 h-4" /> Start Free Course
           </Link>

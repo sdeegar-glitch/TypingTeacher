@@ -51,8 +51,8 @@ export default function ContactPage() {
 
         <p className="text-brand-text-muted text-sm">
           Looking for how we handle your data? Read our{' '}
-          <Link to="/privacy" className="text-brand-primary hover:underline">Privacy Policy</Link> and{' '}
-          <Link to="/terms" className="text-brand-primary hover:underline">Terms of Service</Link>.
+          <Link to="/privacy/" className="text-brand-primary hover:underline">Privacy Policy</Link> and{' '}
+          <Link to="/terms/" className="text-brand-primary hover:underline">Terms of Service</Link>.
         </p>
 
         {/* Social — placeholder for when accounts are live */}

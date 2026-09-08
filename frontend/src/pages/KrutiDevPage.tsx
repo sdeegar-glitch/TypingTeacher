@@ -85,7 +85,7 @@ export default function KrutiDevPage() {
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-6">
           <Link to="/" className="hover:text-brand-primary transition-colors">Home</Link>
           <span>/</span>
-          <Link to="/tests" className="hover:text-brand-primary transition-colors">Tests</Link>
+          <Link to="/tests/" className="hover:text-brand-primary transition-colors">Tests</Link>
           <span>/</span>
           <span className="text-brand-text">Kruti Dev Typing</span>
         </div>
@@ -192,11 +192,11 @@ export default function KrutiDevPage() {
             <p className="text-brand-text-muted text-sm">Use our Hindi Typing Test to practice Unicode Hindi — the modern standard for most exams.</p>
           </div>
           <div className="flex gap-3 shrink-0">
-            <Link to="/hindi-typing-test"
+            <Link to="/hindi-typing-test/"
               className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-brand-primary/20">
               <Languages className="w-4 h-4" /> Hindi Typing Test
             </Link>
-            <Link to="/exam/hindi-typing"
+            <Link to="/exam/hindi-typing/"
               className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border text-brand-text px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-brand-border transition-all">
               Exam Mode <ChevronRight className="w-4 h-4" />
             </Link>

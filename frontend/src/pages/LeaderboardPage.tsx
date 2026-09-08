@@ -156,7 +156,7 @@ export default function LeaderboardPage() {
             {/* CTA */}
             <div className="mt-8 text-center">
               <p className="text-brand-muted text-sm mb-3">Think you can beat the top score? 🔥</p>
-              <a href="/tests" className="inline-block bg-brand-primary hover:bg-brand-secondary text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20">
+              <a href="/tests/" className="inline-block bg-brand-primary hover:bg-brand-secondary text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20">
                 Take the Speed Test
               </a>
             </div>

@@ -105,7 +105,7 @@ export default function WordRainPage() {
     <div className="min-h-screen bg-brand-bg text-brand-text py-6 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-4">
-          <Link to="/games" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm group">
+          <Link to="/games/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm group">
             <ChevronLeft className="w-4 h-4" /> Games
           </Link>
           <div className="h-4 w-px bg-brand-border" />
@@ -160,7 +160,7 @@ export default function WordRainPage() {
                   <button onClick={startGame} className="flex items-center gap-2 bg-brand-primary text-white px-6 py-2.5 rounded-xl font-bold hover:bg-brand-secondary transition-all">
                     <RotateCcw className="w-4 h-4" /> Play Again
                   </button>
-                  <Link to="/games" className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border text-brand-text px-6 py-2.5 rounded-xl font-bold hover:bg-brand-border transition-all">
+                  <Link to="/games/" className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border text-brand-text px-6 py-2.5 rounded-xl font-bold hover:bg-brand-border transition-all">
                     All Games
                   </Link>
                 </div>

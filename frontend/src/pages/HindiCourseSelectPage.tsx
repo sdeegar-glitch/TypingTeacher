@@ -47,7 +47,7 @@ export default function HindiCourseSelectPage() {
       <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
-            <Link to="/learn-hindi-typing" className="font-black text-brand-text text-base hover:text-brand-primary transition-colors shrink-0">
+            <Link to="/learn-hindi-typing/" className="font-black text-brand-text text-base hover:text-brand-primary transition-colors shrink-0">
               FastTypingLab
             </Link>
             <span className="text-brand-muted text-sm shrink-0">/</span>
@@ -217,7 +217,7 @@ export default function HindiCourseSelectPage() {
             परीक्षा की तैयारी करें
           </h3>
           <p className="text-brand-text-muted text-sm mb-4">After completing the course, test yourself against real exam-pattern passages.</p>
-          <Link to="/competitive-exam-typing"
+          <Link to="/competitive-exam-typing/"
             className="inline-flex items-center gap-2 font-bold text-white px-6 py-2.5 rounded-xl transition-all hover:opacity-90 active:scale-95"
             style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)' }}>
             परीक्षा अभ्यास शुरू करें <ChevronRight className="w-4 h-4" />

@@ -32,8 +32,8 @@ const PROFESSION_DATA: Record<string, Profession> = {
       { q: 'How can students improve typing speed?', a: 'Practise 10–15 minutes daily using all ten fingers, keep your eyes off the keyboard, and prioritise accuracy before speed.' },
     ],
     relatedExams: [
-      { label: 'SSC CHSL Typing Test', href: '/exam/ssc-chsl' },
-      { label: 'Hindi Typing Test', href: '/exam/hindi-typing' },
+      { label: 'SSC CHSL Typing Test', href: '/exam/ssc-chsl/' },
+      { label: 'Hindi Typing Test', href: '/exam/hindi-typing/' },
     ],
   },
   'data-entry': {
@@ -49,9 +49,9 @@ const PROFESSION_DATA: Record<string, Profession> = {
       { q: 'What typing speed is needed for data entry jobs?', a: 'Government DEO posts usually require ~8,000 key depressions/hour (about 27 WPM). Private/BPO data entry often expects 40–50 WPM with 95%+ accuracy.' },
     ],
     relatedExams: [
-      { label: 'SSC CGL DEST Test', href: '/exam/ssc-cgl' },
-      { label: 'DEO Typing Test', href: '/deo-typing-test' },
-      { label: 'Court Typing Test', href: '/exam/court-typing' },
+      { label: 'SSC CGL DEST Test', href: '/exam/ssc-cgl/' },
+      { label: 'DEO Typing Test', href: '/deo-typing-test/' },
+      { label: 'Court Typing Test', href: '/exam/court-typing/' },
     ],
   },
   'government-employees': {
@@ -67,10 +67,10 @@ const PROFESSION_DATA: Record<string, Profession> = {
       { q: 'What speed is required for government typing tests?', a: 'Commonly 35 WPM in English or 25–30 WPM in Hindi, but always confirm your exact post notification.' },
     ],
     relatedExams: [
-      { label: 'SSC CHSL Test', href: '/ssc-chsl-typing-test' },
-      { label: 'CPCT Typing Test', href: '/cpct-typing-test' },
-      { label: 'DSSSB Typing Test', href: '/dsssb-typing-test' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'SSC CHSL Test', href: '/ssc-chsl-typing-test/' },
+      { label: 'CPCT Typing Test', href: '/cpct-typing-test/' },
+      { label: 'DSSSB Typing Test', href: '/dsssb-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
   professionals: {
@@ -90,7 +90,7 @@ const PROFESSION_DATA: Record<string, Profession> = {
     relatedExams: [
       { label: 'Typing Test for Programmers', href: '/typing-test-for/programmers' },
       { label: 'Typing Test for Data Entry', href: '/typing-test-for/data-entry' },
-      { label: 'Improve Typing Speed & Accuracy', href: '/blog/how-to-improve-typing-speed-and-accuracy' },
+      { label: 'Improve Typing Speed & Accuracy', href: '/blog/how-to-improve-typing-speed-and-accuracy/' },
     ],
   },
   beginners: {
@@ -106,8 +106,8 @@ const PROFESSION_DATA: Record<string, Profession> = {
       { q: 'How do I learn to type without looking?', a: 'Keep your fingers on the home row (ASDF JKL;), practise short daily sessions, and resist glancing down. Muscle memory builds within a few weeks.' },
     ],
     relatedExams: [
-      { label: 'Learn Touch Typing', href: '/learn' },
-      { label: 'How to Type Without Looking', href: '/blog/how-to-type-without-looking-touch-typing-guide' },
+      { label: 'Learn Touch Typing', href: '/learn/' },
+      { label: 'How to Type Without Looking', href: '/blog/how-to-type-without-looking-touch-typing-guide/' },
     ],
   },
   programmers: {
@@ -123,8 +123,8 @@ const PROFESSION_DATA: Record<string, Profession> = {
       { q: 'How can I type code faster?', a: 'Practise snippets with brackets and operators, learn your editor shortcuts, and use all ten fingers so your hands rarely leave the home row.' },
     ],
     relatedExams: [
-      { label: 'Coding Typing Practice', href: '/coding-typing' },
-      { label: 'Typing Test for Professionals', href: '/typing-test-for/professionals' },
+      { label: 'Coding Typing Practice', href: '/coding-typing/' },
+      { label: 'Typing Test for Professionals', href: '/typing-test-for/professionals/' },
     ],
   },
 };
@@ -170,7 +170,7 @@ export default function TypingTestForPage() {
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-6">
           <Link to="/" className="hover:text-brand-primary transition-colors">Home</Link>
           <ChevronRight className="w-3 h-3" />
-          <Link to="/tests" className="hover:text-brand-primary transition-colors">Tests</Link>
+          <Link to="/tests/" className="hover:text-brand-primary transition-colors">Tests</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-brand-text">{data.title}</span>
         </div>
@@ -198,11 +198,11 @@ export default function TypingTestForPage() {
 
         {/* CTA */}
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
-          <Link to="/tests"
+          <Link to="/tests/"
             className="flex-1 bg-brand-primary hover:bg-brand-secondary text-white py-4 rounded-xl font-bold text-center flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-primary/20">
             <Zap className="w-4 h-4" /> Start Typing Test
           </Link>
-          <Link to="/learn"
+          <Link to="/learn/"
             className="flex-1 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text py-4 rounded-xl font-bold text-center flex items-center justify-center gap-2 transition-all">
             <BookOpen className="w-4 h-4" /> Learn Touch Typing
           </Link>

@@ -124,7 +124,7 @@ export default function HindiTypingPage() {
       />
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
-          <Link to="/tests" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm group">
+          <Link to="/tests/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm group">
             <ChevronLeft className="w-4 h-4" /> Tests
           </Link>
           <div className="h-4 w-px bg-brand-border" />

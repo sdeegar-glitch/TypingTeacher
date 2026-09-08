@@ -85,7 +85,7 @@ export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const post = BLOG_POSTS.find(p => p.slug === slug);
 
-  if (!post) return <Navigate to="/blog" replace />;
+  if (!post) return <Navigate to="/blog/" replace />;
 
   const relatedPosts = BLOG_POSTS.filter(p => p.slug !== slug).slice(0, 2);
 
@@ -118,7 +118,7 @@ export default function BlogPostPage() {
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-6">
           <Link to="/" className="hover:text-brand-primary transition-colors">Home</Link>
           <span>/</span>
-          <Link to="/blog" className="hover:text-brand-primary transition-colors">Blog</Link>
+          <Link to="/blog/" className="hover:text-brand-primary transition-colors">Blog</Link>
           <span>/</span>
           <span className="text-brand-text">{post.title.slice(0, 40)}…</span>
         </div>
@@ -147,7 +147,7 @@ export default function BlogPostPage() {
               className="flex items-center gap-2 bg-brand-surface border border-brand-border text-brand-muted hover:text-brand-text px-4 py-2 rounded-xl text-sm font-semibold transition-all">
               <Share2 className="w-4 h-4" /> Copy Link
             </button>
-            <Link to="/tests"
+            <Link to="/tests/"
               className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2 rounded-xl text-sm font-bold transition-all shadow-md shadow-brand-primary/20">
               <ExternalLink className="w-4 h-4" /> Practice Now
             </Link>

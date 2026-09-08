@@ -149,7 +149,7 @@ export default function SpeedRacerPage() {
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link to="/games" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm group">
+          <Link to="/games/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm group">
             <ChevronLeft className="w-4 h-4" /> Games
           </Link>
           <div className="h-4 w-px bg-brand-border" />
@@ -309,7 +309,7 @@ export default function SpeedRacerPage() {
                     className="flex items-center gap-2 bg-brand-primary text-white px-6 py-2.5 rounded-xl font-bold hover:bg-brand-secondary transition-all">
                     <RotateCcw className="w-4 h-4" /> Race Again
                   </button>
-                  <Link to="/games"
+                  <Link to="/games/"
                     className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border text-brand-text px-6 py-2.5 rounded-xl font-bold hover:bg-brand-border transition-all">
                     All Games
                   </Link>

@@ -112,8 +112,8 @@ export default function TypingStatisticsPage() {
           Where do you stand? This page collects typing-speed benchmarks — average WPM by skill level, age,
           profession and country — plus accuracy stats, the most common typing mistakes, and the speeds
           required for Indian government exams. Figures are compiled from widely reported typing-test benchmarks.
-          You can <Link to="/tests" className="text-brand-primary hover:underline">test your own typing speed free</Link> or
-          use our <Link to="/wpm-calculator" className="text-brand-primary hover:underline">WPM calculator</Link>.
+          You can <Link to="/tests/" className="text-brand-primary hover:underline">test your own typing speed free</Link> or
+          use our <Link to="/wpm-calculator/" className="text-brand-primary hover:underline">WPM calculator</Link>.
         </p>
 
         <Section title="Average typing speed at a glance">
@@ -139,7 +139,7 @@ export default function TypingStatisticsPage() {
           <Table head={['Age group', 'Average speed']} rows={AgeTable} />
           <p className="text-brand-text-muted text-sm mt-3">
             Typing speed tends to peak in the 20s–30s and declines slightly with age. For a deeper breakdown, read{' '}
-            <Link to="/blog/average-typing-speed-by-age-and-profession" className="text-brand-primary hover:underline">average typing speed by age &amp; profession</Link>.
+            <Link to="/blog/average-typing-speed-by-age-and-profession/" className="text-brand-primary hover:underline">average typing speed by age &amp; profession</Link>.
           </p>
         </Section>
 
@@ -151,7 +151,7 @@ export default function TypingStatisticsPage() {
           <Table head={['Exam', 'Required speed']} rows={ExamTable} />
           <p className="text-brand-text-muted text-sm mt-3">
             Always confirm your official notification. Practise in the exact format on our{' '}
-            <Link to="/competitive-exam-typing" className="text-brand-primary hover:underline">exam typing tests</Link>.
+            <Link to="/competitive-exam-typing/" className="text-brand-primary hover:underline">exam typing tests</Link>.
           </p>
         </Section>
 
@@ -170,14 +170,14 @@ export default function TypingStatisticsPage() {
 
         {/* CTA cluster */}
         <div className="grid sm:grid-cols-2 gap-3 mb-6">
-          <Link to="/wpm-calculator" className="flex items-center gap-3 bg-brand-surface border border-brand-border rounded-2xl p-4 hover:border-brand-primary/40 transition-all">
+          <Link to="/wpm-calculator/" className="flex items-center gap-3 bg-brand-surface border border-brand-border rounded-2xl p-4 hover:border-brand-primary/40 transition-all">
             <Calculator className="w-5 h-5 text-brand-primary shrink-0" />
             <div>
               <div className="font-bold text-sm">WPM Calculator</div>
               <div className="text-xs text-brand-muted">Work out your speed from characters &amp; time</div>
             </div>
           </Link>
-          <Link to="/tests" className="flex items-center gap-3 bg-brand-surface border border-brand-border rounded-2xl p-4 hover:border-brand-primary/40 transition-all">
+          <Link to="/tests/" className="flex items-center gap-3 bg-brand-surface border border-brand-border rounded-2xl p-4 hover:border-brand-primary/40 transition-all">
             <Zap className="w-5 h-5 text-brand-accent shrink-0" />
             <div>
               <div className="font-bold text-sm">Take a Typing Test</div>

@@ -10,42 +10,42 @@ const EXAMS = [
     name: 'SSC CHSL',
     full: 'Staff Selection Commission — Combined Higher Secondary Level',
     wpm: 35, accuracy: 80, duration: '10 min', language: 'English',
-    href: '/exam/ssc-chsl',
+    href: '/exam/ssc-chsl/',
     color: 'text-brand-primary', bg: 'bg-brand-primary/10', border: 'border-brand-primary/20',
   },
   {
     name: 'SSC CGL',
     full: 'Staff Selection Commission — Combined Graduate Level',
     wpm: 35, accuracy: 80, duration: '15 min', language: 'English',
-    href: '/exam/ssc-cgl',
+    href: '/exam/ssc-cgl/',
     color: 'text-brand-accent', bg: 'bg-brand-accent/10', border: 'border-brand-accent/20',
   },
   {
     name: 'UP Police Typing',
     full: 'UP Police Computer Operator / Clerk Typing Test',
     wpm: 25, accuracy: 80, duration: '5 min', language: 'Hindi (Kruti Dev)',
-    href: '/exam/hindi-typing',
+    href: '/exam/hindi-typing/',
     color: 'text-brand-cta', bg: 'bg-brand-cta/10', border: 'border-brand-cta/20',
   },
   {
     name: 'CPCT Hindi',
     full: 'Computer Proficiency Certification Test — Hindi Typing',
     wpm: 30, accuracy: 85, duration: '15 min', language: 'Hindi (Unicode)',
-    href: '/exam/hindi-typing',
+    href: '/exam/hindi-typing/',
     color: 'text-brand-accent', bg: 'bg-brand-accent/10', border: 'border-brand-accent/20',
   },
   {
     name: 'Court Clerk',
     full: 'District / High Court Clerk & Steno Typing Test',
     wpm: 30, accuracy: 80, duration: '10 min', language: 'Hindi / English',
-    href: '/exam/hindi-typing',
+    href: '/exam/hindi-typing/',
     color: 'text-brand-secondary', bg: 'bg-brand-secondary/10', border: 'border-brand-secondary/20',
   },
   {
     name: 'Railway NTPC',
     full: 'RRB NTPC — Skill Test (Typing)',
     wpm: 30, accuracy: 80, duration: '15 min', language: 'English',
-    href: '/exam/ssc-chsl',
+    href: '/exam/ssc-chsl/',
     color: 'text-rose-500', bg: 'bg-rose-500/10', border: 'border-rose-500/20',
   },
 ];
@@ -156,22 +156,22 @@ export default function CompetitiveExamTypingPage() {
           <h2 className="text-xl font-black text-brand-text mb-4">In-Depth Exam Typing Guides</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
-              { label: 'SSC CGL DEST', href: '/ssc-cgl-typing-test' },
-              { label: 'CPCT Typing Test', href: '/cpct-typing-test' },
-              { label: 'UP Police Typing', href: '/up-police-typing-test' },
-              { label: 'Railway NTPC Typing', href: '/railway-ntpc-typing-test' },
-              { label: 'Court & Steno Typing', href: '/court-typing-test' },
-              { label: 'Bihar SSC Typing', href: '/bihar-ssc-typing-test' },
-              { label: 'DEO Typing Test', href: '/deo-typing-test' },
-              { label: 'RSMSSB Typing', href: '/rsmssb-typing-test' },
-              { label: 'LDC Typing Test', href: '/ldc-typing-test' },
-              { label: 'SSC Steno Typing', href: '/ssc-steno-typing-test' },
-              { label: 'DSSSB Typing', href: '/dsssb-typing-test' },
-              { label: 'UPSSSC Typing', href: '/upsssc-typing-test' },
-              { label: 'AHC RO/ARO Typing', href: '/ahc-ro-aro-typing-test' },
-              { label: 'Delhi Police Typing', href: '/delhi-police-typing-test' },
-              { label: 'RRB Typing Test', href: '/rrb-typing-test' },
+              { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test/' },
+              { label: 'SSC CGL DEST', href: '/ssc-cgl-typing-test/' },
+              { label: 'CPCT Typing Test', href: '/cpct-typing-test/' },
+              { label: 'UP Police Typing', href: '/up-police-typing-test/' },
+              { label: 'Railway NTPC Typing', href: '/railway-ntpc-typing-test/' },
+              { label: 'Court & Steno Typing', href: '/court-typing-test/' },
+              { label: 'Bihar SSC Typing', href: '/bihar-ssc-typing-test/' },
+              { label: 'DEO Typing Test', href: '/deo-typing-test/' },
+              { label: 'RSMSSB Typing', href: '/rsmssb-typing-test/' },
+              { label: 'LDC Typing Test', href: '/ldc-typing-test/' },
+              { label: 'SSC Steno Typing', href: '/ssc-steno-typing-test/' },
+              { label: 'DSSSB Typing', href: '/dsssb-typing-test/' },
+              { label: 'UPSSSC Typing', href: '/upsssc-typing-test/' },
+              { label: 'AHC RO/ARO Typing', href: '/ahc-ro-aro-typing-test/' },
+              { label: 'Delhi Police Typing', href: '/delhi-police-typing-test/' },
+              { label: 'RRB Typing Test', href: '/rrb-typing-test/' },
             ].map(g => (
               <Link key={g.href} to={g.href}
                 className="group flex items-center justify-between gap-2 bg-brand-surface border border-brand-border rounded-xl px-4 py-3 text-sm font-semibold text-brand-text hover:border-brand-primary/40 transition-all">
@@ -203,9 +203,9 @@ export default function CompetitiveExamTypingPage() {
         {/* CTA strip */}
         <div className="grid sm:grid-cols-3 gap-3 mb-10">
           {[
-            { label: 'English Typing Test', desc: '1/2/5/10 min tests', href: '/tests', color: 'bg-brand-primary' },
-            { label: 'Hindi Typing Test', desc: 'Unicode Devanagari', href: '/hindi-typing-test', color: 'bg-orange-500' },
-            { label: 'Learn Hindi Typing', desc: 'Step-by-step course', href: '/learn-hindi-typing', color: 'bg-emerald-600' },
+            { label: 'English Typing Test', desc: '1/2/5/10 min tests', href: '/tests/', color: 'bg-brand-primary' },
+            { label: 'Hindi Typing Test', desc: 'Unicode Devanagari', href: '/hindi-typing-test/', color: 'bg-orange-500' },
+            { label: 'Learn Hindi Typing', desc: 'Step-by-step course', href: '/learn-hindi-typing/', color: 'bg-emerald-600' },
           ].map(cta => (
             <Link key={cta.label} to={cta.href}
               className={`${cta.color} text-white rounded-2xl p-4 flex items-center justify-between group hover:opacity-90 transition-all`}>

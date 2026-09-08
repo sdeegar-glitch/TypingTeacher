@@ -236,7 +236,7 @@ export default function ExamPage() {
   return (
     <div className="min-h-screen bg-[#0d0d14] text-white flex flex-col">
       <div className="px-6 py-4">
-        <Link to="/competitive-exam-typing" className="flex items-center gap-1.5 text-white/40 hover:text-white/80 text-sm transition-colors w-fit">
+        <Link to="/competitive-exam-typing/" className="flex items-center gap-1.5 text-white/40 hover:text-white/80 text-sm transition-colors w-fit">
           <ChevronLeft className="w-4 h-4" /> All Exams
         </Link>
       </div>

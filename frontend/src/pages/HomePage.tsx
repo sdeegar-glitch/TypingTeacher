@@ -61,37 +61,37 @@ const FEATURES = [
     icon: Zap, title: 'Real-time Speed Tests',
     desc: 'WPM, CPM, and accuracy tracked live. 15 seconds to 10 minutes — you choose.',
     iconClass: 'icon-teal', color: 'text-brand-primary',
-    border: 'hover:border-brand-primary/30', link: '/tests',
+    border: 'hover:border-brand-primary/30', link: '/tests/',
   },
   {
     icon: BookOpen, title: 'Structured Lessons',
     desc: 'Build muscle memory from scratch with a guided curriculum for all skill levels.',
     iconClass: 'icon-terra', color: 'text-brand-cta',
-    border: 'hover:border-brand-cta/30', link: '/learn',
+    border: 'hover:border-brand-cta/30', link: '/learn/',
   },
   {
     icon: Languages, title: 'Hindi Typing Tests',
     desc: 'Unicode & Kruti Dev. Full SSC, CPCT, UP Police, and court exam preparation.',
     iconClass: 'icon-aqua', color: 'text-brand-accent',
-    border: 'hover:border-brand-accent/30', link: '/hindi-typing-test',
+    border: 'hover:border-brand-accent/30', link: '/hindi-typing-test/',
   },
   {
     icon: Trophy, title: 'Global Leaderboard',
     desc: 'Compete worldwide. Earn achievements, climb leagues, and track your rise.',
     iconClass: 'icon-sand', color: 'text-brand-sand',
-    border: 'hover:border-brand-sand/30', link: '/leaderboard',
+    border: 'hover:border-brand-sand/30', link: '/leaderboard/',
   },
   {
     icon: Shield, title: 'Exam Simulation',
     desc: 'SSC CHSL, CGL, Court typing — exact exam environment with real passages.',
     iconClass: 'icon-teal', color: 'text-brand-primary',
-    border: 'hover:border-brand-primary/30', link: '/competitive-exam-typing',
+    border: 'hover:border-brand-primary/30', link: '/competitive-exam-typing/',
   },
   {
     icon: Gamepad2, title: 'Typing Games',
     desc: 'Word Rain, Zombie Typing, Speed Racer — gamified practice that\'s actually fun.',
     iconClass: 'icon-terra', color: 'text-brand-cta',
-    border: 'hover:border-brand-cta/30', link: '/games',
+    border: 'hover:border-brand-cta/30', link: '/games/',
   },
 ];
 
@@ -115,20 +115,20 @@ const TESTIMONIALS = [
 ];
 
 const QUICK_LINKS = [
-  { label: 'Typing Speed Test', href: '/tests',                 tag: 'Popular' },
-  { label: 'Hindi Typing Test', href: '/hindi-typing-test',     tag: 'Govt Exam' },
-  { label: 'SSC CHSL Mock Test',href: '/exam/ssc-chsl',         tag: 'Exam' },
-  { label: 'Learn Hindi Typing',href: '/learn-hindi-typing',    tag: 'Course' },
-  { label: 'Kruti Dev Guide',   href: '/kruti-dev-typing',      tag: 'Guide' },
-  { label: 'AI Typing Tutor',   href: '/ai-tutor',              tag: 'AI' },
-  { label: 'Type Without Looking', href: '/blog/how-to-type-without-looking-touch-typing-guide', tag: 'Guide' },
-  { label: 'How to Type Faster',   href: '/blog/how-to-type-faster',                             tag: 'Guide' },
-  { label: 'What Does WPM Mean?',  href: '/blog/what-does-wpm-mean',                             tag: 'Basics' },
-  { label: 'Typing Test for Jobs', href: '/blog/typing-test-for-jobs',                          tag: 'Careers' },
-  { label: 'Typing Test for Nurses', href: '/blog/typing-test-for-nurses-healthcare',           tag: 'Careers' },
-  { label: 'Typing Games for Kids', href: '/blog/best-typing-games-for-kids',                   tag: 'Kids' },
-  { label: 'Typing for Programmers', href: '/blog/typing-practice-for-programmers-coders',      tag: 'Coding' },
-  { label: 'Professional Typing Test', href: '/typing-test-for/professionals',                   tag: 'Pro' },
+  { label: 'Typing Speed Test', href: '/tests/',                 tag: 'Popular' },
+  { label: 'Hindi Typing Test', href: '/hindi-typing-test/',     tag: 'Govt Exam' },
+  { label: 'SSC CHSL Mock Test',href: '/exam/ssc-chsl/',         tag: 'Exam' },
+  { label: 'Learn Hindi Typing',href: '/learn-hindi-typing/',    tag: 'Course' },
+  { label: 'Kruti Dev Guide',   href: '/kruti-dev-typing/',      tag: 'Guide' },
+  { label: 'AI Typing Tutor',   href: '/ai-tutor/',              tag: 'AI' },
+  { label: 'Type Without Looking', href: '/blog/how-to-type-without-looking-touch-typing-guide/', tag: 'Guide' },
+  { label: 'How to Type Faster',   href: '/blog/how-to-type-faster/',                             tag: 'Guide' },
+  { label: 'What Does WPM Mean?',  href: '/blog/what-does-wpm-mean/',                             tag: 'Basics' },
+  { label: 'Typing Test for Jobs', href: '/blog/typing-test-for-jobs/',                          tag: 'Careers' },
+  { label: 'Typing Test for Nurses', href: '/blog/typing-test-for-nurses-healthcare/',           tag: 'Careers' },
+  { label: 'Typing Games for Kids', href: '/blog/best-typing-games-for-kids/',                   tag: 'Kids' },
+  { label: 'Typing for Programmers', href: '/blog/typing-practice-for-programmers-coders/',      tag: 'Coding' },
+  { label: 'Professional Typing Test', href: '/typing-test-for/professionals/',                   tag: 'Pro' },
 ];
 
 /* ─── Floating blob bg ─────────────────────────────────────────── */
@@ -228,7 +228,7 @@ export default function HomePage() {
                 <BookOpen className="w-5 h-5" />
                 Start Learning
               </button>
-              <Link to="/tests"
+              <Link to="/tests/"
                 className="inline-flex items-center gap-2.5 text-white font-bold px-8 py-4 rounded-2xl text-base transition-all duration-200 w-full sm:w-auto justify-center group shadow-xl active:scale-95"
                 style={{ background: 'linear-gradient(135deg, #304C53 0%, #2A9DAE 100%)', boxShadow: '0 6px 24px rgba(48,76,83,0.30)' }}>
                 <Zap className="w-5 h-5" />
@@ -273,7 +273,7 @@ export default function HomePage() {
                   </div>
                 ))}
                 <div className="ml-auto">
-                  <Link to="/tests"
+                  <Link to="/tests/"
                     className="flex items-center gap-1.5 text-xs font-bold text-brand-primary hover:opacity-80 transition-opacity">
                     Try it <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
@@ -474,12 +474,12 @@ export default function HomePage() {
               No signup required to take your first test.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link to="/tests"
+              <Link to="/tests/"
                 className="inline-flex items-center gap-2.5 bg-white font-bold px-8 py-4 rounded-2xl text-base transition-all w-full sm:w-auto justify-center hover:bg-white/90 active:scale-95 shadow-xl"
                 style={{ color: '#304C53' }}>
                 <Zap className="w-5 h-5" /> Take a Free Test
               </Link>
-              <Link to="/competitive-exam-typing"
+              <Link to="/competitive-exam-typing/"
                 className="inline-flex items-center gap-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl text-base transition-all w-full sm:w-auto justify-center active:scale-95">
                 <Target className="w-5 h-5" /> Exam Prep
               </Link>

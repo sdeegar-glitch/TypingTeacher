@@ -85,7 +85,7 @@ export default function PrivacyPage() {
         <Section title="10. Contact Us">
           <p>Questions about this policy or your data? Email us at{' '}
             <a href={`mailto:${EMAIL}`} className="text-brand-primary hover:underline">{EMAIL}</a>, or see our{' '}
-            <Link to="/contact" className="text-brand-primary hover:underline">Contact page</Link>.
+            <Link to="/contact/" className="text-brand-primary hover:underline">Contact page</Link>.
           </p>
         </Section>
 

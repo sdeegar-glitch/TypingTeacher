@@ -12,53 +12,53 @@ const SECTIONS: { title: string; links: { label: string; to: string }[] }[] = [
   {
     title: 'Typing Tests',
     links: [
-      { label: 'Typing Speed Tests', to: '/tests' },
-      { label: 'Typing Test', to: '/typing-test' },
-      { label: '1 Minute Typing Test', to: '/typing-test/1' },
-      { label: '5 Minute Typing Test', to: '/typing-test/5' },
-      { label: 'Hindi Typing Test', to: '/hindi-typing-test' },
-      { label: 'Kruti Dev Typing Test', to: '/kruti-dev-typing' },
-      { label: 'Typing Certificates', to: '/typing-certificates' },
-      { label: 'Leaderboard', to: '/leaderboard' },
+      { label: 'Typing Speed Tests', to: '/tests/' },
+      { label: 'Typing Test', to: '/typing-test/' },
+      { label: '1 Minute Typing Test', to: '/typing-test/1/' },
+      { label: '5 Minute Typing Test', to: '/typing-test/5/' },
+      { label: 'Hindi Typing Test', to: '/hindi-typing-test/' },
+      { label: 'Kruti Dev Typing Test', to: '/kruti-dev-typing/' },
+      { label: 'Typing Certificates', to: '/typing-certificates/' },
+      { label: 'Leaderboard', to: '/leaderboard/' },
     ],
   },
   {
     title: 'Learn Typing',
     links: [
-      { label: 'Learn English Typing', to: '/learn' },
-      { label: 'Learn Hindi Typing', to: '/learn-hindi-typing' },
-      { label: 'Learn Hindi (Mangal/Unicode)', to: '/learn-hindi-typing/unicode' },
-      { label: 'Learn Kruti Dev', to: '/learn-hindi-typing/kruti-dev' },
-      { label: 'AI Typing Tutor', to: '/ai-tutor' },
+      { label: 'Learn English Typing', to: '/learn/' },
+      { label: 'Learn Hindi Typing', to: '/learn-hindi-typing/' },
+      { label: 'Learn Hindi (Mangal/Unicode)', to: '/learn-hindi-typing/unicode/' },
+      { label: 'Learn Kruti Dev', to: '/learn-hindi-typing/kruti-dev/' },
+      { label: 'AI Typing Tutor', to: '/ai-tutor/' },
     ],
   },
   {
     title: 'Exam Typing Tests',
     links: [
-      { label: 'All Competitive Exam Typing', to: '/competitive-exam-typing' },
+      { label: 'All Competitive Exam Typing', to: '/competitive-exam-typing/' },
       ...Object.values(EXAM_LANDINGS).map(e => ({ label: `${e.examName} Typing Test`, to: `/${e.slug}-typing-test` })),
     ],
   },
   {
     title: 'Tools',
     links: [
-      { label: 'All Tools', to: '/tools' },
-      { label: 'Keyboard Tester', to: '/keyboard-tester' },
-      { label: 'CPS Test', to: '/cps-test' },
-      { label: 'Spacebar Counter', to: '/spacebar-counter' },
-      { label: 'Word Counter', to: '/word-counter' },
-      { label: 'Case Converter', to: '/case-converter' },
-      { label: 'Coding Typing', to: '/coding-typing' },
+      { label: 'All Tools', to: '/tools/' },
+      { label: 'Keyboard Tester', to: '/keyboard-tester/' },
+      { label: 'CPS Test', to: '/cps-test/' },
+      { label: 'Spacebar Counter', to: '/spacebar-counter/' },
+      { label: 'Word Counter', to: '/word-counter/' },
+      { label: 'Case Converter', to: '/case-converter/' },
+      { label: 'Coding Typing', to: '/coding-typing/' },
     ],
   },
   {
     title: 'Games',
     links: [
-      { label: 'All Games', to: '/games' },
-      { label: 'Word Rain', to: '/games/word-rain' },
-      { label: 'Zombie Typing', to: '/games/zombie' },
-      { label: 'Speed Racer', to: '/games/speed-racer' },
-      { label: 'Multiplayer Race', to: '/race' },
+      { label: 'All Games', to: '/games/' },
+      { label: 'Word Rain', to: '/games/word-rain/' },
+      { label: 'Zombie Typing', to: '/games/zombie/' },
+      { label: 'Speed Racer', to: '/games/speed-racer/' },
+      { label: 'Multiplayer Race', to: '/race/' },
     ],
   },
 ];
@@ -93,7 +93,7 @@ export default function SiteMapPage() {
           <section className="bg-brand-surface border border-brand-border rounded-2xl p-5 sm:col-span-2">
             <h2 className="font-black text-brand-text mb-3">Blog Articles</h2>
             <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5">
-              <li><Link to="/blog" className="text-sm text-brand-primary hover:underline font-semibold">All Blog Posts</Link></li>
+              <li><Link to="/blog/" className="text-sm text-brand-primary hover:underline font-semibold">All Blog Posts</Link></li>
               {BLOG_POSTS.map(p => (
                 <li key={p.slug}>
                   <Link to={`/blog/${p.slug}`} className="text-sm text-brand-primary hover:underline">{p.title}</Link>

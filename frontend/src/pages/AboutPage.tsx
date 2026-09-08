@@ -55,7 +55,7 @@ export default function AboutPage() {
           <ul className="text-brand-text-muted text-sm leading-relaxed space-y-2">
             <li>• <strong className="text-brand-text">Free to use</strong> — the core practice is, and will stay, free.</li>
             <li>• <strong className="text-brand-text">Exam-accurate</strong> — we design tests around real exam formats, and always tell you to confirm your official notification.</li>
-            <li>• <strong className="text-brand-text">Privacy-respecting</strong> — see our <Link to="/privacy" className="text-brand-primary hover:underline">Privacy Policy</Link> for exactly what we collect and why.</li>
+            <li>• <strong className="text-brand-text">Privacy-respecting</strong> — see our <Link to="/privacy/" className="text-brand-primary hover:underline">Privacy Policy</Link> for exactly what we collect and why.</li>
           </ul>
         </div>
 
@@ -70,15 +70,15 @@ export default function AboutPage() {
             <li>• <strong className="text-brand-text">Practice passages are curated.</strong> Typing test passages are drawn from public-domain and openly-licensed material and AI-assisted rewriting, then screened for quality, readability and appropriateness before they go live — never published unchecked.</li>
             <li>• <strong className="text-brand-text">Verify official rules.</strong> Exam requirements (speed, duration, error rules) change between notifications, so we clearly tell readers to confirm the current official notification for their exam.</li>
             <li>• <strong className="text-brand-text">Kept up to date.</strong> When exam patterns, layouts or best practices change, we revise the affected pages rather than leaving stale information online.</li>
-            <li>• <strong className="text-brand-text">Corrections welcome.</strong> Spotted a mistake? <Link to="/contact" className="text-brand-primary hover:underline">Tell us</Link> and we will fix it.</li>
+            <li>• <strong className="text-brand-text">Corrections welcome.</strong> Spotted a mistake? <Link to="/contact/" className="text-brand-primary hover:underline">Tell us</Link> and we will fix it.</li>
           </ul>
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <Link to="/tests" className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-6 py-3 rounded-xl font-bold text-sm transition-all">
+          <Link to="/tests/" className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-6 py-3 rounded-xl font-bold text-sm transition-all">
             <Zap className="w-4 h-4" /> Start a Free Test
           </Link>
-          <Link to="/contact" className="inline-flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text px-6 py-3 rounded-xl font-bold text-sm transition-all">
+          <Link to="/contact/" className="inline-flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text px-6 py-3 rounded-xl font-bold text-sm transition-all">
             Contact Us
           </Link>
         </div>

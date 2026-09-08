@@ -229,7 +229,7 @@ export default function HindiLessonCoursePage() {
           <p className="text-brand-text-muted text-sm mb-4">
             After completing the lessons, practice with real exam passages.
           </p>
-          <Link to="/competitive-exam-typing"
+          <Link to="/competitive-exam-typing/"
             className="inline-flex items-center gap-2 font-bold text-white px-6 py-2.5 rounded-xl transition-all hover:opacity-90 active:scale-95"
             style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.3)' }}>
             परीक्षा अभ्यास शुरू करें <ChevronRight className="w-4 h-4" />

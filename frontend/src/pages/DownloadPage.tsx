@@ -110,7 +110,7 @@ export default function DownloadPage() {
           <CheckCircle2 className="w-5 h-5 text-brand-accent shrink-0" />
           <p className="text-sm text-brand-text-muted">
             Prefer not to install anything? You can use the full{' '}
-            <Link to="/tests" className="text-brand-primary font-semibold hover:underline">typing test online</Link>{' '}
+            <Link to="/tests/" className="text-brand-primary font-semibold hover:underline">typing test online</Link>{' '}
             right in your browser — no download needed.
           </p>
         </div>

@@ -4,26 +4,26 @@ import TelegramCTA from './TelegramCTA';
 import WhatsAppCTA from './WhatsAppCTA';
 
 const PRODUCT_LINKS = [
-  { label: 'Typing Tests', href: '/tests' },
-  { label: 'Hindi Typing', href: '/hindi-typing-test' },
-  { label: 'Learn Typing', href: '/learn' },
-  { label: 'Exam Prep', href: '/competitive-exam-typing' },
-  { label: 'Shorthand', href: '/blog/how-to-learn-shorthand-stenography' },
-  { label: 'Typing Statistics', href: '/typing-statistics' },
-  { label: 'WPM Calculator', href: '/wpm-calculator' },
-  { label: 'Games', href: '/games' },
-  { label: 'Tools', href: '/tools' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Certificates', href: '/typing-certificates' },
-  { label: 'Windows App', href: '/download' },
-  { label: 'Site Map', href: '/all-pages' },
+  { label: 'Typing Tests', href: '/tests/' },
+  { label: 'Hindi Typing', href: '/hindi-typing-test/' },
+  { label: 'Learn Typing', href: '/learn/' },
+  { label: 'Exam Prep', href: '/competitive-exam-typing/' },
+  { label: 'Shorthand', href: '/blog/how-to-learn-shorthand-stenography/' },
+  { label: 'Typing Statistics', href: '/typing-statistics/' },
+  { label: 'WPM Calculator', href: '/wpm-calculator/' },
+  { label: 'Games', href: '/games/' },
+  { label: 'Tools', href: '/tools/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'Certificates', href: '/typing-certificates/' },
+  { label: 'Windows App', href: '/download/' },
+  { label: 'Site Map', href: '/all-pages/' },
 ];
 
 const COMPANY_LINKS = [
-  { label: 'About Us', href: '/about' },
-  { label: 'Contact Us', href: '/contact' },
-  { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Terms of Service', href: '/terms' },
+  { label: 'About Us', href: '/about/' },
+  { label: 'Contact Us', href: '/contact/' },
+  { label: 'Privacy Policy', href: '/privacy/' },
+  { label: 'Terms of Service', href: '/terms/' },
 ];
 
 export default function Footer() {

@@ -331,7 +331,7 @@ export default function TypingTestPage() {
       <div className="shrink-0 bg-brand-surface border-b border-brand-border px-3 sm:px-6 h-14 flex items-center justify-between gap-3 z-40">
         {/* Left */}
         <div className="flex items-center gap-3 min-w-0">
-          <Link to="/tests" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm font-medium group shrink-0">
+          <Link to="/tests/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm font-medium group shrink-0">
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             <span className="hidden sm:inline">Back</span>
           </Link>
@@ -707,7 +707,7 @@ export default function TypingTestPage() {
                   <RotateCcw className="w-4 h-4" /> Try Again
                 </button>
                 <Link
-                  to="/tests"
+                  to="/tests/"
                   className="flex-1 py-3 rounded-xl font-bold text-sm text-white text-center transition-all hover:opacity-90 active:scale-95"
                   style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 14px rgba(48,76,83,.25)' }}
                 >

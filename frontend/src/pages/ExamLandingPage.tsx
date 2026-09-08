@@ -9,7 +9,7 @@ import { EXAM_LANDINGS } from '../data/examLandingData';
 
 export default function ExamLandingPage({ slug }: { slug: string }) {
   const exam = EXAM_LANDINGS[slug];
-  if (!exam) return <Navigate to="/competitive-exam-typing" replace />;
+  if (!exam) return <Navigate to="/competitive-exam-typing/" replace />;
 
   const faqLd = {
     '@context': 'https://schema.org',
@@ -30,7 +30,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-6 flex-wrap">
           <Link to="/" className="hover:text-brand-primary transition-colors">Home</Link>
           <span>/</span>
-          <Link to="/competitive-exam-typing" className="hover:text-brand-primary transition-colors">Exam Typing</Link>
+          <Link to="/competitive-exam-typing/" className="hover:text-brand-primary transition-colors">Exam Typing</Link>
           <span>/</span>
           <span className="text-brand-text">{exam.examName}</span>
         </div>
@@ -163,7 +163,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
               ))}
           </div>
           <div className="mt-3">
-            <Link to="/competitive-exam-typing" className="text-sm font-semibold text-brand-primary hover:underline">
+            <Link to="/competitive-exam-typing/" className="text-sm font-semibold text-brand-primary hover:underline">
               View all competitive exam typing tests →
             </Link>
           </div>

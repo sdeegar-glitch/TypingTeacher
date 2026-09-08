@@ -355,7 +355,7 @@ export default function CertificatePage() {
                   </button>
                   {wpm === 0 && (
                     <p className="text-xs text-brand-muted text-center">
-                      <Link to="/tests" className="text-brand-primary font-semibold hover:underline">Take a typing test</Link> to get your real WPM and accuracy on your certificate.
+                      <Link to="/tests/" className="text-brand-primary font-semibold hover:underline">Take a typing test</Link> to get your real WPM and accuracy on your certificate.
                     </p>
                   )}
                 </div>

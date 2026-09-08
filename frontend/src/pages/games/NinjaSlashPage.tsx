@@ -337,7 +337,7 @@ export default function NinjaSlashPage() {
 
       {/* top bar */}
       <div className="relative z-20 flex items-center justify-between px-4 sm:px-6 h-14">
-        <Link to="/games" className="flex items-center gap-1.5 text-white/60 hover:text-white text-sm font-semibold transition-colors">
+        <Link to="/games/" className="flex items-center gap-1.5 text-white/60 hover:text-white text-sm font-semibold transition-colors">
           <ChevronLeft className="w-4 h-4" /> Games
         </Link>
         <div className="flex items-center gap-3">
@@ -441,7 +441,7 @@ export default function NinjaSlashPage() {
                     className="flex-1 py-3.5 rounded-2xl font-black flex items-center justify-center gap-2 shadow-lg" style={{ background: 'linear-gradient(135deg,#06b6d4,#7c3aed)' }}>
                     <RotateCcw className="w-4 h-4" /> Play Again
                   </motion.button>
-                  <Link to="/games" className="px-5 py-3.5 rounded-2xl font-bold bg-white/5 border border-white/10 text-white/70 hover:text-white transition-colors flex items-center">All Games</Link>
+                  <Link to="/games/" className="px-5 py-3.5 rounded-2xl font-bold bg-white/5 border border-white/10 text-white/70 hover:text-white transition-colors flex items-center">All Games</Link>
                 </div>
               </motion.div>
             </motion.div>

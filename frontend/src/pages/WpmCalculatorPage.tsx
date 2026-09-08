@@ -96,7 +96,7 @@ export default function WpmCalculatorPage() {
             </div>
           </div>
 
-          <Link to="/tests" className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white py-3 rounded-xl font-bold text-sm transition-all">
+          <Link to="/tests/" className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white py-3 rounded-xl font-bold text-sm transition-all">
             <Zap className="w-4 h-4" /> Or take a real typing test →
           </Link>
         </div>

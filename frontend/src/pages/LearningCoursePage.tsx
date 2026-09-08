@@ -219,7 +219,7 @@ export default function LearningCoursePage() {
           <p className="text-brand-text-muted text-sm mb-4">
             After completing the lessons, put your skills to the test with a real typing test.
           </p>
-          <Link to="/tests"
+          <Link to="/tests/"
             className="inline-flex items-center gap-2 font-bold text-white px-6 py-2.5 rounded-xl transition-all hover:opacity-90 active:scale-95"
             style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 14px rgba(42,157,174,.3)' }}>
             Start a Typing Test <ChevronRight className="w-4 h-4" />

@@ -189,7 +189,7 @@ export default function HindiTypingJunglePage() {
       {/* ── TOP BAR ── */}
       <div className="shrink-0 bg-brand-surface border-b border-brand-border px-3 sm:px-6 h-14 flex items-center justify-between gap-3 z-40">
         <div className="flex items-center gap-3 min-w-0">
-          <Link to="/hindi-typing-test"
+          <Link to="/hindi-typing-test/"
             className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm font-medium group shrink-0">
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             <span className="hidden sm:inline">वापस</span>
@@ -415,7 +415,7 @@ export default function HindiTypingJunglePage() {
                   प्रमाण पत्र
                 </Link>
               </div>
-              <Link to="/hindi-typing-test"
+              <Link to="/hindi-typing-test/"
                 className="mt-2 w-full flex items-center justify-center gap-2 text-brand-muted hover:text-brand-primary text-sm font-semibold transition-colors">
                 <Award className="w-4 h-4" /> हिंदी टेस्ट पेज
               </Link>

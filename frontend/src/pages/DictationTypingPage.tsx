@@ -140,7 +140,7 @@ export default function DictationTypingPage() {
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <Link to="/blog/how-to-learn-shorthand-stenography" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
+          <Link to="/blog/how-to-learn-shorthand-stenography/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" /> Shorthand Guide
           </Link>
           <div className="h-4 w-px bg-brand-border" />
@@ -259,7 +259,7 @@ export default function DictationTypingPage() {
                 style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
                 <RotateCcw className="w-4 h-4" /> New Dictation
               </button>
-              <Link to="/ssc-steno-typing-test"
+              <Link to="/ssc-steno-typing-test/"
                 className="flex-1 py-3.5 rounded-2xl font-bold text-center bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text flex items-center justify-center gap-2 transition-all">
                 <CheckCircle className="w-4 h-4" /> SSC Steno Practice
               </Link>
@@ -314,11 +314,11 @@ export default function DictationTypingPage() {
           </div>
 
           <div className="flex flex-wrap gap-2 text-sm pt-2">
-            <Link to="/blog/how-to-learn-shorthand-stenography" className="text-brand-primary font-semibold hover:underline">How to learn shorthand →</Link>
+            <Link to="/blog/how-to-learn-shorthand-stenography/" className="text-brand-primary font-semibold hover:underline">How to learn shorthand →</Link>
             <span className="text-brand-border">·</span>
-            <Link to="/ssc-steno-typing-test" className="text-brand-primary font-semibold hover:underline">SSC Steno typing test →</Link>
+            <Link to="/ssc-steno-typing-test/" className="text-brand-primary font-semibold hover:underline">SSC Steno typing test →</Link>
             <span className="text-brand-border">·</span>
-            <Link to="/court-typing-test" className="text-brand-primary font-semibold hover:underline">Court typing test →</Link>
+            <Link to="/court-typing-test/" className="text-brand-primary font-semibold hover:underline">Court typing test →</Link>
           </div>
         </div>
       </div>

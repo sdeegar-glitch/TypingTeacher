@@ -52,9 +52,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/exam/ssc-chsl',
     practiceLabel: 'Start SSC CHSL Practice Test',
     related: [
-      { label: 'SSC CGL DEST Test', href: '/ssc-cgl-typing-test' },
-      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'SSC CGL DEST Test', href: '/ssc-cgl-typing-test/' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -89,9 +89,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/exam/ssc-cgl',
     practiceLabel: 'Start SSC CGL DEST Practice',
     related: [
-      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
-      { label: 'Typing Speed Test', href: '/tests' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test/' },
+      { label: 'Typing Speed Test', href: '/tests/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -127,9 +127,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/hindi-typing-test',
     practiceLabel: 'Start Hindi (Mangal) Practice',
     related: [
-      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
-      { label: 'Hindi Typing Test', href: '/hindi-typing-test' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'Hindi Typing Test', href: '/hindi-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -165,9 +165,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/kruti-dev-typing',
     practiceLabel: 'Start Kruti Dev Practice',
     related: [
-      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing' },
-      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing/' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -203,9 +203,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/tests',
     practiceLabel: 'Start Typing Practice Test',
     related: [
-      { label: 'Typing Speed Test', href: '/tests' },
-      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'Typing Speed Test', href: '/tests/' },
+      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -241,10 +241,10 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/exam/hindi-typing',
     practiceLabel: 'Start Hindi Typing Practice',
     related: [
-      { label: 'Dictation Typing Test', href: '/dictation-typing-test' },
-      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
-      { label: 'Shorthand Guide', href: '/blog/how-to-learn-shorthand-stenography' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'Dictation Typing Test', href: '/dictation-typing-test/' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'Shorthand Guide', href: '/blog/how-to-learn-shorthand-stenography/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -280,9 +280,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/kruti-dev-typing',
     practiceLabel: 'Start Kruti Dev Practice',
     related: [
-      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing' },
-      { label: 'UP Police Typing', href: '/up-police-typing-test' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing/' },
+      { label: 'UP Police Typing', href: '/up-police-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -317,9 +317,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/tests',
     practiceLabel: 'Start Typing Practice Test',
     related: [
-      { label: 'Typing Speed Test', href: '/tests' },
-      { label: 'SSC CGL DEST', href: '/ssc-cgl-typing-test' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'Typing Speed Test', href: '/tests/' },
+      { label: 'SSC CGL DEST', href: '/ssc-cgl-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -355,9 +355,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/kruti-dev-typing',
     practiceLabel: 'Start Hindi Typing Practice',
     related: [
-      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
-      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'Kruti Dev Typing', href: '/kruti-dev-typing/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -393,9 +393,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/tests',
     practiceLabel: 'Start Typing Practice Test',
     related: [
-      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
-      { label: 'Typing Speed Test', href: '/tests' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test/' },
+      { label: 'Typing Speed Test', href: '/tests/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -431,10 +431,10 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/tests',
     practiceLabel: 'Build Transcription Typing Speed',
     related: [
-      { label: 'Dictation Typing Test', href: '/dictation-typing-test' },
-      { label: 'Shorthand Guide', href: '/blog/how-to-learn-shorthand-stenography' },
-      { label: 'Court & Steno Typing', href: '/court-typing-test' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'Dictation Typing Test', href: '/dictation-typing-test/' },
+      { label: 'Shorthand Guide', href: '/blog/how-to-learn-shorthand-stenography/' },
+      { label: 'Court & Steno Typing', href: '/court-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -470,9 +470,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/tests',
     practiceLabel: 'Start Typing Practice Test',
     related: [
-      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
-      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test/' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -509,9 +509,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/kruti-dev-typing',
     practiceLabel: 'Start Hindi Typing Practice',
     related: [
-      { label: 'UP Police Typing Test', href: '/up-police-typing-test' },
-      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'UP Police Typing Test', href: '/up-police-typing-test/' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -547,9 +547,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/kruti-dev-typing',
     practiceLabel: 'Start Hindi Typing Practice',
     related: [
-      { label: 'UPSSSC Typing Test', href: '/upsssc-typing-test' },
-      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'UPSSSC Typing Test', href: '/upsssc-typing-test/' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -585,9 +585,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/tests',
     practiceLabel: 'Start Typing Practice',
     related: [
-      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test' },
-      { label: 'DEO Typing Test', href: '/deo-typing-test' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'SSC CHSL Typing Test', href: '/ssc-chsl-typing-test/' },
+      { label: 'DEO Typing Test', href: '/deo-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 
@@ -623,9 +623,9 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     practiceHref: '/tests',
     practiceLabel: 'Start Typing Practice',
     related: [
-      { label: 'Railway NTPC Typing Test', href: '/railway-ntpc-typing-test' },
-      { label: 'DEO Typing Test', href: '/deo-typing-test' },
-      { label: 'All Exam Typing', href: '/competitive-exam-typing' },
+      { label: 'Railway NTPC Typing Test', href: '/railway-ntpc-typing-test/' },
+      { label: 'DEO Typing Test', href: '/deo-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
 };

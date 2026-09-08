@@ -120,7 +120,7 @@ export default function AiTutorPage() {
             <h2 className="font-black text-brand-text mb-1">Take a test first for a tailored plan</h2>
             <p className="text-brand-text-muted text-sm mb-4">The tutor personalizes your plan from your real WPM and accuracy. Take a quick test, then come back — or get a beginner starter plan now.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link to="/tests" className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold transition-all">
+              <Link to="/tests/" className="inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold transition-all">
                 <Zap className="w-4 h-4" /> Take a typing test
               </Link>
               <button onClick={() => analyze(true)} disabled={loading}
