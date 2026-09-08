@@ -2,8 +2,12 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast } from 'lucide-react';
+import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize } from 'lucide-react';
 import CharSpan from '../components/CharSpan';
+import VirtualKeyboard from '../components/VirtualKeyboard';
+import HandGuide from '../components/HandGuide';
+import { getFingerForKey } from '../utils/KeyboardLayout';
+import { INSCRIPT_FULL_MAP } from '../data/hindiCourseData';
 import SignupPromptBanner from '../components/SignupPromptBanner';
 import TelegramCTA from '../components/TelegramCTA';
 import WhatsAppCTA from '../components/WhatsAppCTA';
@@ -14,6 +18,14 @@ import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
 
 import { saveSession, fetchMistakeHandlingMode, fetchTestBySlug } from '../lib/api';
 import { markTestCompleted } from '../lib/testProgress';
+
+// Devanagari char -> physical QWERTY key, inverted from the INSCRIPT layout map,
+// so the on-screen keyboard can highlight the right key during Mangal tests.
+// (English and Kruti Dev tests type raw ASCII, which matches key labels directly.)
+const INSCRIPT_CHAR_TO_KEY: Record<string, string> = Object.entries(INSCRIPT_FULL_MAP).reduce(
+  (acc, [key, ch]) => { if (!(ch in acc)) acc[ch] = key; return acc; },
+  {} as Record<string, string>
+);
 
 // Duration options
 const DURATION_OPTIONS = [
@@ -209,7 +221,48 @@ export default function TypingTestPage() {
     strictMode
   );
 
-  const { stats, userInput, mistakes, skipped, processChar, processBackspace, handleMobileInput, reset, rejectedFlash, history } = engine;
+  const { stats, userInput, mistakes, skipped, processChar, processBackspace, handleMobileInput, reset, rejectedFlash, history, nextChar } = engine;
+
+  // ── On-screen keyboard + hands guide (Phase-1 interface upgrade) ──
+  const [showKeyboard, setShowKeyboard] = useState(() => {
+    try { return localStorage.getItem('ftl_showKeyboard') !== '0'; } catch { return true; }
+  });
+  const [showHands, setShowHands] = useState(() => {
+    try { return localStorage.getItem('ftl_showHands') === '1'; } catch { return false; }
+  });
+  const toggleKeyboard = useCallback(() => setShowKeyboard(v => {
+    try { localStorage.setItem('ftl_showKeyboard', v ? '0' : '1'); } catch {}
+    return !v;
+  }), []);
+  const toggleHands = useCallback(() => setShowHands(v => {
+    try { localStorage.setItem('ftl_showHands', v ? '0' : '1'); } catch {}
+    return !v;
+  }), []);
+
+  // Which physical key to highlight: ASCII passes straight through (English +
+  // Kruti Dev keystroke text); Devanagari (Mangal) maps via the INSCRIPT table.
+  const keyboardActiveKey = useMemo(() => {
+    const ch = nextChar || '';
+    if (!ch) return '';
+    if (/^[\x20-\x7e]$/.test(ch)) return ch;
+    return INSCRIPT_CHAR_TO_KEY[ch] || '';
+  }, [nextChar]);
+  const activeFinger = useMemo(
+    () => (keyboardActiveKey ? getFingerForKey(keyboardActiveKey) : '' as const),
+    [keyboardActiveKey]
+  );
+
+  // ── Fullscreen / focus mode ──
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {});
+    else document.exitFullscreen?.().catch(() => {});
+  }, []);
+  useEffect(() => {
+    const onFs = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onFs);
+    return () => document.removeEventListener('fullscreenchange', onFs);
+  }, []);
 
   // Brief shake on the typing display when strict mode rejects a keystroke
   const [shake, setShake] = useState(false);
@@ -282,6 +335,19 @@ export default function TypingTestPage() {
       // For now words are stable — user clicks reset to get new set
     }
   }, [reset, isMobile, testMode]);
+
+  // Tab = instant restart (standard on modern typing sites). Skipped once the
+  // results screen is up so keyboard users can still tab through its buttons.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Tab' && !stats.isFinished) {
+        e.preventDefault();
+        handleReset();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [handleReset, stats.isFinished]);
 
   if (loadingTest) {
     return (
@@ -533,6 +599,44 @@ export default function TypingTestPage() {
             >
               <Contrast className="w-3.5 h-3.5" />
             </button>
+            <button
+              onClick={toggleKeyboard}
+              aria-pressed={showKeyboard}
+              aria-label={showKeyboard ? 'Hide on-screen keyboard' : 'Show on-screen keyboard'}
+              title="On-screen keyboard"
+              className={`hidden lg:flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                showKeyboard
+                  ? 'bg-brand-primary text-white border-transparent'
+                  : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
+              }`}
+            >
+              <KeyboardIcon className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={toggleHands}
+              aria-pressed={showHands}
+              aria-label={showHands ? 'Hide finger guide' : 'Show finger guide'}
+              title="Finger guide"
+              className={`hidden lg:flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                showHands
+                  ? 'bg-brand-primary text-white border-transparent'
+                  : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
+              }`}
+            >
+              <Hand className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={toggleFullscreen}
+              aria-pressed={isFullscreen}
+              aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen focus mode'}
+              title="Fullscreen focus mode"
+              className="hidden sm:flex items-center gap-1.5 bg-brand-surface border border-brand-border hover:border-brand-primary/40 text-brand-muted hover:text-brand-text px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+            >
+              {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+            </button>
+            <span className="hidden md:inline-flex items-center gap-1 ml-auto text-[10px] text-brand-muted">
+              <kbd className="px-1.5 py-0.5 rounded bg-brand-surface-2 border border-brand-border font-mono">Tab</kbd> restart
+            </span>
           </div>
 
           {/* Colour legend — helps students read their errors at a glance */}
@@ -556,6 +660,31 @@ export default function TypingTestPage() {
             </motion.div>
           )}
         </div>
+
+        {/* ── On-screen keyboard + finger guide (desktop) ── */}
+        {showKeyboard && !stats.isFinished && (
+          <div className="hidden lg:flex items-center justify-center gap-3 mt-4 select-none" aria-hidden="true">
+            {showHands && (
+              <div style={{ zoom: 0.5 }}>
+                <HandGuide
+                  hand="left"
+                  activeFinger={activeFinger && (activeFinger.startsWith('left') || activeFinger === 'thumb') ? activeFinger : ''}
+                />
+              </div>
+            )}
+            <div style={{ zoom: 0.62 }}>
+              <VirtualKeyboard activeKey={keyboardActiveKey} />
+            </div>
+            {showHands && (
+              <div style={{ zoom: 0.5 }}>
+                <HandGuide
+                  hand="right"
+                  activeFinger={activeFinger && (activeFinger.startsWith('right') || activeFinger === 'thumb') ? activeFinger : ''}
+                />
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Finish early */}
         {!stats.isFinished && stats.isActive && (
