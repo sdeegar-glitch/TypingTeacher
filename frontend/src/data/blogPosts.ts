@@ -70,8 +70,8 @@ Some applications let you attach evidence of your typing ability. After a test y
   {
     slug: 'home-row-keys-finger-placement',
     title: 'Home Row Keys: Correct Finger Placement for Fast Typing',
-    seoTitle: 'Home Row Keys — Correct Finger Placement Guide (2026) | FastTypingLab',
-    metaDesc: 'The home row is the foundation of touch typing. Learn which finger goes on which key (ASDF JKL;), how to use the F and J bumps, and drills to build the habit.',
+    seoTitle: 'Home Row Keys Chart: Which Finger Goes Where? (2026) | FastTypingLab',
+    metaDesc: 'See exactly which finger goes on which home row key (ASDF JKL;), the F/J finger bumps, and simple drills to build the muscle memory fast.',
     category: 'Basics',
     readTime: '6 min',
     date: '2026-08-23',
@@ -710,8 +710,8 @@ The goal of typing practice for programmers is not to win a speed contest. It is
   {
     slug: 'how-to-learn-shorthand-stenography',
     title: 'How to Learn Shorthand (Stenography): A Beginner’s Guide',
-    seoTitle: 'How to Learn Shorthand at Home — Free Beginner Guide (2026) | FastTypingLab',
-    metaDesc: 'Learn shorthand (stenography) from scratch at home: Pitman basics, SSC Steno speed targets, and free dictation practice — a simple step-by-step guide for beginners.',
+    seoTitle: 'How to Learn Shorthand Fast: Pitman Basics for SSC Steno | FastTypingLab',
+    metaDesc: 'Learn Pitman shorthand step by step — alphabet, short forms, SSC Steno speed targets, and free dictation practice to get exam-ready.',
     category: 'Learning',
     readTime: '8 min',
     date: '2026-07-18',
