@@ -6,7 +6,7 @@ import { validateTest, countWords, makeSlug } from './qualityGate.js';
 import { DIFFICULTY_MIX_INSTRUCTIONS, buildDifficultyJsonField, normalizeDifficultyBreakdown } from './difficultyMixer.js';
 import { rewriteWithFallback } from './groqClient.js';
 
-async function rewriteToTest(topic, foundTitle, foundContent) {
+async function rewriteToTest(topic, foundTitle, foundContent, isExamGk = false) {
   const prompt = `You are an expert educational writer creating typing practice content for a competitive-exam-style passage.
 
 Source material about "${topic}":
@@ -17,6 +17,7 @@ Rewrite this as a unique, original 600-1500 word article (aim for ~1000 words) f
 - Plain text only, NO markdown, no bullet points, no headers — just flowing paragraphs
 - Excellent grammar, clear sentences
 - Different enough from the source to be plagiarism-free (your own words and structure)
+${isExamGk ? `- This is General Awareness revision material for Indian government exams (SSC, CPCT, UPSSSC, state clerk). Keep it factually accurate and densely informative: include the specific names, dates, articles, numbers and definitions a candidate would be tested on, worked naturally into the prose. The reader should be revising real exam content while they type.` : ''}
 ${DIFFICULTY_MIX_INSTRUCTIONS}
 Return ONLY valid JSON:
 {
@@ -71,7 +72,8 @@ export async function generateEnglishTest() {
         continue;
       }
 
-      const data = await rewriteToTest(topic, source.title, source.content);
+      const isExamGk = typeof category === 'string' && category.startsWith('GK —');
+      const data = await rewriteToTest(topic, source.title, source.content, isExamGk);
       const { valid, reasons } = validateTest(data);
       if (!valid) {
         lastError = reasons.join('; ');
@@ -100,7 +102,7 @@ export async function generateEnglishTest() {
           difficulty_level: data.difficulty_level,
           word_count: wordCount,
           estimated_read_time: Math.ceil(wordCount / 200),
-          category: data.category,
+          category: isExamGk ? category : data.category,
           tags: data.tags,
           seo_title: data.seo_title,
           seo_description: data.seo_description,
@@ -124,7 +126,7 @@ export async function generateEnglishTest() {
       await logAttempt({ slot: 'en', topic, status: 'success', testId: inserted.id, attemptCount: attempt });
       return {
         status: 'success', testId: inserted.id, topic,
-        slug, title: data.title, category: data.category,
+        slug, title: data.title, category: isExamGk ? category : data.category,
         difficulty: data.difficulty_level, wordCount, language: 'en',
       };
     } catch (err) {

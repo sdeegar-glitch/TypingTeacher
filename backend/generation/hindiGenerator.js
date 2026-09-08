@@ -7,7 +7,7 @@ import { DIFFICULTY_MIX_INSTRUCTIONS, buildDifficultyJsonField, normalizeDifficu
 import { unicodeToKrutiDev } from './krutiDevConverter.js';
 import { rewriteWithFallback } from './groqClient.js';
 
-async function rewriteToHindiTest(topic, foundTitle, foundContent) {
+async function rewriteToHindiTest(topic, foundTitle, foundContent, isExamGk = false) {
   const prompt = `आप हिंदी टंकण (typing) अभ्यास के लिए मूल लेख लिखने वाले एक कुशल शिक्षण-लेखक हैं।
 
 विषय "${topic}" पर स्रोत सामग्री:
@@ -18,6 +18,7 @@ async function rewriteToHindiTest(topic, foundTitle, foundContent) {
 - केवल शुद्ध यूनिकोड देवनागरी पाठ — कोई मार्कडाउन, बुलेट पॉइंट या हेडिंग नहीं, केवल प्रवाहमयी अनुच्छेद
 - उत्कृष्ट व्याकरण, स्पष्ट वाक्य
 - स्रोत से पर्याप्त भिन्न ताकि यह मूल रचना हो (अपने स्वयं के शब्दों और संरचना में)
+${isExamGk ? `- यह सामग्री भारतीय सरकारी परीक्षाओं (SSC, CPCT, UPSSSC, राज्य क्लर्क) के सामान्य ज्ञान खंड की पुनरावृत्ति के लिए है। तथ्यात्मक रूप से सटीक और जानकारी से भरपूर रखें: जिन नामों, तिथियों, अनुच्छेदों, संख्याओं और परिभाषाओं पर प्रश्न पूछे जाते हैं, उन्हें स्वाभाविक रूप से गद्य में शामिल करें। पढ़ने वाला टाइप करते-करते वास्तविक परीक्षा सामग्री दोहराए।` : ''}
 ${DIFFICULTY_MIX_INSTRUCTIONS}
 केवल मान्य JSON लौटाएँ (सभी मान हिंदी में, except difficulty_level/category जो अंग्रेज़ी में रहें):
 {
@@ -77,7 +78,8 @@ export async function generateHindiTest(layout) {
         continue;
       }
 
-      const data = await rewriteToHindiTest(topic, source.title, source.content);
+      const isExamGk = typeof category === 'string' && category.startsWith('GK —');
+      const data = await rewriteToHindiTest(topic, source.title, source.content, isExamGk);
       const { valid, reasons } = validateTest(data);
       if (!valid) {
         lastError = reasons.join('; ');
@@ -110,7 +112,7 @@ export async function generateHindiTest(layout) {
           difficulty_level: data.difficulty_level,
           word_count: wordCount,
           estimated_read_time: Math.ceil(wordCount / 200),
-          category: data.category,
+          category: isExamGk ? category : data.category,
           tags: data.tags,
           seo_title: data.seo_title,
           seo_description: data.seo_description,
@@ -134,7 +136,7 @@ export async function generateHindiTest(layout) {
       await logAttempt({ slot, topic, status: 'success', testId: inserted.id, attemptCount: attempt });
       return {
         status: 'success', testId: inserted.id, topic,
-        slug, title: data.title, category: data.category,
+        slug, title: data.title, category: isExamGk ? category : data.category,
         difficulty: data.difficulty_level, wordCount, language: 'hi', layout,
       };
     } catch (err) {

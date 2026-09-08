@@ -144,14 +144,95 @@ export const TOPICS = [
   { topic: 'rise of remote-work travel', category: 'Travel' },
 ];
 
+/**
+ * Exam-syllabus topics — passages drawn from the General Awareness syllabus
+ * that SSC / CPCT / UPSSSC / state-clerk exams actually test. The point is
+ * that a candidate practising typing on these is simultaneously revising GK
+ * they need anyway: typing practice and exam prep in the same sitting.
+ * Kept as a separate, tagged pool so generation can deliberately bias toward
+ * it (see getRandomTopic) and so the frontend can surface these as a track.
+ */
+export const EXAM_GK_TOPICS = [
+  // Indian Polity & Constitution
+  { topic: 'the Preamble of the Indian Constitution and its values', category: 'GK — Polity' },
+  { topic: 'Fundamental Rights guaranteed by the Indian Constitution', category: 'GK — Polity' },
+  { topic: 'Directive Principles of State Policy explained', category: 'GK — Polity' },
+  { topic: 'powers and functions of the President of India', category: 'GK — Polity' },
+  { topic: 'how Parliament of India makes laws', category: 'GK — Polity' },
+  { topic: 'the Supreme Court of India and judicial review', category: 'GK — Polity' },
+  { topic: 'Panchayati Raj and local self government in India', category: 'GK — Polity' },
+  { topic: 'the Election Commission of India and its functions', category: 'GK — Polity' },
+  { topic: 'centre state relations in the Indian federal system', category: 'GK — Polity' },
+
+  // Modern Indian History & Freedom Movement
+  { topic: 'the Revolt of 1857 and its causes', category: 'GK — History' },
+  { topic: 'Mahatma Gandhi and the Non Cooperation Movement', category: 'GK — History' },
+  { topic: 'the Quit India Movement of 1942', category: 'GK — History' },
+  { topic: 'the Indian National Congress early years', category: 'GK — History' },
+  { topic: 'Subhas Chandra Bose and the Indian National Army', category: 'GK — History' },
+  { topic: 'social reform movements in nineteenth century India', category: 'GK — History' },
+  { topic: 'the partition of Bengal and the Swadeshi movement', category: 'GK — History' },
+  { topic: 'Maurya empire and the reign of Ashoka', category: 'GK — History' },
+  { topic: 'the Indus Valley Civilisation and its town planning', category: 'GK — History' },
+
+  // Geography of India
+  { topic: 'major rivers of India and their tributaries', category: 'GK — Geography' },
+  { topic: 'the Himalayan mountain ranges and their divisions', category: 'GK — Geography' },
+  { topic: 'monsoon system and rainfall distribution in India', category: 'GK — Geography' },
+  { topic: 'soil types found across India', category: 'GK — Geography' },
+  { topic: 'national parks and wildlife sanctuaries of India', category: 'GK — Geography' },
+  { topic: 'mineral resources and mining regions of India', category: 'GK — Geography' },
+  { topic: 'states union territories and their capitals', category: 'GK — Geography' },
+
+  // Indian Economy
+  { topic: 'the Reserve Bank of India and monetary policy', category: 'GK — Economy' },
+  { topic: 'Goods and Services Tax structure in India', category: 'GK — Economy' },
+  { topic: 'five year plans and NITI Aayog', category: 'GK — Economy' },
+  { topic: 'banking sector reforms and financial inclusion', category: 'GK — Economy' },
+  { topic: 'agriculture subsidies and minimum support price', category: 'GK — Economy' },
+  { topic: 'inflation types and how it is measured in India', category: 'GK — Economy' },
+
+  // General Science for exams
+  { topic: 'human digestive system and its organs', category: 'GK — Science' },
+  { topic: 'Newton laws of motion with everyday examples', category: 'GK — Science' },
+  { topic: 'photosynthesis and its importance', category: 'GK — Science' },
+  { topic: 'the periodic table and classification of elements', category: 'GK — Science' },
+  { topic: 'human circulatory system and the heart', category: 'GK — Science' },
+  { topic: 'sources of energy renewable and non renewable', category: 'GK — Science' },
+  { topic: 'vitamins deficiency diseases and nutrition', category: 'GK — Science' },
+
+  // Static GK & Awareness
+  { topic: 'important national symbols of India', category: 'GK — Static' },
+  { topic: 'major dance forms and festivals of India', category: 'GK — Static' },
+  { topic: 'famous historical monuments of India', category: 'GK — Static' },
+  { topic: 'important days and their significance', category: 'GK — Static' },
+  { topic: 'major awards and honours in India', category: 'GK — Static' },
+  { topic: 'United Nations and its principal organs', category: 'GK — Static' },
+  { topic: 'major government welfare schemes and beneficiaries', category: 'GK — Static' },
+];
+
+// Share of generated tests that should come from the exam-syllabus pool.
+// Hindi tracks lean harder into it because that audience is almost entirely
+// government-exam aspirants; English keeps a wider general-interest mix.
+const EXAM_BIAS = { hi: 0.55, en: 0.3 };
+
 // recentTopics tracked per language so English/Hindi generation never starve
 // each other's pool within the same day.
 const recentByLang = { en: new Set(), hi: new Set() };
 
 export function getRandomTopic(lang = 'en') {
   const recent = recentByLang[lang] || (recentByLang[lang] = new Set());
-  const available = TOPICS.filter(t => !recent.has(t.topic));
-  const pool = available.length > 0 ? available : TOPICS;
+
+  // Bias a share of generations toward the exam-syllabus pool so daily content
+  // doubles as General Awareness revision. Falls back to the general pool if
+  // every exam topic is already in the recent window.
+  const bias = EXAM_BIAS[lang] ?? EXAM_BIAS.en;
+  const useExamPool = Math.random() < bias;
+  const sourcePool = useExamPool ? EXAM_GK_TOPICS : TOPICS;
+
+  const available = sourcePool.filter(t => !recent.has(t.topic));
+  const fallback = TOPICS.filter(t => !recent.has(t.topic));
+  const pool = available.length > 0 ? available : (fallback.length > 0 ? fallback : TOPICS);
   const choice = pool[Math.floor(Math.random() * pool.length)];
   recent.add(choice.topic);
   if (recent.size > 30) {
