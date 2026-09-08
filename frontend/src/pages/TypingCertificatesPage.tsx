@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Award, QrCode, Download, Shield, ChevronRight, CheckCircle } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
+import TelegramCTA from '../components/TelegramCTA';
+import WhatsAppCTA from '../components/WhatsAppCTA';
 
 const CERT_FEATURES = [
   { icon: '🏆', title: 'WPM Certified', desc: 'Your words per minute score is officially recorded and displayed on the certificate.' },
@@ -129,6 +131,12 @@ export default function TypingCertificatesPage() {
           <p><strong className="text-brand-text">Are these certificates free?</strong> Yes, completely free. Take any typing test and generate your certificate instantly with no registration required.</p>
           <p><strong className="text-brand-text">Can I use this for government exam applications?</strong> Our certificates are for practice and personal milestone tracking. For official government exam certification, you must appear in the official exam conducted by SSC, CPCT, etc.</p>
           <p><strong className="text-brand-text">How are certificates verified?</strong> Each certificate has a unique ID and QR code. Scanning the QR code takes you to our verification page where anyone can confirm the certificate's authenticity.</p>
+        </div>
+
+        {/* Telegram + WhatsApp — this landing page previously had neither */}
+        <div className="mt-8 space-y-3">
+          <TelegramCTA message="Get notified about new certificate features, exam-date alerts, and a weekly WPM leaderboard — free." />
+          <WhatsAppCTA message="Follow for daily typing tests and exam-prep updates, straight in WhatsApp." />
         </div>
       </div>
     </div>

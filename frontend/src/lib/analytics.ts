@@ -45,3 +45,13 @@ export function trackPageview(path: string) {
     page_title: document.title,
   });
 }
+
+/**
+ * Record a generic event with optional params. Used for things GA4 doesn't
+ * track automatically — e.g. Telegram/WhatsApp CTA clicks — so we can see
+ * click counts (not just page views) on the next analytics pull.
+ */
+export function trackEvent(name: string, params: Record<string, string | number> = {}) {
+  if (!GA_MEASUREMENT_ID || typeof window === 'undefined' || !window.gtag) return;
+  window.gtag('event', name, params);
+}

@@ -8,6 +8,7 @@ import SignupPromptBanner from '../components/SignupPromptBanner';
 import TelegramCTA from '../components/TelegramCTA';
 import WhatsAppCTA from '../components/WhatsAppCTA';
 import { isLoggedIn } from '../lib/auth';
+import { trackEvent } from '../lib/analytics';
 
 interface CertData {
   id: string;
@@ -245,6 +246,7 @@ export default function CertificatePage() {
     // reason a visitor has to sign up. Preview stays fully visible (good UX + AdSense),
     // but saving/downloading the PNG requires logging in.
     if (!isLoggedIn()) {
+      trackEvent('cert_login_gate_shown');
       setShowLoginGate(true);
       return;
     }
@@ -399,11 +401,13 @@ export default function CertificatePage() {
                         </p>
                         <div className="flex flex-wrap gap-2">
                           <Link to={`/signup?next=${encodeURIComponent(window.location.pathname + window.location.search)}`}
+                            onClick={() => trackEvent('cert_login_gate_click', { action: 'signup' })}
                             className="inline-flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all active:scale-95"
                             style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.30)' }}>
                             Create free account
                           </Link>
                           <Link to={`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`}
+                            onClick={() => trackEvent('cert_login_gate_click', { action: 'login' })}
                             className="inline-flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text font-semibold px-5 py-2.5 rounded-xl text-sm transition-all">
                             I already have an account
                           </Link>

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserPlus, X } from 'lucide-react';
 import { isLoggedIn } from '../lib/auth';
+import { trackEvent } from '../lib/analytics';
 
 interface SignupPromptBannerProps {
   /** Short benefit-focused message shown to the visitor. */
@@ -27,9 +28,17 @@ export default function SignupPromptBanner({
     try { return localStorage.getItem(dismissKey) === '1'; } catch { return false; }
   });
 
-  if (isLoggedIn() || dismissed) return null;
+  const visible = !isLoggedIn() && !dismissed;
+
+  useEffect(() => {
+    if (visible) trackEvent('signup_banner_shown', { dismissKey, page: window.location.pathname });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible]);
+
+  if (!visible) return null;
 
   const dismiss = () => {
+    trackEvent('signup_banner_dismiss', { dismissKey });
     setDismissed(true);
     try { localStorage.setItem(dismissKey, '1'); } catch { /* ignore */ }
   };
@@ -59,6 +68,7 @@ export default function SignupPromptBanner({
 
         <Link
           to="/signup"
+          onClick={() => trackEvent('signup_banner_click', { dismissKey, page: window.location.pathname })}
           className="shrink-0 inline-flex items-center justify-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all active:scale-95"
           style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.30)' }}
         >

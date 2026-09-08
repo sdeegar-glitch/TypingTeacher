@@ -1,5 +1,6 @@
 import { Send } from 'lucide-react';
 import { TELEGRAM_URL } from '../lib/social';
+import { trackEvent } from '../lib/analytics';
 
 interface TelegramCTAProps {
   /** 'card' = full banner (results screen); 'inline' = compact button (footer). */
@@ -13,9 +14,14 @@ interface TelegramCTAProps {
  * group members — the cheapest, highest-quality growth channel.
  */
 export default function TelegramCTA({ variant = 'card', message }: TelegramCTAProps) {
+  const onClick = () => trackEvent('telegram_cta_click', {
+    variant,
+    page: typeof window !== 'undefined' ? window.location.pathname : '',
+  });
+
   if (variant === 'inline') {
     return (
-      <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer"
+      <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={onClick}
         className="inline-flex items-center gap-2 font-semibold text-white px-4 py-2 rounded-lg text-sm transition-all active:scale-95 hover:opacity-90"
         style={{ background: '#229ED9', boxShadow: '0 4px 14px rgba(34,158,217,.30)' }}>
         <Send className="w-4 h-4" /> Join our Telegram
@@ -24,7 +30,7 @@ export default function TelegramCTA({ variant = 'card', message }: TelegramCTAPr
   }
 
   return (
-    <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer"
+    <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={onClick}
       className="flex items-center gap-3 rounded-2xl p-4 sm:p-5 border transition-all hover:shadow-lg active:scale-[0.99] group"
       style={{ background: 'linear-gradient(135deg, rgba(34,158,217,0.10), rgba(34,158,217,0.04))', borderColor: 'rgba(34,158,217,0.30)' }}>
       <div className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white shadow-md"
