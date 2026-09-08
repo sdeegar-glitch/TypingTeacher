@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Hash, Quote, Type, FileText, RotateCcw, Zap, ChevronLeft } from 'lucide-react';
+import { Hash, Quote, Type, FileText, RotateCcw, Zap, ChevronLeft, Target } from 'lucide-react';
 import Seo from '../components/Seo';
 import CharSpan from '../components/CharSpan';
 import { useTypingEngine } from '../hooks/useTypingEngine';
@@ -56,7 +56,26 @@ function genPunctuation(): string {
   return Array.from({ length: 70 }, () => pick(patterns)(pick(TOP_WORDS), pick(TOP_WORDS))).join(' ');
 }
 
-type DrillMode = 'numbers' | 'punctuation' | 'words' | 'custom';
+/**
+ * Build a drill that hammers specific weak keys. Picks common words containing
+ * those letters so the practice stays natural (real words, real transitions)
+ * rather than degenerating into "aaa sss ddd", and salts in short bursts of the
+ * raw key where no word contains it (digits, punctuation).
+ */
+function genWeakKeyDrill(keys: string[]): string {
+  const clean = keys.map(k => (k === '␣' ? ' ' : k)).filter(k => k.trim().length === 1);
+  if (!clean.length) return genWords();
+  const out: string[] = [];
+  for (let i = 0; i < 70; i++) {
+    const key = clean[i % clean.length];
+    const matches = TOP_WORDS.filter(w => w.includes(key.toLowerCase()));
+    if (matches.length && Math.random() > 0.25) out.push(pick(matches));
+    else out.push(key.repeat(2 + Math.floor(Math.random() * 2)));
+  }
+  return out.join(' ');
+}
+
+type DrillMode = 'numbers' | 'punctuation' | 'words' | 'custom' | 'weak';
 
 const MODES: Array<{ id: DrillMode; label: string; icon: typeof Hash; desc: string }> = [
   { id: 'numbers', label: 'Numbers (10-Key)', icon: Hash, desc: 'Digit groups for data-entry & KDPH practice' },
@@ -167,7 +186,14 @@ function DrillCore({ text, duration, onRestart, onNewText }: {
 // ─── Page ───────────────────────────────────────────────────────────────────
 
 export default function TypingDrillsPage() {
-  const [mode, setMode] = useState<DrillMode>('numbers');
+  const [searchParams] = useSearchParams();
+  // ?keys=a,e,␣ — arrives from the "keys to practice" chips on a test result
+  const weakKeys = useMemo(() => {
+    const raw = searchParams.get('keys');
+    return raw ? raw.split(',').map(k => k.trim()).filter(Boolean).slice(0, 8) : [];
+  }, [searchParams]);
+
+  const [mode, setMode] = useState<DrillMode>(weakKeys.length ? 'weak' : 'numbers');
   const [duration, setDuration] = useState(60);
   const [customText, setCustomText] = useState('');
   const [customStarted, setCustomStarted] = useState(false);
@@ -176,12 +202,13 @@ export default function TypingDrillsPage() {
   useEffect(() => { document.title = 'Typing Drills — Numbers, Punctuation & Custom Practice | FastTypingLab'; }, []);
 
   const text = useMemo(() => {
+    if (mode === 'weak') return genWeakKeyDrill(weakKeys);
     if (mode === 'numbers') return genNumbers();
     if (mode === 'punctuation') return genPunctuation();
     if (mode === 'words') return genWords();
     return customText.replace(/\s+/g, ' ').trim();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, runId, customStarted]);
+  }, [mode, runId, customStarted, weakKeys]);
 
   const restart = useCallback(() => setRunId(r => r + 1), []);
   const changeMode = (m: DrillMode) => { setMode(m); setCustomStarted(false); setRunId(r => r + 1); };
@@ -205,6 +232,27 @@ export default function TypingDrillsPage() {
         <p className="text-brand-text-muted text-sm mb-6">
           Target the keys that slow you down — numbers for 10-key/data-entry (KDPH) practice, punctuation reaches, common-word speed, or paste your own text.
         </p>
+
+        {/* Weak-keys drill, when arriving from a test result */}
+        {weakKeys.length > 0 && (
+          <button onClick={() => changeMode('weak')}
+            className={`w-full flex items-start gap-3 p-4 rounded-xl border text-left mb-3 transition-all ${
+              mode === 'weak'
+                ? 'bg-rose-500/10 border-rose-500/40'
+                : 'bg-brand-surface border-brand-border hover:border-rose-500/30'
+            }`}>
+            <Target className={`w-5 h-5 shrink-0 mt-0.5 ${mode === 'weak' ? 'text-rose-500' : 'text-brand-muted'}`} />
+            <div>
+              <p className={`font-bold text-sm ${mode === 'weak' ? 'text-rose-500' : 'text-brand-text'}`}>Drill your weak keys</p>
+              <p className="text-xs text-brand-text-muted mt-0.5">
+                Built from the keys you missed most:{' '}
+                {weakKeys.map(k => (
+                  <span key={k} className="inline-block font-mono font-bold bg-brand-surface-2 border border-brand-border rounded px-1.5 mx-0.5">{k}</span>
+                ))}
+              </p>
+            </div>
+          </button>
+        )}
 
         {/* Mode tabs */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4">

@@ -3,6 +3,7 @@ import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize, Share2 } from 'lucide-react';
+// `Target` is used both by the live stats header and the weak-key drill link.
 import CharSpan from '../components/CharSpan';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
@@ -826,13 +827,19 @@ export default function TypingTestPage() {
               {weakKeys.length > 0 && (
                 <div className="mb-6 text-left bg-brand-surface-2 border border-brand-border rounded-xl px-4 py-3">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2">Keys to practice</p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {weakKeys.map(([ch, count]) => (
                       <span key={ch} className="inline-flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 text-rose-500 px-2.5 py-1 rounded-lg text-sm font-mono font-bold">
                         {ch}<span className="text-[10px] font-sans font-semibold opacity-70">×{count}</span>
                       </span>
                     ))}
                   </div>
+                  <Link
+                    to={`/typing-drills/?keys=${encodeURIComponent(weakKeys.map(([ch]) => ch).join(','))}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-primary hover:underline"
+                  >
+                    <Target className="w-3.5 h-3.5" /> Drill these keys →
+                  </Link>
                 </div>
               )}
 
