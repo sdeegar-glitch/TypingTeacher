@@ -6,6 +6,23 @@ import { getReferralStats } from '../services/referrals.js';
 const router = express.Router();
 router.use(requireUser);
 
+// TEMP DIAGNOSTIC (2026-09-09, round 2): Connection: close didn't fix the
+// no-op-write issue, so re-checking whether multiple backend processes are
+// actually in play. A random id generated once at module load lets repeated
+// calls reveal whether they're hitting the same process or different ones.
+const PROCESS_MARKER = Math.random().toString(36).slice(2, 10);
+router.get('/_procid', async (req, res) => {
+  const id = req.profile.id;
+  const upd = await supabase.from('users').update({ referral_code: 'PROCTEST' }).eq('id', id).select('id, referral_code');
+  res.json({
+    processMarker: PROCESS_MARKER,
+    uptimeSec: Math.round(process.uptime()),
+    pid: process.pid,
+    updateData: upd.data,
+    updateError: upd.error,
+  });
+});
+
 // GET /api/me — the caller's own profile
 router.get('/', (req, res) => {
   const p = req.profile;
