@@ -112,6 +112,11 @@ const ROUTES = [
     ['What is a 10-key or number typing drill?', 'It is focused practice on digits and numeric groups, building the speed data-entry roles and DEO exams measure in keystrokes per hour (KDPH).'],
     ['Can I practice my own text?', 'Yes — the custom text mode lets you paste any passage (exam material, legal text, transcription practice) and drill it with live WPM and accuracy.'],
   ]) },
+  { path: '/refer', title: 'Invite Friends & Earn Badges | FastTypingLab Referral Programme', description: 'Share FastTypingLab with friends preparing for SSC, CPCT and other government typing exams. Earn Supporter, Advocate, Ambassador and Legend badges as they join and practise.', jsonLd: faqLd([
+    ['How does the FastTypingLab referral programme work?', 'Every free account gets a personal invite link. Share it with friends, and when someone signs up through your link and completes a typing test, it counts towards your referral tier.'],
+    ['What do I get for referring friends?', 'Recognition badges — Supporter at 1 referral, Advocate at 3, Ambassador at 5 and Legend at 10 — shown on your profile and dashboard, plus a mention in the monthly Telegram shout-out. There is no cash payout; FastTypingLab is completely free.'],
+    ['When does a referral count?', 'A referral counts once the invited person creates a free account and finishes their first typing test. Signups on their own do not count, and an account can only ever be referred once.'],
+  ]) },
   { path: '/contact', title: 'Contact FastTypingLab — Support, Feedback & Enquiries', description: 'Get in touch with the FastTypingLab team. Email us for support, feedback, bug reports, content suggestions or partnership enquiries.' },
   { path: '/privacy', title: 'Privacy Policy | FastTypingLab', description: 'How FastTypingLab collects, uses, and protects your data — account information, typing statistics, cookies, analytics and advertising.' },
   { path: '/terms', title: 'Terms of Service | FastTypingLab', description: 'The terms and conditions for using FastTypingLab — a free online typing and government-exam practice platform.' },

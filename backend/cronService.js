@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import { generateEnglishTest } from './generation/englishGenerator.js';
 import { generateHindiTest } from './generation/hindiGenerator.js';
 import { supabase } from './supabaseClient.js';
-import { postTestToTelegram, postLeaderboardToTelegram, postPollToTelegram, postLiveTestAnnouncement } from './services/telegram.js';
+import { postTestToTelegram, postLeaderboardToTelegram, postPollToTelegram, postLiveTestAnnouncement, postTopReferrersToTelegram } from './services/telegram.js';
 
 // Guard against overlapping runs
 let isRunning = false;
@@ -184,6 +184,7 @@ export async function postDailyLeaderboard() {
 const LEADERBOARD_MARKER_KEY = 'telegram_last_leaderboard_ist_date';
 const POLL_MARKER_KEY = 'telegram_last_poll_iso_week';
 const LIVE_TEST_MARKER_KEY = 'telegram_last_live_test';
+const REFERRERS_MARKER_KEY = 'telegram_last_top_referrers_month';
 
 async function getMarker(key) {
   const { data } = await supabase.from('app_settings').select('value').eq('key', key).maybeSingle();
@@ -250,6 +251,19 @@ export async function maybeCatchUpTelegramPosts() {
       }
     }
 
+    // Top referrers: due any time from 7:00 PM IST on the 1st of the month.
+    // Keyed by month, so a sleeping instance posts it late rather than never —
+    // this is a promised tier reward, missing it silently is not acceptable.
+    if (ist.getUTCDate() === 1 && hour >= 19) {
+      const monthKey = istDateKey(ist).slice(0, 7);
+      const lastPosted = await getMarker(REFERRERS_MARKER_KEY);
+      if (lastPosted !== monthKey) {
+        console.log('[Telegram catch-up] Monthly top referrers overdue — posting now.');
+        const result = await postTopReferrersToTelegram();
+        if (result?.ok || result?.skipped === 'no-referrers') await setMarker(REFERRERS_MARKER_KEY, monthKey);
+      }
+    }
+
     // Wednesday poll: due any time from 7:00 PM IST onward on a Wednesday, once per ISO week.
     const isWednesday = ist.getUTCDay() === 3;
     if (isWednesday && hour >= 19) {
@@ -298,6 +312,17 @@ export const initCronJobs = () => {
     if (r?.ok) await setMarker(LIVE_TEST_MARKER_KEY + ':live', istIsoWeekKey(istNow()));
   });
   console.log('[CronService] Scheduled: Live Test announcements to Telegram — Sunday 6:00 PM & 7:00 PM IST.');
+
+  // Monthly top-referrer shout-out — 1st of the month, 7:00 PM IST (= 13:30 UTC).
+  // "no-referrers" also marks the month: there was nothing to post, and retrying
+  // every request until someone refers would just hammer the database.
+  cron.schedule('30 13 1 * *', async () => {
+    const result = await postTopReferrersToTelegram();
+    if (result?.ok || result?.skipped === 'no-referrers') {
+      await setMarker(REFERRERS_MARKER_KEY, istDateKey(istNow()).slice(0, 7));
+    }
+  });
+  console.log('[CronService] Scheduled: top referrers to Telegram — 1st of month, 7:00 PM IST.');
 
   // Engagement poll to Telegram — Wednesday 7:00 PM IST (= 13:30 UTC). Rotates
   // through a pool of questions so the group stays active mid-week. Marks

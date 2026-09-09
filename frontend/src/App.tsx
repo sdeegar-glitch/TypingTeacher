@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import { useTheme } from './store/useThemeStore';
 import { trackVisit } from './lib/api';
 import { initAnalytics, trackPageview } from './lib/analytics';
+import { captureReferralFromUrl } from './lib/referral';
 
 const TypingTestPage = lazy(() => import('./pages/TypingTestPage'));
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
@@ -19,6 +20,7 @@ const DownloadPage = lazy(() => import('./pages/DownloadPage'));
 const TypingDrillsPage = lazy(() => import('./pages/TypingDrillsPage'));
 const FontConverterPage = lazy(() => import('./pages/FontConverterPage'));
 const LiveTestPage = lazy(() => import('./pages/LiveTestPage'));
+const ReferPage = lazy(() => import('./pages/ReferPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
@@ -326,6 +328,13 @@ const AppContent = () => {
     trackPageview(location.pathname + location.search);
   }, [location.pathname, location.search]);
 
+  // Invite links can land on any page, so `?ref=` is captured app-wide rather
+  // than on /refer alone. Stored until signup, which is usually several clicks
+  // and one typing test later.
+  useEffect(() => {
+    captureReferralFromUrl(location.search);
+  }, [location.search]);
+
   const isLearningInterface =
     location.pathname.startsWith('/embed') ||
     (location.pathname.startsWith('/learn/') && location.pathname !== '/learn' && location.pathname !== '/learn/') ||
@@ -427,6 +436,7 @@ const AppContent = () => {
           <Route path="/kruti-dev-to-unicode" element={<FontConverterPage />} />
           <Route path="/font-converter" element={<FontConverterPage />} />
           <Route path="/live-test" element={<LiveTestPage />} />
+          <Route path="/refer" element={<ReferPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />

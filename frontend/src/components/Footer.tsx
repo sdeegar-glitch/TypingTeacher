@@ -17,6 +17,7 @@ const PRODUCT_LINKS = [
   { label: 'Blog', href: '/blog/' },
   { label: 'Certificates', href: '/typing-certificates/' },
   { label: 'Windows App', href: '/download/' },
+  { label: 'Invite Friends', href: '/refer/' },
   { label: 'Site Map', href: '/all-pages/' },
 ];
 

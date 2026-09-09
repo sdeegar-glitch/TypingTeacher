@@ -1,6 +1,7 @@
 import express from 'express';
 import { supabase } from '../supabaseClient.js';
 import { requireUser } from '../middleware/requireUser.js';
+import { getReferralStats } from '../services/referrals.js';
 
 const router = express.Router();
 router.use(requireUser);
@@ -69,6 +70,18 @@ router.get('/certificates', async (req, res) => {
   const rows = Array.isArray(data) ? data : [];
   rows.sort((a, b) => new Date(b.issued_at || b.created_at || 0) - new Date(a.issued_at || a.created_at || 0));
   res.json(rows);
+});
+
+// GET /api/me/referral — this user's share code and who they have invited
+router.get('/referral', async (req, res) => {
+  try {
+    const stats = await getReferralStats(req.profile.id);
+    res.json(stats);
+  } catch (err) {
+    // Most likely cause is migration 002 not having been run yet. Fail soft so
+    // the dashboard renders without the referral card rather than erroring out.
+    res.status(503).json({ error: err.message || 'Referrals are not available right now.' });
+  }
 });
 
 export default router;

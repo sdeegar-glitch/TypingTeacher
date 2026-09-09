@@ -4,6 +4,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Keyboard, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { getStoredReferral, clearStoredReferral } from '../lib/referral';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
 
@@ -36,13 +37,15 @@ const AuthPage = () => {
       try {
         const res = await fetch(`${API_BASE}/auth/oauth-sync`, {
           method: 'POST',
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+          body: JSON.stringify({ ref: getStoredReferral() || undefined }),
         });
         if (!res.ok) {
           const j = await res.json().catch(() => ({}));
           throw new Error(j.error || 'Google sign-in could not be completed.');
         }
         localStorage.setItem('accessToken', accessToken);
+        clearStoredReferral();
         window.dispatchEvent(new Event('ftl-auth-change'));
         setSuccess('Signed in with Google! Redirecting…');
         const dest = sessionStorage.getItem('postAuthNext') || '/dashboard';
@@ -88,7 +91,9 @@ const AuthPage = () => {
     setLoading(true); setError(''); setSuccess('');
     try {
       const endpoint = isLogin ? '/auth/login' : '/auth/signup';
-      const body = isLogin ? { email, password } : { email, password, name, phone };
+      const body = isLogin
+        ? { email, password }
+        : { email, password, name, phone, ref: getStoredReferral() || undefined };
       const res = await fetch(
         `${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}${endpoint}`,
         { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
@@ -99,6 +104,9 @@ const AuthPage = () => {
         localStorage.setItem('accessToken', data.accessToken);
         window.dispatchEvent(new Event('ftl-auth-change'));
       }
+      // Only on signup: the code has now been redeemed. Logging into an existing
+      // account leaves it stored, since that account was never eligible anyway.
+      if (!isLogin) clearStoredReferral();
       setSuccess(isLogin ? 'Login successful! Redirecting…' : 'Account created! Welcome aboard!');
       setLoading(false);
       setTimeout(() => navigate(nextPath), 900);

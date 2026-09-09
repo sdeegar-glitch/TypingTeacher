@@ -20,6 +20,8 @@
 // Setup: create a bot with @BotFather, add it to the group, and make it an
 // admin (bots can only post to groups/channels where they're an admin).
 
+import { getTopReferrers } from './referrals.js';
+
 const SITE = 'https://fasttypinglab.com';
 
 const LANG_INTRO = {
@@ -219,6 +221,40 @@ export async function postLiveTestAnnouncement(phase = 'live') {
   if (result.ok) {
     console.log(`[Telegram] Posted Live Test announcement (${phase}).`);
     await sendWhatsAppCopyToAdmin(toWhatsAppText(text, url), `Live Test (${phase})`);
+  }
+  return result;
+}
+
+/**
+ * Monthly shout-out for the people bringing others in. This is the Advocate-tier
+ * perk, so it has to actually run — a promised reward that never appears is
+ * worse than promising nothing.
+ */
+export async function postTopReferrersToTelegram() {
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) return { skipped: 'not-configured' };
+
+  const top = await getTopReferrers(5);
+  // Nothing to celebrate yet — stay quiet rather than post an empty leaderboard.
+  if (!top.length) return { skipped: 'no-referrers' };
+
+  const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+  const lines = top
+    .map((r, i) => `${medals[i] || '•'} <b>${escapeHtml(r.name)}</b> — ${r.count} friend${r.count === 1 ? '' : 's'}`)
+    .join('\n');
+
+  const url = `${SITE}/refer/`;
+  const text =
+    `🎉 <b>This month's top inviters</b>\n\n${lines}\n\n` +
+    `Thank you for growing this community 🙏\n` +
+    `Want your name here next month? Grab your invite link below.\n\n#FastTypingLab`;
+
+  const result = await sendMessage({
+    text,
+    replyMarkup: { inline_keyboard: [[{ text: '🎁 Get your invite link', url }]] },
+  });
+  if (result.ok) {
+    console.log(`[Telegram] Posted top referrers (${top.length}).`);
+    await sendWhatsAppCopyToAdmin(toWhatsAppText(text, url), 'Top referrers');
   }
   return result;
 }

@@ -3,6 +3,7 @@ import rateLimit from 'express-rate-limit';
 import { supabase } from '../supabaseClient.js';
 import { logActivity } from '../activityLog.js';
 import { verifyTotp, createPendingLogin, peekPendingLogin, consumePendingLogin } from '../twofa.js';
+import { attachReferral } from '../services/referrals.js';
 
 const router = express.Router();
 
@@ -41,7 +42,7 @@ async function isAccountLockedOut(email) {
 }
 
 router.post('/signup', async (req, res) => {
-  const { email, password, name, phone } = req.body;
+  const { email, password, name, phone, ref } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
 
   // Normalise the optional phone (digits/+/spaces only, keep it lightweight).
@@ -65,6 +66,10 @@ router.post('/signup', async (req, res) => {
     if (insErr) {
       await supabase.from('users').insert([baseRow]);
     }
+    // Credit the inviter, if this signup came from a referral link. Deliberately
+    // awaited but never allowed to fail the signup — attachReferral swallows its
+    // own errors and reports a reason instead.
+    if (ref) await attachReferral(data.user.id, ref);
   }
 
   // Sign the new user in immediately so signup logs them in (createUser does not
@@ -102,6 +107,9 @@ router.post('/oauth-sync', async (req, res) => {
     // Try to seed the Google photo; fall back if the avatar_url column isn't migrated.
     const { error: insErr } = await supabase.from('users').insert([{ id: u.id, email: u.email, name, avatar_url: avatar }]);
     if (insErr) await supabase.from('users').insert([{ id: u.id, email: u.email, name }]);
+    // Only on first sync — an existing account signing in again must not be able
+    // to re-attribute itself to a new referrer.
+    if (req.body?.ref) await attachReferral(u.id, req.body.ref);
     logActivity({ action: 'signup_google', entity: 'auth', actor_email: u.email, ip: req.ip, status: 'success' });
   }
 
