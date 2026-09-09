@@ -62,7 +62,12 @@ export function getLiveTestSchedule(now: number = Date.now()): LiveTestSchedule 
   const evIst = istNow(start);
   const weekKey = isoWeekKey(evIst);
 
-  return { start: new Date(start), end: new Date(end), isLive, msUntilStart: start - now, weekKey };
+  // Clamped: once the event has begun there is no time remaining until it
+  // starts. Callers render this straight into a countdown, and a negative value
+  // would read as a countdown running backwards during the live hour.
+  const msUntilStart = Math.max(0, start - now);
+
+  return { start: new Date(start), end: new Date(end), isLive, msUntilStart, weekKey };
 }
 
 /** ISO-8601 week key (YYYY-Www) for an already IST-shifted date. */

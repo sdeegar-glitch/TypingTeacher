@@ -97,6 +97,27 @@ const REVERSE_PAIRS: Array<[string, string]> = (() => {
   return [...map.entries()].sort((a, b) => b[0].length - a[0].length);
 })();
 
+/**
+ * Reverse pairs bucketed by first character, each bucket longest-first.
+ *
+ * This exists so decoding can be a single left-to-right pass. Replacing pair by
+ * pair over the whole string instead lets one rule rewrite an earlier rule's
+ * output: "\" decodes to "?", which a later rule then decoded again into "घ्",
+ * silently corrupting every question mark in the text.
+ */
+const REVERSE_BY_FIRST_CHAR: Map<string, Array<[string, string]>> = (() => {
+  const buckets = new Map<string, Array<[string, string]>>();
+  for (const pair of REVERSE_PAIRS) {
+    const first = pair[0][0];
+    const bucket = buckets.get(first);
+    if (bucket) bucket.push(pair);
+    else buckets.set(first, [pair]);
+  }
+  // REVERSE_PAIRS is already longest-first, so each bucket inherits that order
+  // and the first match found at a position is the longest one.
+  return buckets;
+})();
+
 const CONSONANT = '\\u0915-\\u0939\\u0958-\\u095F';
 const MATRAS = '\\u093E-\\u094C\\u0902\\u0903\\u0901\\u0945';
 // f<cluster>  ->  <cluster>ि   (undo the visual-order i-matra)
@@ -114,13 +135,33 @@ const RE_REPH = new RegExp(`([${CONSONANT}](?:\\u094D[${CONSONANT}])*[${MATRAS}]
  */
 export function krutiDevToUnicode(krutiText: string): string {
   if (!krutiText) return krutiText;
-  let s = krutiText;
+  // Single pass: once a run of input has been decoded, the emitted Unicode is
+  // never re-examined, so no rule can rewrite another rule's output.
+  let out = '';
+  for (let i = 0; i < krutiText.length; ) {
+    const bucket = REVERSE_BY_FIRST_CHAR.get(krutiText[i]);
+    let matched = false;
 
-  for (const [key, uni] of REVERSE_PAIRS) {
-    if (!key) continue;
-    s = s.split(key).join(uni);
+    if (bucket) {
+      for (const [key, uni] of bucket) {
+        if (krutiText.startsWith(key, i)) {
+          out += uni;
+          i += key.length;
+          matched = true;
+          break;
+        }
+      }
+    }
+
+    // Not a Kruti Dev key — pass it through untouched. This is how the i-matra
+    // 'f' and reph 'Z' markers survive to be reordered by the regexes below.
+    if (!matched) {
+      out += krutiText[i];
+      i++;
+    }
   }
 
+  let s = out;
   s = s.replace(RE_IMATRA, '$1ि');
   s = s.replace(RE_REPH, 'र्$1');
 

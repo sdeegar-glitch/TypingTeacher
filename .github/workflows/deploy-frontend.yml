@@ -38,6 +38,13 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      # Gate the deploy on the test suite. This is the whole point of having
+      # tests: a red suite must stop the broken build from reaching production,
+      # not merely report itself somewhere nobody is looking.
+      - name: Run tests
+        working-directory: frontend
+        run: npm run test
+
       - name: Build
         working-directory: frontend
         run: npm run build

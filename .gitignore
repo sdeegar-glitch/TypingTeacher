@@ -47,3 +47,10 @@ WEEK1_EXECUTION_PLAN.md
 deep-research-report.md
 pending.md
 FastTypingLab Master Plan.pdf
+
+# Test artifacts (Playwright traces, screenshots, HTML reports, coverage)
+/frontend/test-results/
+/frontend/playwright-report/
+/frontend/blob-report/
+/frontend/playwright/.cache/
+/frontend/coverage/

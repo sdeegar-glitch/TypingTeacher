@@ -72,6 +72,8 @@ export default function StreakCard({ compact = false }: { compact?: boolean }) {
           </span>
           <button
             onClick={() => setEditingGoal(v => !v)}
+            aria-expanded={editingGoal}
+            aria-label={`Change daily goal (currently ${stats.todayCount} of ${goal} tests done)`}
             className="text-[11px] font-bold text-brand-primary hover:underline"
           >
             {stats.todayCount}/{goal} tests
@@ -106,6 +108,8 @@ export default function StreakCard({ compact = false }: { compact?: boolean }) {
               <button
                 key={n}
                 onClick={() => chooseGoal(n)}
+                aria-label={`Set daily goal to ${n} test${n === 1 ? '' : 's'}`}
+                aria-pressed={goal === n}
                 className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all ${
                   goal === n
                     ? 'bg-brand-primary text-white border-transparent'

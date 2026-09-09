@@ -3,6 +3,12 @@ import { createRoot } from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async'
 import './index.css'
 import App from './App.tsx'
+import { captureReferralFromUrl } from './lib/referral'
+
+// Capture ?ref= before React mounts. The router also does this on every
+// navigation, but doing it here first means an invite still counts when the
+// visitor taps through on a slow connection before hydration finishes.
+captureReferralFromUrl(window.location.search);
 
 // Apply stored theme immediately to prevent flash of wrong theme
 ;(function() {

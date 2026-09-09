@@ -1,0 +1,79 @@
+name: Tests
+
+# Unit, integration and end-to-end tests. Runs on every push to main and on
+# every pull request, so a regression is caught before it reaches
+# fasttypinglab.com rather than after traffic drops.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/test.yml'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/test.yml'
+  workflow_dispatch: {}
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Fast gate: pure logic + component integration in jsdom. Seconds, not minutes.
+  unit:
+    name: Unit & integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run Vitest
+        working-directory: frontend
+        run: npm run test
+
+  # Slower gate: a real browser against the real production build.
+  e2e:
+    name: End-to-end
+    runs-on: ubuntu-latest
+    # No point spinning up browsers if the unit suite is already red.
+    needs: unit
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      # --with-deps pulls the system libraries headless Chromium needs on the
+      # runner; without it the browser fails to launch on ubuntu-latest.
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright
+        working-directory: frontend
+        run: npm run test:e2e
+
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 7
