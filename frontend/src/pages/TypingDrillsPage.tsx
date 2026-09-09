@@ -163,7 +163,17 @@ function DrillCore({ text, duration, onRestart, onNewText }: {
         </span>
       </div>
       <div className="bg-brand-surface border border-brand-border rounded-2xl px-5 sm:px-8 py-6 cursor-text">
-        <div className="font-mono text-lg sm:text-xl tracking-wide leading-relaxed break-words overflow-y-auto" style={{ maxHeight: 200 }}>
+        {/* tabIndex/role: the passage can overflow its 200px box, and a
+            scrollable region with no keyboard access strands anyone not using a
+            mouse — they cannot reach the rest of the text they are meant to
+            type. Focusable + labelled makes it scrollable with the arrow keys. */}
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label="Text to type"
+          className="font-mono text-lg sm:text-xl tracking-wide leading-relaxed break-words overflow-y-auto"
+          style={{ maxHeight: 200 }}
+        >
           {text.split('').map((char, index) => (
             <CharSpan
               key={index}
@@ -264,7 +274,7 @@ export default function TypingDrillsPage() {
                   : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/30 hover:text-brand-text'
               }`}>
               <span className="flex items-center gap-1.5 font-bold text-sm"><m.icon className="w-3.5 h-3.5" /> {m.label}</span>
-              <span className="text-[10px] leading-tight opacity-80">{m.desc}</span>
+              <span className="text-[10px] leading-tight">{m.desc}</span>
             </button>
           ))}
         </div>

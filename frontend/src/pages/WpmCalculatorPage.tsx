@@ -91,7 +91,7 @@ export default function WpmCalculatorPage() {
               <div className="text-[10px] font-bold uppercase tracking-wider text-brand-muted mt-1">Gross WPM</div>
             </div>
             <div className="rounded-2xl py-4 text-center bg-brand-surface-2 border border-brand-border">
-              <div className="text-3xl font-black font-mono leading-none text-brand-accent">{accuracy}%</div>
+              <div className="text-3xl font-black font-mono leading-none text-brand-primary">{accuracy}%</div>
               <div className="text-[10px] font-bold uppercase tracking-wider text-brand-muted mt-1">Accuracy</div>
             </div>
           </div>

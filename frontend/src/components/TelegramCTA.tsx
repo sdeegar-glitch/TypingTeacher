@@ -23,7 +23,7 @@ export default function TelegramCTA({ variant = 'card', message }: TelegramCTAPr
     return (
       <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={onClick}
         className="inline-flex items-center gap-2 font-semibold text-white px-4 py-2 rounded-lg text-sm transition-all active:scale-95 hover:opacity-90"
-        style={{ background: '#229ED9', boxShadow: '0 4px 14px rgba(34,158,217,.30)' }}>
+        style={{ background: '#1B7EAE', boxShadow: '0 4px 14px rgba(34,158,217,.30)' }}>
         <Send className="w-4 h-4" /> Join our Telegram
       </a>
     );
@@ -34,7 +34,7 @@ export default function TelegramCTA({ variant = 'card', message }: TelegramCTAPr
       className="flex items-center gap-3 rounded-2xl p-4 sm:p-5 border transition-all hover:shadow-lg active:scale-[0.99] group"
       style={{ background: 'linear-gradient(135deg, rgba(34,158,217,0.10), rgba(34,158,217,0.04))', borderColor: 'rgba(34,158,217,0.30)' }}>
       <div className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white shadow-md"
-        style={{ background: '#229ED9' }}>
+        style={{ background: '#1B7EAE' }}>
         <Send className="w-5 h-5" />
       </div>
       <div className="flex-1">
@@ -44,7 +44,7 @@ export default function TelegramCTA({ variant = 'card', message }: TelegramCTAPr
         </p>
       </div>
       <span className="shrink-0 text-white font-bold px-4 py-2 rounded-xl text-sm transition-all group-hover:opacity-90"
-        style={{ background: '#229ED9' }}>
+        style={{ background: '#1B7EAE' }}>
         Join
       </span>
     </a>

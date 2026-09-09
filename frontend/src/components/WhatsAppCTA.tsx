@@ -23,7 +23,7 @@ export default function WhatsAppCTA({ variant = 'card', message }: WhatsAppCTAPr
     return (
       <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={onClick}
         className="inline-flex items-center gap-2 font-semibold text-white px-4 py-2 rounded-lg text-sm transition-all active:scale-95 hover:opacity-90"
-        style={{ background: '#25D366', boxShadow: '0 4px 14px rgba(37,211,102,.30)' }}>
+        style={{ background: '#188842', boxShadow: '0 4px 14px rgba(37,211,102,.30)' }}>
         <MessageCircle className="w-4 h-4" /> Follow on WhatsApp
       </a>
     );
@@ -34,7 +34,7 @@ export default function WhatsAppCTA({ variant = 'card', message }: WhatsAppCTAPr
       className="flex items-center gap-3 rounded-2xl p-4 sm:p-5 border transition-all hover:shadow-lg active:scale-[0.99] group"
       style={{ background: 'linear-gradient(135deg, rgba(37,211,102,0.10), rgba(37,211,102,0.04))', borderColor: 'rgba(37,211,102,0.30)' }}>
       <div className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white shadow-md"
-        style={{ background: '#25D366' }}>
+        style={{ background: '#188842' }}>
         <MessageCircle className="w-5 h-5" />
       </div>
       <div className="flex-1">
@@ -44,7 +44,7 @@ export default function WhatsAppCTA({ variant = 'card', message }: WhatsAppCTAPr
         </p>
       </div>
       <span className="shrink-0 text-white font-bold px-4 py-2 rounded-xl text-sm transition-all group-hover:opacity-90"
-        style={{ background: '#25D366' }}>
+        style={{ background: '#188842' }}>
         Follow
       </span>
     </a>

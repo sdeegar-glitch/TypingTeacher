@@ -24,10 +24,10 @@ const HOW_STEPS = [
 ];
 
 const SAMPLE_SCORES = [
-  { wpm: 30, label: 'SSC CHSL Minimum', color: 'text-amber-500', bg: 'bg-amber-500/10 border-amber-500/20' },
-  { wpm: 40, label: 'Good — Most Exams', color: 'text-emerald-500', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+  { wpm: 30, label: 'SSC CHSL Minimum', color: 'text-amber-700', bg: 'bg-amber-500/10 border-amber-500/20' },
+  { wpm: 40, label: 'Good — Most Exams', color: 'text-emerald-700', bg: 'bg-emerald-500/10 border-emerald-500/20' },
   { wpm: 60, label: 'Professional Typist', color: 'text-brand-primary', bg: 'bg-brand-primary/10 border-brand-primary/20' },
-  { wpm: 80, label: 'Expert Level', color: 'text-purple-500', bg: 'bg-purple-500/10 border-purple-500/20' },
+  { wpm: 80, label: 'Expert Level', color: 'text-purple-700', bg: 'bg-purple-500/10 border-purple-500/20' },
 ];
 
 export default function TypingCertificatesPage() {

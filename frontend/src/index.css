@@ -46,7 +46,13 @@
 
     --brand-text:       #1A2C31;
     --brand-text-muted: #3E5A62;
-    --brand-muted:      #7B9BA3;
+    /* Was #7B9BA3, which failed WCAG AA everywhere it was used (2.46–2.97:1
+       against the three surfaces, where 4.5:1 is required). This is the site's
+       secondary text colour, so that single value put most of the body copy
+       below the legibility threshold. Darkened to the nearest value that clears
+       4.5:1 on every background it lands on, tinted result cards included
+       (white 5.88, #F6F3EE 5.31, #EDE9E3 4.86, #E2E2DE 4.52). */
+    --brand-muted:      #53686E;
     --brand-border:     #D9D4CE;
 
     /* glow colors for effects */
@@ -69,7 +75,9 @@
 
     --brand-text:       #EBF5F7;
     --brand-text-muted: #6BAEBB;
-    --brand-muted:      #3E6470;
+    /* Same failure in dark mode (2.31–2.83:1). Lightened rather than darkened:
+       #0B1719 5.53, #111F24 5.11, #172A30 4.51. */
+    --brand-muted:      #77929A;
     --brand-border:     #1C3540;
 
     --glow-primary:     rgba(175, 224, 231, 0.12);
@@ -89,7 +97,9 @@
       --brand-surface-2:  #172A30;
       --brand-text:       #EBF5F7;
       --brand-text-muted: #6BAEBB;
-      --brand-muted:      #3E6470;
+      /* Must match the .dark value above — this block serves visitors on system
+         dark mode who have never picked a theme explicitly. */
+      --brand-muted:      #77929A;
       --brand-border:     #1C3540;
       --glow-primary:     rgba(175, 224, 231, 0.12);
       --glow-accent:      rgba(94, 200, 212, 0.18);

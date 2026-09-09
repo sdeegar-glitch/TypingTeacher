@@ -14,7 +14,7 @@ const TOOL_CARDS = [
     tag: 'New',
     color: 'text-brand-accent',
     bg: 'bg-brand-accent/10 border-brand-accent/20',
-    tagColor: 'bg-brand-accent/10 text-brand-accent',
+    tagColor: 'bg-brand-accent/10 text-brand-primary',
   },
   {
     icon: Headphones,
@@ -34,7 +34,7 @@ const TOOL_CARDS = [
     tag: 'Free',
     color: 'text-brand-cta',
     bg: 'bg-brand-cta/10 border-brand-cta/20',
-    tagColor: 'bg-brand-cta/10 text-brand-cta',
+    tagColor: 'bg-brand-cta/10 text-brand-secondary',
   },
   {
     icon: Calculator,
@@ -64,7 +64,7 @@ const TOOL_CARDS = [
     tag: 'Gaming',
     color: 'text-rose-500',
     bg: 'bg-rose-500/10 border-rose-500/20',
-    tagColor: 'bg-rose-500/10 text-rose-500',
+    tagColor: 'bg-rose-500/10 text-rose-700',
   },
   {
     icon: Space,
@@ -74,7 +74,7 @@ const TOOL_CARDS = [
     tag: 'Fun',
     color: 'text-brand-accent',
     bg: 'bg-brand-accent/10 border-brand-accent/20',
-    tagColor: 'bg-brand-accent/10 text-brand-accent',
+    tagColor: 'bg-brand-accent/10 text-brand-primary',
   },
   {
     icon: Zap,
@@ -94,7 +94,7 @@ const TOOL_CARDS = [
     tag: 'New',
     color: 'text-teal-500',
     bg: 'bg-teal-500/10 border-teal-500/20',
-    tagColor: 'bg-teal-500/10 text-teal-500',
+    tagColor: 'bg-teal-500/10 text-teal-700',
   },
   {
     icon: Users,
@@ -104,7 +104,7 @@ const TOOL_CARDS = [
     tag: 'Live',
     color: 'text-amber-500',
     bg: 'bg-amber-500/10 border-amber-500/20',
-    tagColor: 'bg-amber-500/10 text-amber-500',
+    tagColor: 'bg-amber-500/10 text-amber-700',
   },
   {
     icon: CaseSensitive,
@@ -114,7 +114,7 @@ const TOOL_CARDS = [
     tag: 'New',
     color: 'text-violet-500',
     bg: 'bg-violet-500/10 border-violet-500/20',
-    tagColor: 'bg-violet-500/10 text-violet-500',
+    tagColor: 'bg-violet-500/10 text-violet-700',
   },
   {
     icon: Code,
@@ -124,7 +124,7 @@ const TOOL_CARDS = [
     tag: 'Dev',
     color: 'text-emerald-500',
     bg: 'bg-emerald-500/10 border-emerald-500/20',
-    tagColor: 'bg-emerald-500/10 text-emerald-500',
+    tagColor: 'bg-emerald-500/10 text-emerald-700',
   },
   {
     icon: Languages,
@@ -134,7 +134,7 @@ const TOOL_CARDS = [
     tag: 'Hindi',
     color: 'text-orange-500',
     bg: 'bg-orange-500/10 border-orange-500/20',
-    tagColor: 'bg-orange-500/10 text-orange-500',
+    tagColor: 'bg-orange-500/10 text-orange-700',
   },
   {
     icon: Hash,
@@ -144,7 +144,7 @@ const TOOL_CARDS = [
     tag: 'New',
     color: 'text-amber-500',
     bg: 'bg-amber-500/10 border-amber-500/20',
-    tagColor: 'bg-amber-500/10 text-amber-500',
+    tagColor: 'bg-amber-500/10 text-amber-700',
   },
 ];
 
@@ -273,7 +273,7 @@ export default function ToolsPage() {
               { title: 'Typing Trainer AI', desc: 'AI-generated drills targeting your weakest keys and common error patterns.' },
               { title: 'Typing History Export', desc: 'Export your full typing history as CSV or PDF for analysis.' },
             ].map(t => (
-              <div key={t.title} className="p-5 bg-brand-surface border border-dashed border-brand-border rounded-2xl opacity-60">
+              <div key={t.title} className="p-5 bg-brand-surface border border-dashed border-brand-border rounded-2xl">
                 <h3 className="font-bold text-brand-text mb-1">{t.title}</h3>
                 <p className="text-brand-text-muted text-sm">{t.desc}</p>
                 <span className="mt-2 inline-block text-[10px] bg-brand-surface-2 border border-brand-border px-2 py-0.5 rounded-full text-brand-muted font-semibold uppercase">Coming Soon</span>
