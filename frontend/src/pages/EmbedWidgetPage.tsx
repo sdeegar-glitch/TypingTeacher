@@ -144,7 +144,7 @@ export default function EmbedWidgetPage() {
           <p className="text-brand-text-muted text-sm mb-3">
             Add a free typing speed test to your blog, school site or resource page. Just paste this code where you want it to appear:
           </p>
-          <pre className="bg-brand-surface-2 border border-brand-border rounded-xl p-3 text-[11px] overflow-x-auto whitespace-pre-wrap break-all">{EMBED_CODE}</pre>
+          <pre tabIndex={0} role="region" aria-label="Embed code" className="bg-brand-surface-2 border border-brand-border rounded-xl p-3 text-[11px] overflow-x-auto whitespace-pre-wrap break-all">{EMBED_CODE}</pre>
           <button onClick={copyCode} className="mt-3 text-xs font-bold text-white px-4 py-2 rounded-lg" style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)' }}>
             {copied ? 'Copied!' : 'Copy embed code'}
           </button>

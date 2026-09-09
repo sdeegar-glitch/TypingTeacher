@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, CheckCircle } from 'lucide-react';
+import ScrollableRegion from '../components/ScrollableRegion';
 
 // Full QWERTY keyboard layout
 const ROWS = [
@@ -164,7 +165,7 @@ export default function KeyboardTesterPage() {
         </div>
 
         {/* Keyboard */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 sm:p-6 overflow-x-auto">
+        <ScrollableRegion label="On-screen keyboard" className="bg-brand-surface border border-brand-border rounded-2xl p-4 sm:p-6">
           <div className="flex flex-col gap-2 min-w-[640px]">
             {ROWS.map((row, ri) => (
               <div key={ri} className="flex gap-2">
@@ -185,7 +186,7 @@ export default function KeyboardTesterPage() {
               </div>
             ))}
           </div>
-        </div>
+        </ScrollableRegion>
 
         {/* Legend */}
         <div className="flex items-center gap-6 mt-4 text-xs text-brand-muted">

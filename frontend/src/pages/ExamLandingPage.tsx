@@ -6,6 +6,7 @@ import Seo from '../components/Seo';
 import TelegramCTA from '../components/TelegramCTA';
 import WhatsAppCTA from '../components/WhatsAppCTA';
 import { EXAM_LANDINGS } from '../data/examLandingData';
+import ScrollableRegion from '../components/ScrollableRegion';
 
 export default function ExamLandingPage({ slug }: { slug: string }) {
   const exam = EXAM_LANDINGS[slug];
@@ -56,7 +57,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
         <section className="mb-10">
           <h2 className="text-xl font-black text-brand-text mb-4 flex items-center gap-2"><Target className="w-5 h-5 text-brand-primary" /> Speed Requirements</h2>
           <div className="bg-brand-surface border border-brand-border rounded-2xl overflow-hidden">
-            <div className="overflow-x-auto">
+            <ScrollableRegion label="Speed requirements table">
               <table className="w-full text-sm">
                 <thead className="bg-brand-surface-2">
                   <tr>
@@ -77,7 +78,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollableRegion>
           </div>
         </section>
 

@@ -241,7 +241,7 @@ export default function CodingTypingPage() {
           </div>
 
           {/* Code display */}
-          <pre className="px-6 py-5 font-mono text-sm leading-7 overflow-x-auto select-none whitespace-pre">
+          <pre tabIndex={0} role="region" aria-label="Code to type" className="px-6 py-5 font-mono text-sm leading-7 overflow-x-auto select-none whitespace-pre">
             {renderCode()}
           </pre>
 

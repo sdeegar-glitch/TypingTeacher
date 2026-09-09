@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calculator, Zap, HelpCircle } from 'lucide-react';
 import Seo from '../components/Seo';
+import ScrollableRegion from '../components/ScrollableRegion';
 
 const FAQS = [
   { q: 'How is WPM calculated?', a: 'The standard formula counts every 5 characters as one word. Gross WPM = (characters typed ÷ 5) ÷ minutes. Net WPM subtracts your errors: Net WPM = ((characters ÷ 5) − errors) ÷ minutes.' },
@@ -117,7 +118,7 @@ export default function WpmCalculatorPage() {
         {/* Benchmarks */}
         <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
           <h2 className="font-black text-lg mb-3">What is a good typing speed?</h2>
-          <div className="overflow-x-auto">
+          <ScrollableRegion label="WPM reference table">
             <table className="w-full text-sm">
               <tbody>
                 {BENCHMARKS.map(([label, val], i) => (
@@ -128,7 +129,7 @@ export default function WpmCalculatorPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollableRegion>
         </div>
 
         {/* FAQ */}

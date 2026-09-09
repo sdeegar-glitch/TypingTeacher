@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Seo from '../components/Seo';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, BookOpen, Languages, Keyboard } from 'lucide-react';
+import ScrollableRegion from '../components/ScrollableRegion';
 
 const KRUTI_MAP = [
   { english: 'K', kruti: 'd', devanagari: 'क' },
@@ -133,7 +134,7 @@ export default function KrutiDevPage() {
             <Keyboard className="w-5 h-5 text-brand-primary" />
             <h2 className="font-bold text-brand-text">Kruti Dev 010 Key Mapping (Common Keys)</h2>
           </div>
-          <div className="overflow-x-auto">
+          <ScrollableRegion label="Kruti Dev key mapping table">
             <table className="w-full text-sm">
               <thead className="bg-brand-surface-2">
                 <tr>
@@ -154,7 +155,7 @@ export default function KrutiDevPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollableRegion>
         </div>
 
         {/* Exams table */}
@@ -163,7 +164,7 @@ export default function KrutiDevPage() {
             <BookOpen className="w-5 h-5 text-brand-secondary" />
             <h2 className="font-bold text-brand-text">Exams Using Kruti Dev / Hindi Typing</h2>
           </div>
-          <div className="overflow-x-auto">
+          <ScrollableRegion label="Kruti Dev shortcut reference table">
             <table className="w-full text-sm">
               <thead className="bg-brand-surface-2">
                 <tr>
@@ -182,7 +183,7 @@ export default function KrutiDevPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollableRegion>
         </div>
 
         {/* CTA */}

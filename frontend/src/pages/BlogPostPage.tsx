@@ -5,6 +5,7 @@ import { BLOG_POSTS } from '../data/blogPosts';
 import Seo from '../components/Seo';
 import TelegramCTA from '../components/TelegramCTA';
 import WhatsAppCTA from '../components/WhatsAppCTA';
+import ScrollableRegion from '../components/ScrollableRegion';
 
 // Inline formatting: links, bold, italics (links first so bold doesn't eat them)
 function inline(s: string): string {
@@ -41,7 +42,7 @@ function renderMarkdown(md: string): React.ReactNode[] {
       while (i < lines.length && lines[i].startsWith('|')) { tableLines.push(lines[i]); i++; }
       const rows = tableLines.filter(r => !r.match(/^\|[-| ]+\|$/));
       nodes.push(
-        <div key={`t${i}`} className="overflow-x-auto my-4">
+        <ScrollableRegion key={`t${i}`} label="Table" className="my-4">
           <table className="w-full text-sm border-collapse">
             <tbody>
               {rows.map((r, ri) => {
@@ -59,7 +60,7 @@ function renderMarkdown(md: string): React.ReactNode[] {
               })}
             </tbody>
           </table>
-        </div>
+        </ScrollableRegion>
       );
       continue;
     }

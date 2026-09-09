@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight, Languages, Trophy, Target, Zap, Building2, Scale, Shield, GraduationCap, Star, Award, Flame } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
+import ScrollableRegion from '../components/ScrollableRegion';
 
 export default function LearnHindiTypingPage() {
   useEffect(() => {
@@ -142,7 +143,7 @@ export default function LearnHindiTypingPage() {
           <div className="px-5 py-4 border-b border-brand-border">
             <h2 className="font-bold text-brand-text">Exams This Course Prepares You For</h2>
           </div>
-          <div className="overflow-x-auto">
+          <ScrollableRegion label="Hindi keyboard layout comparison table">
             <table className="w-full text-sm">
               <thead className="bg-brand-surface-2">
                 <tr>
@@ -161,7 +162,7 @@ export default function LearnHindiTypingPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollableRegion>
         </div>
 
         {/* ── CTA ── */}

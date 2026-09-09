@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart3, Calculator, Zap, HelpCircle } from 'lucide-react';
 import Seo from '../components/Seo';
+import ScrollableRegion from '../components/ScrollableRegion';
 
 const FAQS = [
   { q: 'What is the average typing speed in India?', a: 'The average typing speed in India is around 35–40 words per minute (WPM), close to the global average of about 40 WPM. Students and beginners often type 25–35 WPM, while government-exam typists usually train to 30–40 WPM in English and 25–30 WPM in Hindi.' },
@@ -47,7 +48,7 @@ const ExamTable = [
 
 function Table({ head, rows }: { head: string[]; rows: string[][] }) {
   return (
-    <div className="overflow-x-auto">
+    <ScrollableRegion label="Typing statistics table">
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr className="text-left text-brand-muted border-b border-brand-border">
@@ -64,7 +65,7 @@ function Table({ head, rows }: { head: string[]; rows: string[][] }) {
           ))}
         </tbody>
       </table>
-    </div>
+    </ScrollableRegion>
   );
 }
 

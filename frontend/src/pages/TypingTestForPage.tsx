@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight, Zap, Target, Clock, BookOpen, GraduationCap, CheckCircle, HelpCircle } from 'lucide-react';
 import Seo from '../components/Seo';
+import ScrollableRegion from '../components/ScrollableRegion';
 
 interface Profession {
   title: string;          // used in breadcrumb + card labels
@@ -228,7 +229,7 @@ export default function TypingTestForPage() {
         {/* Recommended typing speed by profession — benchmark table + cross-links */}
         <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
           <h2 className="font-bold text-brand-text mb-4">Recommended typing speed by profession</h2>
-          <div className="overflow-x-auto">
+          <ScrollableRegion label="Comparison table">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-brand-muted border-b border-brand-border">
@@ -250,7 +251,7 @@ export default function TypingTestForPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollableRegion>
         </div>
 
         {/* How to improve */}

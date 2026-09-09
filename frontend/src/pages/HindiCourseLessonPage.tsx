@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, RotateCcw, Star, Zap, Flame } from 'lucide-r
 import * as UnicodeCourse from '../data/hindiCourseData';
 import * as KrutiDevCourse from '../data/krutiDevCourseData';
 import { STAGES } from '../data/hindiCourseData';
+import ScrollableRegion from '../components/ScrollableRegion';
 
 const DEVA_FONT = "'Noto Sans Devanagari', sans-serif";
 
@@ -20,7 +21,7 @@ function VirtualKeyboard({ pressedKey, activeMap, label }: { pressedKey: string;
   return (
     <div className="w-full max-w-2xl select-none">
       <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2 px-1">{label}</p>
-      <div className="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
+      <ScrollableRegion label="Lesson keys" className="-mx-3 px-3 sm:mx-0 sm:px-0">
         <div className="flex flex-col gap-1.5 items-center w-max mx-auto">
           {KEYBOARD_ROWS.map((row, ri) => (
             <div key={ri} className="flex gap-1.5" style={{ paddingLeft: `${ri * 14}px` }}>
@@ -46,7 +47,7 @@ function VirtualKeyboard({ pressedKey, activeMap, label }: { pressedKey: string;
             </div>
           ))}
         </div>
-      </div>
+      </ScrollableRegion>
     </div>
   );
 }
