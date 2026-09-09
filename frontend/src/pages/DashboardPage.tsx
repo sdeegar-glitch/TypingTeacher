@@ -6,6 +6,8 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'rec
 import { Zap, Target, Flame, Trophy, Star, TrendingUp, Award, Brain, ChevronRight, Lock, Sparkles } from 'lucide-react';
 
 import { API_URL } from '../lib/api';
+import StreakCard from '../components/StreakCard';
+import { computePracticeStats } from '../lib/streaks';
 
 // XP needed per level
 const xpForLevel = (level: number) => level * 200;
@@ -36,6 +38,8 @@ function loadLocalStats() {
 
 function computeStats(sessions: any[]) {
   if (!sessions.length) return { bestWpm: 0, avgWpm: 0, avgAcc: 100, total: 0, xp: 0, level: 1, streak: 0, unlockedKeys: [] as string[] };
+  // Real streak, derived from practice dates (see lib/streaks).
+  const practice = computePracticeStats(sessions);
   const bestWpm = Math.max(...sessions.map(s => s.netWpm || 0));
   const avgWpm = Math.round(sessions.reduce((a, s) => a + (s.netWpm || 0), 0) / sessions.length);
   const avgAcc = Math.round(sessions.reduce((a, s) => a + (s.accuracy || 0), 0) / sessions.length);
@@ -54,6 +58,11 @@ function computeStats(sessions: any[]) {
   if (total >= 10) unlockedKeys.push('tests_10');
   if (total >= 50) unlockedKeys.push('tests_50');
   if (sessions.some(s => s.netWpm >= 80 && s.accuracy >= 90)) unlockedKeys.push('speed_demon');
+  // Streak achievements were defined but had no unlock condition — now driven
+  // by the real practice streak, and by the best streak ever reached so a
+  // hard-won badge isn't lost the moment a streak breaks.
+  if (practice.longestStreak >= 3) unlockedKeys.push('streak_3');
+  if (practice.longestStreak >= 7) unlockedKeys.push('streak_7');
 
   const achievementXp = unlockedKeys.reduce((a, k) => {
     const ach = ACHIEVEMENTS.find(x => x.key === k);
@@ -67,7 +76,7 @@ function computeStats(sessions: any[]) {
   const xpIntoLevel = xp - cumulative;
   const xpNeeded = xpForLevel(level);
 
-  return { bestWpm, avgWpm, avgAcc, total, xp, level, xpIntoLevel, xpNeeded, streak: 0, unlockedKeys };
+  return { bestWpm, avgWpm, avgAcc, total, xp, level, xpIntoLevel, xpNeeded, streak: practice.currentStreak, unlockedKeys };
 }
 
 const LEVEL_TITLES: Record<number, string> = {
@@ -259,6 +268,9 @@ export default function DashboardPage() {
         {/* ── OVERVIEW TAB ── */}
         {tab === 'overview' && (
           <div className="space-y-6">
+            {/* Streak + daily goal */}
+            <StreakCard />
+
             {/* WPM Chart */}
             {chartData.length >= 2 ? (
               <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">

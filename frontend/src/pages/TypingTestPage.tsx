@@ -19,6 +19,7 @@ import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
 
 import { saveSession, fetchMistakeHandlingMode, fetchTestBySlug } from '../lib/api';
 import { markTestCompleted } from '../lib/testProgress';
+import { loadPracticeStats, getDailyGoal } from '../lib/streaks';
 
 // Devanagari char -> physical QWERTY key, inverted from the INSCRIPT layout map,
 // so the on-screen keyboard can highlight the right key during Mangal tests.
@@ -354,6 +355,16 @@ export default function TypingTestPage() {
       }
     } catch { /* dismissed */ }
   }, [buildChallengeUrl, stats.netWpm, stats.accuracy]);
+
+  // Streak/goal snapshot, read once the test finishes — by then this session
+  // has already been written to typingHistory, so it includes the run just done.
+  const [practice, setPractice] = useState<ReturnType<typeof loadPracticeStats> | null>(null);
+  useEffect(() => {
+    if (!stats.isFinished) { setPractice(null); return; }
+    // Defer a tick so the onFinish handler's history write lands first.
+    const t = setTimeout(() => setPractice(loadPracticeStats()), 60);
+    return () => clearTimeout(t);
+  }, [stats.isFinished]);
 
   const [shareCopied, setShareCopied] = useState(false);
   const shareResult = useCallback(async () => {
@@ -853,6 +864,26 @@ export default function TypingTestPage() {
                 style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
                 ⚡ Faster than ~{wpmPercentile(stats.netWpm)}% of typists
               </div>
+
+              {/* Streak + daily goal feedback */}
+              {practice && (
+                <div className="mb-6 flex items-center gap-3 rounded-2xl px-4 py-3 border text-left"
+                  style={{ background: 'linear-gradient(135deg, rgba(249,115,22,0.10), rgba(249,115,22,0.03))', borderColor: 'rgba(249,115,22,0.28)' }}>
+                  <span className="text-2xl shrink-0">🔥</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-brand-text">
+                      {practice.currentStreak > 1
+                        ? `${practice.currentStreak}-day streak!`
+                        : 'Streak started — come back tomorrow'}
+                    </p>
+                    <p className="text-xs text-brand-text-muted">
+                      {practice.todayCount >= getDailyGoal()
+                        ? `✅ Daily goal complete — ${practice.todayCount} ${practice.todayCount === 1 ? 'test' : 'tests'} today`
+                        : `${practice.todayCount}/${getDailyGoal()} tests today · ${getDailyGoal() - practice.todayCount} to go`}
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Challenge verdict — head-to-head on the same passage */}
               {challenge && (
