@@ -90,6 +90,25 @@ export default function TypingTestPage() {
     ? (typeof window !== 'undefined' ? sessionStorage.getItem('ftl_practice_text') : null)
     : null;
 
+  // ── Challenge link (?cw=52&ca=96&cn=Dev) ──
+  // Every value here comes from a URL a stranger may have crafted, so clamp the
+  // numbers and hard-limit the name. React escapes on render, so the name is
+  // safe as text — we only strip angle brackets and cap the length so it can't
+  // be used to smuggle markup-looking noise or blow out the layout.
+  const challenge = useMemo(() => {
+    const rawWpm = Number(searchParams.get('cw'));
+    if (!Number.isFinite(rawWpm) || rawWpm <= 0) return null;
+    const rawAcc = Number(searchParams.get('ca'));
+    const rawName = (searchParams.get('cn') || '').replace(/[<>]/g, '').trim().slice(0, 20);
+    return {
+      wpm: Math.min(400, Math.round(rawWpm)),
+      accuracy: Number.isFinite(rawAcc) ? Math.min(100, Math.max(0, Math.round(rawAcc))) : null,
+      name: rawName || 'A friend',
+    };
+    // location.search is the real dependency; searchParams is derived from it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
+
   const isMobile = useMemo(() => {
     if (typeof window === 'undefined') return false;
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
@@ -308,6 +327,33 @@ export default function TypingTestPage() {
     });
     return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 4);
   }, [stats.isFinished, mistakes, activeText]);
+
+  // Build a link that reopens THIS passage at THIS duration, carrying the
+  // score to beat. The friend types the identical text, so the comparison is
+  // fair — no backend needed, the whole challenge rides in the URL.
+  const [challengeCopied, setChallengeCopied] = useState(false);
+  const buildChallengeUrl = useCallback(() => {
+    const params = new URLSearchParams();
+    params.set('duration', String(selectedDuration));
+    params.set('cw', String(stats.netWpm));
+    params.set('ca', String(stats.accuracy));
+    const myName = (localStorage.getItem('ftl_user_name') || '').replace(/[<>]/g, '').trim().slice(0, 20);
+    if (myName) params.set('cn', myName);
+    return `https://fasttypinglab.com${window.location.pathname}?${params.toString()}`;
+  }, [selectedDuration, stats.netWpm, stats.accuracy]);
+
+  const shareChallenge = useCallback(async () => {
+    const url = buildChallengeUrl();
+    const msg = `I scored ${stats.netWpm} WPM (${stats.accuracy}% accuracy) on FastTypingLab. Think you can beat me on the same passage? 🏁 ${url}`;
+    try {
+      if (navigator.share) await navigator.share({ text: msg });
+      else {
+        await navigator.clipboard.writeText(msg);
+        setChallengeCopied(true);
+        setTimeout(() => setChallengeCopied(false), 2200);
+      }
+    } catch { /* dismissed */ }
+  }, [buildChallengeUrl, stats.netWpm, stats.accuracy]);
 
   const [shareCopied, setShareCopied] = useState(false);
   const shareResult = useCallback(async () => {
@@ -551,6 +597,27 @@ export default function TypingTestPage() {
           </div>
         </div>
 
+        {/* ── Challenge banner (someone sent this link) ── */}
+        {challenge && !stats.isFinished && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full max-w-2xl mb-3 flex items-center gap-3 rounded-2xl px-4 py-3 border"
+            style={{ background: 'linear-gradient(135deg, rgba(188,108,80,0.12), rgba(188,108,80,0.04))', borderColor: 'rgba(188,108,80,0.3)' }}
+          >
+            <span className="text-2xl shrink-0">🏁</span>
+            <div className="text-left">
+              <p className="text-sm font-bold text-brand-text">
+                {challenge.name} challenged you to beat {challenge.wpm} WPM
+              </p>
+              <p className="text-xs text-brand-text-muted">
+                {challenge.accuracy !== null && `at ${challenge.accuracy}% accuracy · `}
+                Same passage, same duration — good luck!
+              </p>
+            </div>
+          </motion.div>
+        )}
+
         {/* ── Start hint (pre-test only) ── */}
         <AnimatePresence>
           {!stats.isActive && !stats.isFinished && (
@@ -787,6 +854,37 @@ export default function TypingTestPage() {
                 ⚡ Faster than ~{wpmPercentile(stats.netWpm)}% of typists
               </div>
 
+              {/* Challenge verdict — head-to-head on the same passage */}
+              {challenge && (
+                <div className={`mb-6 rounded-2xl border px-4 py-4 ${
+                  stats.netWpm > challenge.wpm
+                    ? 'bg-emerald-500/10 border-emerald-500/30'
+                    : stats.netWpm === challenge.wpm
+                      ? 'bg-amber-500/10 border-amber-500/30'
+                      : 'bg-brand-surface-2 border-brand-border'
+                }`}>
+                  <p className="font-black text-base mb-3">
+                    {stats.netWpm > challenge.wpm
+                      ? `🏆 You beat ${challenge.name}!`
+                      : stats.netWpm === challenge.wpm
+                        ? `🤝 Dead tie with ${challenge.name}!`
+                        : `😤 ${challenge.name} still leads — ${challenge.wpm - stats.netWpm} WPM to go`}
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 text-center">
+                    <div className="bg-brand-surface rounded-xl px-3 py-2 border border-brand-border">
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-0.5">You</div>
+                      <div className="text-xl font-black font-mono text-brand-primary">{stats.netWpm}</div>
+                      <div className="text-[10px] text-brand-muted">{stats.accuracy}% acc</div>
+                    </div>
+                    <div className="bg-brand-surface rounded-xl px-3 py-2 border border-brand-border">
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-0.5 truncate">{challenge.name}</div>
+                      <div className="text-xl font-black font-mono text-brand-text">{challenge.wpm}</div>
+                      <div className="text-[10px] text-brand-muted">{challenge.accuracy !== null ? `${challenge.accuracy}% acc` : '—'}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-3 gap-3 mb-7">
                 <div className="bg-brand-surface-2 border border-brand-border p-4 rounded-2xl">
                   <div className="text-[10px] font-bold text-brand-muted uppercase tracking-widest mb-1">Gross</div>
@@ -936,8 +1034,18 @@ export default function TypingTestPage() {
                 </Link>
               </div>
               <button
+                onClick={shareChallenge}
+                className="mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm text-white transition-all hover:opacity-90 active:scale-[0.98]"
+                style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.28)' }}
+              >
+                🏁 {challengeCopied ? 'Challenge link copied!' : challenge ? 'Challenge someone back' : 'Challenge a friend'}
+              </button>
+              <p className="mt-1.5 text-[11px] text-brand-muted">
+                Sends this exact passage with your score to beat
+              </p>
+              <button
                 onClick={shareResult}
-                className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all border"
+                className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all border"
                 style={{ background: 'rgba(42,157,174,0.08)', borderColor: 'rgba(42,157,174,0.3)', color: '#2A9DAE' }}
               >
                 <Share2 className="w-4 h-4" /> {shareCopied ? 'Copied to clipboard!' : 'Share my result'}
