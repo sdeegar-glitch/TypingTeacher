@@ -86,6 +86,23 @@ router.get('/_keycheck', (req, res) => {
   res.json({ present: !!key, length: key.length, role, tail: key.slice(-6) });
 });
 
+// TEMP DIAGNOSTIC: raw HTTP-level result of the exact UPDATE call that isn't
+// persisting, including req.profile.id verbatim (to rule out value corruption)
+// and PostgREST's own status/count for the request as executed on THIS process.
+router.get('/_updatecheck', async (req, res) => {
+  const id = req.profile.id;
+  const before = await supabase.from('users').select('id, referral_code').eq('id', id).maybeSingle();
+  const upd = await supabase.from('users').update({ referral_code: 'RENDERTEST' }).eq('id', id).select('id, referral_code');
+  const after = await supabase.from('users').select('id, referral_code').eq('id', id).maybeSingle();
+  res.json({
+    profileIdRaw: JSON.stringify(id),
+    profileIdLen: id.length,
+    before: before.data,
+    updateResult: { data: upd.data, error: upd.error, status: upd.status, statusText: upd.statusText, count: upd.count },
+    after: after.data,
+  });
+});
+
 // GET /api/me/referral — this user's share code and who they have invited
 router.get('/referral', async (req, res) => {
   try {
