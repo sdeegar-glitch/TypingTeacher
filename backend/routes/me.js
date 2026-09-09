@@ -76,13 +76,6 @@ router.get('/certificates', async (req, res) => {
 router.get('/referral', async (req, res) => {
   try {
     const stats = await getReferralStats(req.profile.id);
-    // TEMP DIAGNOSTIC (2026-09-09): remove once the code-regenerates-every-call
-    // bug is root-caused. Exposes only the caller's own id/read result, gated
-    // behind their own auth — no cross-user leak.
-    if (req.query.debug === '1') {
-      const raw = await supabase.from('users').select('referral_code').eq('id', req.profile.id).maybeSingle();
-      stats._debug = { userId: req.profile.id, rawSelect: raw.data, rawError: raw.error };
-    }
     res.json(stats);
   } catch (err) {
     // Most likely cause is migration 002 not having been run yet. Fail soft so
