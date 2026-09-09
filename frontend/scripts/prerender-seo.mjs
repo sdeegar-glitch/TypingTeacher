@@ -97,6 +97,12 @@ const ROUTES = [
     ['Does it work without internet?', 'Yes. The app ships with English and Hindi typing tests built in, so you can practise fully offline. Account features, the AI tutor and certificates need internet.'],
     ['What are the system requirements?', 'Windows 10 or 11 (64-bit). The app is lightweight — only a few megabytes — and installs in seconds.'],
   ]) },
+  { path: '/kruti-dev-to-unicode', title: 'Kruti Dev to Unicode Converter — Both Ways, Free | FastTypingLab', description: 'Free Kruti Dev to Unicode and Unicode to Kruti Dev converter for Hindi. Paste text, convert instantly, copy or download. Runs in your browser — no signup, nothing uploaded.', jsonLd: faqLd([
+    ['How do I convert Kruti Dev to Unicode?', 'Paste your Kruti Dev text, choose the Kruti Dev to Unicode direction, and the Unicode (Mangal) version appears instantly. Copy it or download it as a text file. Conversion runs in your browser, so nothing is uploaded.'],
+    ['Why does Kruti Dev text look like random English letters?', 'Kruti Dev is a legacy non-Unicode font. The file stores ordinary Latin characters and the Kruti Dev font draws Devanagari shapes over them, so without that font installed the text looks like gibberish.'],
+    ['Is this Kruti Dev converter free?', 'Yes, completely free with no signup and no limit, and your text never leaves your device.'],
+  ]) },
+  { path: '/font-converter', title: 'Hindi Font Converter — Kruti Dev ↔ Unicode (Mangal) | FastTypingLab', description: 'Convert Hindi text between Kruti Dev and Unicode (Mangal) instantly. Free browser-based Hindi font converter — copy or download the result, no signup needed.' },
   { path: '/typing-drills', title: 'Typing Drills — Number (10-Key), Punctuation & Custom Text Practice | FastTypingLab', description: 'Free typing drills: number typing test for 10-key & data entry (KDPH), punctuation practice, top-200 common words, and custom text mode. Live WPM and accuracy.', jsonLd: faqLd([
     ['What is a 10-key or number typing drill?', 'It is focused practice on digits and numeric groups, building the speed data-entry roles and DEO exams measure in keystrokes per hour (KDPH).'],
     ['Can I practice my own text?', 'Yes — the custom text mode lets you paste any passage (exam material, legal text, transcription practice) and drill it with live WPM and accuracy.'],

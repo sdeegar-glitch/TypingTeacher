@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench, Sparkles, Headphones, Calculator, Hash } from 'lucide-react';
+import { Keyboard, MousePointer, Space, ChevronRight, Zap, GraduationCap, Clock, Users, Type, CaseSensitive, Code, Wrench, Sparkles, Headphones, Calculator, Hash, Languages } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 
 const TOOL_CARDS = [
@@ -125,6 +125,16 @@ const TOOL_CARDS = [
     color: 'text-emerald-500',
     bg: 'bg-emerald-500/10 border-emerald-500/20',
     tagColor: 'bg-emerald-500/10 text-emerald-500',
+  },
+  {
+    icon: Languages,
+    title: 'Kruti Dev ↔ Unicode',
+    desc: 'Convert Hindi between Kruti Dev and Unicode (Mangal) instantly. Copy or download the result.',
+    href: '/kruti-dev-to-unicode/',
+    tag: 'Hindi',
+    color: 'text-orange-500',
+    bg: 'bg-orange-500/10 border-orange-500/20',
+    tagColor: 'bg-orange-500/10 text-orange-500',
   },
   {
     icon: Hash,

@@ -78,6 +78,55 @@ const NUKTA_NORMALIZE: Array<[RegExp, string]> = [
   [/य़/g, 'य़'], [/ऱ/g, 'ऱ'],
 ];
 
+/**
+ * Reverse table: Kruti Dev keystroke -> Unicode. Built by walking the forward
+ * pairs in order and letting later entries win, because several keys are
+ * genuinely ambiguous in Kruti Dev 010 (e.g. 'd' is listed for both क़ and क,
+ * ';' for य़ and य). The later entry is the plain, overwhelmingly more common
+ * letter, which is the right guess when decoding. Sorted longest-key-first so
+ * multi-character keys ('vks', '[k', 'Ùk') match before their prefixes.
+ */
+const REVERSE_PAIRS: Array<[string, string]> = (() => {
+  const map = new Map<string, string>();
+  for (let i = 0; i < KEY_SEQUENCES.length; i++) {
+    const key = KEY_SEQUENCES[i];
+    const uni = UNICODE_PATTERNS[i];
+    if (!key) continue;
+    map.set(key, uni); // later wins
+  }
+  return [...map.entries()].sort((a, b) => b[0].length - a[0].length);
+})();
+
+const CONSONANT = '\\u0915-\\u0939\\u0958-\\u095F';
+const MATRAS = '\\u093E-\\u094C\\u0902\\u0903\\u0901\\u0945';
+// f<cluster>  ->  <cluster>ि   (undo the visual-order i-matra)
+const RE_IMATRA = new RegExp(`f([${CONSONANT}](?:\\u094D[${CONSONANT}])*)`, 'g');
+// <syllable>Z  ->  र्<syllable> (undo the moved reph)
+const RE_REPH = new RegExp(`([${CONSONANT}](?:\\u094D[${CONSONANT}])*[${MATRAS}]*)Z`, 'g');
+
+/**
+ * Converts Kruti Dev 010 encoded text back into Unicode Devanagari.
+ *
+ * Note this is a best-effort decode, not a perfect inverse: Kruti Dev is a
+ * lossy legacy encoding where a few keys are ambiguous (nukta forms share a
+ * key with their plain letter), so those decode to the common form. Ordinary
+ * prose round-trips cleanly; exotic conjuncts may need a manual touch-up.
+ */
+export function krutiDevToUnicode(krutiText: string): string {
+  if (!krutiText) return krutiText;
+  let s = krutiText;
+
+  for (const [key, uni] of REVERSE_PAIRS) {
+    if (!key) continue;
+    s = s.split(key).join(uni);
+  }
+
+  s = s.replace(RE_IMATRA, '$1ि');
+  s = s.replace(RE_REPH, 'र्$1');
+
+  return s;
+}
+
 /** Converts Unicode Devanagari text into the literal Kruti Dev 010 keystroke sequence. */
 export function unicodeToKrutiDevKeys(unicodeText: string): string {
   if (!unicodeText) return unicodeText;
