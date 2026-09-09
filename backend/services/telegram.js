@@ -195,6 +195,34 @@ function isoWeek(d = new Date()) {
  * Post an engagement poll to the community. Rotates through POLLS by ISO week.
  * No-op when Telegram isn't configured. Uses the Bot API sendPoll method.
  */
+/**
+ * Announce the weekly Live Test. `phase` is 'soon' (sent an hour before) or
+ * 'live' (sent as it opens). The page itself derives the schedule and passage
+ * from the date, so this post only has to drive people there.
+ */
+export async function postLiveTestAnnouncement(phase = 'live') {
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) return { skipped: 'not-configured' };
+
+  const url = `${SITE}/live-test/`;
+  const text = phase === 'soon'
+    ? `⏰ <b>Live Test starts in 1 hour!</b>\n\n` +
+      `Everyone types the <b>same passage</b> at the same time — English, Hindi Mangal and Kruti Dev tracks.\n` +
+      `Warm up now and be ready at <b>7:00 PM IST</b>.\n\n#LiveTest #FastTypingLab`
+    : `🔴 <b>LIVE NOW — Weekly Typing Test</b>\n\n` +
+      `One passage. One hour. Same text for everyone in your track.\n` +
+      `Post your WPM in the group and see where you land 👇\n\n#LiveTest #FastTypingLab`;
+
+  const result = await sendMessage({
+    text,
+    replyMarkup: { inline_keyboard: [[{ text: phase === 'soon' ? '⏰ See this week’s passage' : '🔴 Join the Live Test', url }]] },
+  });
+  if (result.ok) {
+    console.log(`[Telegram] Posted Live Test announcement (${phase}).`);
+    await sendWhatsAppCopyToAdmin(toWhatsAppText(text, url), `Live Test (${phase})`);
+  }
+  return result;
+}
+
 export async function postPollToTelegram() {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;

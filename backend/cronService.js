@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import { generateEnglishTest } from './generation/englishGenerator.js';
 import { generateHindiTest } from './generation/hindiGenerator.js';
 import { supabase } from './supabaseClient.js';
-import { postTestToTelegram, postLeaderboardToTelegram, postPollToTelegram } from './services/telegram.js';
+import { postTestToTelegram, postLeaderboardToTelegram, postPollToTelegram, postLiveTestAnnouncement } from './services/telegram.js';
 
 // Guard against overlapping runs
 let isRunning = false;
@@ -183,6 +183,7 @@ export async function postDailyLeaderboard() {
 // both the cron tick and a catch-up check firing close together.
 const LEADERBOARD_MARKER_KEY = 'telegram_last_leaderboard_ist_date';
 const POLL_MARKER_KEY = 'telegram_last_poll_iso_week';
+const LIVE_TEST_MARKER_KEY = 'telegram_last_live_test';
 
 async function getMarker(key) {
   const { data } = await supabase.from('app_settings').select('value').eq('key', key).maybeSingle();
@@ -227,6 +228,28 @@ export async function maybeCatchUpTelegramPosts() {
       }
     }
 
+    // Live Test announcements: Sunday only. Each phase fires at most once per
+    // ISO week, so a sleeping instance still announces on the next request.
+    if (ist.getUTCDay() === 0) {
+      const weekKey = istIsoWeekKey(ist);
+      if (hour >= 18 && hour < 19) {
+        const last = await getMarker(LIVE_TEST_MARKER_KEY + ':soon');
+        if (last !== weekKey) {
+          console.log('[Telegram catch-up] Live Test reminder overdue — posting now.');
+          const r = await postLiveTestAnnouncement('soon');
+          if (r?.ok) await setMarker(LIVE_TEST_MARKER_KEY + ':soon', weekKey);
+        }
+      }
+      if (hour >= 19 && hour < 20) {
+        const last = await getMarker(LIVE_TEST_MARKER_KEY + ':live');
+        if (last !== weekKey) {
+          console.log('[Telegram catch-up] Live Test go-live overdue — posting now.');
+          const r = await postLiveTestAnnouncement('live');
+          if (r?.ok) await setMarker(LIVE_TEST_MARKER_KEY + ':live', weekKey);
+        }
+      }
+    }
+
     // Wednesday poll: due any time from 7:00 PM IST onward on a Wednesday, once per ISO week.
     const isWednesday = ist.getUTCDay() === 3;
     if (isWednesday && hour >= 19) {
@@ -262,6 +285,19 @@ export const initCronJobs = () => {
     if (result?.ok || result?.skipped === 'no-data') await setMarker(LEADERBOARD_MARKER_KEY, istDateKey(istNow()));
   });
   console.log('[CronService] Scheduled: daily leaderboard to Telegram — every day 9:00 AM IST.');
+
+  // Weekly Live Test — one-hour reminder (Sunday 6:00 PM IST = 12:30 UTC) and
+  // the go-live post (Sunday 7:00 PM IST = 13:30 UTC), matching the schedule
+  // the /live-test page derives from the date.
+  cron.schedule('30 12 * * 0', async () => {
+    const r = await postLiveTestAnnouncement('soon');
+    if (r?.ok) await setMarker(LIVE_TEST_MARKER_KEY + ':soon', istIsoWeekKey(istNow()));
+  });
+  cron.schedule('30 13 * * 0', async () => {
+    const r = await postLiveTestAnnouncement('live');
+    if (r?.ok) await setMarker(LIVE_TEST_MARKER_KEY + ':live', istIsoWeekKey(istNow()));
+  });
+  console.log('[CronService] Scheduled: Live Test announcements to Telegram — Sunday 6:00 PM & 7:00 PM IST.');
 
   // Engagement poll to Telegram — Wednesday 7:00 PM IST (= 13:30 UTC). Rotates
   // through a pool of questions so the group stays active mid-week. Marks

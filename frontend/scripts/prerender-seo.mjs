@@ -103,6 +103,11 @@ const ROUTES = [
     ['Is this Kruti Dev converter free?', 'Yes, completely free with no signup and no limit, and your text never leaves your device.'],
   ]) },
   { path: '/font-converter', title: 'Hindi Font Converter — Kruti Dev ↔ Unicode (Mangal) | FastTypingLab', description: 'Convert Hindi text between Kruti Dev and Unicode (Mangal) instantly. Free browser-based Hindi font converter — copy or download the result, no signup needed.' },
+  { path: '/live-test', title: 'Weekly Live Typing Test — Compete Every Sunday | FastTypingLab', description: 'Join the free weekly Live Typing Test every Sunday at 7 PM IST. Everyone types the same passage, then compare your WPM on the leaderboard. English, Hindi Mangal and Kruti Dev.', jsonLd: faqLd([
+    ['When is the weekly Live Typing Test?', 'Every Sunday at 7:00 PM IST. The event window stays open for one hour, and the test itself is one minute long.'],
+    ['Do I need an account to join the Live Test?', 'No. You can take the Live Test without signing up. Creating a free account means your result is saved to your profile and can appear on the leaderboard with your name.'],
+    ['Does everyone type the same passage?', 'Yes — one passage per track (English, Hindi Mangal, Hindi Kruti Dev) is selected for the week, so every participant in a track types identical text and the ranking is fair.'],
+  ]) },
   { path: '/typing-drills', title: 'Typing Drills — Number (10-Key), Punctuation & Custom Text Practice | FastTypingLab', description: 'Free typing drills: number typing test for 10-key & data entry (KDPH), punctuation practice, top-200 common words, and custom text mode. Live WPM and accuracy.', jsonLd: faqLd([
     ['What is a 10-key or number typing drill?', 'It is focused practice on digits and numeric groups, building the speed data-entry roles and DEO exams measure in keystrokes per hour (KDPH).'],
     ['Can I practice my own text?', 'Yes — the custom text mode lets you paste any passage (exam material, legal text, transcription practice) and drill it with live WPM and accuracy.'],

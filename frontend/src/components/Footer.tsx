@@ -5,6 +5,7 @@ import WhatsAppCTA from './WhatsAppCTA';
 
 const PRODUCT_LINKS = [
   { label: 'Typing Tests', href: '/tests/' },
+  { label: 'Live Test', href: '/live-test/' },
   { label: 'Hindi Typing', href: '/hindi-typing-test/' },
   { label: 'Learn Typing', href: '/learn/' },
   { label: 'Exam Prep', href: '/competitive-exam-typing/' },

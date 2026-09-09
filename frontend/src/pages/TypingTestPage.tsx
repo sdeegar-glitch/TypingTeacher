@@ -126,7 +126,7 @@ export default function TypingTestPage() {
   }, [duration, profession, language, queryDuration]);
 
   // Test content state
-  const [testContent, setTestContent] = useState<{ title: string; content: string; keyboardLayout?: string | null; displayContent?: string | null }>(
+  const [testContent, setTestContent] = useState<{ title: string; content: string; keyboardLayout?: string | null; displayContent?: string | null; testId?: number | null }>(
     practiceText
       ? { title: 'AI Practice Passage', content: practiceText }
       : { title: sampleTexts['1'].title, content: sampleTexts['1'].content }
@@ -150,7 +150,7 @@ export default function TypingTestPage() {
       setLoadingTest(true);
       fetchTestBySlug(id)
         .then(data => {
-          if (data?.content) setTestContent({ title: data.title, content: data.content, keyboardLayout: data.keyboard_layout, displayContent: data.display_content });
+          if (data?.content) setTestContent({ title: data.title, content: data.content, keyboardLayout: data.keyboard_layout, displayContent: data.display_content, testId: Number(data.id) || null });
           else setTestContent(sampleTexts['1']);
         })
         .catch(() => setTestContent(sampleTexts['1']))
@@ -210,7 +210,7 @@ export default function TypingTestPage() {
 
       // 1. Save to backend
       saveSession({
-        test_id: Number(id) || null,
+        test_id: testContent.testId ?? null,
         duration: finalStats.elapsedSeconds,
         gross_wpm: finalStats.wpm,
         net_wpm: finalStats.netWpm,
