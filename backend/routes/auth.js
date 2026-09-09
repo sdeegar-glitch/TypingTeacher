@@ -60,12 +60,31 @@ router.post('/signup', async (req, res) => {
 
   // Insert into our users table. Try with phone; if the column doesn't exist
   // yet (migration not run), fall back to a row without it so signup never breaks.
+  //
+  // Both attempts' outcomes are logged. This used to swallow the second
+  // attempt's error entirely — a real incident (a stale connection silently
+  // no-op'ing the write on Render's free tier after idle) meant new accounts
+  // got a working login but no `users` row at all, with nothing in the logs
+  // to explain it. The auth account still succeeds either way (that's the
+  // right tradeoff — a bookkeeping row is not worth blocking signup over),
+  // but a persistent failure is now visible instead of silent.
   if (data?.user) {
     const baseRow = { id: data.user.id, email: data.user.email, name: name };
-    const { error: insErr } = await supabase.from('users').insert([{ ...baseRow, phone: cleanPhone }]);
-    if (insErr) {
-      await supabase.from('users').insert([baseRow]);
+    const { data: insData, error: insErr } = await supabase
+      .from('users')
+      .insert([{ ...baseRow, phone: cleanPhone }])
+      .select('id');
+
+    if (insErr || !insData?.length) {
+      const { data: retryData, error: retryErr } = await supabase.from('users').insert([baseRow]).select('id');
+      if (retryErr || !retryData?.length) {
+        console.error(
+          `[signup] users row NOT created for ${data.user.id} (${email}). ` +
+          `first attempt: ${insErr?.message || 'no rows returned'}; retry: ${retryErr?.message || 'no rows returned'}`
+        );
+      }
     }
+
     // Credit the inviter, if this signup came from a referral link. Deliberately
     // awaited but never allowed to fail the signup — attachReferral swallows its
     // own errors and reports a reason instead.

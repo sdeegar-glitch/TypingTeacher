@@ -33,6 +33,15 @@ export function normaliseCode(raw) {
 /**
  * Returns this user's share code, creating one on first use.
  * Retries on the unique-index collision rather than assuming randomness is enough.
+ *
+ * The write is verified, not just checked for an error: a stale connection
+ * (confirmed root cause of a real production incident — a wedged keep-alive
+ * socket after Render's free-tier process resumes from idle) can return a
+ * clean "no error" response for an UPDATE that never actually reached
+ * PostgREST, silently matching 0 rows. `.select()` after the update forces a
+ * real round trip and confirms the row PostgREST actually touched, so a
+ * no-op is caught here instead of surfacing as a code that changes on every
+ * single call with no explanation.
  */
 export async function ensureReferralCode(userId) {
   const { data: existing } = await supabase
@@ -45,15 +54,21 @@ export async function ensureReferralCode(userId) {
 
   for (let attempt = 0; attempt < 6; attempt++) {
     const code = randomCode();
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('users')
       .update({ referral_code: code })
-      .eq('id', userId);
+      .eq('id', userId)
+      .select('referral_code');
 
-    if (!error) return code;
-    // 23505 = unique_violation: this code is taken, roll again. Anything else is
-    // a real failure (most likely the migration has not been run yet).
-    if (error.code !== '23505') throw new Error(error.message);
+    if (error) {
+      // 23505 = unique_violation: this code is taken, roll again. Anything
+      // else is a real failure (most likely the migration has not been run).
+      if (error.code === '23505') continue;
+      throw new Error(error.message);
+    }
+    if (data?.[0]?.referral_code === code) return code;
+    // No error, but nothing was actually written — the connection-staleness
+    // case. Fall through and retry rather than returning a code that lies.
   }
   throw new Error('Could not allocate a referral code. Please try again.');
 }

@@ -72,37 +72,6 @@ router.get('/certificates', async (req, res) => {
   res.json(rows);
 });
 
-// TEMP DIAGNOSTIC (2026-09-09): confirms which Supabase key role is actually
-// loaded in this deployed process, without exposing the secret itself — only
-// the JWT's own "role" claim (public within the token) and its last 6 chars
-// (a fingerprint, not the key). Remove once the RLS-on-UPDATE mystery is solved.
-router.get('/_keycheck', (req, res) => {
-  const key = process.env.SUPABASE_SERVICE_KEY || '';
-  let role = null;
-  try {
-    const payload = JSON.parse(Buffer.from(key.split('.')[1], 'base64url').toString());
-    role = payload.role;
-  } catch { /* not a JWT-format key */ }
-  res.json({ present: !!key, length: key.length, role, tail: key.slice(-6) });
-});
-
-// TEMP DIAGNOSTIC: raw HTTP-level result of the exact UPDATE call that isn't
-// persisting, including req.profile.id verbatim (to rule out value corruption)
-// and PostgREST's own status/count for the request as executed on THIS process.
-router.get('/_updatecheck', async (req, res) => {
-  const id = req.profile.id;
-  const before = await supabase.from('users').select('id, referral_code').eq('id', id).maybeSingle();
-  const upd = await supabase.from('users').update({ referral_code: 'RENDERTEST' }).eq('id', id).select('id, referral_code');
-  const after = await supabase.from('users').select('id, referral_code').eq('id', id).maybeSingle();
-  res.json({
-    profileIdRaw: JSON.stringify(id),
-    profileIdLen: id.length,
-    before: before.data,
-    updateResult: { data: upd.data, error: upd.error, status: upd.status, statusText: upd.statusText, count: upd.count },
-    after: after.data,
-  });
-});
-
 // GET /api/me/referral — this user's share code and who they have invited
 router.get('/referral', async (req, res) => {
   try {
