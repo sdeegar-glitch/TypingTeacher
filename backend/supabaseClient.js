@@ -10,16 +10,19 @@ if (!supabaseUrl || !supabaseKey) {
   console.warn('Warning: SUPABASE_URL and SUPABASE_SERVICE_KEY must be set in .env');
 }
 
-// `Connection: close` on every request. Render's free tier suspends the
-// process on idle and resumes it on the next request; Node's fetch keeps
-// outbound TCP connections alive across that gap, and the confirmed failure
-// mode is a wedged socket that a WRITE reuses silently -- PostgREST never
-// receives the request, but the client sees a normal-looking response and no
-// error, so a signup or an UPDATE (referral code, profile edit, avatar) can
-// be lost with nothing in the logs to show for it. Reads and inserts mostly
-// got lucky in testing; this closes the gap for every request rather than
-// relying on luck. The cost is one extra TLS handshake per call, which is
-// nothing next to silently losing writes.
+// `Connection: close` on every request. In production, requests to Supabase
+// from this backend have intermittently returned a clean "no error" response
+// for a write that never actually reached PostgREST -- confirmed by issuing
+// the identical request (same key, same payload, same moment) from a
+// different machine, which succeeded every time. A reused, wedged TCP
+// connection is the most likely mechanism (Render's free tier suspends the
+// process on idle, and Node's fetch keeps sockets alive across that gap), so
+// this closes the connection after every request rather than reusing one --
+// one extra TLS handshake per call, which is nothing next to silently losing
+// writes. It has not fully eliminated the issue by itself in testing, which
+// suggests part of the problem may sit further upstream (e.g. Supabase's own
+// connection pooling) -- see services/referrals.js for the verify-what-was-
+// actually-written pattern that catches whatever gets through regardless.
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   global: { headers: { Connection: 'close' } },
 });

@@ -34,14 +34,17 @@ export function normaliseCode(raw) {
  * Returns this user's share code, creating one on first use.
  * Retries on the unique-index collision rather than assuming randomness is enough.
  *
- * The write is verified, not just checked for an error: a stale connection
- * (confirmed root cause of a real production incident — a wedged keep-alive
- * socket after Render's free-tier process resumes from idle) can return a
- * clean "no error" response for an UPDATE that never actually reached
- * PostgREST, silently matching 0 rows. `.select()` after the update forces a
- * real round trip and confirms the row PostgREST actually touched, so a
- * no-op is caught here instead of surfacing as a code that changes on every
- * single call with no explanation.
+ * The write is verified, not just checked for an error. In production this
+ * has genuinely returned a clean "no error" response for an UPDATE that
+ * never touched a row — confirmed by comparing identical requests (same key,
+ * same code, same moment) issued from this backend vs. run directly from
+ * another machine, where only the backend's request silently matched zero
+ * rows. The underlying cause sits somewhere in the Render-to-Supabase
+ * network/connection-pooling path and is intermittent, not something this
+ * function can prevent — but `.select()` after the update forces a real
+ * round trip and confirms the row PostgREST actually touched, so a no-op is
+ * caught and retried here instead of surfacing as a code that silently
+ * changes on every call, or as data quietly not saved at all.
  */
 export async function ensureReferralCode(userId) {
   const { data: existing } = await supabase
@@ -53,6 +56,10 @@ export async function ensureReferralCode(userId) {
   if (existing?.referral_code) return existing.referral_code;
 
   for (let attempt = 0; attempt < 6; attempt++) {
+    // Small backoff after the first attempt: the observed failure mode comes
+    // in bursts, so an immediate retry often just hits the same bad window.
+    if (attempt > 0) await new Promise(r => setTimeout(r, 300 * attempt));
+
     const code = randomCode();
     const { data, error } = await supabase
       .from('users')
@@ -67,8 +74,8 @@ export async function ensureReferralCode(userId) {
       throw new Error(error.message);
     }
     if (data?.[0]?.referral_code === code) return code;
-    // No error, but nothing was actually written — the connection-staleness
-    // case. Fall through and retry rather than returning a code that lies.
+    // No error, but nothing was actually written. Fall through and retry
+    // rather than returning a code that lies.
   }
   throw new Error('Could not allocate a referral code. Please try again.');
 }
