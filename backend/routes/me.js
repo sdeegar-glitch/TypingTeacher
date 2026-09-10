@@ -1,4 +1,5 @@
 import express from 'express';
+import fs from 'fs';
 import { supabase } from '../supabaseClient.js';
 import { requireUser } from '../middleware/requireUser.js';
 import { getReferralStats } from '../services/referrals.js';
@@ -13,13 +14,50 @@ router.use(requireUser);
 const PROCESS_MARKER = Math.random().toString(36).slice(2, 10);
 router.get('/_procid', async (req, res) => {
   const id = req.profile.id;
+
   const upd = await supabase.from('users').update({ referral_code: 'PROCTEST' }).eq('id', id).select('id, referral_code');
+
+  // Bypass supabase-js entirely: raw fetch PATCH, same URL/key, from inside
+  // this same process. If this ALSO matches 0 rows, the library isn't the
+  // variable — something about Render's outbound path or this exact request
+  // is. If this WORKS, the bug is specific to supabase-js's request
+  // construction as deployed here.
+  let rawFetchResult;
+  try {
+    const url = `${process.env.SUPABASE_URL}/rest/v1/users?id=eq.${id}`;
+    const r = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        apikey: process.env.SUPABASE_SERVICE_KEY,
+        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation',
+      },
+      body: JSON.stringify({ referral_code: 'RAWFETCHTEST' }),
+    });
+    rawFetchResult = { status: r.status, body: await r.text() };
+  } catch (e) {
+    rawFetchResult = { threw: e.message };
+  }
+
+  let supabaseJsVersion = 'unknown';
+  try {
+    const raw = fs.readFileSync(
+      new URL('../node_modules/@supabase/supabase-js/package.json', import.meta.url),
+      'utf8'
+    );
+    supabaseJsVersion = JSON.parse(raw).version;
+  } catch { /* ignore */ }
+
   res.json({
     processMarker: PROCESS_MARKER,
     uptimeSec: Math.round(process.uptime()),
     pid: process.pid,
-    updateData: upd.data,
-    updateError: upd.error,
+    nodeVersion: process.version,
+    supabaseJsVersion,
+    idCharCodes: [...id].map(c => c.charCodeAt(0)),
+    supabaseJsUpdate: { data: upd.data, error: upd.error },
+    rawFetchUpdate: rawFetchResult,
   });
 });
 
