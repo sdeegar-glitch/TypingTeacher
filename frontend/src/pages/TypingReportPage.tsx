@@ -1,13 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, RotateCcw, Award, Target } from 'lucide-react';
+import { ChevronLeft, RotateCcw, Award, Target, MessageCircle, Send, X } from 'lucide-react';
 import Seo from '../components/Seo';
 import PassageComparison from '../components/results/PassageComparison';
-import WhatsAppCTA from '../components/WhatsAppCTA';
-import TelegramCTA from '../components/TelegramCTA';
-import SignupPromptBanner from '../components/SignupPromptBanner';
 import { readTypingResult } from '../lib/typingResult';
 import { trackEvent } from '../lib/analytics';
+import { WHATSAPP_URL, TELEGRAM_URL } from '../lib/social';
+import { isLoggedIn } from '../lib/auth';
 
 // Same approximate percentile curve used previously in the results popup —
 // kept local since this is now the only place it's shown.
@@ -37,6 +36,9 @@ function wpmPercentile(wpm: number): number {
  */
 export default function TypingReportPage() {
   const result = useMemo(readTypingResult, []);
+  const [signupDismissed, setSignupDismissed] = useState(() => {
+    try { return localStorage.getItem('signupPromptReport') === '1'; } catch { return false; }
+  });
 
   if (!result) {
     return (
@@ -133,37 +135,71 @@ export default function TypingReportPage() {
         </div>
       )}
 
-      {/* Signup nudge — lowest priority, self-hides for logged-in visitors */}
-      <div className="shrink-0 px-3 sm:px-6 pb-2">
-        <SignupPromptBanner
-          dismissKey="signupPromptReport"
-          message={`${result.netWpm} WPM at ${result.accuracy}% — create a free account to save this and track your progress.`}
-          cta="Save my result"
-        />
-      </div>
+      {/* Signup nudge — one compact line, self-hides for logged-in visitors, dismissible */}
+      {!isLoggedIn() && !signupDismissed && (
+        <div className="shrink-0 px-3 sm:px-6 pb-1.5 flex items-center gap-2">
+          <p className="flex-1 min-w-0 truncate text-[11px] sm:text-xs text-brand-muted">
+            {result.netWpm} WPM at {result.accuracy}% —{' '}
+            <Link
+              to="/signup"
+              onClick={() => trackEvent('signup_banner_click', { dismissKey: 'signupPromptReport', page: window.location.pathname })}
+              className="font-bold text-brand-primary hover:underline"
+            >
+              create a free account
+            </Link>{' '}
+            to save this.
+          </p>
+          <button
+            type="button"
+            aria-label="Dismiss"
+            onClick={() => {
+              trackEvent('signup_banner_dismiss', { dismissKey: 'signupPromptReport' });
+              setSignupDismissed(true);
+              try { localStorage.setItem('signupPromptReport', '1'); } catch { /* ignore */ }
+            }}
+            className="shrink-0 text-brand-muted hover:text-brand-text transition-colors"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
-      {/* Footer actions */}
-      <div className="shrink-0 border-t border-brand-border bg-brand-surface px-3 sm:px-6 py-2.5 flex flex-col gap-1.5">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-          <div className="flex-1 flex gap-2">
-            <WhatsAppCTA variant="inline" className="flex-1 justify-center" />
-            <TelegramCTA variant="inline" className="flex-1 justify-center" />
-          </div>
-          <div className="flex gap-2 shrink-0">
-            <Link
-              to={`/certificate?wpm=${result.netWpm}&acc=${result.accuracy}&title=${encodeURIComponent(result.testTitle)}`}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 border border-brand-border text-brand-muted hover:text-brand-primary px-3 py-2.5 rounded-xl text-sm font-bold transition-colors"
-            >
-              <Award className="w-4 h-4" /> <span className="hidden sm:inline">Certificate</span>
-            </Link>
-            <Link
-              to="/typing-test/"
-              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 text-white px-3 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90"
-              style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}
-            >
-              <RotateCcw className="w-4 h-4" /> <span className="hidden sm:inline">Try Again</span>
-            </Link>
-          </div>
+      {/* Footer actions — one row, four equal-weight buttons, never wraps */}
+      <div className="shrink-0 border-t border-brand-border bg-brand-surface px-3 sm:px-6 py-2 flex flex-col gap-1">
+        <div className="flex gap-1.5 sm:gap-2">
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('whatsapp_cta_click', { variant: 'report_footer', page: window.location.pathname })}
+            className="flex-1 flex items-center justify-center gap-1.5 text-white px-2 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all hover:opacity-90"
+            style={{ background: '#188842' }}
+          >
+            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" /> WhatsApp
+          </a>
+          <a
+            href={TELEGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('telegram_cta_click', { variant: 'report_footer', page: window.location.pathname })}
+            className="flex-1 flex items-center justify-center gap-1.5 text-white px-2 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all hover:opacity-90"
+            style={{ background: '#1B7EAE' }}
+          >
+            <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" /> Telegram
+          </a>
+          <Link
+            to={`/certificate?wpm=${result.netWpm}&acc=${result.accuracy}&title=${encodeURIComponent(result.testTitle)}`}
+            className="flex-1 flex items-center justify-center gap-1.5 border border-brand-border text-brand-muted hover:text-brand-primary px-2 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors"
+          >
+            <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" /> Certificate
+          </Link>
+          <Link
+            to="/typing-test/"
+            className="flex-1 flex items-center justify-center gap-1.5 text-white px-2 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}
+          >
+            <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" /> Try Again
+          </Link>
         </div>
         <p className="text-[11px] text-brand-muted text-center sm:text-left">
           Or dare a friend to beat this score:{' '}
