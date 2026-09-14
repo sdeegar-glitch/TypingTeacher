@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff, Loader2, Shield, KeyRound } from 'lucide-react';
 import { submit2faLogin } from './api';
 
-const API = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
+const API = import.meta.env.VITE_API_URL || 'https://api.fasttypinglab.com';
 
 interface AdminLoginProps {
   onLogin: () => void;

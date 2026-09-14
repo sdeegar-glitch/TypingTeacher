@@ -1,4 +1,4 @@
-export const API_URL = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
+export const API_URL = import.meta.env.VITE_API_URL || 'https://api.fasttypinglab.com';
 
 import { isTauri, offlineList, offlineBySlug } from './offlineTests';
 

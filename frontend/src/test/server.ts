@@ -1,7 +1,7 @@
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 
-const API = 'https://typingteacher-2lnd.onrender.com';
+const API = 'https://api.fasttypinglab.com';
 
 /**
  * Default happy-path API. Individual tests override these with

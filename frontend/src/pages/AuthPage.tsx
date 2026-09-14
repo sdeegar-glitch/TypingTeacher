@@ -6,7 +6,7 @@ import { Keyboard, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { getStoredReferral, clearStoredReferral } from '../lib/referral';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://api.fasttypinglab.com';
 
 const AuthPage = () => {
   const location = useLocation();
@@ -95,7 +95,7 @@ const AuthPage = () => {
         ? { email, password }
         : { email, password, name, phone, ref: getStoredReferral() || undefined };
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}${endpoint}`,
+        `${import.meta.env.VITE_API_URL || 'https://api.fasttypinglab.com'}${endpoint}`,
         { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
       );
       const data = await res.json();

@@ -75,7 +75,7 @@ function NotificationsPanel() {
   );
 }
 
-const API = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
+const API = import.meta.env.VITE_API_URL || 'https://api.fasttypinglab.com';
 
 type SessionState = 'checking' | 'loggedOut' | 'loggedIn';
 

@@ -48,7 +48,7 @@ export default function TestsPage() {
   const triggerGenerate = async () => {
     setGenerating(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com'}/api/tests/generate`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://api.fasttypinglab.com'}/api/tests/generate`, {
         method: 'POST',
         headers: authHeaders(),
       });

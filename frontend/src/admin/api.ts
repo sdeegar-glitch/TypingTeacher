@@ -1,6 +1,6 @@
 import type { DashboardStats, AnalyticsPoint, PlatformUser, TypingTest, Category, ActivityLog, AppSettings, SeoTest, AdminAnalytics } from './types';
 
-const API = import.meta.env.VITE_API_URL || 'https://typingteacher-2lnd.onrender.com';
+const API = import.meta.env.VITE_API_URL || 'https://api.fasttypinglab.com';
 
 export function authHeaders(): HeadersInit {
   const token = localStorage.getItem('adminToken');
