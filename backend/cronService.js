@@ -87,51 +87,6 @@ export async function fetchAndGenerateTests(options = {}) {
   return { results, successCount, total: results.length };
 }
 
-// ─── CATCH-UP GENERATION ──────────────────────────────────────────────────────
-// Render's free tier sleeps the instance when idle, so the scheduled 3 AM IST
-// cron often never fires (no traffic at that hour). This runs on incoming
-// traffic instead (throttled): if the newest test is stale, it generates a
-// batch — making generation resilient to the instance sleeping at cron time.
-// Generate ONE test per trigger (not a long batch) so each unit finishes within
-// seconds — resilient to the instance idling mid-run. Rotates languages and
-// stops once ~12 tests exist in the last 24h (the normal daily volume).
-const CATCHUP_SLOTS = ['en', 'hi_mangal', 'hi_kruti'];
-const DAILY_TARGET = 12;
-let lastCatchUpCheck = 0;
-let slotCursor = 0;
-
-export async function maybeCatchUpGeneration() {
-  const now = Date.now();
-  if (now - lastCatchUpCheck < 6 * 60 * 1000) return; // at most once every 6 min
-  lastCatchUpCheck = now;
-  if (isRunning) return;
-  if (!process.env.GEMINI_API_KEY) return;
-
-  try {
-    const dayAgo = new Date(now - 24 * 3600 * 1000).toISOString();
-    const { count } = await supabase
-      .from('typing_test')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', dayAgo);
-    if ((count || 0) >= DAILY_TARGET) return; // enough fresh tests already
-
-    const slot = CATCHUP_SLOTS[slotCursor % CATCHUP_SLOTS.length];
-    slotCursor++;
-    isRunning = true;
-    console.log(`[Catch-up] ${count || 0}/${DAILY_TARGET} tests in last 24h — generating one "${slot}".`);
-    try {
-      const result = await runSlot(slot);
-      console.log(`[Catch-up] ${slot}: ${result?.status || 'done'}${result?.error ? ' — ' + result.error : ''}`);
-      if (result?.status === 'success') await postTestToTelegram(result);
-    } finally {
-      isRunning = false;
-    }
-  } catch (e) {
-    isRunning = false;
-    console.error('[Catch-up] failed:', e.message);
-  }
-}
-
 // Midnight-to-midnight IST bounds for "yesterday" (or N days ago), returned as
 // UTC Date objects for querying started_at (stored in UTC).
 const IST_OFFSET_MS = 5.5 * 3600 * 1000;
@@ -173,14 +128,10 @@ export async function postDailyLeaderboard() {
   }
 }
 
-// ─── TELEGRAM POST CATCH-UP ────────────────────────────────────────────────────
-// Render's free tier sleeps the instance when idle, so a cron tick scheduled
-// for a quiet hour (e.g. 9 AM leaderboard) can simply never fire if nothing
-// woke the instance up in time. This mirrors maybeCatchUpGeneration: on
-// incoming traffic, check whether today's leaderboard / this week's poll is
-// overdue and post it if so. "Already posted" is tracked in app_settings
-// (not in-memory) so it survives instance restarts and isn't duplicated by
-// both the cron tick and a catch-up check firing close together.
+// ─── TELEGRAM POST MARKERS ─────────────────────────────────────────────────────
+// Tracks the last IST date/week/month each scheduled post actually went out,
+// stored in app_settings (not in-memory) so it survives process restarts and
+// a cron tick never double-posts if the app happens to restart right after.
 const LEADERBOARD_MARKER_KEY = 'telegram_last_leaderboard_ist_date';
 const POLL_MARKER_KEY = 'telegram_last_poll_iso_week';
 const LIVE_TEST_MARKER_KEY = 'telegram_last_live_test';
@@ -206,80 +157,6 @@ function istIsoWeekKey(d) {
   return `${date.getUTCFullYear()}-W${week}`;
 }
 
-let lastTelegramCatchUpCheck = 0;
-
-export async function maybeCatchUpTelegramPosts() {
-  const now = Date.now();
-  if (now - lastTelegramCatchUpCheck < 6 * 60 * 1000) return; // at most once every 6 min
-  lastTelegramCatchUpCheck = now;
-  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) return;
-
-  try {
-    const ist = istNow();
-    const todayKey = istDateKey(ist);
-    const hour = ist.getUTCHours(); // ist is already shifted, so getUTCHours() reads as IST hour
-
-    // Daily leaderboard: due any time from 9:00 AM IST onward, once per IST day.
-    if (hour >= 9) {
-      const lastPosted = await getMarker(LEADERBOARD_MARKER_KEY);
-      if (lastPosted !== todayKey) {
-        console.log('[Telegram catch-up] Daily leaderboard overdue — posting now.');
-        const result = await postDailyLeaderboard();
-        if (result?.ok || result?.skipped === 'no-data') await setMarker(LEADERBOARD_MARKER_KEY, todayKey);
-      }
-    }
-
-    // Live Test announcements: Sunday only. Each phase fires at most once per
-    // ISO week, so a sleeping instance still announces on the next request.
-    if (ist.getUTCDay() === 0) {
-      const weekKey = istIsoWeekKey(ist);
-      if (hour >= 18 && hour < 19) {
-        const last = await getMarker(LIVE_TEST_MARKER_KEY + ':soon');
-        if (last !== weekKey) {
-          console.log('[Telegram catch-up] Live Test reminder overdue — posting now.');
-          const r = await postLiveTestAnnouncement('soon');
-          if (r?.ok) await setMarker(LIVE_TEST_MARKER_KEY + ':soon', weekKey);
-        }
-      }
-      if (hour >= 19 && hour < 20) {
-        const last = await getMarker(LIVE_TEST_MARKER_KEY + ':live');
-        if (last !== weekKey) {
-          console.log('[Telegram catch-up] Live Test go-live overdue — posting now.');
-          const r = await postLiveTestAnnouncement('live');
-          if (r?.ok) await setMarker(LIVE_TEST_MARKER_KEY + ':live', weekKey);
-        }
-      }
-    }
-
-    // Top referrers: due any time from 7:00 PM IST on the 1st of the month.
-    // Keyed by month, so a sleeping instance posts it late rather than never —
-    // this is a promised tier reward, missing it silently is not acceptable.
-    if (ist.getUTCDate() === 1 && hour >= 19) {
-      const monthKey = istDateKey(ist).slice(0, 7);
-      const lastPosted = await getMarker(REFERRERS_MARKER_KEY);
-      if (lastPosted !== monthKey) {
-        console.log('[Telegram catch-up] Monthly top referrers overdue — posting now.');
-        const result = await postTopReferrersToTelegram();
-        if (result?.ok || result?.skipped === 'no-referrers') await setMarker(REFERRERS_MARKER_KEY, monthKey);
-      }
-    }
-
-    // Wednesday poll: due any time from 7:00 PM IST onward on a Wednesday, once per ISO week.
-    const isWednesday = ist.getUTCDay() === 3;
-    if (isWednesday && hour >= 19) {
-      const weekKey = istIsoWeekKey(ist);
-      const lastPolled = await getMarker(POLL_MARKER_KEY);
-      if (lastPolled !== weekKey) {
-        console.log('[Telegram catch-up] Weekly poll overdue — posting now.');
-        const result = await postPollToTelegram();
-        if (result?.ok) await setMarker(POLL_MARKER_KEY, weekKey);
-      }
-    }
-  } catch (e) {
-    console.error('[Telegram catch-up] failed:', e.message);
-  }
-}
-
 // ─── CRON JOBS ────────────────────────────────────────────────────────────────
 export const initCronJobs = () => {
   // Production: once daily at 3:00 AM IST (= 21:30 UTC previous day), generates
@@ -292,8 +169,7 @@ export const initCronJobs = () => {
   console.log('[CronService] Scheduled: daily at 3:00 AM IST — 12 tests (4 EN + 4 HI/Mangal + 4 HI/KrutiDev).');
 
   // Daily leaderboard to Telegram — every day 9:00 AM IST (= 03:30 UTC),
-  // ranking the previous day's top typists. Marks app_settings on success so
-  // maybeCatchUpTelegramPosts() doesn't re-post the same day if it also fires.
+  // ranking the previous day's top typists. Marks app_settings on success.
   cron.schedule('30 3 * * *', async () => {
     const result = await postDailyLeaderboard();
     if (result?.ok || result?.skipped === 'no-data') await setMarker(LEADERBOARD_MARKER_KEY, istDateKey(istNow()));
@@ -333,16 +209,7 @@ export const initCronJobs = () => {
   });
   console.log('[CronService] Scheduled: engagement poll to Telegram — Wednesday 7:00 PM IST.');
 
-  // No self-ping keep-alive here on purpose. Render's free tier grants 750
-  // instance-hours/month per workspace, and a spun-down (sleeping) service
-  // consumes NONE of that — only active/awake time counts. Pinging every
-  // 14 minutes to prevent sleep meant the service ran ~24/7, which eats
-  // roughly 720-744 of the 750 hours in a given month, leaving almost no
-  // margin before every free service on the account gets suspended for the
-  // rest of the month. Instead we let the instance sleep naturally when
-  // idle (spin-down costs nothing) and rely on maybeCatchUpGeneration() /
-  // maybeCatchUpTelegramPosts() — both run on the next real incoming
-  // request and post/generate anything that's overdue within minutes.
-  // Trade-off: the first visitor after 15+ idle minutes eats a ~1 min cold
-  // start; that's cheap compared to risking the whole backend going dark.
+  // No catch-up/keep-alive logic needed here. This process runs 24/7 on a VPS
+  // (PM2, single fork-mode instance) rather than a free-tier host that sleeps
+  // on idle, so node-cron's own schedules fire reliably on their own.
 };
