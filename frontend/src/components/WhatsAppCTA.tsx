@@ -6,6 +6,8 @@ interface WhatsAppCTAProps {
   /** 'card' = full banner (results screen); 'inline' = compact button (footer). */
   variant?: 'card' | 'inline';
   message?: string;
+  /** Extra classes appended to the inline variant's button (e.g. `flex-1 justify-center`). */
+  className?: string;
 }
 
 /**
@@ -13,7 +15,7 @@ interface WhatsAppCTAProps {
  * community channel alongside Telegram (see TelegramCTA). Placed at the same
  * high-intent spots so both channels grow together.
  */
-export default function WhatsAppCTA({ variant = 'card', message }: WhatsAppCTAProps) {
+export default function WhatsAppCTA({ variant = 'card', message, className = '' }: WhatsAppCTAProps) {
   const onClick = () => trackEvent('whatsapp_cta_click', {
     variant,
     page: typeof window !== 'undefined' ? window.location.pathname : '',
@@ -22,7 +24,7 @@ export default function WhatsAppCTA({ variant = 'card', message }: WhatsAppCTAPr
   if (variant === 'inline') {
     return (
       <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={onClick}
-        className="inline-flex items-center gap-2 font-semibold text-white px-4 py-2 rounded-lg text-sm transition-all active:scale-95 hover:opacity-90"
+        className={`inline-flex items-center gap-2 font-semibold text-white px-4 py-2 rounded-lg text-sm transition-all active:scale-95 hover:opacity-90 ${className}`}
         style={{ background: '#188842', boxShadow: '0 4px 14px rgba(37,211,102,.30)' }}>
         <MessageCircle className="w-4 h-4" /> Follow on WhatsApp
       </a>

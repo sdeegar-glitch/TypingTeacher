@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, ChevronRight } from 'lucide-react';
-import ScoreShareButtons from './ScoreShareButtons';
+import { RotateCcw, ChevronRight, MessageCircle, Send, UserPlus } from 'lucide-react';
+import { WHATSAPP_URL, TELEGRAM_URL } from '../../lib/social';
+import { isLoggedIn } from '../../lib/auth';
+import { trackEvent } from '../../lib/analytics';
 
 interface Unlock { icon: string; name: string; xp: number }
 
@@ -14,16 +16,11 @@ interface ResultsPopupProps {
   onReset: () => void;
 }
 
-/** One line, matched to how fast the run was — sets up the share buttons below it. */
-function motivateLine(netWpm: number): string {
-  if (netWpm >= 60) return "🔥 That's a fast run — flex it. Challenge your friends:";
-  if (netWpm >= 35) return 'Solid speed! Bet your friends can\'t keep up 👀';
-  return 'Every run makes you faster. Dare a friend to try it 🏁';
-}
-
 /**
- * The short post-test popup: two numbers, one nudge, two share buttons, one
- * way to see more. Deliberately excludes everything else the old all-in-one
+ * The short post-test popup: two numbers, one achievement banner, and the
+ * primary highlighted actions — join WhatsApp/Telegram and create a free
+ * account — with a low-key "share your score" link underneath rather than
+ * its own buttons. Deliberately excludes everything else the old all-in-one
  * modal showed — that detail lives in the /results report instead. Sized to
  * a fixed content budget (no overflow-y-auto fallback) so it never scrolls,
  * on any screen size — `dvh` rather than `vh` because `vh` on mobile
@@ -32,6 +29,13 @@ function motivateLine(netWpm: number): string {
  * content looked short enough in a desktop browser.
  */
 export default function ResultsPopup({ netWpm, accuracy, challengeUrl, newUnlock, prefersReducedMotion, onReset }: ResultsPopupProps) {
+  const showSignup = !isLoggedIn();
+
+  const shareMessage = `I scored ${netWpm} WPM (${accuracy}% accuracy) on FastTypingLab. Think you can beat me on the same passage? 🏁 ${challengeUrl}`;
+  const shareWhatsappHref = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+  const shareTelegramHref = `https://t.me/share/url?url=${encodeURIComponent(challengeUrl)}&text=${encodeURIComponent(
+    `I scored ${netWpm} WPM (${accuracy}% accuracy) on FastTypingLab. Think you can beat me on the same passage? 🏁`
+  )}`;
   return (
     <AnimatePresence>
       <motion.div
@@ -71,8 +75,61 @@ export default function ResultsPopup({ netWpm, accuracy, challengeUrl, newUnlock
             </div>
           )}
 
-          <p className="text-xs text-brand-muted mb-2">{motivateLine(netWpm)}</p>
-          <ScoreShareButtons wpm={netWpm} accuracy={accuracy} challengeUrl={challengeUrl} />
+          <div className={`grid ${showSignup ? 'grid-cols-3' : 'grid-cols-2'} gap-1.5 mb-2`}>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('whatsapp_cta_click', { variant: 'popup', page: window.location.pathname })}
+              className="flex flex-col items-center justify-center gap-1 text-white font-bold text-[11px] py-2.5 rounded-xl transition-all hover:opacity-90 active:scale-95"
+              style={{ background: '#188842' }}
+            >
+              <MessageCircle className="w-4 h-4" /> Join
+            </a>
+            <a
+              href={TELEGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('telegram_cta_click', { variant: 'popup', page: window.location.pathname })}
+              className="flex flex-col items-center justify-center gap-1 text-white font-bold text-[11px] py-2.5 rounded-xl transition-all hover:opacity-90 active:scale-95"
+              style={{ background: '#1B7EAE' }}
+            >
+              <Send className="w-4 h-4" /> Join
+            </a>
+            {showSignup && (
+              <Link
+                to="/signup"
+                onClick={() => trackEvent('signup_banner_click', { dismissKey: 'resultsPopup', page: window.location.pathname })}
+                className="flex flex-col items-center justify-center gap-1 text-white font-bold text-[11px] py-2.5 rounded-xl transition-all hover:opacity-90 active:scale-95"
+                style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)' }}
+              >
+                <UserPlus className="w-4 h-4" /> Sign up
+              </Link>
+            )}
+          </div>
+
+          <p className="text-[11px] text-brand-muted mb-3">
+            Or dare a friend to beat this score:{' '}
+            <a
+              href={shareWhatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('whatsapp_score_share_click', { page: window.location.pathname })}
+              className="font-bold text-brand-primary hover:underline"
+            >
+              WhatsApp
+            </a>
+            {' · '}
+            <a
+              href={shareTelegramHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('telegram_score_share_click', { page: window.location.pathname })}
+              className="font-bold text-brand-primary hover:underline"
+            >
+              Telegram
+            </a>
+          </p>
 
           <div className="flex gap-2 mt-3">
             <button

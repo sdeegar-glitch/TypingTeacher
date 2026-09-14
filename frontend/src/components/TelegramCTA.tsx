@@ -6,6 +6,8 @@ interface TelegramCTAProps {
   /** 'card' = full banner (results screen); 'inline' = compact button (footer). */
   variant?: 'card' | 'inline';
   message?: string;
+  /** Extra classes appended to the inline variant's button (e.g. `flex-1 justify-center`). */
+  className?: string;
 }
 
 /**
@@ -13,7 +15,7 @@ interface TelegramCTAProps {
  * (after a test result, in the footer) to convert existing site traffic into
  * group members — the cheapest, highest-quality growth channel.
  */
-export default function TelegramCTA({ variant = 'card', message }: TelegramCTAProps) {
+export default function TelegramCTA({ variant = 'card', message, className = '' }: TelegramCTAProps) {
   const onClick = () => trackEvent('telegram_cta_click', {
     variant,
     page: typeof window !== 'undefined' ? window.location.pathname : '',
@@ -22,7 +24,7 @@ export default function TelegramCTA({ variant = 'card', message }: TelegramCTAPr
   if (variant === 'inline') {
     return (
       <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={onClick}
-        className="inline-flex items-center gap-2 font-semibold text-white px-4 py-2 rounded-lg text-sm transition-all active:scale-95 hover:opacity-90"
+        className={`inline-flex items-center gap-2 font-semibold text-white px-4 py-2 rounded-lg text-sm transition-all active:scale-95 hover:opacity-90 ${className}`}
         style={{ background: '#1B7EAE', boxShadow: '0 4px 14px rgba(34,158,217,.30)' }}>
         <Send className="w-4 h-4" /> Join our Telegram
       </a>

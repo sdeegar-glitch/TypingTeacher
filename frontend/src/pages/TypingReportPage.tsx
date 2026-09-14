@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Award, Target } from 'lucide-react';
 import Seo from '../components/Seo';
 import PassageComparison from '../components/results/PassageComparison';
-import ScoreShareButtons from '../components/results/ScoreShareButtons';
+import WhatsAppCTA from '../components/WhatsAppCTA';
+import TelegramCTA from '../components/TelegramCTA';
 import SignupPromptBanner from '../components/SignupPromptBanner';
 import { readTypingResult } from '../lib/typingResult';
+import { trackEvent } from '../lib/analytics';
 
 // Same approximate percentile curve used previously in the results popup —
 // kept local since this is now the only place it's shown.
@@ -141,25 +143,50 @@ export default function TypingReportPage() {
       </div>
 
       {/* Footer actions */}
-      <div className="shrink-0 border-t border-brand-border bg-brand-surface px-3 sm:px-6 py-2.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <div className="flex-1">
-          <ScoreShareButtons wpm={result.netWpm} accuracy={result.accuracy} challengeUrl={result.challengeUrl} />
+      <div className="shrink-0 border-t border-brand-border bg-brand-surface px-3 sm:px-6 py-2.5 flex flex-col gap-1.5">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <div className="flex-1 flex gap-2">
+            <WhatsAppCTA variant="inline" className="flex-1 justify-center" />
+            <TelegramCTA variant="inline" className="flex-1 justify-center" />
+          </div>
+          <div className="flex gap-2 shrink-0">
+            <Link
+              to={`/certificate?wpm=${result.netWpm}&acc=${result.accuracy}&title=${encodeURIComponent(result.testTitle)}`}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 border border-brand-border text-brand-muted hover:text-brand-primary px-3 py-2.5 rounded-xl text-sm font-bold transition-colors"
+            >
+              <Award className="w-4 h-4" /> <span className="hidden sm:inline">Certificate</span>
+            </Link>
+            <Link
+              to="/typing-test/"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 text-white px-3 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90"
+              style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}
+            >
+              <RotateCcw className="w-4 h-4" /> <span className="hidden sm:inline">Try Again</span>
+            </Link>
+          </div>
         </div>
-        <div className="flex gap-2 shrink-0">
-          <Link
-            to={`/certificate?wpm=${result.netWpm}&acc=${result.accuracy}&title=${encodeURIComponent(result.testTitle)}`}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 border border-brand-border text-brand-muted hover:text-brand-primary px-3 py-2.5 rounded-xl text-sm font-bold transition-colors"
+        <p className="text-[11px] text-brand-muted text-center sm:text-left">
+          Or dare a friend to beat this score:{' '}
+          <a
+            href={`https://wa.me/?text=${encodeURIComponent(`I scored ${result.netWpm} WPM (${result.accuracy}% accuracy) on FastTypingLab. Think you can beat me on the same passage? 🏁 ${result.challengeUrl}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('whatsapp_score_share_click', { page: window.location.pathname })}
+            className="font-bold text-brand-primary hover:underline"
           >
-            <Award className="w-4 h-4" /> <span className="hidden sm:inline">Certificate</span>
-          </Link>
-          <Link
-            to="/typing-test/"
-            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 text-white px-3 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90"
-            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}
+            WhatsApp
+          </a>
+          {' · '}
+          <a
+            href={`https://t.me/share/url?url=${encodeURIComponent(result.challengeUrl)}&text=${encodeURIComponent(`I scored ${result.netWpm} WPM (${result.accuracy}% accuracy) on FastTypingLab. Think you can beat me on the same passage? 🏁`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('telegram_score_share_click', { page: window.location.pathname })}
+            className="font-bold text-brand-primary hover:underline"
           >
-            <RotateCcw className="w-4 h-4" /> <span className="hidden sm:inline">Try Again</span>
-          </Link>
-        </div>
+            Telegram
+          </a>
+        </p>
       </div>
     </div>
   );
