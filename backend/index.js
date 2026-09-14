@@ -16,7 +16,29 @@ app.set('trust proxy', 1);
 app.use(helmet({
   crossOriginResourcePolicy: false,
 }));
-app.use(cors());
+// Nginx does not add CORS headers for routes it proxies to this app (see the
+// comment in the api.fasttypinglab.com Nginx config) -- this is the one and
+// only place CORS is decided for everything under /api, /auth, /tests, etc.
+//
+// Allowed origins: the production site, the Vite dev server, and the Tauri
+// desktop app's webview (whose origin varies by OS/Tauri version -- tauri://
+// on Windows, https://tauri.localhost on some setups). Requests with no
+// Origin header at all (curl, server-to-server, some non-browser HTTP
+// clients) are also allowed -- CORS only governs browser-mediated requests,
+// so there's nothing to enforce against a client that isn't a browser.
+const ALLOWED_ORIGINS = [
+  'https://fasttypinglab.com',
+  'http://localhost:5173',
+  'https://tauri.localhost',
+];
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || ALLOWED_ORIGINS.includes(origin) || origin.startsWith('tauri://')) {
+      return callback(null, true);
+    }
+    callback(new Error('Not allowed by CORS'));
+  },
+}));
 // 2 MB ceiling so base64 avatar uploads (POST /api/me/avatar) fit; other
 // endpoints send tiny JSON bodies well under this.
 app.use(express.json({ limit: '2mb' }));
