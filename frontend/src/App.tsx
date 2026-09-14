@@ -9,6 +9,7 @@ import { initAnalytics, trackPageview } from './lib/analytics';
 import { captureReferralFromUrl } from './lib/referral';
 
 const TypingTestPage = lazy(() => import('./pages/TypingTestPage'));
+const TypingReportPage = lazy(() => import('./pages/TypingReportPage'));
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const LearningCoursePage = lazy(() => import('./pages/LearningCoursePage'));
@@ -338,7 +339,8 @@ const AppContent = () => {
   const isLearningInterface =
     location.pathname.startsWith('/embed') ||
     (location.pathname.startsWith('/learn/') && location.pathname !== '/learn' && location.pathname !== '/learn/') ||
-    (location.pathname.startsWith('/tests/') && location.pathname !== '/tests' && location.pathname !== '/tests/' && !location.pathname.includes('/config/'));
+    (location.pathname.startsWith('/tests/') && location.pathname !== '/tests' && location.pathname !== '/tests/' && !location.pathname.includes('/config/')) ||
+    location.pathname === '/results';
 
   return (
     <div className={`min-h-screen flex flex-col font-sans bg-brand-bg transition-colors ${isLearningInterface ? 'h-screen overflow-hidden' : ''}`}>
@@ -353,6 +355,7 @@ const AppContent = () => {
           <Route path="/typing-test/:duration" element={<TypingTestPage />} />
           <Route path="/typing-test-for/:profession" element={<TypingTestPage />} />
           <Route path="/typing-test/language/:language" element={<TypingTestPage />} />
+          <Route path="/results" element={<TypingReportPage />} />
           
           {/* New Dynamic Routes */}
           <Route path="/tests/config/:slug" element={<TestConfigPage />} />

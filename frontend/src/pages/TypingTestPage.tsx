@@ -1,17 +1,14 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize, Share2 } from 'lucide-react';
+import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize } from 'lucide-react';
 // `Target` is used both by the live stats header and the weak-key drill link.
 import CharSpan from '../components/CharSpan';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
 import { INSCRIPT_FULL_MAP } from '../data/hindiCourseData';
-import SignupPromptBanner from '../components/SignupPromptBanner';
-import TelegramCTA from '../components/TelegramCTA';
-import WhatsAppCTA from '../components/WhatsAppCTA';
+import ResultsPopup from '../components/results/ResultsPopup';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -19,7 +16,7 @@ import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
 
 import { saveSession, fetchMistakeHandlingMode, fetchTestBySlug } from '../lib/api';
 import { markTestCompleted } from '../lib/testProgress';
-import { loadPracticeStats, getDailyGoal } from '../lib/streaks';
+import { storeTypingResult } from '../lib/typingResult';
 
 // Devanagari char -> physical QWERTY key, inverted from the INSCRIPT layout map,
 // so the on-screen keyboard can highlight the right key during Mangal tests.
@@ -28,25 +25,6 @@ const INSCRIPT_CHAR_TO_KEY: Record<string, string> = Object.entries(INSCRIPT_FUL
   (acc, [key, ch]) => { if (!(ch in acc)) acc[ch] = key; return acc; },
   {} as Record<string, string>
 );
-
-// Approximate percentile for a net WPM, from published typing-speed
-// distributions (average adult ≈ 40 WPM). Piecewise-linear between anchors.
-const WPM_PERCENTILE_ANCHORS: Array<[number, number]> = [
-  [0, 1], [10, 3], [20, 15], [30, 32], [40, 52], [50, 70], [60, 82], [70, 90], [80, 95], [90, 97], [100, 99],
-];
-function wpmPercentile(wpm: number): number {
-  if (wpm <= 0) return 1;
-  const a = WPM_PERCENTILE_ANCHORS;
-  if (wpm >= a[a.length - 1][0]) return 99;
-  for (let i = 1; i < a.length; i++) {
-    if (wpm <= a[i][0]) {
-      const [x0, y0] = a[i - 1];
-      const [x1, y1] = a[i];
-      return Math.round(y0 + ((wpm - x0) / (x1 - x0)) * (y1 - y0));
-    }
-  }
-  return 99;
-}
 
 // Duration options
 const DURATION_OPTIONS = [
@@ -304,8 +282,12 @@ export default function TypingTestPage() {
     return () => document.removeEventListener('fullscreenchange', onFs);
   }, []);
 
-  // ── Results extras: consistency, weak keys, share ──
+  // ── Results extras ──
   // Consistency = how steady the WPM stayed (100 - coefficient of variation).
+  // Kept as a single derived number (not the full `history` array) for the
+  // /results handoff — the per-second sparkline charts that also used
+  // `history` were cut from this flow, so there's no reason to persist more
+  // than the one number they'd have needed.
   const consistency = useMemo(() => {
     if (!stats.isFinished || history.length < 3) return null;
     const samples = history.slice(1).map((h: any) => h.wpm).filter((w: number) => w > 0);
@@ -316,23 +298,10 @@ export default function TypingTestPage() {
     return Math.max(0, Math.min(100, Math.round(100 - (Math.sqrt(variance) / mean) * 100)));
   }, [stats.isFinished, history]);
 
-  // Which expected characters were mistyped most — derived from mistake indices.
-  const weakKeys = useMemo(() => {
-    if (!stats.isFinished || mistakes.size === 0) return [];
-    const counts = new Map<string, number>();
-    mistakes.forEach((idx: number) => {
-      const ch = activeText[idx];
-      if (!ch) return;
-      const key = ch === ' ' ? '␣' : ch;
-      counts.set(key, (counts.get(key) || 0) + 1);
-    });
-    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 4);
-  }, [stats.isFinished, mistakes, activeText]);
-
   // Build a link that reopens THIS passage at THIS duration, carrying the
   // score to beat. The friend types the identical text, so the comparison is
-  // fair — no backend needed, the whole challenge rides in the URL.
-  const [challengeCopied, setChallengeCopied] = useState(false);
+  // fair — no backend needed, the whole challenge rides in the URL. Used by
+  // both the short popup and the /results report's share buttons.
   const buildChallengeUrl = useCallback(() => {
     const params = new URLSearchParams();
     params.set('duration', String(selectedDuration));
@@ -343,42 +312,28 @@ export default function TypingTestPage() {
     return `https://fasttypinglab.com${window.location.pathname}?${params.toString()}`;
   }, [selectedDuration, stats.netWpm, stats.accuracy]);
 
-  const shareChallenge = useCallback(async () => {
-    const url = buildChallengeUrl();
-    const msg = `I scored ${stats.netWpm} WPM (${stats.accuracy}% accuracy) on FastTypingLab. Think you can beat me on the same passage? 🏁 ${url}`;
-    try {
-      if (navigator.share) await navigator.share({ text: msg });
-      else {
-        await navigator.clipboard.writeText(msg);
-        setChallengeCopied(true);
-        setTimeout(() => setChallengeCopied(false), 2200);
-      }
-    } catch { /* dismissed */ }
-  }, [buildChallengeUrl, stats.netWpm, stats.accuracy]);
-
-  // Streak/goal snapshot, read once the test finishes — by then this session
-  // has already been written to typingHistory, so it includes the run just done.
-  const [practice, setPractice] = useState<ReturnType<typeof loadPracticeStats> | null>(null);
+  // Hand the full result off to the /results report the moment the test
+  // finishes — by the time "View detailed report" is clickable in the popup,
+  // this has already run, so that link needs no query params or router state.
   useEffect(() => {
-    if (!stats.isFinished) { setPractice(null); return; }
-    // Defer a tick so the onFinish handler's history write lands first.
-    const t = setTimeout(() => setPractice(loadPracticeStats()), 60);
-    return () => clearTimeout(t);
+    if (!stats.isFinished) return;
+    storeTypingResult({
+      passage: activeText,
+      typed: userInput,
+      mistakes: Array.from(mistakes),
+      skipped: Array.from(skipped),
+      wpm: stats.wpm,
+      netWpm: stats.netWpm,
+      accuracy: stats.accuracy,
+      errors: stats.errors,
+      cpm: stats.cpm,
+      elapsedSeconds: stats.elapsedSeconds,
+      consistency,
+      testTitle: testContent.title,
+      challengeUrl: buildChallengeUrl(),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stats.isFinished]);
-
-  const [shareCopied, setShareCopied] = useState(false);
-  const shareResult = useCallback(async () => {
-    const msg = `I just scored ${stats.netWpm} WPM with ${stats.accuracy}% accuracy on FastTypingLab! Can you beat me? 🏁 https://fasttypinglab.com${window.location.pathname}`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ text: msg });
-      } else {
-        await navigator.clipboard.writeText(msg);
-        setShareCopied(true);
-        setTimeout(() => setShareCopied(false), 2000);
-      }
-    } catch { /* user dismissed share sheet */ }
-  }, [stats.netWpm, stats.accuracy]);
 
   // Brief shake on the typing display when strict mode rejects a keystroke
   const [shake, setShake] = useState(false);
@@ -834,278 +789,16 @@ export default function TypingTestPage() {
         )}
       </div>
 
-      {/* ── RESULT MODAL ── */}
-      <AnimatePresence>
-        {stats.isFinished && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-[100] p-4"
-          >
-            <motion.div
-              initial={prefersReducedMotion ? { opacity: 0 } : { scale: 0.9, y: 20, opacity: 0 }}
-              animate={prefersReducedMotion ? { opacity: 1 } : { scale: 1, y: 0, opacity: 1 }}
-              transition={prefersReducedMotion ? { duration: 0.15 } : { type: 'spring', damping: 20, stiffness: 300 }}
-              className="bg-brand-surface border border-brand-border rounded-3xl p-7 sm:p-10 max-w-sm sm:max-w-md w-full text-center shadow-2xl max-h-[90vh] overflow-y-auto"
-            >
-              <div className="text-5xl mb-4">
-                {stats.accuracy >= 95 ? '🏆' : stats.accuracy >= 80 ? '🎉' : '💪'}
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-brand-text mb-1">Test Complete!</h2>
-              <p className="text-brand-muted text-sm mb-4">
-                {stats.netWpm >= 80 ? "Blazing fast! You're in the top tier." :
-                 stats.netWpm >= 50 ? "Great speed! Keep practicing to push further." :
-                 "Good effort! Consistent practice builds speed."}
-              </p>
-
-              {/* Percentile benchmark */}
-              <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold text-white"
-                style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-                ⚡ Faster than ~{wpmPercentile(stats.netWpm)}% of typists
-              </div>
-
-              {/* Streak + daily goal feedback */}
-              {practice && (
-                <div className="mb-6 flex items-center gap-3 rounded-2xl px-4 py-3 border text-left"
-                  style={{ background: 'linear-gradient(135deg, rgba(249,115,22,0.10), rgba(249,115,22,0.03))', borderColor: 'rgba(249,115,22,0.28)' }}>
-                  <span className="text-2xl shrink-0">🔥</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-brand-text">
-                      {practice.currentStreak > 1
-                        ? `${practice.currentStreak}-day streak!`
-                        : 'Streak started — come back tomorrow'}
-                    </p>
-                    <p className="text-xs text-brand-text-muted">
-                      {practice.todayCount >= getDailyGoal()
-                        ? `✅ Daily goal complete — ${practice.todayCount} ${practice.todayCount === 1 ? 'test' : 'tests'} today`
-                        : `${practice.todayCount}/${getDailyGoal()} tests today · ${getDailyGoal() - practice.todayCount} to go`}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Challenge verdict — head-to-head on the same passage */}
-              {challenge && (
-                <div className={`mb-6 rounded-2xl border px-4 py-4 ${
-                  stats.netWpm > challenge.wpm
-                    ? 'bg-emerald-500/10 border-emerald-500/30'
-                    : stats.netWpm === challenge.wpm
-                      ? 'bg-amber-500/10 border-amber-500/30'
-                      : 'bg-brand-surface-2 border-brand-border'
-                }`}>
-                  <p className="font-black text-base mb-3">
-                    {stats.netWpm > challenge.wpm
-                      ? `🏆 You beat ${challenge.name}!`
-                      : stats.netWpm === challenge.wpm
-                        ? `🤝 Dead tie with ${challenge.name}!`
-                        : `😤 ${challenge.name} still leads — ${challenge.wpm - stats.netWpm} WPM to go`}
-                  </p>
-                  <div className="grid grid-cols-2 gap-3 text-center">
-                    <div className="bg-brand-surface rounded-xl px-3 py-2 border border-brand-border">
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-0.5">You</div>
-                      <div className="text-xl font-black font-mono text-brand-primary">{stats.netWpm}</div>
-                      <div className="text-[10px] text-brand-muted">{stats.accuracy}% acc</div>
-                    </div>
-                    <div className="bg-brand-surface rounded-xl px-3 py-2 border border-brand-border">
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-0.5 truncate">{challenge.name}</div>
-                      <div className="text-xl font-black font-mono text-brand-text">{challenge.wpm}</div>
-                      <div className="text-[10px] text-brand-muted">{challenge.accuracy !== null ? `${challenge.accuracy}% acc` : '—'}</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="grid grid-cols-3 gap-3 mb-7">
-                <div className="bg-brand-surface-2 border border-brand-border p-4 rounded-2xl">
-                  <div className="text-[10px] font-bold text-brand-muted uppercase tracking-widest mb-1">Gross</div>
-                  <div className="text-2xl font-black text-brand-text font-mono">{stats.wpm}</div>
-                  <div className="text-[10px] text-brand-muted">WPM</div>
-                </div>
-                <div className="bg-brand-primary/10 border border-brand-primary/20 p-4 rounded-2xl">
-                  <div className="text-[10px] font-bold text-brand-primary uppercase tracking-widest mb-1">Net</div>
-                  <div className="text-2xl font-black text-brand-primary font-mono">{stats.netWpm}</div>
-                  <div className="text-[10px] text-brand-primary/70">WPM</div>
-                </div>
-                <div className={`p-4 rounded-2xl border ${stats.accuracy >= 90 ? 'bg-brand-accent/10 border-brand-accent/20' : 'bg-rose-500/10 border-rose-500/20'}`}>
-                  <div className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${stats.accuracy >= 90 ? 'text-brand-accent' : 'text-rose-500'}`}>Acc</div>
-                  <div className={`text-2xl font-black font-mono ${stats.accuracy >= 90 ? 'text-brand-accent' : 'text-rose-500'}`}>{stats.accuracy}%</div>
-                  <div className={`text-[10px] ${stats.accuracy >= 90 ? 'text-brand-accent/70' : 'text-rose-400'}`}>{stats.errors} err</div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 text-xs text-brand-muted mb-6">
-                <div className="bg-brand-surface-2 rounded-xl px-3 py-2 flex justify-between items-center">
-                  <span>CPM</span>
-                  <span className="font-mono font-semibold text-brand-text">{stats.cpm}</span>
-                </div>
-                <div className="bg-brand-surface-2 rounded-xl px-3 py-2 flex justify-between items-center">
-                  <span>Time</span>
-                  <span className="font-mono font-semibold text-brand-text">{stats.elapsedSeconds}s</span>
-                </div>
-                {consistency !== null && (
-                  <div className="bg-brand-surface-2 rounded-xl px-3 py-2 flex justify-between items-center col-span-2"
-                    title="How steady your speed stayed through the test">
-                    <span>Consistency</span>
-                    <span className="font-mono font-semibold text-brand-text">{consistency}%</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Weakest keys — derived from this test's mistakes */}
-              {weakKeys.length > 0 && (
-                <div className="mb-6 text-left bg-brand-surface-2 border border-brand-border rounded-xl px-4 py-3">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2">Keys to practice</p>
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {weakKeys.map(([ch, count]) => (
-                      <span key={ch} className="inline-flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 text-rose-500 px-2.5 py-1 rounded-lg text-sm font-mono font-bold">
-                        {ch}<span className="text-[10px] font-sans font-semibold opacity-70">×{count}</span>
-                      </span>
-                    ))}
-                  </div>
-                  <Link
-                    to={`/typing-drills/?keys=${encodeURIComponent(weakKeys.map(([ch]) => ch).join(','))}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-primary hover:underline"
-                  >
-                    <Target className="w-3.5 h-3.5" /> Drill these keys →
-                  </Link>
-                </div>
-              )}
-
-              {/* Speed & accuracy over time */}
-              {history.length >= 2 && (
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                  <div className="bg-brand-surface-2 border border-brand-border rounded-xl p-2">
-                    <p className="text-[9px] font-bold uppercase tracking-widest text-brand-muted mb-1 text-left px-1">Speed (WPM)</p>
-                    <ResponsiveContainer width="100%" height={70}>
-                      <AreaChart data={history}>
-                        <defs>
-                          <linearGradient id="wpmGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#2A9DAE" stopOpacity={0.4} />
-                            <stop offset="100%" stopColor="#2A9DAE" stopOpacity={0} />
-                          </linearGradient>
-                        </defs>
-                        <XAxis dataKey="t" hide />
-                        <YAxis hide domain={[0, 'auto']} />
-                        <Tooltip
-                          formatter={(v: any) => [`${v} WPM`, '']}
-                          labelFormatter={(t: any) => `${t}s`}
-                          contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid var(--brand-border)' }}
-                        />
-                        <Area type="monotone" dataKey="wpm" stroke="#2A9DAE" strokeWidth={2} fill="url(#wpmGrad)" />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                  <div className="bg-brand-surface-2 border border-brand-border rounded-xl p-2">
-                    <p className="text-[9px] font-bold uppercase tracking-widest text-brand-muted mb-1 text-left px-1">Accuracy (%)</p>
-                    <ResponsiveContainer width="100%" height={70}>
-                      <AreaChart data={history}>
-                        <defs>
-                          <linearGradient id="accGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#BC6C50" stopOpacity={0.4} />
-                            <stop offset="100%" stopColor="#BC6C50" stopOpacity={0} />
-                          </linearGradient>
-                        </defs>
-                        <XAxis dataKey="t" hide />
-                        <YAxis hide domain={[0, 100]} />
-                        <Tooltip
-                          formatter={(v: any) => [`${v}%`, '']}
-                          labelFormatter={(t: any) => `${t}s`}
-                          contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid var(--brand-border)' }}
-                        />
-                        <Area type="monotone" dataKey="accuracy" stroke="#BC6C50" strokeWidth={2} fill="url(#accGrad)" />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              )}
-
-                {/* Achievement unlocks */}
-                <AnimatePresence>
-                  {newUnlocks.length > 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="mb-5 space-y-2"
-                    >
-                      {newUnlocks.map((u, i) => (
-                        <motion.div
-                          key={u.name}
-                          initial={{ x: -20, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          transition={{ delay: i * 0.15 }}
-                          className="flex items-center gap-3 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl px-3 py-2 text-left"
-                        >
-                          <span className="text-2xl">{u.icon}</span>
-                          <div className="flex-1">
-                            <div className="text-xs font-bold text-amber-700 dark:text-amber-400">Achievement Unlocked!</div>
-                            <div className="text-sm font-semibold text-brand-text">{u.name}</div>
-                          </div>
-                          <span className="text-xs font-bold text-amber-600 dark:text-amber-500">+{u.xp} XP</span>
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <div className="flex gap-3">
-                <button
-                  onClick={handleReset}
-                  className="flex-1 bg-brand-surface-2 hover:bg-brand-border text-brand-text py-3 rounded-xl font-bold text-sm transition-all border border-brand-border flex items-center justify-center gap-2"
-                >
-                  <RotateCcw className="w-4 h-4" /> Try Again
-                </button>
-                <Link
-                  to="/tests/"
-                  className="flex-1 py-3 rounded-xl font-bold text-sm text-white text-center transition-all hover:opacity-90 active:scale-95"
-                  style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 4px 14px rgba(48,76,83,.25)' }}
-                >
-                  More Tests
-                </Link>
-              </div>
-              <button
-                onClick={shareChallenge}
-                className="mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm text-white transition-all hover:opacity-90 active:scale-[0.98]"
-                style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.28)' }}
-              >
-                🏁 {challengeCopied ? 'Challenge link copied!' : challenge ? 'Challenge someone back' : 'Challenge a friend'}
-              </button>
-              <p className="mt-1.5 text-[11px] text-brand-muted">
-                Sends this exact passage with your score to beat
-              </p>
-              <button
-                onClick={shareResult}
-                className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all border"
-                style={{ background: 'rgba(42,157,174,0.08)', borderColor: 'rgba(42,157,174,0.3)', color: '#2A9DAE' }}
-              >
-                <Share2 className="w-4 h-4" /> {shareCopied ? 'Copied to clipboard!' : 'Share my result'}
-              </button>
-              <Link
-                to={`/certificate?wpm=${stats.netWpm}&acc=${stats.accuracy}&title=${encodeURIComponent(testContent.title)}`}
-                className="mt-2 w-full flex items-center justify-center gap-2 text-brand-muted hover:text-brand-primary text-sm font-semibold transition-colors"
-              >
-                <Award className="w-4 h-4" /> Get Certificate
-              </Link>
-              <div className="mt-4">
-                <SignupPromptBanner
-                  dismissKey="signupPromptResult"
-                  message={
-                    stats.netWpm >= 40
-                      ? `🏆 ${stats.netWpm} WPM at ${stats.accuracy}% — that's certificate-worthy! Create a free account to save this result, download your certificate, and keep your streak.`
-                      : `Nice run — ${stats.netWpm} WPM! 🚀 Create a free account to track your progress over time, keep your streak, and unlock the AI tutor.`
-                  }
-                  cta="Save my result"
-                />
-              </div>
-              <div className="mt-3 space-y-2.5">
-                <TelegramCTA />
-                <WhatsAppCTA />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {stats.isFinished && (
+        <ResultsPopup
+          netWpm={stats.netWpm}
+          accuracy={stats.accuracy}
+          challengeUrl={buildChallengeUrl()}
+          newUnlock={newUnlocks[0] || null}
+          prefersReducedMotion={prefersReducedMotion}
+          onReset={handleReset}
+        />
+      )}
     </div>
   );
 }
