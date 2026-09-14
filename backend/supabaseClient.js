@@ -10,19 +10,42 @@ if (!supabaseUrl || !supabaseKey) {
   console.warn('Warning: SUPABASE_URL and SUPABASE_SERVICE_KEY must be set in .env');
 }
 
-// `Connection: close` on every request. In production, requests to Supabase
-// from this backend have intermittently returned a clean "no error" response
-// for a write that never actually reached PostgREST -- confirmed by issuing
-// the identical request (same key, same payload, same moment) from a
-// different machine, which succeeded every time. A reused, wedged TCP
-// connection is the most likely mechanism (Render's free tier suspends the
-// process on idle, and Node's fetch keeps sockets alive across that gap), so
-// this closes the connection after every request rather than reusing one --
-// one extra TLS handshake per call, which is nothing next to silently losing
-// writes. It has not fully eliminated the issue by itself in testing, which
-// suggests part of the problem may sit further upstream (e.g. Supabase's own
-// connection pooling) -- see services/referrals.js for the verify-what-was-
-// actually-written pattern that catches whatever gets through regardless.
-export const supabase = createClient(supabaseUrl, supabaseKey, {
-  global: { headers: { Connection: 'close' } },
-});
+function createFreshClient() {
+  return createClient(supabaseUrl, supabaseKey, {
+    global: { headers: { Connection: 'close' } },
+  });
+}
+
+/**
+ * A long-lived, singleton `SupabaseClient` in a Node server process is not
+ * reliable: confirmed live (2026-09-14) by running two queries -- identical
+ * SQL, identical key, same request -- side by side, one through the shared
+ * client and one through a client created fresh right there. The shared one
+ * returned zero rows for a row that demonstrably existed; the fresh one found
+ * it immediately. A raw `fetch()` to the same URL, bypassing supabase-js
+ * entirely, also found it -- so the fault sits inside the client library's
+ * internal state as it ages across many requests, not the network, not
+ * PostgREST, and not connection keep-alive (Connection: close was already in
+ * place and did not prevent this). This most likely also explains an earlier,
+ * never-fully-explained pattern of intermittent silent failures against
+ * Supabase Cloud in production, previously suspected to be network/connection
+ * staleness.
+ *
+ * The fix: never hold onto one client instance across requests. Every
+ * property access below builds a brand-new client and reads that property
+ * off it, so `supabase.from(...)` and `supabase.auth.getUser(...)` are always
+ * backed by a client that has only ever served this one call. Construction is
+ * cheap (no network I/O happens until a request is actually made), so this
+ * costs an extra object allocation per access -- negligible next to the
+ * alternative of queries silently returning wrong results in production.
+ */
+export const supabase = new Proxy(
+  {},
+  {
+    get(_target, prop) {
+      const client = createFreshClient();
+      const value = client[prop];
+      return typeof value === 'function' ? value.bind(client) : value;
+    },
+  }
+);
