@@ -1,12 +1,13 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useLocation } from 'react-router-dom';
-import { Menu, X, Moon, Sun } from 'lucide-react';
+import { Menu, X, Moon, Sun, MessageCircle, Send } from 'lucide-react';
 import { fetchMe } from './lib/user';
 import Footer from './components/Footer';
 import { useTheme } from './store/useThemeStore';
 import { trackVisit } from './lib/api';
-import { initAnalytics, trackPageview } from './lib/analytics';
+import { initAnalytics, trackPageview, trackEvent } from './lib/analytics';
 import { captureReferralFromUrl } from './lib/referral';
+import { WHATSAPP_URL, TELEGRAM_URL } from './lib/social';
 
 const TypingTestPage = lazy(() => import('./pages/TypingTestPage'));
 const TypingReportPage = lazy(() => import('./pages/TypingReportPage'));
@@ -147,6 +148,22 @@ const Navbar = () => {
 
           {/* ── Right Side ── */}
           <div className="flex items-center gap-2 shrink-0">
+            {/* Community links — desktop only */}
+            <div className="hidden md:flex items-center gap-1.5">
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" title="Join our WhatsApp channel"
+                onClick={() => trackEvent('whatsapp_cta_click', { variant: 'navbar', page: window.location.pathname })}
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all hover:opacity-90 hover:-translate-y-px"
+                style={{ background: '#188842' }}>
+                <MessageCircle size={16} />
+              </a>
+              <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" title="Join our Telegram channel"
+                onClick={() => trackEvent('telegram_cta_click', { variant: 'navbar', page: window.location.pathname })}
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all hover:opacity-90 hover:-translate-y-px"
+                style={{ background: '#1B7EAE' }}>
+                <Send size={16} />
+              </a>
+            </div>
+
             {/* Theme toggle */}
             <button onClick={toggleTheme} aria-label="Toggle theme"
               className="w-9 h-9 rounded-xl flex items-center justify-center text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
@@ -226,6 +243,23 @@ const Navbar = () => {
                   </Link>
                 );
               })}
+            </div>
+
+            {/* Community links */}
+            <div className="mt-4 pt-4 border-t border-brand-border">
+              <p className="px-4 pb-2 text-xs font-bold uppercase tracking-wider text-brand-muted">Join our community</p>
+              <div className="flex gap-2 px-1">
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={() => { trackEvent('whatsapp_cta_click', { variant: 'navbar_mobile', page: window.location.pathname }); closeMenu(); }}
+                  className="flex-1 flex items-center justify-center gap-1.5 text-white font-semibold text-sm py-2.5 rounded-xl transition-all"
+                  style={{ background: '#188842' }}>
+                  <MessageCircle size={16} /> WhatsApp
+                </a>
+                <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => { trackEvent('telegram_cta_click', { variant: 'navbar_mobile', page: window.location.pathname }); closeMenu(); }}
+                  className="flex-1 flex items-center justify-center gap-1.5 text-white font-semibold text-sm py-2.5 rounded-xl transition-all"
+                  style={{ background: '#1B7EAE' }}>
+                  <Send size={16} /> Telegram
+                </a>
+              </div>
             </div>
 
             <div className="mt-auto pt-6 border-t border-brand-border flex flex-col gap-3">
