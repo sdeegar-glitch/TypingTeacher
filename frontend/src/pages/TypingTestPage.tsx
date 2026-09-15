@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize } from 'lucide-react';
-// `Target` is used both by the live stats header and the weak-key drill link.
-import CharSpan from '../components/CharSpan';
+import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize, RefreshCw, Eye, EyeOff, Download } from 'lucide-react';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
@@ -14,9 +12,34 @@ import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
 
-import { saveSession, fetchMistakeHandlingMode, fetchTestBySlug } from '../lib/api';
+import { saveSession, fetchMistakeHandlingMode, fetchTestBySlug, fetchTestList } from '../lib/api';
 import { markTestCompleted } from '../lib/testProgress';
 import { storeTypingResult } from '../lib/typingResult';
+
+// Splits text into space-delimited word ranges for word-level typing feedback.
+interface WordRange { start: number; end: number; text: string }
+function splitWords(text: string): WordRange[] {
+  const words: WordRange[] = [];
+  let i = 0;
+  while (i < text.length) {
+    while (i < text.length && text[i] === ' ') i++;
+    const start = i;
+    while (i < text.length && text[i] !== ' ') i++;
+    if (i > start) words.push({ start, end: i, text: text.slice(start, i) });
+  }
+  return words;
+}
+type WordStatus = 'pending' | 'current' | 'correct' | 'wrong';
+function getWordStatus(w: WordRange, typedLen: number, mistakes: Set<number>, skipped: Set<number>): WordStatus {
+  if (typedLen <= w.start) return 'pending';
+  const typedEnd = Math.min(w.end, typedLen);
+  let hasError = false;
+  for (let idx = w.start; idx < typedEnd; idx++) {
+    if (mistakes.has(idx) || skipped.has(idx)) { hasError = true; break; }
+  }
+  if (typedLen < w.end) return hasError ? 'wrong' : 'current';
+  return hasError ? 'wrong' : 'correct';
+}
 
 // Devanagari char -> physical QWERTY key, inverted from the INSCRIPT layout map,
 // so the on-screen keyboard can highlight the right key during Mangal tests.
@@ -62,6 +85,7 @@ const sampleTexts: Record<string, { title: string; content: string }> = {
 export default function TypingTestPage() {
   const { id, duration, profession, language } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const queryDuration = searchParams.get('duration');
   // Optional AI-tutor practice passage, handed off via sessionStorage (?practice=1).
@@ -241,6 +265,10 @@ export default function TypingTestPage() {
 
   const { stats, userInput, mistakes, skipped, processChar, processBackspace, handleMobileInput, reset, rejectedFlash, history, nextChar } = engine;
 
+  // Word ranges for the current passage, reused by both the passage box and
+  // the typed-preview line below it (word-level, not character-level, feedback).
+  const wordRanges = useMemo(() => splitWords(activeText), [activeText]);
+
   // ── On-screen keyboard + hands guide (Phase-1 interface upgrade) ──
   const [showKeyboard, setShowKeyboard] = useState(() => {
     try { return localStorage.getItem('ftl_showKeyboard') !== '0'; } catch { return true; }
@@ -256,6 +284,71 @@ export default function TypingTestPage() {
     try { localStorage.setItem('ftl_showHands', v ? '0' : '1'); } catch {}
     return !v;
   }), []);
+
+  // ── Live engine display prefs (Highlight / Indicator / Backspace mode) ──
+  const [showPassage, setShowPassage] = useState(true);
+  const [highlightOn, setHighlightOn] = useState(() => {
+    try { return localStorage.getItem('ftl_highlight') !== '0'; } catch { return true; }
+  });
+  const [indicatorOn, setIndicatorOn] = useState(() => {
+    try { return localStorage.getItem('ftl_indicator') !== '0'; } catch { return true; }
+  });
+  const [backspaceMode, setBackspaceMode] = useState<'full' | 'word' | 'off'>(() => {
+    try { return (localStorage.getItem('ftl_bsmode') as 'full' | 'word' | 'off') || 'full'; } catch { return 'full'; }
+  });
+  useEffect(() => { try { localStorage.setItem('ftl_highlight', highlightOn ? '1' : '0'); } catch {} }, [highlightOn]);
+  useEffect(() => { try { localStorage.setItem('ftl_indicator', indicatorOn ? '1' : '0'); } catch {} }, [indicatorOn]);
+  useEffect(() => { try { localStorage.setItem('ftl_bsmode', backspaceMode); } catch {} }, [backspaceMode]);
+
+  // Delete/Backspace keystroke counters — live-view only, not persisted to the report.
+  const [backspaceCount, setBackspaceCount] = useState(0);
+  const [deleteCount, setDeleteCount] = useState(0);
+
+  // Whether a backspace/delete is allowed right now, given the current mode
+  // and how much has been typed so far.
+  const canDeleteNow = useCallback((currentInput: string) => {
+    if (backspaceMode === 'off') return false;
+    if (backspaceMode === 'word') {
+      if (currentInput.length === 0) return false;
+      if (currentInput[currentInput.length - 1] === ' ') return false;
+    }
+    return true;
+  }, [backspaceMode]);
+
+  // "Change" — jump to a different passage at the same duration.
+  const [testPool, setTestPool] = useState<string[]>([]);
+  useEffect(() => {
+    fetchTestList().then(list => {
+      const slugs = (list || []).map((t: any) => t.slug || t.id).filter(Boolean);
+      setTestPool(slugs);
+    }).catch(() => {});
+  }, []);
+  const handleChangePassage = useCallback(() => {
+    const others = testPool.filter(slug => String(slug) !== String(id));
+    if (others.length === 0) return;
+    const next = others[Math.floor(Math.random() * others.length)];
+    navigate(`/tests/${next}?duration=${selectedDuration}`);
+  }, [testPool, id, selectedDuration, navigate]);
+
+  // "Download" — save the current passage as a plain-text file.
+  const handleDownloadPassage = useCallback(() => {
+    const blob = new Blob([testContent.content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${testContent.title.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'passage'}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }, [testContent]);
+
+  const greetingName = useMemo(() => {
+    try {
+      const raw = (localStorage.getItem('ftl_user_name') || '').trim().split(/\s+/)[0];
+      return raw || '';
+    } catch { return ''; }
+  }, []);
 
   // Which physical key to highlight: ASCII passes straight through (English +
   // Kruti Dev keystroke text); Devanagari (Mangal) maps via the INSCRIPT table.
@@ -356,12 +449,22 @@ export default function TypingTestPage() {
         const expected = activeText[userInput.length + i];
         if (added[i] === expected) sound.playKey(); else sound.playError();
       }
+      handleMobileInput(newVal);
+      setMobileVal(newVal);
     } else {
+      // Deletion — count the attempt, then honor the current backspace mode.
+      const removedCount = mobileVal.length - newVal.length;
+      setBackspaceCount(c => c + removedCount);
       sound.playKey();
+      if (!canDeleteNow(userInput)) {
+        // Blocked: leave the underlying engine state untouched and let the
+        // controlled input snap back to its previous value on re-render.
+        return;
+      }
+      handleMobileInput(newVal);
+      setMobileVal(newVal);
     }
-    handleMobileInput(newVal);
-    setMobileVal(newVal);
-  }, [handleMobileInput, mobileVal, activeText, userInput.length, sound]);
+  }, [handleMobileInput, mobileVal, activeText, userInput, sound, canDeleteNow]);
 
   // Desktop keyboard listener
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -369,12 +472,16 @@ export default function TypingTestPage() {
     const ignored = ['Shift','Control','Alt','Meta','CapsLock','Tab','Escape','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12'];
     if (ignored.includes(e.key)) return;
     if (e.key === ' ') e.preventDefault();
-    if (e.key === 'Backspace') { sound.playKey(); processBackspace(); }
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      sound.playKey();
+      if (e.key === 'Backspace') setBackspaceCount(c => c + 1); else setDeleteCount(c => c + 1);
+      if (canDeleteNow(userInput)) processBackspace();
+    }
     else if (e.key.length === 1) {
       if (e.key === activeText[userInput.length]) sound.playKey(); else sound.playError();
       processChar(e.key);
     }
-  }, [stats.isFinished, processChar, processBackspace, sound, activeText, userInput.length]);
+  }, [stats.isFinished, processChar, processBackspace, sound, activeText, userInput, canDeleteNow]);
 
   useEffect(() => {
     if (!isMobile) {
@@ -400,6 +507,8 @@ export default function TypingTestPage() {
   const handleReset = useCallback(() => {
     reset();
     setMobileVal('');
+    setBackspaceCount(0);
+    setDeleteCount(0);
     if (isMobile) setTimeout(() => hiddenInputRef.current?.focus(), 100);
     if (testMode === 'words') {
       // Re-trigger words mode re-generation via key change in parent
@@ -494,36 +603,8 @@ export default function TypingTestPage() {
           </span>
         )}
 
-        {/* Right: Stats */}
+        {/* Right: Restart (live numbers now live in the stat-pills row below) */}
         <div className="flex items-center gap-3 sm:gap-5 shrink-0">
-          <div className="text-center">
-            <div className="text-[9px] text-brand-muted uppercase tracking-widest font-semibold flex items-center gap-0.5 justify-center">
-              <Clock className="w-2.5 h-2.5" />
-              <span className="hidden sm:inline">Time</span>
-            </div>
-            <div className={`text-sm sm:text-base font-black tabular-nums font-mono ${stats.timeLeft <= 10 && stats.isActive ? 'text-rose-500' : 'text-brand-text'}`}>
-              {formattedTime}
-            </div>
-          </div>
-
-          <div className="text-center">
-            <div className="text-[9px] text-brand-muted uppercase tracking-widest font-semibold flex items-center gap-0.5 justify-center">
-              <Zap className="w-2.5 h-2.5" />
-              WPM
-            </div>
-            <div className="text-sm sm:text-base font-black tabular-nums text-brand-primary font-mono">{stats.netWpm}</div>
-          </div>
-
-          <div className="text-center hidden sm:block">
-            <div className="text-[9px] text-brand-muted uppercase tracking-widest font-semibold flex items-center gap-0.5 justify-center">
-              <Target className="w-2.5 h-2.5" />
-              Acc
-            </div>
-            <div className={`text-sm sm:text-base font-black tabular-nums font-mono ${stats.accuracy >= 90 ? 'text-brand-accent' : 'text-rose-500'}`}>
-              {stats.accuracy}%
-            </div>
-          </div>
-
           <button
             onClick={(e) => { e.stopPropagation(); handleReset(); }}
             className="flex items-center gap-1.5 bg-brand-surface-2 hover:bg-brand-border text-brand-muted hover:text-brand-text px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-brand-border"
@@ -547,20 +628,63 @@ export default function TypingTestPage() {
       {/* ── MAIN CONTENT ────────────────────────────── */}
       <div className="flex-grow flex flex-col items-center justify-start gap-4 px-3 sm:px-6 py-4 sm:py-6 overflow-y-auto">
 
-        {/* ── LIVE STAT CARDS (WPM · Accuracy · Errors) ── */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full max-w-2xl">
-          <div className="rounded-2xl py-3 sm:py-4 text-center text-white shadow-md" style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-            <div className="text-2xl sm:text-3xl font-black font-mono leading-none">{stats.wpm}</div>
-            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/80 mt-1">WPM</div>
+        {/* ── Welcome header: greeting + passage pill + Change/Hide/Download ── */}
+        <div className="w-full max-w-2xl flex flex-wrap items-center gap-2">
+          <h2 className="text-sm sm:text-base font-black text-brand-text shrink-0">
+            {greetingName ? `Welcome, ${greetingName}` : 'Welcome!'}
+          </h2>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-white truncate max-w-[45%] sm:max-w-xs"
+            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+            <span className="opacity-80 font-semibold">Passage:</span> <span className="truncate">{testContent.title}</span>
+          </span>
+          <div className="ml-auto flex items-center gap-1.5">
+            <button
+              onClick={handleChangePassage}
+              disabled={testPool.length === 0}
+              title="Switch to a different passage"
+              className="flex items-center gap-1.5 bg-brand-surface border border-brand-border hover:border-brand-primary/40 text-brand-muted hover:text-brand-text px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-40"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Change</span>
+            </button>
+            <button
+              onClick={() => setShowPassage(v => !v)}
+              title={showPassage ? 'Hide the passage text' : 'Show the passage text'}
+              className="flex items-center gap-1.5 bg-brand-surface border border-brand-border hover:border-brand-primary/40 text-brand-muted hover:text-brand-text px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+            >
+              {showPassage ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />} <span className="hidden sm:inline">{showPassage ? 'Hide' : 'Show'}</span>
+            </button>
+            <button
+              onClick={handleDownloadPassage}
+              title="Download this passage as a text file"
+              className="flex items-center gap-1.5 bg-brand-surface border border-brand-border hover:border-brand-primary/40 text-brand-muted hover:text-brand-text px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+            >
+              <Download className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Download</span>
+            </button>
           </div>
-          <div className="rounded-2xl py-3 sm:py-4 text-center text-white shadow-md" style={{ background: 'linear-gradient(135deg,#2A9DAE,#54c1cf)' }}>
-            <div className="text-2xl sm:text-3xl font-black font-mono leading-none">{stats.accuracy}%</div>
-            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/80 mt-1">Accuracy</div>
-          </div>
-          <div className="rounded-2xl py-3 sm:py-4 text-center text-white shadow-md" style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)' }}>
-            <div className="text-2xl sm:text-3xl font-black font-mono leading-none">{stats.errors}</div>
-            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/80 mt-1">Errors</div>
-          </div>
+        </div>
+
+        {/* ── STAT PILLS (Gross · Delete · Backspace · Time Left) ── */}
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-2 w-full max-w-2xl">
+          {[
+            { label: 'Gross', value: stats.wpm, icon: Zap, cls: 'bg-brand-primary/10 border-brand-primary/30 text-brand-primary' },
+            { label: 'Delete', value: deleteCount, icon: RotateCcw, cls: 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400' },
+            { label: 'Backspace', value: backspaceCount, icon: RotateCcw, cls: 'bg-rose-500/10 border-rose-500/30 text-rose-500' },
+            { label: 'Time Left', value: formattedTime, icon: Clock, cls: stats.timeLeft <= 10 && stats.isActive ? 'bg-rose-500/15 border-rose-500/40 text-rose-500 animate-pulse' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400' },
+          ].map(s => (
+            <div key={s.label} className={`rounded-xl px-1.5 py-1.5 sm:py-2 text-center border ${s.cls}`}>
+              <div className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest opacity-80 flex items-center justify-center gap-0.5">
+                <s.icon className="w-2.5 h-2.5" /> {s.label}
+              </div>
+              <div className="text-sm sm:text-lg font-black font-mono tabular-nums leading-none mt-0.5">{s.value}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* ── Compact meta line: Net WPM · Accuracy · Errors ── */}
+        <div className="w-full max-w-2xl flex items-center gap-4 text-xs text-brand-muted font-semibold">
+          <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> Net: <span className="font-mono font-bold text-brand-text">{stats.netWpm}</span></span>
+          <span className="flex items-center gap-1"><Target className="w-3 h-3" /> Accuracy: <span className={`font-mono font-bold ${stats.accuracy >= 90 ? 'text-brand-accent' : 'text-rose-500'}`}>{stats.accuracy}%</span></span>
+          <span>Errors: <span className="font-mono font-bold text-rose-500">{stats.errors}</span></span>
         </div>
 
         {/* ── Challenge banner (someone sent this link) ── */}
@@ -620,32 +744,100 @@ export default function TypingTestPage() {
               <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mt-3 mb-0">Kruti Dev keystrokes (type this)</p>
             </div>
           )}
-          <div
-            className={`relative bg-brand-surface border border-brand-border rounded-2xl px-4 sm:px-8 py-5 shadow-sm cursor-text overflow-hidden ${shake && !prefersReducedMotion ? 'animate-error-shake' : ''}`}
-            onClick={() => isMobile && hiddenInputRef.current?.focus()}
-          >
-            {/* Subtle top glow when active */}
-            {stats.isActive && (
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-primary/50 to-transparent" />
-            )}
-
-            {/* Text display */}
+          {showPassage && (
             <div
-              className="font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
-              style={{ maxHeight: isMobile ? '120px' : '160px', fontSize: `${a11y.fontSize}px` }}
+              className={`relative bg-brand-surface border border-brand-border rounded-2xl px-4 sm:px-8 py-5 shadow-sm cursor-text overflow-hidden ${shake && !prefersReducedMotion ? 'animate-error-shake' : ''}`}
+              onClick={() => isMobile && hiddenInputRef.current?.focus()}
             >
-              {activeText.split('').map((char, index) => (
-                <CharSpan
-                  key={index}
-                  char={char}
-                  isCorrect={index < userInput.length && !mistakes.has(index) && !skipped.has(index)}
-                  isError={index < userInput.length && mistakes.has(index)}
-                  isSkipped={skipped.has(index)}
-                  isCurrent={index === userInput.length}
-                />
-              ))}
-            </div>
+              {/* Subtle top glow when active */}
+              {stats.isActive && (
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-primary/50 to-transparent" />
+              )}
 
+              {/* Text display — word-level color feedback */}
+              <div
+                className="font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
+                style={{ maxHeight: isMobile ? '120px' : '160px', fontSize: `${a11y.fontSize}px` }}
+              >
+                {wordRanges.map((w, wi) => {
+                  const status = getWordStatus(w, userInput.length, mistakes, skipped);
+                  const cls =
+                    status === 'correct' && highlightOn ? 'text-emerald-600 dark:text-emerald-400' :
+                    status === 'wrong' && highlightOn ? 'text-rose-600 dark:text-rose-400 bg-rose-500/10 rounded-sm' :
+                    status === 'current' && indicatorOn ? 'text-brand-text bg-amber-300/40 rounded-sm' :
+                    'text-brand-text-muted';
+                  return (
+                    <span key={wi}>
+                      <span className={cls}>{w.text}</span>
+                      {wi < wordRanges.length - 1 ? ' ' : ''}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ── Typed-text preview — what you actually typed, misspelled words underlined ── */}
+          {userInput.length > 0 && (
+            <div className="bg-brand-surface-2 border border-brand-border rounded-2xl px-4 sm:px-8 py-3 mt-2 max-h-[70px] overflow-y-auto font-mono tracking-wide"
+              style={{ fontSize: `${a11y.fontSize}px` }}>
+              {wordRanges.filter(w => w.start < userInput.length).map((w, wi) => {
+                const status = getWordStatus(w, userInput.length, mistakes, skipped);
+                const typedSlice = userInput.slice(w.start, Math.min(w.end, userInput.length));
+                const wrong = status === 'wrong';
+                return (
+                  <span key={wi}>
+                    <span className={wrong ? 'text-rose-500 underline decoration-wavy decoration-rose-500' : 'text-brand-text'}>{typedSlice}</span>
+                    {' '}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ── Highlight / Indicator / Backspace-mode controls ── */}
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 px-1 text-xs">
+            <label className="flex items-center gap-2 cursor-pointer select-none font-semibold text-brand-muted">
+              Highlight
+              <button
+                type="button"
+                role="switch"
+                aria-checked={highlightOn}
+                onClick={() => setHighlightOn(v => !v)}
+                className={`relative w-9 h-5 rounded-full transition-colors ${highlightOn ? 'bg-brand-primary' : 'bg-brand-border'}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${highlightOn ? 'translate-x-4' : ''}`} />
+              </button>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer select-none font-semibold text-brand-muted">
+              Indicator
+              <button
+                type="button"
+                role="switch"
+                aria-checked={indicatorOn}
+                onClick={() => setIndicatorOn(v => !v)}
+                className={`relative w-9 h-5 rounded-full transition-colors ${indicatorOn ? 'bg-brand-primary' : 'bg-brand-border'}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${indicatorOn ? 'translate-x-4' : ''}`} />
+              </button>
+            </label>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-brand-muted">Backspace:</span>
+              <div className="flex items-center bg-brand-surface-2 border border-brand-border rounded-lg p-0.5">
+                {([['full', 'Full'], ['word', 'Word'], ['off', 'Off']] as [typeof backspaceMode, string][]).map(([val, label]) => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => setBackspaceMode(val)}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-colors ${
+                      backspaceMode === val ? 'bg-brand-primary text-white' : 'text-brand-muted hover:text-brand-text'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* ── Controls toolbar — below the typing window ── */}
