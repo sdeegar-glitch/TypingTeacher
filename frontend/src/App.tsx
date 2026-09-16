@@ -26,6 +26,8 @@ const ReferPage = lazy(() => import('./pages/ReferPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
+const DisclaimerPage = lazy(() => import('./pages/DisclaimerPage'));
+const CookiePolicyPage = lazy(() => import('./pages/CookiePolicyPage'));
 const EmbedWidgetPage = lazy(() => import('./pages/EmbedWidgetPage'));
 const WpmCalculatorPage = lazy(() => import('./pages/WpmCalculatorPage'));
 const TypingStatisticsPage = lazy(() => import('./pages/TypingStatisticsPage'));
@@ -477,6 +479,8 @@ const AppContent = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/disclaimer" element={<DisclaimerPage />} />
+          <Route path="/cookie-policy" element={<CookiePolicyPage />} />
           <Route path="/embed" element={<EmbedWidgetPage />} />
           <Route path="/wpm-calculator" element={<WpmCalculatorPage />} />
           <Route path="/typing-statistics" element={<TypingStatisticsPage />} />

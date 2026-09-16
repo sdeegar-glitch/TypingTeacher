@@ -26,6 +26,8 @@ const COMPANY_LINKS = [
   { label: 'Contact Us', href: '/contact/' },
   { label: 'Privacy Policy', href: '/privacy/' },
   { label: 'Terms of Service', href: '/terms/' },
+  { label: 'Disclaimer', href: '/disclaimer/' },
+  { label: 'Cookie Policy', href: '/cookie-policy/' },
 ];
 
 export default function Footer() {
