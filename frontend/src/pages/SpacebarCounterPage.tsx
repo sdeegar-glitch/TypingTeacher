@@ -197,10 +197,23 @@ export default function SpacebarCounterPage() {
         )}
 
         {/* SEO content */}
-        <div className="mt-8 text-sm text-brand-text-muted leading-relaxed space-y-2">
-          <h2 className="text-base font-bold text-brand-text">Spacebar Counter — Test Your Spacebar Speed</h2>
-          <p>The Spacebar Counter test measures how many times you can press the spacebar in 10 seconds. It's popular for checking keyboard responsiveness and for gaming challenges like Minecraft "spacebar clicking" records.</p>
-          <p>The world record is over <strong className="text-brand-text">14 spacebar presses per second</strong>. Average users score between 5–8 SPS. Can you beat the record?</p>
+        <div className="mt-8 text-sm text-brand-text-muted leading-relaxed space-y-4">
+          <div className="space-y-2">
+            <h2 className="text-base font-bold text-brand-text">Spacebar Counter — Test Your Spacebar Speed</h2>
+            <p>The Spacebar Counter test measures how many times you can press the spacebar in 10 seconds. It's popular for checking keyboard responsiveness and for gaming challenges like Minecraft "spacebar clicking" records.</p>
+            <p>The world record is over <strong className="text-brand-text">14 spacebar presses per second</strong>. Average users score between 5–8 SPS. Can you beat the record?</p>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-base font-bold text-brand-text">FAQ</h2>
+            <div>
+              <p className="font-semibold text-brand-text">What is SPS?</p>
+              <p>SPS (Spacebar Presses per Second) is the average rate at which you can press the spacebar over the test duration.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-brand-text">Does spacebar speed relate to typing speed?</p>
+              <p>Not directly — this measures raw key-press repetition rather than typing accuracy or rhythm. For a real measure of your typing ability, try our <Link to="/tests/" className="text-brand-primary hover:underline">typing test</Link>.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

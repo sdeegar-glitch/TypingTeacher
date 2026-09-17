@@ -208,6 +208,14 @@ export default function ZombieTypingPage() {
               className="w-full bg-brand-surface border-2 border-emerald-500/40 focus:border-emerald-500 rounded-xl px-5 py-3.5 text-brand-text font-mono text-lg outline-none transition-all" />
           </div>
         )}
+
+        {state !== 'playing' && (
+          <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed space-y-2">
+            <h2 className="text-base font-bold text-brand-text">What is Zombie Typing?</h2>
+            <p>Zombie Typing is a free typing survival game — zombies approach from the right side of the screen carrying a word each, and you must type it exactly to destroy them before they reach your base. You start with 5 lives; a zombie that gets through costs you one.</p>
+            <p>Each wave introduces tougher, longer words and faster zombies, so the game scales from beginner-friendly to a real accuracy-under-pressure challenge as you clear more waves.</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -181,6 +181,14 @@ export default function WordRainPage() {
             <Zap className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-primary" />
           </div>
         )}
+
+        {gameState !== 'playing' && (
+          <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed space-y-2">
+            <h2 className="text-base font-bold text-brand-text">What is Word Rain?</h2>
+            <p>Word Rain is a free typing game where words fall from the top of the screen and you must type each one correctly before it reaches the bottom. Miss three words and it's game over — but combo streaks of correct words boost your score.</p>
+            <p>Words get harder and fall faster as you level up, from short everyday words to longer vocabulary. It's a quick way to sharpen reaction time and accuracy under pressure, not just raw speed.</p>
+          </div>
+        )}
       </div>
     </div>
   );

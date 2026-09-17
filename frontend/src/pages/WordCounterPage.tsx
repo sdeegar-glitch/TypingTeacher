@@ -164,10 +164,27 @@ export default function WordCounterPage() {
         </div>
 
         {/* SEO text */}
-        <div className="mt-10 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed space-y-2">
-          <h2 className="text-base font-bold text-brand-text">About This Word Counter</h2>
-          <p>This free online word counter tool counts words, characters (with and without spaces), sentences, paragraphs, and estimates your reading time in real time. It also shows keyword density — how often specific words appear in your text.</p>
-          <p>Use it for essays, articles, blog posts, social media captions, or any writing project where word count matters. No sign-up required — everything runs instantly in your browser.</p>
+        <div className="mt-10 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed space-y-4">
+          <div className="space-y-2">
+            <h2 className="text-base font-bold text-brand-text">About This Word Counter</h2>
+            <p>This free online word counter tool counts words, characters (with and without spaces), sentences, paragraphs, and estimates your reading time in real time. It also shows keyword density — how often specific words appear in your text.</p>
+            <p>Use it for essays, articles, blog posts, social media captions, or any writing project where word count matters. No sign-up required — everything runs instantly in your browser.</p>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-base font-bold text-brand-text">FAQ</h2>
+            <div>
+              <p className="font-semibold text-brand-text">How is reading time calculated?</p>
+              <p>Reading time is estimated using an average adult reading speed of 200 words per minute.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-brand-text">Is my text saved or uploaded anywhere?</p>
+              <p>No — everything is calculated locally in your browser. Nothing you type here is sent to a server or stored.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-brand-text">What counts as a "sentence" or "paragraph"?</p>
+              <p>Sentences are counted by terminal punctuation (. ! ?). Paragraphs are counted by blank-line breaks in your text.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

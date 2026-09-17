@@ -151,9 +151,22 @@ export default function CaseConverterPage() {
         )}
 
         {/* SEO */}
-        <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-2">
-          <h2 className="text-base font-bold text-brand-text">About Case Converter</h2>
-          <p>This free online case converter transforms text between 10 case formats including UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, kebab-case, aLtErNaTiNg, and iNVERSE. Useful for developers, writers, students, and content creators.</p>
+        <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-4">
+          <div className="space-y-2">
+            <h2 className="text-base font-bold text-brand-text">About Case Converter</h2>
+            <p>This free online case converter transforms text between 10 case formats including UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, kebab-case, aLtErNaTiNg, and iNVERSE. Useful for developers, writers, students, and content creators.</p>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-base font-bold text-brand-text">FAQ</h2>
+            <div>
+              <p className="font-semibold text-brand-text">When would I use camelCase vs snake_case?</p>
+              <p>camelCase and PascalCase are common variable/class naming conventions in JavaScript, TypeScript and Java. snake_case is common in Python and database column names. kebab-case is typical for URLs and CSS class names.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-brand-text">Does this tool store my text?</p>
+              <p>No — conversion happens instantly in your browser and nothing is uploaded or saved.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

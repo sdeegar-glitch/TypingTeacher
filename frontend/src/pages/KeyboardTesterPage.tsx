@@ -201,15 +201,34 @@ export default function KeyboardTesterPage() {
         </div>
 
         {/* SEO Content */}
-        <div className="mt-10 prose max-w-none text-brand-text-muted">
-          <h2 className="text-lg font-bold text-brand-text mb-2">What is a Keyboard Tester?</h2>
-          <p className="text-sm leading-relaxed">
-            A keyboard tester lets you check if every key on your keyboard is working correctly by pressing each key and watching it light up on the virtual keyboard display.
-            It's useful for testing a new mechanical keyboard, diagnosing stuck keys, checking key rollover (NKRO), or verifying your keyboard before an important exam.
-          </p>
-          <p className="text-sm leading-relaxed mt-2">
-            Simply press each key and watch it highlight on the display above. Green indicates a key you've tested successfully, and blue shows the key currently being pressed.
-          </p>
+        <div className="mt-10 prose max-w-none text-brand-text-muted space-y-4">
+          <div>
+            <h2 className="text-lg font-bold text-brand-text mb-2">What is a Keyboard Tester?</h2>
+            <p className="text-sm leading-relaxed">
+              A keyboard tester lets you check if every key on your keyboard is working correctly by pressing each key and watching it light up on the virtual keyboard display.
+              It's useful for testing a new mechanical keyboard, diagnosing stuck keys, checking key rollover (NKRO), or verifying your keyboard before an important exam.
+            </p>
+            <p className="text-sm leading-relaxed mt-2">
+              Simply press each key and watch it highlight on the display above. Green indicates a key you've tested successfully, and blue shows the key currently being pressed.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-brand-text mb-2">FAQ</h2>
+            <div className="text-sm leading-relaxed space-y-2">
+              <div>
+                <p className="font-semibold text-brand-text">Why does a key not light up when I press it?</p>
+                <p>If a key doesn't register, it may be physically stuck or disconnected, or another application on your device could be intercepting the keypress. Try pressing it directly with nothing else running in focus.</p>
+              </div>
+              <div>
+                <p className="font-semibold text-brand-text">What is key rollover (NKRO)?</p>
+                <p>Rollover is how many simultaneous key presses a keyboard can register correctly. Press several keys together to see whether they all light up — if some don't, your keyboard has limited rollover, common on cheaper membrane keyboards.</p>
+              </div>
+              <div>
+                <p className="font-semibold text-brand-text">Does this work on laptop keyboards?</p>
+                <p>Yes — this tester works with any physical keyboard connected to or built into your device, in any modern browser.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

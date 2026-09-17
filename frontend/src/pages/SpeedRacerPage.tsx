@@ -332,6 +332,13 @@ export default function SpeedRacerPage() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* SEO content */}
+        <div className="mt-10 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed space-y-2">
+          <h2 className="text-base font-bold text-brand-text">What is Speed Racer?</h2>
+          <p>Speed Racer is a free typing race game where you compete against a "ghost" typist set to a fixed WPM — Easy (20 WPM), Medium (35 WPM), or Hard (55 WPM). Type the given passage as fast and accurately as possible to cross the finish line before the ghost does.</p>
+          <p>Unlike a plain typing test, Speed Racer gives you a moving target to beat, which makes it useful for pushing past a speed plateau. Your best WPM is saved locally so you can track improvement across attempts, and finishing a race earns XP toward your typing level.</p>
+        </div>
       </div>
     </div>
   );

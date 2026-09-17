@@ -226,10 +226,31 @@ export default function CpsTestPage() {
         </div>
 
         {/* SEO content */}
-        <div className="mt-8 text-sm text-brand-text-muted leading-relaxed space-y-2">
-          <h2 className="text-base font-bold text-brand-text">What is CPS (Clicks Per Second)?</h2>
-          <p>CPS stands for Clicks Per Second — a measure of how fast you can click a mouse button. It's widely used in gaming (Minecraft PvP), data entry, and performance benchmarking.</p>
-          <p>Average users click at <strong className="text-brand-text">4–6 CPS</strong>. Pro gamers using butterfly or jitter-clicking techniques can reach <strong className="text-brand-text">14+ CPS</strong>.</p>
+        <div className="mt-8 text-sm text-brand-text-muted leading-relaxed space-y-4">
+          <div className="space-y-2">
+            <h2 className="text-base font-bold text-brand-text">What is CPS (Clicks Per Second)?</h2>
+            <p>CPS stands for Clicks Per Second — a measure of how fast you can click a mouse button. It's widely used in gaming (Minecraft PvP), data entry, and performance benchmarking.</p>
+            <p>Average users click at <strong className="text-brand-text">4–6 CPS</strong>. Pro gamers using butterfly or jitter-clicking techniques can reach <strong className="text-brand-text">14+ CPS</strong>.</p>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-base font-bold text-brand-text">How to use this CPS test</h2>
+            <p>Click "Click to Start!" to begin, then click as fast as you can inside the box for 10 seconds. Your click count, live CPS, and best 1-second CPS burst are tracked automatically — no sign-up, no download.</p>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-base font-bold text-brand-text">FAQ</h2>
+            <div>
+              <p className="font-semibold text-brand-text">What is a good CPS score?</p>
+              <p>5–6 CPS is average for a casual clicker. 7–9 CPS is considered advanced, and 10+ CPS puts you in pro territory.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-brand-text">What is jitter clicking / butterfly clicking?</p>
+              <p>Jitter clicking uses arm tension to vibrate the mouse button at high frequency; butterfly clicking alternates two fingers on the same button. Both techniques are used to push CPS above 10.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-brand-text">Does CPS affect typing speed?</p>
+              <p>Not directly — CPS measures mouse-click speed, while WPM measures keyboard typing speed. Try our <Link to="/tests/" className="text-brand-primary hover:underline">typing test</Link> to measure your WPM.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
