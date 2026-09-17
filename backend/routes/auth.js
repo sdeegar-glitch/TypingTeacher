@@ -4,6 +4,7 @@ import { supabase } from '../supabaseClient.js';
 import { logActivity } from '../activityLog.js';
 import { verifyTotp, createPendingLogin, peekPendingLogin, consumePendingLogin } from '../twofa.js';
 import { attachReferral } from '../services/referrals.js';
+import { verifyTurnstile } from '../services/turnstile.js';
 
 const router = express.Router();
 
@@ -21,6 +22,28 @@ const loginLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many login attempts from this network. Please try again in 15 minutes.' },
 });
+
+// Signup had no dedicated limiter at all before this — only the global
+// 100/min in index.js, which is loose enough to allow mass fake-account
+// creation. This is on top of, not instead of, the Turnstile check below:
+// the limiter caps damage from a single IP even if a future Turnstile bypass
+// is ever found, and the Turnstile check stops distributed attempts a
+// per-IP limiter alone would miss.
+const signupLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many accounts created from this network. Please try again later.' },
+});
+
+// Shared by /signup and /login. No-ops (lets the request through) until
+// TURNSTILE_SECRET_KEY is configured — see services/turnstile.js.
+async function requireTurnstile(req, res, next) {
+  const result = await verifyTurnstile(req.body?.turnstileToken, req.ip);
+  if (result.success) return next();
+  return res.status(400).json({ error: 'Please complete the verification challenge and try again.' });
+}
 
 const twoFaLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
@@ -41,7 +64,7 @@ async function isAccountLockedOut(email) {
   return (count || 0) >= LOCKOUT_THRESHOLD;
 }
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', signupLimiter, requireTurnstile, async (req, res) => {
   const { email, password, name, phone, ref } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
 
@@ -135,7 +158,7 @@ router.post('/oauth-sync', async (req, res) => {
   res.json({ ok: true, user: { id: u.id, email: u.email } });
 });
 
-router.post('/login', loginLimiter, async (req, res) => {
+router.post('/login', loginLimiter, requireTurnstile, async (req, res) => {
   const { email, password } = req.body;
 
   const lockedOut = await isAccountLockedOut(email);

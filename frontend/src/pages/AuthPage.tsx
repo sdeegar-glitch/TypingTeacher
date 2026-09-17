@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Keyboard, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { getStoredReferral, clearStoredReferral } from '../lib/referral';
+import TurnstileWidget from '../components/TurnstileWidget';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://api.fasttypinglab.com';
 
@@ -19,6 +20,7 @@ const AuthPage = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const navigate = useNavigate();
   const oauthHandled = useRef(false);
 
@@ -86,14 +88,20 @@ const AuthPage = () => {
     }
   };
 
+  const turnstileRequired = !!import.meta.env.VITE_TURNSTILE_SITE_KEY;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (turnstileRequired && !turnstileToken) {
+      setError('Please complete the verification challenge below.');
+      return;
+    }
     setLoading(true); setError(''); setSuccess('');
     try {
       const endpoint = isLogin ? '/auth/login' : '/auth/signup';
       const body = isLogin
-        ? { email, password }
-        : { email, password, name, phone, ref: getStoredReferral() || undefined };
+        ? { email, password, turnstileToken }
+        : { email, password, name, phone, ref: getStoredReferral() || undefined, turnstileToken };
       const res = await fetch(
         `${import.meta.env.VITE_API_URL || 'https://api.fasttypinglab.com'}${endpoint}`,
         { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
@@ -150,7 +158,7 @@ const AuthPage = () => {
         {/* Tab switcher */}
         <div className="flex bg-brand-surface-2 rounded-xl p-1 mb-6 border border-brand-border">
           {[{ id: true, label: 'Log In' }, { id: false, label: 'Register' }].map(tab => (
-            <button key={String(tab.id)} onClick={() => { setIsLogin(tab.id); setError(''); setSuccess(''); }}
+            <button key={String(tab.id)} onClick={() => { setIsLogin(tab.id); setError(''); setSuccess(''); setTurnstileToken(null); }}
               className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-200 ${
                 isLogin === tab.id
                   ? 'text-white shadow-md'
@@ -239,7 +247,9 @@ const AuthPage = () => {
                 className={inputCls} value={password} onChange={e => setPassword(e.target.value)} />
             </div>
 
-            <button type="submit" disabled={loading}
+            <TurnstileWidget resetKey={isLogin} onToken={setTurnstileToken} />
+
+            <button type="submit" disabled={loading || (turnstileRequired && !turnstileToken)}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold text-white transition-all duration-200 mt-2 active:scale-[0.98]"
               style={loading
                 ? { background: 'rgba(48,76,83,0.5)', cursor: 'not-allowed' }
@@ -254,7 +264,7 @@ const AuthPage = () => {
 
           <p className="text-center text-xs text-brand-muted mt-5">
             {isLogin ? "Don't have an account? " : 'Already have an account? '}
-            <button onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess(''); }}
+            <button onClick={() => { setIsLogin(!isLogin); setError(''); setSuccess(''); setTurnstileToken(null); }}
               className="font-bold hover:opacity-80 transition-opacity" style={{ color: 'var(--brand-primary)' }}>
               {isLogin ? 'Register free' : 'Log in here'}
             </button>
