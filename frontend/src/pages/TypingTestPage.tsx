@@ -16,6 +16,7 @@ import { saveSession, fetchMistakeHandlingMode, fetchTestBySlug, fetchTestList }
 import { markTestCompleted } from '../lib/testProgress';
 import { storeTypingResult } from '../lib/typingResult';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 // Splits text into space-delimited word ranges for word-level typing feedback.
 interface WordRange { start: number; end: number; text: string }
@@ -987,6 +988,29 @@ export default function TypingTestPage() {
           >
             Finish Early
           </button>
+        )}
+
+        {/* About this test — hidden while actively typing to stay out of the way */}
+        {!stats.isActive && (
+          <div className="w-full max-w-2xl" onClick={e => e.stopPropagation()}>
+            <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed space-y-2">
+              <h2 className="text-base font-bold text-brand-text">How WPM, accuracy and errors are calculated</h2>
+              <p><strong className="text-brand-text">Gross WPM</strong> counts every character you typed, divided by 5, over your time in minutes. <strong className="text-brand-text">Net WPM</strong> subtracts your mistakes first, so it's a truer measure of usable speed — this is the number most exams and employers care about.</p>
+              <p><strong className="text-brand-text">Accuracy</strong> is the percentage of characters typed correctly. A single typo lowers your Net WPM more than it looks, since one wrong keystroke usually costs a correction too.</p>
+              <h3 className="text-sm font-bold text-brand-text pt-1">Tips to improve your speed</h3>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Keep your eyes on the passage, not your hands — glancing down breaks your rhythm more than it helps.</li>
+                <li>Slow down slightly if you're making frequent mistakes; a clean 45 WPM beats a sloppy 60 WPM on most tests.</li>
+                <li>Practice the same duration as your real exam or job test, not just quick one-minute bursts.</li>
+                <li>Retype passages you found hard — repetition on your weak spots improves speed faster than random practice.</li>
+              </ul>
+            </div>
+            <RelatedLinks items={[
+              { label: 'All Typing Tests', href: '/tests/' },
+              { label: 'Competitive Exam Typing', href: '/competitive-exam-typing/' },
+              { label: 'Learn Touch Typing', href: '/learn/' },
+            ]} />
+          </div>
         )}
       </div>
 
