@@ -13,6 +13,12 @@ const SAMPLES: Record<Direction, string> = {
   kd2uni: "Hkkjr ,d fo'kky ns'k gSA",
 };
 
+const FAQS = [
+  { q: 'How do I convert Kruti Dev to Unicode?', a: 'Paste your Kruti Dev text into the box, choose the Kruti Dev to Unicode direction, and the Unicode (Mangal) version appears instantly. You can copy it or download it as a text file. The tool runs entirely in your browser, so nothing is uploaded.' },
+  { q: 'Why does Kruti Dev text look like random English letters?', a: "Kruti Dev is a legacy non-Unicode font. The file stores ordinary Latin characters, and the Kruti Dev font draws Devanagari shapes over them. Without that font installed the text shows as gibberish (e.g. Hkkjr ,d fo'kky), which is why converting to Unicode makes it readable everywhere." },
+  { q: 'Is this Kruti Dev converter free?', a: 'Yes, completely free with no signup and no limit. Conversion happens in your browser, so your text never leaves your device.' },
+];
+
 export default function FontConverterPage() {
   const [direction, setDirection] = useState<Direction>('uni2kd');
   const [input, setInput] = useState('');
@@ -62,23 +68,11 @@ export default function FontConverterPage() {
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'How do I convert Kruti Dev to Unicode?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Paste your Kruti Dev text into the box, choose the Kruti Dev to Unicode direction, and the Unicode (Mangal) version appears instantly. You can copy it or download it as a text file. The tool runs entirely in your browser, so nothing is uploaded.' },
-      },
-      {
-        '@type': 'Question',
-        name: 'Why does Kruti Dev text look like random English letters?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Kruti Dev is a legacy non-Unicode font. The file stores ordinary Latin characters, and the Kruti Dev font draws Devanagari shapes over them. Without that font installed the text shows as gibberish, which is why converting to Unicode makes it readable everywhere.' },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is this Kruti Dev converter free?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Yes, completely free with no signup and no limit. Conversion happens in your browser, so your text never leaves your device.' },
-      },
-    ],
+    mainEntity: FAQS.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
   };
 
   return (
@@ -228,6 +222,19 @@ export default function FontConverterPage() {
           <p>
             Ordinary Hindi prose — including conjuncts (क्ष, त्र, ज्ञ), the i-matra (ि) and reph (र्) — round-trips cleanly. One honest caveat: Kruti Dev is a lossy legacy encoding where a few keys are ambiguous (nukta letters such as क़ share a key with plain क), so those decode to the common form and may occasionally need a manual touch-up. Always proofread converted text before submitting it officially.
           </p>
+        </div>
+
+        {/* FAQ */}
+        <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-6">
+          <h2 className="font-black text-lg mb-4 text-brand-text">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            {FAQS.map(f => (
+              <div key={f.q}>
+                <h3 className="font-semibold text-sm text-brand-text mb-1">{f.q}</h3>
+                <p className="text-brand-text-muted text-sm leading-relaxed">{f.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
