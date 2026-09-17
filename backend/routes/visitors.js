@@ -1,7 +1,40 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { supabase } from '../supabaseClient.js';
 
 const router = express.Router();
+
+// This is a public, unauthenticated write endpoint by necessity (it's called
+// from every anonymous visitor's browser), which makes it a standing target
+// for scripts that POST fake visits directly to inflate/pollute the counter.
+// Two independent checks, since either one alone has a gap a script can avoid:
+//  - Origin check: a real browser call from our own SPA always carries this;
+//    a script hitting the endpoint directly usually doesn't bother forging it.
+//  - A dedicated per-IP limit tighter than the global one in index.js, since
+//    a single real visitor never legitimately fires more than a couple of
+//    these per minute (route change), but a script rotating across many IPs
+//    can still be slowed down per-IP even though it can't be stopped outright
+//    this way alone — see infra/nginx and fail2ban for the rest of the layers.
+const ALLOWED_TRACK_ORIGINS = new Set([
+  'https://fasttypinglab.com',
+  'http://localhost:5173',
+]);
+
+function requireBrowserOrigin(req, res, next) {
+  const origin = req.headers.origin;
+  // Tauri's desktop-app webview doesn't send a standard http(s) Origin.
+  const isTauri = typeof origin === 'string' && origin.startsWith('tauri://');
+  if (origin && (ALLOWED_TRACK_ORIGINS.has(origin) || isTauri)) return next();
+  return res.status(403).json({ error: 'Origin not allowed' });
+}
+
+const trackLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests.' },
+});
 
 // Compute total page views + unique visitors. Never throws — returns zeros if
 // the site_visits table/RPC isn't present yet (see migrations/001_site_visits.sql).
@@ -23,10 +56,12 @@ async function getTotals() {
 }
 
 // POST /api/visitors/track — record a single visit, return updated totals.
-router.post('/track', async (req, res) => {
+router.post('/track', requireBrowserOrigin, trackLimiter, async (req, res) => {
   try {
     const { visitor_id, path, referrer } = req.body || {};
-    if (!visitor_id) return res.status(400).json({ error: 'visitor_id is required' });
+    if (typeof visitor_id !== 'string' || visitor_id.length < 8 || visitor_id.length > 100) {
+      return res.status(400).json({ error: 'visitor_id is required' });
+    }
 
     const forwarded = (req.headers['x-forwarded-for'] || '').toString().split(',')[0].trim();
     const ip = forwarded || req.ip || null;
