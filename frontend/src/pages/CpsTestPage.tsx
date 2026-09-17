@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Zap, Target, TrendingUp } from 'lucide-react';
+import Seo from '../components/Seo';
 
 type TestState = 'idle' | 'active' | 'finished';
 
@@ -74,6 +75,10 @@ export default function CpsTestPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="CPS Test — Free Clicks Per Second Test | FastTypingLab"
+        description="Test your click speed in clicks per second (CPS). Free 10-second CPS test with a live rating chart from beginner to jitter-click pro."
+      />
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">

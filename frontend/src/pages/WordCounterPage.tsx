@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Type, Hash, AlignLeft, FileText, Clock, Trash2, Copy, Check } from 'lucide-react';
+import Seo from '../components/Seo';
 
 const READING_SPEED_WPM = 200; // avg adult reading speed
 
@@ -60,6 +61,10 @@ export default function WordCounterPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Word Counter — Free Online Tool | FastTypingLab"
+        description="Free online word and character counter with reading time and keyword density. Paste or type text for instant analysis — no sign-up required."
+      />
       <div className="max-w-4xl mx-auto">
 
         {/* Header */}

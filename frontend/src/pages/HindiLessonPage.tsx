@@ -8,6 +8,7 @@ import {
   isHindiLessonUnlocked,
   loadHindiProgress,
 } from '../data/hindiLessons';
+import Seo from '../components/Seo';
 
 const DEVA_FONT = "'Noto Sans Devanagari', sans-serif";
 
@@ -181,6 +182,10 @@ export default function HindiLessonPage() {
     <div className="h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none"
       onClick={() => isMobile && hiddenRef.current?.focus()}
       style={{ fontFamily: 'Inter, sans-serif' }}>
+      <Seo
+        title={`${lesson.title} — Hindi Typing Lesson | FastTypingLab`}
+        description={`Practice lesson ${id} of the Hindi typing course: ${lesson.title}. Free guided Hindi typing lesson with live WPM, accuracy and stars.`}
+      />
 
       {/* Hidden mobile input */}
       {isMobile && (

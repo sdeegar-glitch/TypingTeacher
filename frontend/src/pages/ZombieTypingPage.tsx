@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Play, Heart } from 'lucide-react';
 import { saveGameScore } from '../lib/api';
+import Seo from '../components/Seo';
 
 const ZOMBIE_WORDS = [
   ['run','fly','hop','sit','dog','cat','sun','fun','big','red'],
@@ -109,6 +110,10 @@ export default function ZombieTypingPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-6 px-4">
+      <Seo
+        title="Zombie Typing — Typing Game | FastTypingLab"
+        description="Type words to defeat waves of zombies before they reach you in this free typing survival game. How many waves can you clear?"
+      />
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-4">
           <Link to="/games/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm group">

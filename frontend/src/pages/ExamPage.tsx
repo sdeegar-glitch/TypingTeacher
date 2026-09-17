@@ -4,6 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Clock, Zap, Target, Award, RotateCcw, CheckCircle, XCircle, Trophy, Shield } from 'lucide-react';
 import { saveSession } from '../lib/api';
 import ExamTypingInterface, { type ExamResult } from '../components/ExamTypingInterface';
+import Seo from '../components/Seo';
+
+// Exam keys that have a matching, SEO-owning landing page — canonicalize there
+// instead of letting this interactive session page compete with it in search.
+const LANDING_CANONICAL: Record<string, string> = {
+  'ssc-chsl': '/ssc-chsl-typing-test/',
+  'ssc-cgl': '/ssc-cgl-typing-test/',
+  'up-police': '/up-police-typing-test/',
+  'court-typing': '/court-typing-test/',
+};
 
 // ─── Paragraph Library ──────────────────────────────────────────────────────
 
@@ -235,6 +245,11 @@ export default function ExamPage() {
   // ═══ INFO (default) ═══
   return (
     <div className="min-h-screen bg-[#0d0d14] text-white flex flex-col">
+      <Seo
+        title={`${exam.title} Mock Test | FastTypingLab`}
+        description={`Free ${exam.title} typing mock test — ${exam.duration / 60} minutes, target ${exam.wpmTarget}+ WPM at ${exam.accuracyTarget}%+ accuracy. Practice with real exam-style passages.`}
+        canonical={LANDING_CANONICAL[key]}
+      />
       <div className="px-6 py-4">
         <Link to="/competitive-exam-typing/" className="flex items-center gap-1.5 text-white/40 hover:text-white/80 text-sm transition-colors w-fit">
           <ChevronLeft className="w-4 h-4" /> All Exams

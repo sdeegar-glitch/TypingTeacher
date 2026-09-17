@@ -9,6 +9,7 @@ import {
   loadHindiProgress,
   isHindiLessonUnlocked,
 } from '../data/hindiLessons';
+import Seo from '../components/Seo';
 
 export default function HindiLessonCoursePage() {
   const [progress, setProgress] = useState<Record<number, any>>({});
@@ -30,6 +31,10 @@ export default function HindiLessonCoursePage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text pb-24">
+      <Seo
+        title="Learn Hindi Typing — INSCRIPT Course | FastTypingLab"
+        description="Free 30-lesson Hindi typing course in the INSCRIPT layout. Learn key by key, earn stars, and track your progress from beginner to expert."
+      />
       {/* ── Sticky header ── */}
       <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">

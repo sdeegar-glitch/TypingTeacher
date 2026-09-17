@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Code, Zap } from 'lucide-react';
+import Seo from '../components/Seo';
 
 interface CodeSnippet {
   language: string;
@@ -175,6 +176,10 @@ export default function CodingTypingPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Coding Typing Practice — Type Real Code | FastTypingLab"
+        description="Practice typing real JavaScript, Python, TypeScript and SQL code snippets to build muscle memory for symbols, brackets and indentation."
+      />
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
           <Link to="/tools/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">

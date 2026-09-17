@@ -6,6 +6,7 @@ import PageHeader from '../components/PageHeader';
 import { STAGES, type CourseProgressState } from '../data/hindiCourseData';
 import * as UnicodeCourse from '../data/hindiCourseData';
 import * as KrutiDevCourse from '../data/krutiDevCourseData';
+import Seo from '../components/Seo';
 
 const DIFFICULTY_COLOR: Record<string, string> = {
   beginner: '#2A9DAE',
@@ -43,6 +44,10 @@ export default function HindiCourseSelectPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text pb-24">
+      <Seo
+        title={`Hindi Typing Course — ${isKrutiDev ? 'Kruti Dev' : 'Unicode'} Layout | FastTypingLab`}
+        description={`Free structured Hindi typing course in the ${isKrutiDev ? 'Kruti Dev' : 'Unicode Mangal'} layout. Progress through stages, earn XP and badges, and track your typing speed.`}
+      />
       {/* Sticky header */}
       <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">

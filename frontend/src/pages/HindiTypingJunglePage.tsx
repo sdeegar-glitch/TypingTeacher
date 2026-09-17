@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Languages } from 'lucide-react';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { saveSession } from '../lib/api';
+import Seo from '../components/Seo';
 
 // ─── Passage libraries ───────────────────────────────────────────────────────
 
@@ -177,6 +178,10 @@ export default function HindiTypingJunglePage() {
   return (
     <div className="h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none"
       onClick={() => isMobile && hiddenInputRef.current?.focus()}>
+      <Seo
+        title="Hindi Typing Jungle — Practice Hindi Typing | FastTypingLab"
+        description="Practice Hindi typing with real articles, words and quotes in Kruti Dev or Unicode Mangal layout. Free timed Hindi typing test with live WPM and accuracy."
+      />
 
       {/* Hidden mobile input */}
       {isMobile && (

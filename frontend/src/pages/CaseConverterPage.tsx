@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Copy, Check, Trash2, RefreshCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 type ConversionType = 'uppercase' | 'lowercase' | 'title' | 'sentence' | 'camel' | 'pascal' | 'snake' | 'kebab' | 'alternating' | 'inverse';
 
@@ -57,6 +58,10 @@ export default function CaseConverterPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Case Converter — Free Online Tool | FastTypingLab"
+        description="Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case and more, instantly and for free."
+      />
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
           <Link to="/tools/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">

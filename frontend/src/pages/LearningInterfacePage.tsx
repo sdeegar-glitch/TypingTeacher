@@ -6,6 +6,7 @@ import { saveProgress } from '../utils/progressManager';
 import { getFingerForKey } from '../utils/KeyboardLayout';
 
 import { ENGLISH_LESSON_MAP } from '../data/englishLessons';
+import Seo from '../components/Seo';
 
 const lessonData = ENGLISH_LESSON_MAP;
 
@@ -166,6 +167,10 @@ const LearningInterfacePage = () => {
       style={{ fontFamily: "'Inter', sans-serif", background: '#ebebea' }}
       onClick={() => isMobile && hiddenInputRef.current?.focus()}
     >
+      <Seo
+        title={`${currentLesson.title} — Typing Lesson | FastTypingLab`}
+        description={`Practice lesson: ${currentLesson.title}. Free guided touch-typing lesson with live WPM, accuracy and a virtual keyboard hand guide.`}
+      />
       {/* Hidden input for mobile */}
       {isMobile && (
         <input

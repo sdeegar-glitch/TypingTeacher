@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Play, Zap, Trophy, Flag } from 'lucide-react';
 import { saveGameScore } from '../lib/api';
+import Seo from '../components/Seo';
 
 const PASSAGES = [
   'The quick brown fox jumps over the lazy dog near the river bank on a sunny afternoon.',
@@ -145,6 +146,10 @@ export default function SpeedRacerPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Speed Racer — Typing Race Game | FastTypingLab"
+        description="Race a ghost typist at Easy, Medium or Hard speed in this free typing game. Beat your best WPM and climb the leaderboard."
+      />
       <div className="max-w-3xl mx-auto">
 
         {/* Header */}

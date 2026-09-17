@@ -6,6 +6,7 @@ import * as UnicodeCourse from '../data/hindiCourseData';
 import * as KrutiDevCourse from '../data/krutiDevCourseData';
 import { STAGES } from '../data/hindiCourseData';
 import ScrollableRegion from '../components/ScrollableRegion';
+import Seo from '../components/Seo';
 
 const DEVA_FONT = "'Noto Sans Devanagari', sans-serif";
 
@@ -241,6 +242,10 @@ export default function HindiCourseLessonPage() {
     <div className="h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none"
       onClick={() => isMobile && hiddenRef.current?.focus()}
       style={{ fontFamily: 'Inter, sans-serif' }}>
+      <Seo
+        title={`Lesson ${id}: ${lesson.title} — ${isKrutiDev ? 'Kruti Dev' : 'Unicode'} Hindi Typing | FastTypingLab`}
+        description={`Practice lesson ${id} of the ${isKrutiDev ? 'Kruti Dev' : 'Unicode'} Hindi typing course: ${lesson.title}. Free guided lesson with live WPM, accuracy and stars.`}
+      />
 
       {isMobile && (
         <input ref={hiddenRef} type="text" value={mobileVal} onChange={handleMobileChange}

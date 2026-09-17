@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Zap } from 'lucide-react';
+import Seo from '../components/Seo';
 
 const TEST_DURATION = 10;
 type TestState = 'idle' | 'active' | 'finished';
@@ -79,6 +80,10 @@ export default function SpacebarCounterPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Spacebar Counter — Spacebar Speed Test | FastTypingLab"
+        description="Free spacebar counter and speed test. See how many times you can press the spacebar in 10 seconds and compare against the world record."
+      />
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">

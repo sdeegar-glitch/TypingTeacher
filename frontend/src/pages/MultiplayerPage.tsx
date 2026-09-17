@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Zap, Copy, Check, RotateCcw, Play, Trophy, Link as LinkIcon } from 'lucide-react';
+import Seo from '../components/Seo';
 
 // Race texts
 const RACE_TEXTS = [
@@ -136,6 +137,10 @@ export default function MultiplayerPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Typing Race — Multiplayer Typing Game | FastTypingLab"
+        description="Race against other typists in real time. Share a room link, count down together, and see who finishes fastest with the highest accuracy."
+      />
       <div className="max-w-3xl mx-auto">
 
         {/* Header */}

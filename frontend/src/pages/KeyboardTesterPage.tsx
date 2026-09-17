@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, CheckCircle } from 'lucide-react';
 import ScrollableRegion from '../components/ScrollableRegion';
+import Seo from '../components/Seo';
 
 // Full QWERTY keyboard layout
 const ROWS = [
@@ -94,6 +95,10 @@ export default function KeyboardTesterPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Keyboard Tester — Test Every Key Online | FastTypingLab"
+        description="Free online keyboard tester. Press every key to check for stuck keys, ghosting or NKRO issues on any keyboard, right in your browser."
+      />
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">

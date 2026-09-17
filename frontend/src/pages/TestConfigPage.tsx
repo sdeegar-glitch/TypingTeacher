@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { BookOpen, Clock, Zap, ChevronLeft } from 'lucide-react';
 import { fetchTestBySlug } from '../lib/api';
 import { getLastDuration, setLastDuration } from '../lib/testProgress';
+import Seo from '../components/Seo';
 
 const DURATION_OPTIONS = [
   { label: '1 Min',  value: 1,  desc: 'Quick warm-up' },
@@ -54,6 +55,11 @@ export default function TestConfigPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg flex items-center justify-center p-4">
+      <Seo
+        title={`Choose Duration — ${test.title} | FastTypingLab`}
+        description="Pick a test duration to start your typing test."
+        noindex
+      />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-lg">
 

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, Zap, RotateCcw, Play } from 'lucide-react';
 import { saveGameScore } from '../lib/api';
+import Seo from '../components/Seo';
 
 const WORDS_EASY = ['cat','dog','sun','run','big','top','map','red','box','cup','pan','win','sit','hop','log','fix','jam','net','pop','zip','fat','hat','bat','rat','sat','can','fan','man','tan','van'];
 const WORDS_MED  = ['brave','cloud','dance','eagle','flame','grace','happy','ivory','juice','knack','lemon','magic','night','ocean','piano','queen','river','storm','tiger','ultra'];
@@ -103,6 +104,10 @@ export default function WordRainPage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-6 px-4">
+      <Seo
+        title="Word Rain — Typing Game | FastTypingLab"
+        description="Type falling words before they hit the ground in this free typing game. Survive as long as you can and beat your high score."
+      />
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-4">
           <Link to="/games/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm group">

@@ -15,6 +15,7 @@ import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
 import { saveSession, fetchMistakeHandlingMode, fetchTestBySlug, fetchTestList } from '../lib/api';
 import { markTestCompleted } from '../lib/testProgress';
 import { storeTypingResult } from '../lib/typingResult';
+import Seo from '../components/Seo';
 
 // Splits text into space-delimited word ranges for word-level typing feedback.
 interface WordRange { start: number; end: number; text: string }
@@ -545,6 +546,14 @@ export default function TypingTestPage() {
       className={`h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none ${a11y.highContrast ? 'typing-high-contrast' : ''}`}
       onClick={() => isMobile && hiddenInputRef.current?.focus()}
     >
+      {/* No individual test passage is in sitemap.xml yet and content is a bare widget
+          (Phase 2a of the AdSense roadmap) — noindex every variant until real per-passage
+          content exists and a curated set is chosen. */}
+      <Seo
+        title={`${testContent.title} — Typing Test | FastTypingLab`}
+        description={`Take a free online typing test: ${testContent.title}. Get live WPM, accuracy and error tracking.`}
+        noindex
+      />
       {/* Screen-reader only live region — announces test start/finish without affecting sighted UI */}
       <div role="status" aria-live="polite" className="sr-only">{srAnnouncement}</div>
 

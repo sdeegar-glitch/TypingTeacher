@@ -9,6 +9,7 @@ import TelegramCTA from '../components/TelegramCTA';
 import WhatsAppCTA from '../components/WhatsAppCTA';
 import { isLoggedIn } from '../lib/auth';
 import { trackEvent } from '../lib/analytics';
+import Seo from '../components/Seo';
 
 interface CertData {
   id: string;
@@ -298,6 +299,11 @@ export default function CertificatePage() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+      <Seo
+        title="Your Typing Certificate | FastTypingLab"
+        description="Download your personalized FastTypingLab typing speed certificate."
+        noindex
+      />
       <canvas ref={hiddenCanvasRef} style={{ display: 'none' }} />
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
