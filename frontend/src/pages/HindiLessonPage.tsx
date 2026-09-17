@@ -9,6 +9,7 @@ import {
   loadHindiProgress,
 } from '../data/hindiLessons';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 const DEVA_FONT = "'Noto Sans Devanagari', sans-serif";
 
@@ -301,6 +302,15 @@ export default function HindiLessonPage() {
             </div>
             <p className="text-xs text-brand-text-muted leading-relaxed">{lesson.description}</p>
           </motion.div>
+        )}
+
+        {!startTime && !isFinished && (
+          <div className="w-full max-w-2xl">
+            <RelatedLinks title="More practice" items={[
+              { label: 'Kruti Dev Course', href: '/learn-hindi-typing/kruti-dev' },
+              { label: 'Hindi Typing Test', href: '/hindi-typing-test/' },
+            ]} />
+          </div>
         )}
 
         {/* Typing area */}

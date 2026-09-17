@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Zap } from 'lucide-react';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 const TEST_DURATION = 10;
 type TestState = 'idle' | 'active' | 'finished';
@@ -215,6 +216,12 @@ export default function SpacebarCounterPage() {
             </div>
           </div>
         </div>
+
+        <RelatedLinks items={[
+          { label: 'CPS Test', href: '/cps-test/' },
+          { label: 'Keyboard Tester', href: '/keyboard-tester/' },
+          { label: 'Typing Speed Test', href: '/tests/' },
+        ]} />
       </div>
     </div>
   );

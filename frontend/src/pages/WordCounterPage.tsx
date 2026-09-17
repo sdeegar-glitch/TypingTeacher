@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Type, Hash, AlignLeft, FileText, Clock, Trash2, Copy, Check } from 'lucide-react';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 const READING_SPEED_WPM = 200; // avg adult reading speed
 
@@ -186,6 +187,11 @@ export default function WordCounterPage() {
             </div>
           </div>
         </div>
+
+        <RelatedLinks items={[
+          { label: 'Case Converter', href: '/case-converter/' },
+          { label: 'Typing Speed Test', href: '/tests/' },
+        ]} />
       </div>
     </div>
   );

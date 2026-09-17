@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, Copy, Check, Trash2, RefreshCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 type ConversionType = 'uppercase' | 'lowercase' | 'title' | 'sentence' | 'camel' | 'pascal' | 'snake' | 'kebab' | 'alternating' | 'inverse';
 
@@ -168,6 +169,12 @@ export default function CaseConverterPage() {
             </div>
           </div>
         </div>
+
+        <RelatedLinks items={[
+          { label: 'Word Counter', href: '/word-counter/' },
+          { label: 'Coding Typing Practice', href: '/coding-typing/' },
+          { label: 'Typing Speed Test', href: '/tests/' },
+        ]} />
       </div>
     </div>
   );

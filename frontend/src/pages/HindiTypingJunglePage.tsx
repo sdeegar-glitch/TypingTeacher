@@ -5,6 +5,7 @@ import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Languages 
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { saveSession } from '../lib/api';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 // ─── Passage libraries ───────────────────────────────────────────────────────
 
@@ -340,6 +341,16 @@ export default function HindiTypingJunglePage() {
               style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', fontFamily: "'Noto Sans Devanagari',sans-serif" }}>
               {engine.nextChar === ' ' ? '⎵' : engine.nextChar}
             </kbd>
+          </div>
+        )}
+
+        {!stats.isActive && !stats.isFinished && (
+          <div className="w-full max-w-2xl">
+            <RelatedLinks items={[
+              { label: 'Hindi Typing Test', href: '/hindi-typing-test/' },
+              { label: 'Learn Hindi Typing', href: '/hindi-lessons' },
+              { label: 'English Typing Test', href: '/tests/' },
+            ]} />
           </div>
         )}
       </div>

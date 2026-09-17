@@ -6,6 +6,7 @@ import Seo from '../components/Seo';
 import TelegramCTA from '../components/TelegramCTA';
 import WhatsAppCTA from '../components/WhatsAppCTA';
 import ScrollableRegion from '../components/ScrollableRegion';
+import RelatedLinks from '../components/RelatedLinks';
 
 // Inline formatting: links, bold, italics (links first so bold doesn't eat them)
 function inline(s: string): string {
@@ -88,7 +89,9 @@ export default function BlogPostPage() {
 
   if (!post) return <Navigate to="/blog/" replace />;
 
-  const relatedPosts = BLOG_POSTS.filter(p => p.slug !== slug).slice(0, 2);
+  const sameCategory = BLOG_POSTS.filter(p => p.slug !== slug && p.category === post.category);
+  const otherPosts = BLOG_POSTS.filter(p => p.slug !== slug && p.category !== post.category);
+  const relatedPosts = [...sameCategory, ...otherPosts].slice(0, 2);
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
@@ -176,6 +179,12 @@ export default function BlogPostPage() {
               </div>
             </div>
           )}
+
+          <RelatedLinks title="Practice what you read" items={[
+            { label: 'Typing Speed Test', href: '/tests/' },
+            { label: 'Competitive Exam Typing', href: '/competitive-exam-typing/' },
+            { label: 'Learn Touch Typing', href: '/learn/' },
+          ]} />
         </motion.article>
       </div>
     </div>

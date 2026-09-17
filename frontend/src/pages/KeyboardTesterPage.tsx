@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, CheckCircle } from 'lucide-react';
 import ScrollableRegion from '../components/ScrollableRegion';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 // Full QWERTY keyboard layout
 const ROWS = [
@@ -230,6 +231,12 @@ export default function KeyboardTesterPage() {
             </div>
           </div>
         </div>
+
+        <RelatedLinks items={[
+          { label: 'CPS Test', href: '/cps-test/' },
+          { label: 'Spacebar Counter', href: '/spacebar-counter/' },
+          { label: 'Typing Speed Test', href: '/tests/' },
+        ]} />
       </div>
     </div>
   );

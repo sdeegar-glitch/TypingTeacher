@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Play, Zap, Trophy, Flag } from 'lucide-react';
 import { saveGameScore } from '../lib/api';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 const PASSAGES = [
   'The quick brown fox jumps over the lazy dog near the river bank on a sunny afternoon.',
@@ -339,6 +340,12 @@ export default function SpeedRacerPage() {
           <p>Speed Racer is a free typing race game where you compete against a "ghost" typist set to a fixed WPM — Easy (20 WPM), Medium (35 WPM), or Hard (55 WPM). Type the given passage as fast and accurately as possible to cross the finish line before the ghost does.</p>
           <p>Unlike a plain typing test, Speed Racer gives you a moving target to beat, which makes it useful for pushing past a speed plateau. Your best WPM is saved locally so you can track improvement across attempts, and finishing a race earns XP toward your typing level.</p>
         </div>
+
+        <RelatedLinks items={[
+          { label: 'All Typing Games', href: '/games/' },
+          { label: 'Typing Speed Test', href: '/tests/' },
+          { label: 'Multiplayer Race', href: '/race' },
+        ]} />
       </div>
     </div>
   );

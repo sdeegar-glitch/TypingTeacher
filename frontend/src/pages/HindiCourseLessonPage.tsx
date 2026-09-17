@@ -7,6 +7,7 @@ import * as KrutiDevCourse from '../data/krutiDevCourseData';
 import { STAGES } from '../data/hindiCourseData';
 import ScrollableRegion from '../components/ScrollableRegion';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 const DEVA_FONT = "'Noto Sans Devanagari', sans-serif";
 
@@ -344,6 +345,15 @@ export default function HindiCourseLessonPage() {
             </div>
             <p className="text-xs text-brand-text-muted leading-relaxed">{lesson.description}</p>
           </motion.div>
+        )}
+
+        {!startTime && !isFinished && (
+          <div className="w-full max-w-2xl">
+            <RelatedLinks title="More practice" items={[
+              { label: 'INSCRIPT Lessons', href: '/hindi-lessons' },
+              { label: 'Hindi Typing Test', href: '/hindi-typing-test/' },
+            ]} />
+          </div>
         )}
 
         <div className="w-full max-w-2xl">

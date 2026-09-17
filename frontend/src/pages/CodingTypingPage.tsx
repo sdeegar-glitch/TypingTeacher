@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, RotateCcw, Code, Zap } from 'lucide-react';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 interface CodeSnippet {
   language: string;
@@ -313,6 +314,11 @@ export default function CodingTypingPage() {
           <h2 className="text-base font-bold text-brand-text">About Coding Typing Test</h2>
           <p>Practice typing real programming code in JavaScript, Python, TypeScript, SQL, React JSX, and CSS. Coding typing tests improve your programming speed, muscle memory for special characters, and reduce typos in real development work.</p>
         </div>
+
+        <RelatedLinks items={[
+          { label: 'Case Converter', href: '/case-converter/' },
+          { label: 'Typing Speed Test', href: '/tests/' },
+        ]} />
       </div>
     </div>
   );

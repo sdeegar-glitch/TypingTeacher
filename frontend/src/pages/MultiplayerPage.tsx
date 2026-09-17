@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Zap, Copy, Check, RotateCcw, Play, Trophy, Link as LinkIcon } from 'lucide-react';
 import Seo from '../components/Seo';
+import RelatedLinks from '../components/RelatedLinks';
 
 // Race texts
 const RACE_TEXTS = [
@@ -298,6 +299,12 @@ export default function MultiplayerPage() {
           <p>Challenge your friends or compete against AI bots in real-time typing races. Each race uses a fresh text passage. The first player to type the complete passage correctly wins the race.</p>
           <p>Share the room link with friends to race together. Typing races are one of the most effective ways to improve your speed because the competitive element pushes you to type faster while staying accurate.</p>
         </div>
+
+        <RelatedLinks items={[
+          { label: 'Speed Racer', href: '/games/speed-racer' },
+          { label: 'All Typing Games', href: '/games/' },
+          { label: 'Typing Speed Test', href: '/tests/' },
+        ]} />
       </div>
     </div>
   );
