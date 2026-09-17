@@ -7,6 +7,25 @@ export interface EnglishLesson {
   title: string;
   content: string;
   minWpm: number;
+  description: string;
+}
+
+// One short explainer per curriculum stage — surfaced on the lesson screen so
+// each lesson has real context instead of being a bare typing widget.
+const GROUP_DESCRIPTIONS: [range: [number, number], text: string][] = [
+  [[1, 5], 'Anchors your fingers on the home row (ASDF JKL;) so they can return to a known position without looking down. Common mistake: letting your wrists drop or your hands drift sideways off the home keys.'],
+  [[6, 11], 'Extends reach to the top row while keeping your other fingers resting on home row. Common mistake: looking at the keyboard to find top-row keys instead of trusting muscle memory.'],
+  [[12, 17], 'Extends reach to the bottom row, the trickiest row for most beginners since it requires curling fingers down. Common mistake: rushing bottom-row reaches and missing the key entirely.'],
+  [[18, 22], 'Introduces the Shift key for capital letters, typed with the opposite hand from the letter itself. Common mistake: using the same-hand Shift key, which slows you down and strains your pinky.'],
+  [[23, 28], 'Builds speed and accuracy on the number row, essential for exam data-entry sections. Common mistake: treating numbers as a separate skill instead of practising them daily alongside letters.'],
+  [[29, 41], 'Moves from single keys to real words and common letter pairs, so your fingers start recognising patterns instead of individual keystrokes. Common mistake: slowing down to "sound out" each letter instead of typing the word as a whole.'],
+  [[42, 51], 'Introduces full sentences with punctuation and capitalization, closer to real typing tests. Common mistake: pausing before punctuation marks instead of keeping a steady rhythm.'],
+  [[52, 61], 'Combines everything into full paragraphs with numbers, symbols and mixed case — the same format used in most competitive typing exams. Common mistake: prioritising raw speed over accuracy, which costs more time in corrections than it saves.'],
+];
+
+function descriptionFor(id: number): string {
+  const group = GROUP_DESCRIPTIONS.find(([[lo, hi]]) => id >= lo && id <= hi);
+  return group ? group[1] : 'Practice this lesson to build typing speed and accuracy.';
 }
 
 // Home row -> top row -> bottom row -> bigrams -> words -> sentences -> paragraphs.
@@ -88,6 +107,7 @@ export const ENGLISH_LESSONS: EnglishLesson[] = CURRICULUM.map(([title, content]
   title,
   content,
   minWpm: Math.min(35, 10 + Math.floor(idx * 0.5)),
+  description: descriptionFor(idx + 1),
 }));
 
 export const ENGLISH_LESSON_MAP: Record<string, EnglishLesson> = Object.fromEntries(

@@ -19,6 +19,8 @@ export default function HindiLessonPage() {
 
   const lesson = useMemo(() => HINDI_LESSONS.find(l => l.id === id) || HINDI_LESSONS[0], [id]);
   const nextLesson = HINDI_LESSONS.find(l => l.id === id + 1);
+  const prevLesson = HINDI_LESSONS.find(l => l.id === id - 1);
+  const [showAbout, setShowAbout] = useState(true);
 
   const isMobile = useMemo(() => {
     if (typeof window === 'undefined') return false;
@@ -242,11 +244,29 @@ export default function HindiLessonPage() {
               {accuracy}%
             </div>
           </div>
+          {prevLesson && (
+            <Link to={`/hindi-lessons/${prevLesson.id}`} onClick={e => e.stopPropagation()}
+              className="hidden sm:flex items-center gap-1 text-brand-muted hover:text-brand-text px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              title={prevLesson.title}>
+              <ChevronLeft className="w-3.5 h-3.5" /> पिछला
+            </Link>
+          )}
+          <button onClick={e => { e.stopPropagation(); setShowAbout(s => !s); }}
+            className="flex items-center gap-1.5 bg-brand-surface-2 hover:bg-brand-border text-brand-muted hover:text-brand-text px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-brand-border">
+            जानकारी
+          </button>
           <button onClick={reset}
             className="flex items-center gap-1.5 bg-brand-surface-2 hover:bg-brand-border text-brand-muted hover:text-brand-text px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-brand-border">
             <RotateCcw className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Restart</span>
           </button>
+          {nextLesson && isHindiLessonUnlocked(nextLesson.id) && (
+            <Link to={`/hindi-lessons/${nextLesson.id}`} onClick={e => e.stopPropagation()}
+              className="hidden sm:flex items-center gap-1 text-brand-muted hover:text-brand-text px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              title={nextLesson.title}>
+              अगला <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          )}
         </div>
       </div>
 
@@ -259,8 +279,8 @@ export default function HindiLessonPage() {
       {/* ── MAIN ── */}
       <div className="flex-grow flex flex-col items-center justify-start gap-4 px-3 sm:px-6 py-5 overflow-y-auto">
 
-        {/* New characters info (when not started) */}
-        {!startTime && !isFinished && lesson.newKeys.length > 0 && (
+        {/* About this lesson — toggleable via the "जानकारी" button, not just pre-start */}
+        {showAbout && lesson.newKeys.length > 0 && (
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
             className="w-full max-w-2xl rounded-2xl p-4 border"
             style={{ background: 'rgba(188,108,80,0.05)', borderColor: 'rgba(188,108,80,0.2)' }}

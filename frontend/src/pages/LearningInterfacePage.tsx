@@ -14,6 +14,9 @@ const LearningInterfacePage = () => {
   const { lessonId } = useParams();
   const navigate = useNavigate();
   const currentLesson = lessonData[lessonId || '1'] || lessonData['1'];
+  const prevLesson = lessonData[String(currentLesson.id - 1)];
+  const nextLessonNav = lessonData[String(currentLesson.id + 1)];
+  const [showAbout, setShowAbout] = useState(true);
 
   // Detect mobile
   const isMobile = useMemo(() => {
@@ -238,6 +241,17 @@ const LearningInterfacePage = () => {
             <span className="text-[8px] sm:text-[9px] text-slate-400 uppercase tracking-widest block">Acc</span>
             <span className={`text-sm sm:text-lg font-black tabular-nums ${accuracy >= 90 ? 'text-emerald-600' : 'text-rose-500'}`}>{accuracy}%</span>
           </div>
+          {prevLesson && (
+            <Link to={`/learn/${prevLesson.id}`}
+              className="hidden sm:flex items-center gap-1 text-slate-500 hover:text-slate-800 px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              title={prevLesson.title}>
+              ← Prev
+            </Link>
+          )}
+          <button onClick={() => setShowAbout(s => !s)}
+            className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 sm:px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-slate-300">
+            About
+          </button>
           <button
             onClick={() => window.location.reload()}
             className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 sm:px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-slate-300"
@@ -247,6 +261,13 @@ const LearningInterfacePage = () => {
             </svg>
             <span className="hidden sm:inline">Restart</span>
           </button>
+          {nextLessonNav && (
+            <Link to={`/learn/${nextLessonNav.id}`}
+              className="hidden sm:flex items-center gap-1 text-slate-500 hover:text-slate-800 px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              title={nextLessonNav.title}>
+              Next →
+            </Link>
+          )}
         </div>
       </div>
 
@@ -260,6 +281,13 @@ const LearningInterfacePage = () => {
 
       {/* ── MAIN CONTENT ── */}
       <div className="flex-grow flex flex-col items-center justify-start gap-3 sm:gap-4 px-3 sm:px-4 py-4 sm:py-6 overflow-hidden">
+
+        {/* About this lesson — compact, pre-start only to avoid crowding the fixed-height layout */}
+        {showAbout && !startTime && !isFinished && (
+          <div className="w-full max-w-2xl bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-2.5">
+            <p className="text-xs text-indigo-900 leading-relaxed">{currentLesson.description}</p>
+          </div>
+        )}
 
         {/* Mobile tap banner */}
         {isMobile && !startTime && !isFinished && (

@@ -65,6 +65,8 @@ export default function HindiCourseLessonPage() {
 
   const lesson = useMemo(() => course.LESSONS.find(l => l.id === id) || course.LESSONS[0], [id, course]);
   const nextLesson = course.LESSONS.find(l => l.id === id + 1);
+  const prevLesson = course.LESSONS.find(l => l.id === id - 1);
+  const [showAbout, setShowAbout] = useState(true);
   const stageMeta = STAGES.find(s => s.id === lesson.stage);
   const displayHindi = 'displayHindi' in lesson ? (lesson as KrutiDevCourse.KrutiDevLesson).displayHindi : null;
 
@@ -291,11 +293,29 @@ export default function HindiCourseLessonPage() {
             <div className="text-[9px] text-brand-muted uppercase tracking-widest font-semibold">Acc</div>
             <div className={`text-sm font-black font-mono tabular-nums ${accuracy >= 90 ? 'text-brand-accent' : 'text-rose-500'}`}>{accuracy}%</div>
           </div>
+          {prevLesson && (
+            <Link to={`${basePath}/lesson-${prevLesson.id}`} onClick={e => e.stopPropagation()}
+              className="hidden sm:flex items-center gap-1 text-brand-muted hover:text-brand-text px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              title={prevLesson.title}>
+              <ChevronLeft className="w-3.5 h-3.5" /> पिछला
+            </Link>
+          )}
+          <button onClick={e => { e.stopPropagation(); setShowAbout(s => !s); }}
+            className="flex items-center gap-1.5 bg-brand-surface-2 hover:bg-brand-border text-brand-muted hover:text-brand-text px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-brand-border">
+            जानकारी
+          </button>
           <button onClick={reset}
             className="flex items-center gap-1.5 bg-brand-surface-2 hover:bg-brand-border text-brand-muted hover:text-brand-text px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-brand-border">
             <RotateCcw className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Restart</span>
           </button>
+          {nextLesson && course.isLessonUnlocked(nextLesson.id, progress) && (
+            <Link to={`${basePath}/lesson-${nextLesson.id}`} onClick={e => e.stopPropagation()}
+              className="hidden sm:flex items-center gap-1 text-brand-muted hover:text-brand-text px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              title={nextLesson.title}>
+              अगला <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          )}
         </div>
       </div>
 
@@ -307,7 +327,7 @@ export default function HindiCourseLessonPage() {
       {/* ── MAIN ── */}
       <div className="flex-grow flex flex-col items-center justify-start gap-4 px-3 sm:px-6 py-5 overflow-y-auto">
 
-        {!startTime && !isFinished && lesson.newKeys.length > 0 && (
+        {showAbout && lesson.newKeys.length > 0 && (
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
             className="w-full max-w-2xl rounded-2xl p-4 border"
             style={{ background: 'rgba(188,108,80,0.05)', borderColor: 'rgba(188,108,80,0.2)' }}
