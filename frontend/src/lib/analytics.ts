@@ -17,23 +17,42 @@ declare global {
   }
 }
 
-let initialized = false;
+let stubReady = false;
+let scriptLoaded = false;
 
-/** Load gtag.js once. Safe to call repeatedly. */
-export function initAnalytics() {
-  if (initialized || !GA_MEASUREMENT_ID || typeof window === 'undefined') return;
-  initialized = true;
-
-  const s = document.createElement('script');
-  s.async = true;
-  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  document.head.appendChild(s);
-
+/**
+ * Set up window.dataLayer/gtag immediately (cheap, synchronous, no network) so
+ * trackPageview/trackEvent calls made before the real script loads are queued
+ * rather than dropped — this is how GA4's own snippet is designed to work.
+ */
+function ensureStub() {
+  if (stubReady || !GA_MEASUREMENT_ID || typeof window === 'undefined') return;
+  stubReady = true;
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
   // We send page views manually on each SPA route change instead of automatically.
   window.gtag('config', GA_MEASUREMENT_ID, { send_page_view: false });
+}
+
+/** Load the actual gtag.js network script. Deferred to idle time by the caller
+ *  so it doesn't compete with the app's initial render for main-thread time. */
+function loadScript() {
+  if (scriptLoaded || !GA_MEASUREMENT_ID || typeof window === 'undefined') return;
+  scriptLoaded = true;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  document.head.appendChild(s);
+}
+
+/** Set up analytics: stub now, real script on next idle tick. Safe to call repeatedly. */
+export function initAnalytics() {
+  ensureStub();
+  const idle = typeof window !== 'undefined' && window.requestIdleCallback
+    ? window.requestIdleCallback
+    : (cb: () => void) => setTimeout(cb, 1500);
+  idle(loadScript);
 }
 
 /** Record a single-page-app page view. */
