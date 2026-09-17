@@ -42,7 +42,7 @@ export default function WpmCalculatorPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
       <Seo
-        title="WPM Calculator — Free Typing Speed Calculator (Gross & Net) | FastTypingLab"
+        title="WPM Calculator — Free Typing Speed Calculator | FastTypingLab"
         description="Free WPM calculator. Enter characters typed, time and errors to get your gross and net typing speed (words per minute) and accuracy, with the exact formula explained."
         jsonLd={{
           '@context': 'https://schema.org', '@type': 'FAQPage',

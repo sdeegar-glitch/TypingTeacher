@@ -45,7 +45,7 @@ export default function HindiCourseSelectPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text pb-24">
       <Seo
-        title={`Hindi Typing Course — ${isKrutiDev ? 'Kruti Dev' : 'Unicode'} Layout | FastTypingLab`}
+        title={`${isKrutiDev ? 'Kruti Dev' : 'Unicode'} Hindi Typing Course | FastTypingLab`}
         description={`Free structured Hindi typing course in the ${isKrutiDev ? 'Kruti Dev' : 'Unicode Mangal'} layout. Progress through stages, earn XP and badges, and track your typing speed.`}
       />
       {/* Sticky header */}

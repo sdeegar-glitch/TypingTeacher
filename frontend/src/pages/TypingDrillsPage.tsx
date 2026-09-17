@@ -228,7 +228,7 @@ export default function TypingDrillsPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
       <Seo
-        title="Typing Drills — Number (10-Key), Punctuation & Custom Text Practice | FastTypingLab"
+        title="Typing Drills — Number, Punctuation & Custom Practice | FastTypingLab"
         description="Free typing drills: number typing test for 10-key & data entry (KDPH), punctuation practice, top-200 common words, and custom text mode. Live WPM and accuracy."
       />
       <div className="max-w-3xl mx-auto">

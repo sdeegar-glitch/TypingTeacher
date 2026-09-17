@@ -39,7 +39,7 @@ export default function DownloadPage() {
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
       <Seo
-        title="Download Free Typing Software for Windows — English & Hindi | FastTypingLab"
+        title="Download Free Typing Software for Windows | FastTypingLab"
         description="Download the free FastTypingLab typing software for Windows. Practise English and Hindi (Mangal & Kruti Dev) typing offline, with live WPM and accuracy — great for SSC, CPCT and government exam prep."
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />

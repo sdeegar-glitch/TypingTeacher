@@ -131,7 +131,7 @@ Every fast typist you've ever seen is anchored to the home row without thinking 
   {
     slug: 'ten-key-typing-test-data-entry',
     title: '10-Key Typing Test: Numeric Data Entry Speed (KPH)',
-    seoTitle: '10-Key Typing Test — Numeric Data Entry Speed & KPH Explained (2026) | FastTypingLab',
+    seoTitle: '10-Key Typing Test — KPH & Data Entry Speed | FastTypingLab',
     metaDesc: '10-key (numeric keypad) speed is measured in KPH, not WPM. Learn what a 10-key typing test is, what KPH employers expect for data entry, and how to practise.',
     category: 'Careers',
     readTime: '6 min',
@@ -193,7 +193,7 @@ Fast, accurate 10-key skills open doors in **accounting, banking, insurance, bil
   {
     slug: 'typing-test-for-students',
     title: 'Typing Test for Students: Practice for School & College',
-    seoTitle: 'Typing Test for Students — Free Practice for School & College (2026) | FastTypingLab',
+    seoTitle: 'Typing Test for Students — School & College Practice | FastTypingLab',
     metaDesc: 'Typing is an essential skill for students. See the typing speed students should aim for by grade, why it matters for school and college, and practice free.',
     category: 'Learning',
     readTime: '6 min',
@@ -243,7 +243,7 @@ Unlike cramming for one exam, learning to type is a skill that helps with *every
   {
     slug: 'why-is-keyboard-qwerty',
     title: 'Why Is the Keyboard QWERTY? History & Layout Explained',
-    seoTitle: 'Why Is the Keyboard QWERTY? The History Explained (2026) | FastTypingLab',
+    seoTitle: 'Why Is the Keyboard QWERTY? History Explained | FastTypingLab',
     metaDesc: 'Why are the letters on your keyboard arranged QWERTY and not ABC? Learn the real history behind the QWERTY layout, the jam-prevention myth, and whether alternatives are faster.',
     category: 'Basics',
     readTime: '6 min',
@@ -292,7 +292,7 @@ QWERTY is a 150-year-old solution to a mechanical problem that no longer exists 
   {
     slug: 'best-keyboard-for-typing-fast',
     title: 'Best Keyboard for Typing Fast: What Actually Matters',
-    seoTitle: 'Best Keyboard for Typing Fast (2026) — Mechanical vs Membrane | FastTypingLab',
+    seoTitle: 'Best Keyboard for Typing — Mechanical vs Membrane | FastTypingLab',
     metaDesc: 'Does your keyboard make you type faster? Learn what really matters — mechanical vs membrane, key travel, layout and ergonomics — and how to choose a keyboard for speed.',
     category: 'Skills',
     readTime: '7 min',
@@ -421,7 +421,7 @@ Ready to see your number? [Take a free WPM test now](/tests) and find out where 
   {
     slug: 'typing-test-for-nurses-healthcare',
     title: 'Typing Test for Nurses & Healthcare Jobs',
-    seoTitle: 'Typing Test for Nurses — WPM Needed for Healthcare Jobs (2026) | FastTypingLab',
+    seoTitle: 'Typing Test for Nurses — WPM for Healthcare Jobs | FastTypingLab',
     metaDesc: 'Nurses and healthcare workers type constantly into EHR systems. Learn the typing speed expected for nursing and medical jobs, and practice free to pass a healthcare typing test.',
     category: 'Careers',
     readTime: '6 min',
@@ -476,7 +476,7 @@ Whether you are charting at the bedside or aiming for a medical scribe role, fas
   {
     slug: 'how-to-type-faster',
     title: 'How to Type Faster: Proven Techniques That Work',
-    seoTitle: 'How to Type Faster — 9 Proven Techniques to Boost Your WPM (2026) | FastTypingLab',
+    seoTitle: 'How to Type Faster — 9 Techniques to Boost Your WPM | FastTypingLab',
     metaDesc: 'Want to type faster? Learn the proven techniques — touch typing, correct finger placement, accuracy first, and daily drills — that raise your WPM in weeks, not years.',
     category: 'Skills',
     readTime: '7 min',
@@ -536,7 +536,7 @@ Want a structured schedule? Follow our [how to type faster in 30 days](/blog/how
   {
     slug: 'typing-test-for-jobs',
     title: 'Typing Test for Jobs: Data Entry, Admin & Remote Work',
-    seoTitle: 'Typing Test for Jobs — Free Practice for Data Entry & Admin Roles (2026) | FastTypingLab',
+    seoTitle: 'Typing Test for Jobs — Data Entry & Admin Practice | FastTypingLab',
     metaDesc: 'Many jobs need a typing test — data entry, admin, customer service, transcription and remote work. See the WPM employers expect and practice free to pass your pre-employment typing test.',
     category: 'Careers',
     readTime: '7 min',
@@ -598,7 +598,7 @@ A typing test is the most improvable step in any hiring process. Spend 15 minute
   {
     slug: 'best-typing-games-for-kids',
     title: 'Best Free Typing Games for Kids to Learn to Type',
-    seoTitle: 'Best Free Typing Games for Kids (2026) — Fun Way to Learn to Type | FastTypingLab',
+    seoTitle: 'Best Free Typing Games for Kids — Learn to Type | FastTypingLab',
     metaDesc: 'Free typing games make learning to type fun for kids. Discover the best age-appropriate typing games, how to start, and how much practice children need to type without looking.',
     category: 'Learning',
     readTime: '6 min',
@@ -654,7 +654,7 @@ Typing is one of those rare skills that helps with *everything* a child does lat
   {
     slug: 'typing-practice-for-programmers-coders',
     title: 'Typing Practice for Programmers: Type Code Faster',
-    seoTitle: 'Typing Practice for Programmers — Type Code Faster (2026) | FastTypingLab',
+    seoTitle: 'Typing Practice for Programmers — Type Code Faster | FastTypingLab',
     metaDesc: 'Faster, more accurate typing lets programmers stay in flow. Learn why touch typing matters for coding, the symbols to master, and how to practice typing code the right way.',
     category: 'Skills',
     readTime: '7 min',
@@ -710,7 +710,7 @@ The goal of typing practice for programmers is not to win a speed contest. It is
   {
     slug: 'how-to-learn-shorthand-stenography',
     title: 'How to Learn Shorthand (Stenography): A Beginner’s Guide',
-    seoTitle: 'How to Learn Shorthand Fast: Pitman Basics for SSC Steno | FastTypingLab',
+    seoTitle: 'Shorthand Basics: Pitman Fundamentals for SSC Steno | FastTypingLab',
     metaDesc: 'Learn Pitman shorthand step by step — alphabet, short forms, SSC Steno speed targets, and free dictation practice to get exam-ready.',
     category: 'Learning',
     readTime: '8 min',
@@ -1296,7 +1296,7 @@ FastTypingLab offers free Hindi Unicode (Mangal/INSCRIPT) and English typing tes
   {
     slug: 'up-police-typing-test-speed-and-layout',
     title: 'UP Police Typing Test: Speed, Kruti Dev Layout & Practice (2026)',
-    seoTitle: 'UP Police Typing Test 2026 — Speed, Kruti Dev & Practice | FastTypingLab',
+    seoTitle: 'UP Police Typing Test — Speed, Kruti Dev & Practice | FastTypingLab',
     metaDesc: 'UP Police typing test guide: required Hindi speed (~25 WPM), Kruti Dev vs Mangal layout, exam format, common mistakes, and a free practice plan for Computer Operator & Clerk posts.',
     category: 'Government Exams',
     readTime: '6 min',
@@ -1358,7 +1358,7 @@ FastTypingLab offers free Kruti Dev and Hindi Unicode (Mangal) typing tests with
   {
     slug: 'how-to-type-in-hindi-on-laptop-word-whatsapp',
     title: 'How to Type in Hindi on Laptop, MS Word & WhatsApp (2026)',
-    seoTitle: 'How to Type Hindi on Laptop, Word & WhatsApp — 3 Free Ways | FastTypingLab',
+    seoTitle: 'How to Type Hindi on Laptop, Word & WhatsApp | FastTypingLab',
     metaDesc: 'Type Hindi on your laptop, MS Word & WhatsApp — 3 free ways: Mangal (INSCRIPT), Google Input Tools & phonetic typing. Simple step-by-step, no software needed.',
     category: 'Learning',
     readTime: '6 min',
@@ -1461,7 +1461,7 @@ FastTypingLab offers a free Kruti Dev typing test and guide with an on-screen la
   {
     slug: 'ahc-ro-aro-typing-test-guide',
     title: 'AHC RO/ARO Typing Test: Speed, Rules & Practice (2026)',
-    seoTitle: 'Allahabad High Court RO/ARO Typing Test — Speed & Practice | FastTypingLab',
+    seoTitle: 'AHC RO/ARO Typing Test — Speed & Practice | FastTypingLab',
     metaDesc: 'Allahabad High Court (AHC) RO/ARO typing test guide: Hindi & English speed, rules, exam format, common mistakes, and free practice to prepare.',
     category: 'Government Exams',
     readTime: '5 min',

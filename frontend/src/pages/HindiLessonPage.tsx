@@ -186,7 +186,7 @@ export default function HindiLessonPage() {
       onClick={() => isMobile && hiddenRef.current?.focus()}
       style={{ fontFamily: 'Inter, sans-serif' }}>
       <Seo
-        title={`${lesson.title} — Hindi Typing Lesson | FastTypingLab`}
+        title={`${lesson.title} | FastTypingLab`}
         description={`Practice lesson ${id} of the Hindi typing course: ${lesson.title}. Free guided Hindi typing lesson with live WPM, accuracy and stars.`}
       />
 
