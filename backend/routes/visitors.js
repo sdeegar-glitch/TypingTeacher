@@ -1,33 +1,17 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { supabase } from '../supabaseClient.js';
+import { requireBrowserOrigin } from '../middleware/requireBrowserOrigin.js';
 
 const router = express.Router();
 
 // This is a public, unauthenticated write endpoint by necessity (it's called
 // from every anonymous visitor's browser), which makes it a standing target
 // for scripts that POST fake visits directly to inflate/pollute the counter.
-// Two independent checks, since either one alone has a gap a script can avoid:
-//  - Origin check: a real browser call from our own SPA always carries this;
-//    a script hitting the endpoint directly usually doesn't bother forging it.
-//  - A dedicated per-IP limit tighter than the global one in index.js, since
-//    a single real visitor never legitimately fires more than a couple of
-//    these per minute (route change), but a script rotating across many IPs
-//    can still be slowed down per-IP even though it can't be stopped outright
-//    this way alone — see infra/nginx and fail2ban for the rest of the layers.
-const ALLOWED_TRACK_ORIGINS = new Set([
-  'https://fasttypinglab.com',
-  'http://localhost:5173',
-]);
-
-function requireBrowserOrigin(req, res, next) {
-  const origin = req.headers.origin;
-  // Tauri's desktop-app webview doesn't send a standard http(s) Origin.
-  const isTauri = typeof origin === 'string' && origin.startsWith('tauri://');
-  if (origin && (ALLOWED_TRACK_ORIGINS.has(origin) || isTauri)) return next();
-  return res.status(403).json({ error: 'Origin not allowed' });
-}
-
+// requireBrowserOrigin + a dedicated per-IP limit tighter than the global one
+// in index.js, since a single real visitor never legitimately fires more than
+// a couple of these per minute (route change) — see infra/nginx and
+// infra/fail2ban for the rest of the layers.
 const trackLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 10,

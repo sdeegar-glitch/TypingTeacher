@@ -4,16 +4,31 @@
  * GET  /api/certificates/:id - Verify a certificate by UUID
  */
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { supabase } from '../supabaseClient.js';
+import { requireBrowserOrigin } from '../middleware/requireBrowserOrigin.js';
 
 const router = express.Router();
 
+// A real user only ever issues one certificate per completed test.
+const issueLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests.' },
+});
+
 // POST /api/certificates
-router.post('/', async (req, res) => {
+router.post('/', requireBrowserOrigin, issueLimiter, async (req, res) => {
   try {
     const { username, wpm, accuracy, errors, duration_seconds, test_title } = req.body;
 
-    if (!username || !wpm || !accuracy) {
+    if (
+      !username || typeof username !== 'string' || username.length > 100 ||
+      typeof wpm !== 'number' || wpm <= 0 || wpm > 400 ||
+      typeof accuracy !== 'number' || accuracy < 0 || accuracy > 100
+    ) {
       return res.status(400).json({ error: 'username, wpm, and accuracy are required.' });
     }
 
