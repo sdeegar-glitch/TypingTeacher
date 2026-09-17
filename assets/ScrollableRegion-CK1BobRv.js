@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-DJcXP4Mu.js";var t=e();function n({children:e,label:n,className:r=``,axis:i=`x`}){return(0,t.jsx)(`div`,{tabIndex:0,role:`region`,"aria-label":n,className:`${i===`x`?`overflow-x-auto`:`overflow-y-auto`} ${r}`.trim(),children:e})}export{n as t};
