@@ -130,7 +130,7 @@ export default function TypingTestPage() {
   }, [duration, profession, language, queryDuration]);
 
   // Test content state
-  const [testContent, setTestContent] = useState<{ title: string; content: string; keyboardLayout?: string | null; displayContent?: string | null; testId?: number | null }>(
+  const [testContent, setTestContent] = useState<{ title: string; content: string; keyboardLayout?: string | null; displayContent?: string | null; testId?: number | null; excerpt?: string | null }>(
     practiceText
       ? { title: 'AI Practice Passage', content: practiceText }
       : { title: sampleTexts['1'].title, content: sampleTexts['1'].content }
@@ -154,7 +154,7 @@ export default function TypingTestPage() {
       setLoadingTest(true);
       fetchTestBySlug(id)
         .then(data => {
-          if (data?.content) setTestContent({ title: data.title, content: data.content, keyboardLayout: data.keyboard_layout, displayContent: data.display_content, testId: Number(data.id) || null });
+          if (data?.content) setTestContent({ title: data.title, content: data.content, keyboardLayout: data.keyboard_layout, displayContent: data.display_content, testId: Number(data.id) || null, excerpt: data.excerpt || null });
           else setTestContent(sampleTexts['1']);
         })
         .catch(() => setTestContent(sampleTexts['1']))
@@ -547,12 +547,17 @@ export default function TypingTestPage() {
       className={`h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none ${a11y.highContrast ? 'typing-high-contrast' : ''}`}
       onClick={() => isMobile && hiddenInputRef.current?.focus()}
     >
-      {/* No individual test passage is in sitemap.xml yet and content is a bare widget
-          (Phase 2a of the AdSense roadmap) — noindex every variant until real per-passage
-          content exists and a curated set is chosen. */}
+      {/* Every test now carries a real, AI-written per-passage excerpt (Phase 2a of
+          the AdSense roadmap, backend half) — used below for both the meta
+          description and the on-page "About this passage" content. Still noindexed
+          for now: no individual test slug is in sitemap.xml yet, so indexing every
+          AI-generated test page today would still be a duplicate-content risk;
+          that's a separate follow-up (curate + add specific slugs to the sitemap). */}
       <Seo
         title={`${testContent.title} — Typing Test | FastTypingLab`}
-        description={`Take a free online typing test: ${testContent.title}. Get live WPM, accuracy and error tracking.`}
+        description={testContent.excerpt
+          ? testContent.excerpt.slice(0, 155)
+          : `Take a free online typing test: ${testContent.title}. Get live WPM, accuracy and error tracking.`}
         noindex
       />
       {/* Screen-reader only live region — announces test start/finish without affecting sighted UI */}
@@ -993,6 +998,12 @@ export default function TypingTestPage() {
         {/* About this test — hidden while actively typing to stay out of the way */}
         {!stats.isActive && (
           <div className="w-full max-w-2xl" onClick={e => e.stopPropagation()}>
+            {testContent.excerpt && (
+              <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed mb-3">
+                <h2 className="text-base font-bold text-brand-text mb-1.5">About this passage</h2>
+                <p>{testContent.excerpt}</p>
+              </div>
+            )}
             <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed space-y-2">
               <h2 className="text-base font-bold text-brand-text">How WPM, accuracy and errors are calculated</h2>
               <p><strong className="text-brand-text">Gross WPM</strong> counts every character you typed, divided by 5, over your time in minutes. <strong className="text-brand-text">Net WPM</strong> subtracts your mistakes first, so it's a truer measure of usable speed — this is the number most exams and employers care about.</p>
