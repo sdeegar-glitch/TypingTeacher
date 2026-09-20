@@ -1,4 +1,5 @@
 import { supabase } from '../supabaseClient.js';
+import { ensureProfileRow } from './optionalUser.js';
 
 /**
  * Verifies the Supabase access token in the Authorization header and loads the
@@ -15,8 +16,9 @@ export async function requireUser(req, res, next) {
     return res.status(401).json({ error: 'Invalid or expired session' });
   }
 
-  // Make sure a profile row exists (email users always have one; this is a
-  // safety net for any edge case where it's missing).
+  // Make sure a profile row exists (signup can fail to create it, and old
+  // Cloud-era rows collide on email) so FKs to users(id) work for this account.
+  await ensureProfileRow(userData.user);
   const { data: profile } = await supabase
     .from('users')
     .select('id, email, name, role, phone, avatar_url, is_banned, created_at')

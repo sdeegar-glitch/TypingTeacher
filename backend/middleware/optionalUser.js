@@ -9,7 +9,7 @@ const knownProfiles = new Set();
  * can fail to create it. Create it on first sight so scores can be attributed
  * to the account instead of being silently stored as anonymous.
  */
-async function ensureProfileRow(authUser) {
+export async function ensureProfileRow(authUser) {
   if (knownProfiles.has(authUser.id)) return;
   const { data: existing } = await supabase
     .from('users')
@@ -19,9 +19,16 @@ async function ensureProfileRow(authUser) {
   if (!existing) {
     const meta = authUser.user_metadata || {};
     const name = meta.full_name || meta.name || (authUser.email ? authUser.email.split('@')[0] : 'User');
-    const { error } = await supabase
+    let { error } = await supabase
       .from('users')
       .insert([{ id: authUser.id, email: authUser.email, name }]);
+    // Same email on a stale row from the Cloud copy: retire it and create a fresh
+    // row (see supabase/migrations/20260921_adopt_stale_user.sql).
+    if (error && /users_email_key/.test(error.message || '')) {
+      ({ error } = await supabase.rpc('adopt_stale_user_row', {
+        p_id: authUser.id, p_email: authUser.email, p_name: name,
+      }));
+    }
     if (error) {
       console.error(`[optionalUser] could not create users row for ${authUser.id}:`, error.message);
       return; // not cached: try again next time
