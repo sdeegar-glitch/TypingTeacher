@@ -103,6 +103,7 @@ export default function HindiTypingJunglePage() {
       errors: finalStats.errors,
       accuracy: finalStats.accuracy,
       lang: 'hindi',
+      key_stats: engine.getKeyStats(),
     });
     try {
       const hist = JSON.parse(localStorage.getItem('typingHistory') || '[]');

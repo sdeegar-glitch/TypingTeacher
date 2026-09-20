@@ -26,6 +26,13 @@ export interface TypingStats {
   elapsedSeconds: number;
 }
 
+export interface KeyStat {
+  key: string;      // the character the user was supposed to type
+  hits: number;     // times it was attempted
+  errors: number;   // attempts that were wrong
+  total_ms: number; // summed time-to-press (gap since previous keystroke, capped)
+}
+
 export interface TypingEngineResult {
   stats: TypingStats;
   userInput: string;
@@ -41,6 +48,7 @@ export interface TypingEngineResult {
   pressedKey: string;          // last pressed key (for virtual keyboard highlight)
   rejectedFlash: number;       // increments each time strict mode rejects a wrong keystroke (for shake/feedback UI)
   history: TypingHistoryPoint[]; // WPM/accuracy sampled every second, for results-screen graphs
+  getKeyStats: () => KeyStat[];  // per-key breakdown for this run (heatmap / AI weak-key analysis)
 }
 
 export function useTypingEngine(
@@ -71,6 +79,23 @@ export function useTypingEngine(
   const mistakesRef = useRef<Set<number>>(new Set());
   const skippedRef = useRef<Set<number>>(new Set());
   const strictErrorCountRef = useRef(0);
+
+  // Per-key stats live in refs (no re-render per keystroke). posRef mirrors the
+  // cursor synchronously -- state updaters can't host side effects safely.
+  const keyStatsRef = useRef<Map<string, KeyStat>>(new Map());
+  const posRef = useRef(0);
+  const lastKeyAtRef = useRef(0);
+  const recordKey = (expected: string, wrong: boolean) => {
+    const now = performance.now();
+    const gap = lastKeyAtRef.current ? Math.min(3000, now - lastKeyAtRef.current) : 0;
+    lastKeyAtRef.current = now;
+    const m = keyStatsRef.current;
+    const ks = m.get(expected) ?? { key: expected, hits: 0, errors: 0, total_ms: 0 };
+    ks.hits += 1;
+    if (wrong) ks.errors += 1;
+    ks.total_ms += Math.round(gap);
+    m.set(expected, ks);
+  };
   useEffect(() => { userInputRef.current = userInput; }, [userInput]);
   useEffect(() => { mistakesRef.current = mistakes; }, [mistakes]);
   useEffect(() => { skippedRef.current = skipped; }, [skipped]);
@@ -155,6 +180,23 @@ export function useTypingEngine(
     if (finishedRef.current) return;
     setStartTime(prev => prev ?? Date.now());
 
+    // Mirror the outcome below (same rules) into the per-key stats.
+    {
+      const pos = posRef.current;
+      const expectedCh = text[pos];
+      if (expectedCh !== undefined) {
+        if (char === ' ' && expectedCh !== ' ' && !strictMode) {
+          const nextSpaceIdx = text.indexOf(' ', pos);
+          posRef.current = nextSpaceIdx === -1 ? text.length : nextSpaceIdx + 1; // skipped word: not a keypress on any key
+        } else if (char !== expectedCh && strictMode) {
+          recordKey(expectedCh, true); // rejected, cursor stays
+        } else {
+          recordKey(expectedCh, char !== expectedCh);
+          posRef.current = pos + 1;
+        }
+      }
+    }
+
     setUserInput(prev => {
       if (prev.length >= text.length) {
         finish();
@@ -202,6 +244,7 @@ export function useTypingEngine(
   const processBackspace = useCallback(() => {
     if (finishedRef.current) return;
     setStartTime(prev => prev ?? Date.now());
+    if (posRef.current > 0) posRef.current -= 1;
     setUserInput(prev => {
       const newLen = prev.length - 1;
       if (newLen < 0) return prev;
@@ -237,8 +280,17 @@ export function useTypingEngine(
     setHistory([]);
     lastMobileVal.current = '';
     finishedRef.current = false;
+    keyStatsRef.current = new Map();
+    posRef.current = 0;
+    lastKeyAtRef.current = 0;
     clearInterval(timerRef.current!);
   }, [durationSeconds]);
+
+  const getKeyStats = useCallback((): KeyStat[] => (
+    [...keyStatsRef.current.values()]
+      .sort((a, b) => b.hits - a.hits)
+      .slice(0, 200)
+  ), []);
 
   const nextChar = text[userInput.length] ?? '';
   const caretIndex = userInput.length;
@@ -258,5 +310,6 @@ export function useTypingEngine(
     pressedKey,
     rejectedFlash,
     history,
+    getKeyStats,
   };
 }

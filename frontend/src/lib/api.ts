@@ -46,6 +46,17 @@ interface SessionPayload {
   errors: number;
   accuracy: number;
   lang?: string;
+  /** Per-key breakdown for the heatmap / AI weak-key analysis. */
+  key_stats?: { key: string; hits: number; errors: number; total_ms: number }[];
+}
+
+function authHeader(): Record<string, string> {
+  try {
+    const token = localStorage.getItem('accessToken');
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  } catch {
+    return {};
+  }
 }
 
 /** POST a completed typing session to the backend. Fire-and-forget — never throws. */
@@ -53,7 +64,7 @@ export async function saveSession(payload: SessionPayload): Promise<void> {
   try {
     await fetch(`${API_URL}/test_sessions`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authHeader() },
       body: JSON.stringify(payload),
     });
   } catch {
@@ -71,18 +82,18 @@ interface GameScorePayload {
   xp?: number;
 }
 
-/** POST a game result to the backend as a session. Fire-and-forget. */
+/** POST a game result to /api/game-scores (kept out of typing sessions). Fire-and-forget. */
 export async function saveGameScore(payload: GameScorePayload): Promise<void> {
   try {
-    await fetch(`${API_URL}/test_sessions`, {
+    await fetch(`${API_URL}/api/game-scores`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authHeader() },
       body: JSON.stringify({
-        duration: payload.duration || 60,
-        gross_wpm: payload.wpm || 0,
-        net_wpm: payload.wpm || 0,
-        errors: 0,
-        accuracy: payload.accuracy || 100,
+        game: payload.game,
+        score: Math.max(0, Math.round(payload.score)),
+        ...(payload.wpm !== undefined ? { wpm: Math.round(payload.wpm) } : {}),
+        ...(payload.accuracy !== undefined ? { accuracy: payload.accuracy } : {}),
+        ...(payload.duration !== undefined ? { duration: Math.round(payload.duration) } : {}),
       }),
     });
   } catch {}

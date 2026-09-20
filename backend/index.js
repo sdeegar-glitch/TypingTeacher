@@ -65,6 +65,8 @@ import meRoutes from './routes/me.js';
 import adminRoutes from './routes/admin.js';
 import publicSettingsRoutes from './routes/publicSettings.js';
 import visitorsRoutes from './routes/visitors.js';
+import gameScoresRoutes from './routes/gameScores.js';
+import progressRoutes from './routes/progress.js';
 import { initCronJobs } from './cronService.js';
 
 app.use('/tests', testsRoutes);
@@ -78,6 +80,8 @@ app.use('/api/me', meRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/settings', publicSettingsRoutes);
 app.use('/api/visitors', visitorsRoutes);
+app.use('/api/game-scores', gameScoresRoutes);
+app.use('/api/progress', progressRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

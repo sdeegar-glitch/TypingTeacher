@@ -65,7 +65,7 @@ export default function SpeedRacerPage() {
       hist.push({ game: 'speedracer', netWpm: w, accuracy: acc, difficulty: diff.label, xp: w * 2, date: new Date().toISOString() });
       localStorage.setItem('typingHistory', JSON.stringify(hist));
     } catch {}
-    saveGameScore({ game: 'speedracer', wpm: w, accuracy: acc, difficulty: diff.label, xp: w * 2 });
+    saveGameScore({ game: 'speedracer', score: w, wpm: w, accuracy: acc, difficulty: diff.label, xp: w * 2 });
   }, [passage, bestWpm, diff.label]);
 
   const startGame = () => {

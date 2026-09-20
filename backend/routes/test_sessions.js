@@ -2,6 +2,7 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { supabase } from '../supabaseClient.js';
 import { requireBrowserOrigin } from '../middleware/requireBrowserOrigin.js';
+import { optionalUser } from '../middleware/optionalUser.js';
 
 const router = express.Router();
 
@@ -19,8 +20,29 @@ const submitLimiter = rateLimit({
 });
 
 // POST /test_sessions - Submit test results
-router.post('/', requireBrowserOrigin, submitLimiter, async (req, res) => {
-  const { user_id, test_id, duration, gross_wpm, net_wpm, errors, accuracy } = req.body;
+// Validates the optional per-key breakdown sent by the typing engine. Returns
+// a cleaned array (max 200 keys) or [] if absent/invalid -- never fails the
+// session save because of it.
+function cleanKeyStats(raw) {
+  if (!Array.isArray(raw)) return [];
+  const out = [];
+  for (const k of raw.slice(0, 200)) {
+    if (
+      k && typeof k.key === 'string' && k.key.length >= 1 && k.key.length <= 8 &&
+      Number.isInteger(k.hits) && k.hits >= 0 && k.hits <= 100000 &&
+      Number.isInteger(k.errors) && k.errors >= 0 && k.errors <= k.hits + 100000 &&
+      (k.total_ms === undefined || (Number.isInteger(k.total_ms) && k.total_ms >= 0 && k.total_ms <= 3.6e9))
+    ) {
+      out.push({ key: k.key, hits: k.hits, errors: k.errors, total_ms: k.total_ms ?? 0 });
+    }
+  }
+  return out;
+}
+
+router.post('/', requireBrowserOrigin, submitLimiter, optionalUser, async (req, res) => {
+  // user_id in the body is ignored on purpose: attribution comes from the token.
+  const { test_id, duration, gross_wpm, net_wpm, errors, accuracy, key_stats } = req.body;
+  const user_id = req.userId;
 
   if (
     typeof duration !== 'number' || typeof gross_wpm !== 'number' || typeof net_wpm !== 'number' ||
@@ -46,7 +68,14 @@ router.post('/', requireBrowserOrigin, submitLimiter, async (req, res) => {
     .single();
     
   if (error) return res.status(500).json({ error: error.message });
-  
+
+  // Per-key data is best-effort: a failure here must not lose the session.
+  const keyRows = cleanKeyStats(key_stats).map(k => ({ ...k, session_id: data.id, user_id }));
+  if (keyRows.length) {
+    const { error: keyErr } = await supabase.from('session_key_stats').insert(keyRows);
+    if (keyErr) console.error('[test_sessions] key stats insert failed:', keyErr.message);
+  }
+
   // Return expected response format
   res.status(201).json({
     session_id: data.id,

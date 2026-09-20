@@ -220,6 +220,7 @@ export default function TypingTestPage() {
         net_wpm: finalStats.netWpm,
         errors: finalStats.errors,
         accuracy: finalStats.accuracy,
+        key_stats: engine.getKeyStats(),
       });
 
       // 2. Save to localStorage for Dashboard
