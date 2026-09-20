@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Seo from '../components/Seo';
 import { motion } from 'framer-motion';
-import { Trophy, Medal, Award, TrendingUp, RefreshCcw } from 'lucide-react';
+import { Trophy, Medal, Award, RefreshCcw } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 
 import { API_URL } from '../lib/api';
@@ -14,26 +14,15 @@ interface LeaderboardEntry {
   date: string;
 }
 
-const MOCK: LeaderboardEntry[] = [
-  { rank: 1, user: 'RocketTypist', net_wpm: 142, accuracy: 98.5, date: '2026-05-30' },
-  { rank: 2, user: 'KeyboardNinja', net_wpm: 128, accuracy: 99.1, date: '2026-05-29' },
-  { rank: 3, user: 'SpeedDemon99', net_wpm: 117, accuracy: 96.0, date: '2026-05-31' },
-  { rank: 4, user: 'TypeMaster', net_wpm: 105, accuracy: 97.2, date: '2026-05-28' },
-  { rank: 5, user: 'QuickFingers', net_wpm: 98, accuracy: 94.5, date: '2026-05-27' },
-  { rank: 6, user: 'AccuracyKing', net_wpm: 91, accuracy: 99.8, date: '2026-05-26' },
-  { rank: 7, user: 'HomeDeskTyper', net_wpm: 85, accuracy: 95.2, date: '2026-05-25' },
-  { rank: 8, user: 'CodeWriter42', net_wpm: 78, accuracy: 96.0, date: '2026-05-24' },
-];
-
 const RANK_COLORS = ['text-amber-400', 'text-slate-400', 'text-orange-500'];
 const RANK_BG = ['bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20',
   'bg-slate-50 dark:bg-slate-500/10 border-slate-200 dark:border-slate-500/20',
   'bg-orange-50 dark:bg-orange-500/10 border-orange-200 dark:border-orange-500/20'];
 
 export default function LeaderboardPage() {
-  const [data, setData] = useState<LeaderboardEntry[]>(MOCK);
+  const [data, setData] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<'global' | 'exam'>('global');
+  const [error, setError] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -42,13 +31,15 @@ export default function LeaderboardPage() {
 
   const loadData = async () => {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch(`${API_URL}/leaderboard`);
       const json = await res.json();
-      if (Array.isArray(json) && json.length > 0) setData(json);
-      else setData(MOCK);
+      if (!res.ok || !Array.isArray(json)) throw new Error('bad response');
+      setData(json);
     } catch {
-      setData(MOCK);
+      setData([]);
+      setError(true);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -75,23 +66,28 @@ export default function LeaderboardPage() {
           subtitle="The fastest typists on FastTypingLab. Can you make the list?"
         />
 
-        {/* Tabs */}
-        <div className="flex gap-1 bg-brand-surface-2 rounded-xl p-1 mb-8 w-fit mx-auto">
-          {(['global', 'exam'] as const).map(t => (
-            <button key={t} onClick={() => setTab(t)}
-              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${tab === t ? 'bg-brand-surface shadow text-brand-text' : 'text-brand-muted hover:text-brand-text'}`}>
-              {t === 'global' ? '🌍 Global' : '📋 Exam (SSC/Court)'}
-            </button>
-          ))}
-          <button onClick={() => { setRefreshing(true); loadData(); }}
-            className="px-3 py-2 rounded-lg text-brand-muted hover:text-brand-text transition-all">
-            <RefreshCcw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+        <div className="flex justify-center mb-8">
+          <button onClick={() => { setRefreshing(true); loadData(); }} aria-label="Refresh leaderboard"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-surface-2 text-sm font-semibold text-brand-muted hover:text-brand-text transition-all">
+            <RefreshCcw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
           </button>
         </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : error || data.length === 0 ? (
+          <div className="text-center py-16 bg-brand-surface border border-brand-border rounded-2xl">
+            <p className="font-bold text-brand-text mb-1">
+              {error ? 'Could not load the leaderboard.' : 'No scores yet.'}
+            </p>
+            <p className="text-brand-muted text-sm mb-4">
+              {error ? 'Please try again in a moment.' : 'Be the first on the board — take a test!'}
+            </p>
+            <a href="/tests/" className="inline-block bg-brand-primary hover:bg-brand-secondary text-white px-6 py-2.5 rounded-xl font-bold transition-all">
+              Take the Speed Test
+            </a>
           </div>
         ) : (
           <>

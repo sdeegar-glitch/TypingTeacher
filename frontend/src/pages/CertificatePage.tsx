@@ -189,6 +189,7 @@ export default function CertificatePage() {
   const [verifyId, setVerifyId] = useState('');
   const [verifyResult, setVerifyResult] = useState<{ valid: boolean; data?: CertData } | null>(null);
   const [isIssuing, setIsIssuing] = useState(false);
+  const [issueError, setIssueError] = useState('');
   const [isDownloading, setIsDownloading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showLoginGate, setShowLoginGate] = useState(false);
@@ -216,8 +217,10 @@ export default function CertificatePage() {
   }, [searchParams]);
 
   const issueCertificate = async () => {
-    if (!username.trim()) return;
+    // Certificates are only issued for a real, completed test result.
+    if (!username.trim() || wpm <= 0 || accuracy <= 0) return;
     setIsIssuing(true);
+    setIssueError('');
     try {
       const token = localStorage.getItem('accessToken');
       const res = await fetch(`${API_URL}/api/certificates`, {
@@ -226,16 +229,13 @@ export default function CertificatePage() {
           'Content-Type': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ username: username.trim(), wpm: wpm || 50, accuracy: accuracy || 90, test_title: testTitle }),
+        body: JSON.stringify({ username: username.trim(), wpm, accuracy, test_title: testTitle }),
       });
       const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || 'Could not issue certificate.');
       setCertData(data);
-    } catch {
-      setCertData({
-        id: `FTLAB-${Date.now().toString(36).toUpperCase()}`,
-        username: username.trim(), wpm: wpm || 50, accuracy: accuracy || 90, errors: 0,
-        test_title: testTitle, issued_at: new Date().toISOString(), is_valid: true,
-      });
+    } catch (e) {
+      setIssueError(e instanceof Error ? e.message : 'Could not issue certificate. Please try again.');
     } finally {
       setIsIssuing(false);
     }
@@ -353,7 +353,8 @@ export default function CertificatePage() {
                       <div className="text-xs text-brand-muted">Accuracy</div>
                     </div>
                   </div>
-                  <button onClick={issueCertificate} disabled={!username.trim() || isIssuing}
+                  {issueError && <p role="alert" className="text-sm text-red-500 mb-2">{issueError}</p>}
+                  <button onClick={issueCertificate} disabled={!username.trim() || wpm <= 0 || isIssuing}
                     className="w-full bg-brand-primary hover:bg-brand-secondary disabled:opacity-50 text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
                     {isIssuing
                       ? <><div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" /> Generating…</>

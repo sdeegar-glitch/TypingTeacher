@@ -64,16 +64,9 @@ router.post('/', requireBrowserOrigin, issueLimiter, async (req, res) => {
     }
 
     if (error) {
-      // If table doesn't exist yet, return a mock certificate ID
-      console.warn('[Certificates] DB error, returning mock:', error.message);
-      const mockId = `FTLAB-${Date.now().toString(36).toUpperCase()}`;
-      return res.status(201).json({
-        id: mockId,
-        username, wpm, accuracy, errors: errors ?? 0,
-        test_title: test_title ?? 'Typing Speed Test',
-        issued_at: new Date().toISOString(),
-        is_valid: true,
-      });
+      // Never hand out an ID that isn't stored: it could not be verified later.
+      console.error('[Certificates] insert failed:', error.message);
+      return res.status(503).json({ error: 'Could not issue certificate right now. Please try again.' });
     }
 
     res.status(201).json(data);

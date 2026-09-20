@@ -54,9 +54,6 @@ export default function ContactPage() {
           <Link to="/privacy/" className="text-brand-primary hover:underline">Privacy Policy</Link> and{' '}
           <Link to="/terms/" className="text-brand-primary hover:underline">Terms of Service</Link>.
         </p>
-
-        {/* Social — placeholder for when accounts are live */}
-        <p className="text-brand-muted text-xs mt-6">Our social media channels are coming soon.</p>
       </div>
     </div>
   );

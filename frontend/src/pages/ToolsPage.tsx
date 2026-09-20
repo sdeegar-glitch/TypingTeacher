@@ -99,9 +99,9 @@ const TOOL_CARDS = [
   {
     icon: Users,
     title: 'Multiplayer Race',
-    desc: 'Race against friends and AI bots in real-time typing competitions.',
+    desc: 'Head-to-head typing races against other players — in development.',
     href: '/race/',
-    tag: 'Live',
+    tag: 'Soon',
     color: 'text-amber-500',
     bg: 'bg-amber-500/10 border-amber-500/20',
     tagColor: 'bg-amber-500/10 text-amber-700',
