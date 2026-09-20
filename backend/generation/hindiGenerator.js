@@ -1,4 +1,5 @@
 import { supabase } from '../supabaseClient.js';
+import { cleanTypingText } from './cleanTypingText.js';
 import { getRandomTopic } from './topicPool.js';
 import { findSourceMaterial } from './sourceEngine.js';
 import { findSimilarTest } from './embeddings.js';
@@ -40,6 +41,7 @@ ${DIFFICULTY_MIX_INSTRUCTIONS}
   const jsonString = start !== -1 && end !== -1 ? rawText.substring(start, end + 1) : rawText;
   const data = JSON.parse(jsonString);
   if (!data.title || !data.content) throw new Error('Parsed JSON missing title or content');
+  data.content = cleanTypingText(data.content); // keep passages typable on a normal keyboard
   return data;
 }
 

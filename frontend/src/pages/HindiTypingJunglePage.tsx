@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { charsFromKeyEvent } from '../lib/hindiInput';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Languages } from 'lucide-react';
@@ -143,8 +144,8 @@ export default function HindiTypingJunglePage() {
     if (skip.includes(e.key) || e.ctrlKey || e.metaKey) return;
     if (e.key === ' ') e.preventDefault();
     if (e.key === 'Backspace') processBackspace();
-    else if (e.key.length === 1) processChar(e.key);
-  }, [stats.isFinished, processChar, processBackspace]);
+    else charsFromKeyEvent(e, activeText[userInput.length], true).forEach(processChar);
+  }, [stats.isFinished, processChar, processBackspace, activeText, userInput.length]);
 
   useEffect(() => {
     if (!isMobile) { window.addEventListener('keydown', handleKeyDown); return () => window.removeEventListener('keydown', handleKeyDown); }

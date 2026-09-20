@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { pushLessonResult } from '../lib/courseSync';
+import { charsFromKeyEvent } from '../lib/hindiInput';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, RotateCcw, Star, Zap, Flame } from 'lucide-react';
 import * as UnicodeCourse from '../data/hindiCourseData';
@@ -187,8 +188,8 @@ export default function HindiCourseLessonPage() {
     if (skip.includes(e.key) || e.ctrlKey || e.metaKey) return;
     if (e.key === ' ') e.preventDefault();
     if (e.key === 'Backspace') processBackspace();
-    else if (e.key.length === 1) processChar(e.key);
-  }, [isFinished, processChar, processBackspace]);
+    else charsFromKeyEvent(e, target[userInput.length], !isKrutiDev).forEach(processChar);
+  }, [isFinished, processChar, processBackspace, target, userInput.length, isKrutiDev]);
 
   useEffect(() => {
     if (!isMobile) {

@@ -5,7 +5,7 @@ import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Volume2, VolumeX,
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
-import { INSCRIPT_FULL_MAP } from '../data/hindiCourseData';
+import { INSCRIPT_CHAR_TO_KEY, charsFromKeyEvent, isImeKey, normalizeTypingText } from '../lib/hindiInput';
 import ResultsPopup from '../components/results/ResultsPopup';
 import { useTypingEngine } from '../hooks/useTypingEngine';
 import { useSoundEffects } from '../hooks/useSoundEffects';
@@ -42,14 +42,6 @@ function getWordStatus(w: WordRange, typedLen: number, mistakes: Set<number>, sk
   if (typedLen < w.end) return hasError ? 'wrong' : 'current';
   return hasError ? 'wrong' : 'correct';
 }
-
-// Devanagari char -> physical QWERTY key, inverted from the INSCRIPT layout map,
-// so the on-screen keyboard can highlight the right key during Mangal tests.
-// (English and Kruti Dev tests type raw ASCII, which matches key labels directly.)
-const INSCRIPT_CHAR_TO_KEY: Record<string, string> = Object.entries(INSCRIPT_FULL_MAP).reduce(
-  (acc, [key, ch]) => { if (!(ch in acc)) acc[ch] = key; return acc; },
-  {} as Record<string, string>
-);
 
 // Duration options
 const DURATION_OPTIONS = [
@@ -169,8 +161,14 @@ export default function TypingTestPage() {
   const activeText = useMemo(() => {
     if (testMode === 'words') return getRandomWords(80);
     if (testMode === 'quote') return QUOTES[Math.floor(Math.random() * QUOTES.length)];
-    return testContent.content;
+    // AI-written passages contain non-breaking hyphens, exotic spaces, curly
+    // quotes and hard line breaks that no keyboard can type -- normalise them so a
+    // correct keystroke always matches (see lib/hindiInput.ts).
+    return normalizeTypingText(testContent.content, { legacyFont: testContent.keyboardLayout === 'kruti_dev' });
   }, [testMode, testContent]);
+
+  // Devanagari (Unicode/INSCRIPT) test -- not Kruti Dev, whose text is legacy-font keystrokes.
+  const isMangal = testContent.keyboardLayout !== 'kruti_dev' && /[\u0900-\u097F]/.test(activeText);
 
   // Accessibility & sound preferences
   const sound = useSoundEffects();
@@ -480,11 +478,21 @@ export default function TypingTestPage() {
       if (e.key === 'Backspace') setBackspaceCount(c => c + 1); else setDeleteCount(c => c + 1);
       if (canDeleteNow(userInput)) processBackspace();
     }
-    else if (e.key.length === 1) {
-      if (e.key === activeText[userInput.length]) sound.playKey(); else sound.playError();
-      processChar(e.key);
+    else {
+      // Mangal tests accept the OS Hindi layout AND a plain English layout (the
+      // physical key is mapped through INSCRIPT); ligature keys (क्ष, ज्ञ...) emit
+      // several characters per keypress.
+      if (isMangal && isImeKey(e)) {
+        showCheat('⌨️ A Hindi IME (e.g. Phonetic) is capturing your keys. Switch to the Hindi INSCRIPT keyboard (Win + Space) or an English keyboard.');
+        return;
+      }
+      const chars = charsFromKeyEvent(e, activeText[userInput.length], isMangal);
+      chars.forEach((ch, i) => {
+        if (i === 0) { if (ch === activeText[userInput.length]) sound.playKey(); else sound.playError(); }
+        processChar(ch);
+      });
     }
-  }, [stats.isFinished, processChar, processBackspace, sound, activeText, userInput, canDeleteNow]);
+  }, [stats.isFinished, processChar, processBackspace, sound, activeText, userInput, canDeleteNow, isMangal]);
 
   useEffect(() => {
     if (!isMobile) {
