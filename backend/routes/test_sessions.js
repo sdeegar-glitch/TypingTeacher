@@ -53,21 +53,34 @@ router.post('/', requireBrowserOrigin, submitLimiter, optionalUser, async (req, 
     return res.status(400).json({ error: 'Missing or implausible metrics' });
   }
 
-  const { data, error } = await supabase
-    .from('test_sessions')
-    .insert([{ 
-      user_id: user_id || null, // Allow anonymous submissions for now
-      test_id: test_id || null, 
-      duration, 
-      gross_wpm, 
-      net_wpm, 
-      errors, 
-      accuracy 
-    }])
-    .select()
-    .single();
-    
-  if (error) return res.status(500).json({ error: error.message });
+  const row = {
+    user_id: user_id || null, // null = anonymous
+    test_id: test_id || null,
+    duration,
+    gross_wpm,
+    net_wpm,
+    errors,
+    accuracy,
+  };
+
+  const insertSession = (r) =>
+    supabase.from('test_sessions').insert([r]).select().single();
+
+  let { data, error } = await insertSession(row);
+
+  // A foreign-key violation (Postgres 23503, surfaced as HTTP 409) means the
+  // user_id has no public.users row or the test_id is not in `tests`. Never
+  // lose a completed session over that: retry dropping each reference in turn.
+  if (error && (error.code === '23503' || /foreign key/i.test(error.message || ''))) {
+    console.error('[test_sessions] FK violation, retrying without references:', error.message);
+    if (row.test_id) ({ data, error } = await insertSession({ ...row, test_id: null }));
+    if (error && row.user_id) ({ data, error } = await insertSession({ ...row, test_id: null, user_id: null }));
+  }
+
+  if (error) {
+    console.error('[test_sessions] insert failed:', error.message);
+    return res.status(500).json({ error: 'Could not save session.' });
+  }
 
   // Per-key data is best-effort: a failure here must not lose the session.
   const keyRows = cleanKeyStats(key_stats).map(k => ({ ...k, session_id: data.id, user_id }));
