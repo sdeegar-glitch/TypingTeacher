@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Lock, Star, Zap, Languages, CheckCircle, ChevronRight, Flame, Award, TrendingUp } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { STAGES, type CourseProgressState } from '../data/hindiCourseData';
+import { syncCourseProgress } from '../lib/courseSync';
 import * as UnicodeCourse from '../data/hindiCourseData';
 import * as KrutiDevCourse from '../data/krutiDevCourseData';
 import Seo from '../components/Seo';
@@ -30,7 +31,12 @@ export default function HindiCourseSelectPage() {
     link.rel = 'stylesheet';
     document.head.appendChild(link);
     setProgress(course.loadCourseProgress());
-    return () => { try { document.head.removeChild(link); } catch {} };
+    // Signed in: merge with the server copy so progress follows the account.
+    let cancelled = false;
+    syncCourseProgress(isKrutiDev ? 'kruti' : 'unicode').then(merged => {
+      if (merged && !cancelled) setProgress(merged);
+    });
+    return () => { cancelled = true; try { document.head.removeChild(link); } catch {} };
   }, [isKrutiDev, course]);
 
   const xp = useMemo(() => (progress ? course.totalXp(progress) : 0), [progress, course]);

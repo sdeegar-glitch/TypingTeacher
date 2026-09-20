@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { pushLessonResult } from '../lib/courseSync';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, RotateCcw, Star, Zap, Flame } from 'lucide-react';
 import * as UnicodeCourse from '../data/hindiCourseData';
@@ -147,9 +148,10 @@ export default function HindiCourseLessonPage() {
     setEarnedStars(s);
     if (s > 0) {
       course.saveCourseProgress({ lessonId: id, stars: s, bestWpm: net, bestAccuracy: acc });
+      pushLessonResult(isKrutiDev ? 'kruti' : 'unicode', { lessonId: id, stars: s, wpm: net, accuracy: acc });
       setXpGained(savedProgress?.completed ? 0 : lesson.xp);
     }
-  }, [userInput, target, startTime, mistakes.length, id, lesson.minWpm, lesson.xp, savedProgress, course]);
+  }, [userInput, target, startTime, mistakes.length, id, lesson.minWpm, lesson.xp, savedProgress, course, isKrutiDev]);
 
   useEffect(() => {
     if (!startTime || isFinished || userInput.length === 0) return;

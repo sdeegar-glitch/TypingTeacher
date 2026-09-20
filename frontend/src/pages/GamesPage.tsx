@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight, Gamepad2, Trophy, Zap, Star } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
+import GameLeaderboard from '../components/GameLeaderboard';
 
 const GAMES = [
   {
@@ -201,6 +202,9 @@ export default function GamesPage() {
             );
           })}
         </div>
+
+        {/* Real top scores per game */}
+        <GameLeaderboard />
 
         {/* XP info */}
         <div className="mt-10 bg-brand-surface border border-brand-border rounded-2xl p-5 flex items-start gap-4">

@@ -8,6 +8,7 @@ import { Zap, Target, Flame, Trophy, Star, TrendingUp, Award, Brain, ChevronRigh
 import { API_URL } from '../lib/api';
 import StreakCard from '../components/StreakCard';
 import ReferralCard from '../components/ReferralCard';
+import KeyHeatmapCard from '../components/KeyHeatmapCard';
 import { computePracticeStats } from '../lib/streaks';
 
 // XP needed per level
@@ -274,6 +275,9 @@ export default function DashboardPage() {
 
             {/* Invite a friend */}
             <ReferralCard />
+
+            {/* Per-key accuracy from real sessions */}
+            <KeyHeatmapCard />
 
             {/* WPM Chart */}
             {chartData.length >= 2 ? (
