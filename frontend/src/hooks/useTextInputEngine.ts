@@ -20,7 +20,7 @@
  *    path: with an English layout active and Devanagari expected, the physical
  *    key is mapped through lib/hindiInput and inserted for the user.
  */
-import { useCallback, useEffect, useReducer, useRef, useState, type RefObject, type TextareaHTMLAttributes } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState, type RefCallback, type TextareaHTMLAttributes } from 'react';
 import {
   applyValue, canDelete, createState,
   type BackspaceMode, type TypingOptions, type TypingState,
@@ -54,11 +54,13 @@ export interface TextInputEngine {
   /** In-progress IME text (not yet committed). Empty when not composing. */
   composing: string;
   inputMethod: InputMethod;
-  inputProps: TextareaHTMLAttributes<HTMLTextAreaElement> & { ref: RefObject<HTMLTextAreaElement | null> };
+  inputProps: TextareaHTMLAttributes<HTMLTextAreaElement> & { ref: RefCallback<HTMLTextAreaElement> };
   focus: () => void;
   reset: (text?: string) => void;
   /** Programmatic insertion (built-in INSCRIPT, tests). */
   insertText: (s: string) => void;
+  /** Replace the whole typed value (deletions, adapters). */
+  setValue: (value: string) => void;
 }
 
 const HIDDEN_STYLE = {
@@ -73,6 +75,10 @@ const isCoarsePointer = () => {
 
 export function useTextInputEngine(opts: UseTextInputEngineOptions): TextInputEngine {
   const taRef = useRef<HTMLTextAreaElement | null>(null);
+  // Callback ref + state so listeners attach whenever the textarea (re)appears,
+  // e.g. when the beta toggle renders it after the first paint.
+  const [el, setEl] = useState<HTMLTextAreaElement | null>(null);
+  const attachRef = useCallback((node: HTMLTextAreaElement | null) => { taRef.current = node; setEl(node); }, []);
   const stateRef = useRef<TypingState>(createState(opts.text));
   const startedRef = useRef(false);
   const composingRef = useRef(false);
@@ -136,11 +142,11 @@ export function useTextInputEngine(opts: UseTextInputEngineOptions): TextInputEn
       document.removeEventListener('visibilitychange', refocus);
       window.removeEventListener('focus', refocus);
     };
-  }, [opts.disabled, focus]);
+  }, [opts.disabled, focus, el]);
 
   // Native listeners on the textarea.
   useEffect(() => {
-    const ta = taRef.current;
+    const ta = el;
     if (!ta) return;
 
     const onBeforeInput = (e: InputEvent) => {
@@ -224,14 +230,16 @@ export function useTextInputEngine(opts: UseTextInputEngineOptions): TextInputEn
       ta.removeEventListener('compositionend', onCompositionEnd);
       ta.removeEventListener('keydown', onKeyDown);
     };
-  }, [apply, setMethod]);
+  }, [el, apply, setMethod]);
+
+  const setValue = useCallback((value: string) => { apply(value); }, [apply]);
 
   return {
     state: stateRef.current,
     composing,
     inputMethod,
     inputProps: {
-      ref: taRef,
+      ref: attachRef,
       'aria-label': 'Typing input',
       lang: 'hi',
       rows: 1,
@@ -247,5 +255,6 @@ export function useTextInputEngine(opts: UseTextInputEngineOptions): TextInputEn
     focus,
     reset,
     insertText,
+    setValue,
   };
 }

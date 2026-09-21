@@ -7,7 +7,8 @@ import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
 import { INSCRIPT_CHAR_TO_KEY, charsFromKeyEvent, isImeKey, normalizeTypingText } from '../lib/hindiInput';
 import ResultsPopup from '../components/results/ResultsPopup';
-import { useTypingEngine } from '../hooks/useTypingEngine';
+import { useTypingEngine, type TypingStats } from '../hooks/useTypingEngine';
+import { useTypingEngineV2 } from '../hooks/useTypingEngineV2';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { useTypingA11yPrefs } from '../hooks/useTypingA11yPrefs';
@@ -42,6 +43,14 @@ function getWordStatus(w: WordRange, typedLen: number, mistakes: Set<number>, sk
   if (typedLen < w.end) return hasError ? 'wrong' : 'current';
   return hasError ? 'wrong' : 'correct';
 }
+
+const INPUT_METHOD_LABEL: Record<string, string> = {
+  unknown: '-',
+  'os-layout': 'Hindi keyboard',
+  'built-in-inscript': 'Built-in INSCRIPT',
+  ime: 'IME / phonetic',
+  touch: 'Touch keyboard',
+};
 
 // Duration options
 const DURATION_OPTIONS = [
@@ -200,12 +209,24 @@ export default function TypingTestPage() {
     return () => window.removeEventListener('paste', onPaste);
   }, []);
 
-  // Engine
-  const engine = useTypingEngine(
-    activeText,
-    selectedDuration,
-    'timed',
-    (finalStats) => {
+  const [backspaceMode, setBackspaceMode] = useState<'full' | 'word' | 'off'>(() => {
+    try { return (localStorage.getItem('ftl_bsmode') as 'full' | 'word' | 'off') || 'full'; } catch { return 'full'; }
+  });
+
+  // Typing engine: v1 = window keydown, per character (default); v2 = hidden
+  // textarea that reads the composed text (opt-in beta: `?engine=v2`, or the
+  // switch below). v2 supports IME/phone keyboards and INSCRIPT ligature keys.
+  const [engineV2, setEngineV2] = useState<boolean>(() => {
+    try {
+      const q = new URLSearchParams(location.search).get('engine');
+      if (q === 'v2' || q === 'v1') { localStorage.setItem('ftl_engine', q); return q === 'v2'; }
+      return localStorage.getItem('ftl_engine') === 'v2';
+    } catch { return false; }
+  });
+  const handleResetRef = useRef<() => void>(() => {});
+
+  // Called by whichever engine is active when the run ends.
+  const handleFinish = (finalStats: TypingStats) => {
       sound.playComplete();
       markTestCompleted(id); // mark this passage "done" for the tests list
       setSrAnnouncement(`Test complete. Net speed ${finalStats.netWpm} words per minute, accuracy ${finalStats.accuracy} percent, ${finalStats.errors} errors.`);
@@ -219,6 +240,8 @@ export default function TypingTestPage() {
         errors: finalStats.errors,
         accuracy: finalStats.accuracy,
         key_stats: engine.getKeyStats(),
+        engine_version: engineV2 ? 'v2' : 'v1',
+        input_method: engineV2 ? v2.inputMethod : 'key-events',
       });
 
       // 2. Save to localStorage for Dashboard
@@ -260,9 +283,19 @@ export default function TypingTestPage() {
         localStorage.setItem('achievementKeys', JSON.stringify(prevKeys));
         if (unlocks.length) setNewUnlocks(unlocks);
       } catch {}
-    },
-    strictMode
-  );
+  };
+
+  const v1 = useTypingEngine(activeText, selectedDuration, 'timed', handleFinish, strictMode);
+  const v2 = useTypingEngineV2(activeText, selectedDuration, handleFinish, {
+    enabled: engineV2,
+    strict: strictMode,
+    backspaceMode,
+    mangal: isMangal,
+    onPaste: () => { showCheat('⚠️ Paste detected! Test invalidated. Type manually to get a fair score.'); handleResetRef.current(); },
+    onRestart: () => handleResetRef.current(),
+    onKey: ({ correct }) => { if (correct) sound.playKey(); else sound.playError(); },
+  });
+  const engine = engineV2 ? v2 : v1;
 
   const { stats, userInput, mistakes, skipped, processChar, processBackspace, handleMobileInput, reset, rejectedFlash, history, nextChar } = engine;
 
@@ -293,9 +326,6 @@ export default function TypingTestPage() {
   });
   const [indicatorOn, setIndicatorOn] = useState(() => {
     try { return localStorage.getItem('ftl_indicator') !== '0'; } catch { return true; }
-  });
-  const [backspaceMode, setBackspaceMode] = useState<'full' | 'word' | 'off'>(() => {
-    try { return (localStorage.getItem('ftl_bsmode') as 'full' | 'word' | 'off') || 'full'; } catch { return 'full'; }
   });
   useEffect(() => { try { localStorage.setItem('ftl_highlight', highlightOn ? '1' : '0'); } catch {} }, [highlightOn]);
   useEffect(() => { try { localStorage.setItem('ftl_indicator', indicatorOn ? '1' : '0'); } catch {} }, [indicatorOn]);
@@ -441,6 +471,11 @@ export default function TypingTestPage() {
   // Mobile hidden input
   const hiddenInputRef = useRef<HTMLInputElement>(null);
   const [mobileVal, setMobileVal] = useState('');
+  // Focus whichever input owns typing right now.
+  const focusInput = useCallback(() => {
+    if (engineV2) v2.focus();
+    else if (isMobile) hiddenInputRef.current?.focus();
+  }, [engineV2, isMobile, v2]);
 
   const onMobileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newVal = e.target.value;
@@ -495,11 +530,11 @@ export default function TypingTestPage() {
   }, [stats.isFinished, processChar, processBackspace, sound, activeText, userInput, canDeleteNow, isMangal]);
 
   useEffect(() => {
-    if (!isMobile) {
+    if (!isMobile && !engineV2) {
       window.addEventListener('keydown', handleKeyDown);
       return () => window.removeEventListener('keydown', handleKeyDown);
     }
-  }, [handleKeyDown, isMobile]);
+  }, [handleKeyDown, isMobile, engineV2]);
 
   // Announce test start for screen readers (completion is announced via onFinish above)
   useEffect(() => {
@@ -508,10 +543,10 @@ export default function TypingTestPage() {
 
   // Auto-focus mobile input
   useEffect(() => {
-    if (!loadingTest && isMobile) {
+    if (!loadingTest && isMobile && !engineV2) {
       setTimeout(() => hiddenInputRef.current?.focus(), 300);
     }
-  }, [loadingTest, isMobile]);
+  }, [loadingTest, isMobile, engineV2]);
 
   const formattedTime = `${Math.floor(stats.timeLeft / 60)}:${String(stats.timeLeft % 60).padStart(2, '0')}`;
 
@@ -520,12 +555,22 @@ export default function TypingTestPage() {
     setMobileVal('');
     setBackspaceCount(0);
     setDeleteCount(0);
-    if (isMobile) setTimeout(() => hiddenInputRef.current?.focus(), 100);
+    if (isMobile || engineV2) setTimeout(focusInput, 100);
     if (testMode === 'words') {
       // Re-trigger words mode re-generation via key change in parent
       // For now words are stable — user clicks reset to get new set
     }
-  }, [reset, isMobile, testMode]);
+  }, [reset, isMobile, engineV2, focusInput, testMode]);
+  handleResetRef.current = handleReset;
+
+  const toggleEngine = useCallback(() => {
+    setEngineV2(prev => {
+      try { localStorage.setItem('ftl_engine', prev ? 'v1' : 'v2'); } catch { /* ignore */ }
+      return !prev;
+    });
+    v1.reset();
+    v2.reset();
+  }, [v1, v2]);
 
   // Tab = instant restart (standard on modern typing sites). Skipped once the
   // results screen is up so keyboard users can still tab through its buttons.
@@ -554,7 +599,7 @@ export default function TypingTestPage() {
   return (
     <div
       className={`h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none ${a11y.highContrast ? 'typing-high-contrast' : ''}`}
-      onClick={() => isMobile && hiddenInputRef.current?.focus()}
+      onClick={() => focusInput()}
     >
       {/* Every test now carries a real, AI-written per-passage excerpt (Phase 2a of
           the AdSense roadmap, backend half) — used below for both the meta
@@ -580,7 +625,8 @@ export default function TypingTestPage() {
       )}
 
       {/* Hidden mobile input */}
-      {isMobile && (
+      {engineV2 && <textarea {...v2.inputProps} />}
+      {isMobile && !engineV2 && (
         <input
           ref={hiddenInputRef}
           type="text"
@@ -747,7 +793,7 @@ export default function TypingTestPage() {
                 {isMobile ? 'Tap the text area below to start' : 'Start typing below — timer begins on first keystroke'}
               </p>
               {isMobile && (
-                <button onClick={() => hiddenInputRef.current?.focus()}
+                <button onClick={() => focusInput()}
                   className="text-xs font-bold text-white px-3 py-1.5 rounded-lg transition-all"
                   style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
                   Tap to type
@@ -771,7 +817,7 @@ export default function TypingTestPage() {
           {showPassage && (
             <div
               className={`relative bg-brand-surface border border-brand-border rounded-2xl px-4 sm:px-8 py-5 shadow-sm cursor-text overflow-hidden ${shake && !prefersReducedMotion ? 'animate-error-shake' : ''}`}
-              onClick={() => isMobile && hiddenInputRef.current?.focus()}
+              onClick={() => focusInput()}
             >
               {/* Subtle top glow when active */}
               {stats.isActive && (
@@ -802,7 +848,7 @@ export default function TypingTestPage() {
           )}
 
           {/* ── Typed-text preview — what you actually typed, misspelled words underlined ── */}
-          {userInput.length > 0 && (
+          {(userInput.length > 0 || (engineV2 && v2.composing)) && (
             <div className="bg-brand-surface-2 border border-brand-border rounded-2xl px-4 sm:px-8 py-3 mt-2 max-h-[70px] overflow-y-auto font-mono tracking-wide"
               style={{ fontSize: `${a11y.fontSize}px` }}>
               {wordRanges.filter(w => w.start < userInput.length).map((w, wi) => {
@@ -816,6 +862,7 @@ export default function TypingTestPage() {
                   </span>
                 );
               })}
+              {engineV2 && v2.composing && <span className="text-brand-muted underline" aria-live="polite">{v2.composing}</span>}
             </div>
           )}
 
@@ -862,6 +909,21 @@ export default function TypingTestPage() {
                 ))}
               </div>
             </div>
+            <label className="flex items-center gap-2 cursor-pointer select-none font-semibold text-brand-muted" title="Reads the text your keyboard produces, so phone keyboards and Hindi IMEs work">
+              New typing engine <span className="text-[10px] font-bold uppercase text-brand-primary">beta</span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={engineV2}
+                onClick={toggleEngine}
+                className={`relative w-9 h-5 rounded-full transition-colors ${engineV2 ? 'bg-brand-primary' : 'bg-brand-border'}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${engineV2 ? 'translate-x-4' : ''}`} />
+              </button>
+            </label>
+            {engineV2 && v2.inputMethod !== 'unknown' && (
+              <span className="text-brand-muted">Input: <span className="font-semibold text-brand-text">{INPUT_METHOD_LABEL[v2.inputMethod]}</span></span>
+            )}
           </div>
 
           {/* ── Controls toolbar — below the typing window ── */}

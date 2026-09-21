@@ -20,6 +20,9 @@ const submitLimiter = rateLimit({
 });
 
 // POST /test_sessions - Submit test results
+const ENGINE_VERSIONS = new Set(['v1', 'v2']);
+const INPUT_METHODS = new Set(['key-events', 'os-layout', 'built-in-inscript', 'ime', 'touch', 'unknown']);
+
 // Validates the optional per-key breakdown sent by the typing engine. Returns
 // a cleaned array (max 200 keys) or [] if absent/invalid -- never fails the
 // session save because of it.
@@ -42,6 +45,9 @@ function cleanKeyStats(raw) {
 router.post('/', requireBrowserOrigin, submitLimiter, optionalUser, async (req, res) => {
   // user_id in the body is ignored on purpose: attribution comes from the token.
   const { test_id, duration, gross_wpm, net_wpm, errors, accuracy, key_stats } = req.body;
+  // Engine telemetry (allow-listed so arbitrary client strings never reach the DB).
+  const engine_version = ENGINE_VERSIONS.has(req.body.engine_version) ? req.body.engine_version : null;
+  const input_method = INPUT_METHODS.has(req.body.input_method) ? req.body.input_method : null;
   const user_id = req.userId;
 
   if (
@@ -53,7 +59,7 @@ router.post('/', requireBrowserOrigin, submitLimiter, optionalUser, async (req, 
     return res.status(400).json({ error: 'Missing or implausible metrics' });
   }
 
-  const row = {
+  let row = {
     user_id: user_id || null, // null = anonymous
     test_id: test_id || null,
     duration,
@@ -61,12 +67,23 @@ router.post('/', requireBrowserOrigin, submitLimiter, optionalUser, async (req, 
     net_wpm,
     errors,
     accuracy,
+    ...(engine_version ? { engine_version } : {}),
+    ...(input_method ? { input_method } : {}),
   };
 
   const insertSession = (r) =>
     supabase.from('test_sessions').insert([r]).select().single();
 
   let { data, error } = await insertSession(row);
+
+  // Telemetry columns come from a migration; if it has not been applied yet, never
+  // lose the session over them -- retry without the extra fields.
+  if (error && (engine_version || input_method) && /engine_version|input_method|column/i.test(error.message || '')) {
+    console.error('[test_sessions] telemetry columns unavailable, retrying without them:', error.message);
+    const { engine_version: _e, input_method: _m, ...plain } = row;
+    row = plain;
+    ({ data, error } = await insertSession(row));
+  }
 
   // A foreign-key violation (Postgres 23503, surfaced as HTTP 409) means the
   // user_id has no public.users row or the test_id is not in `tests`. Never

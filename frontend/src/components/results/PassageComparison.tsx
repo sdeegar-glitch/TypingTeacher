@@ -1,4 +1,5 @@
-import CharSpan from '../CharSpan';
+import { useMemo } from 'react';
+import ClusterText from '../ClusterText';
 
 interface PassageComparisonProps {
   passage: string;
@@ -8,17 +9,17 @@ interface PassageComparisonProps {
 }
 
 /**
- * The original passage and what was actually typed, side by side — the same
- * per-character correct/error/skipped mapping already used for the *live*
- * typing display (CharSpan), just rendered once for review instead of live.
+ * The original passage and what was actually typed, side by side. Coloured per
+ * grapheme cluster (ClusterText) so Devanagari conjuncts and vowel signs are
+ * never split across styled spans.
  *
  * Each panel is a fixed-height box with its own internal scroll for long
  * passages (same pattern a diff viewer uses) — the page around this never
  * scrolls, only the passage text does, within its own bounded region.
  */
 export default function PassageComparison({ passage, typed, mistakes, skipped }: PassageComparisonProps) {
-  const mistakeSet = new Set(mistakes);
-  const skipSet = new Set(skipped);
+  const mistakeSet = useMemo(() => new Set(mistakes), [mistakes]);
+  const skipSet = useMemo(() => new Set(skipped), [skipped]);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 h-full min-h-0">
@@ -36,16 +37,7 @@ export default function PassageComparison({ passage, typed, mistakes, skipped }:
           What you typed
         </p>
         <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-3 font-mono text-sm leading-relaxed break-words">
-          {passage.split('').map((char, index) => (
-            <CharSpan
-              key={index}
-              char={char}
-              isCorrect={index < typed.length && !mistakeSet.has(index) && !skipSet.has(index)}
-              isError={mistakeSet.has(index)}
-              isSkipped={skipSet.has(index)}
-              isCurrent={false}
-            />
-          ))}
+          <ClusterText text={passage} typedLength={typed.length} mistakes={mistakeSet} skipped={skipSet} />
         </div>
       </div>
     </div>

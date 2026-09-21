@@ -48,6 +48,9 @@ interface SessionPayload {
   lang?: string;
   /** Per-key breakdown for the heatmap / AI weak-key analysis. */
   key_stats?: { key: string; hits: number; errors: number; total_ms: number }[];
+  /** Which typing engine produced this run ('v1' | 'v2') and how text was entered. */
+  engine_version?: string;
+  input_method?: string;
 }
 
 function authHeader(): Record<string, string> {

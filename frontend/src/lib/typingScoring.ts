@@ -115,14 +115,21 @@ export function alignWords(passageWords: string[], typedWords: string[]): Alignm
     if (cost < D[at(i, j)] - 1e-9) { D[at(i, j)] = cost; B[at(i, j)] = op; }
   };
 
+  // Per-word values used in the inner loop, computed once (string building and
+  // regex work inside an O(n*m) loop made long runs slow).
+  const Ps = P.map(stripPunct);
+  const Ts = T.map(stripPunct);
+  const PP = P.map((w, k) => (k >= 1 ? P[k - 1] + w : ''));   // PP[k] = P[k-1] + P[k]
+  const TT = T.map((w, k) => (k >= 1 ? T[k - 1] + w : ''));   // TT[k] = T[k-1] + T[k]
+
   for (let i = 1; i <= n; i++) {
     for (let j = 1; j <= m; j++) {
       const t = T[i - 1], p = P[j - 1];
       // preference order (first wins ties): match, half-cost ops, substitution, insert, delete
       if (t === p) try_(i, j, D[at(i - 1, j - 1)], OP.MATCH);
-      else if (stripPunct(t) !== '' && stripPunct(t) === stripPunct(p)) try_(i, j, D[at(i - 1, j - 1)] + RULES.halfMistakeWeight, OP.PUNCT);
-      if (j >= 2 && t === P[j - 2] + p) try_(i, j, D[at(i - 1, j - 2)] + RULES.halfMistakeWeight, OP.MERGE);
-      if (i >= 2 && T[i - 2] + t === p) try_(i, j, D[at(i - 2, j - 1)] + RULES.halfMistakeWeight, OP.SPLIT);
+      else if (Ts[i - 1] !== '' && Ts[i - 1] === Ps[j - 1]) try_(i, j, D[at(i - 1, j - 1)] + RULES.halfMistakeWeight, OP.PUNCT);
+      if (j >= 2 && t === PP[j - 1]) try_(i, j, D[at(i - 1, j - 2)] + RULES.halfMistakeWeight, OP.MERGE);
+      if (i >= 2 && TT[i - 1] === p) try_(i, j, D[at(i - 2, j - 1)] + RULES.halfMistakeWeight, OP.SPLIT);
       if (i >= 2 && j >= 2 && T[i - 2] === p && t === P[j - 2] && t !== T[i - 2]) {
         try_(i, j, D[at(i - 2, j - 2)] + RULES.halfMistakeWeight, OP.TRANSP);
       }
