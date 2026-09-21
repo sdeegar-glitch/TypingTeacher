@@ -1,4 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { isLoggedIn, logoutAndRedirect } from './lib/auth';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useLocation } from 'react-router-dom';
 import { Menu, X, Moon, Sun, MessageCircle, Send } from 'lucide-react';
 import { fetchMe } from './lib/user';
@@ -40,7 +41,7 @@ const LearningInterfacePageWithKey = () => {
 };
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const token = localStorage.getItem('accessToken');
+  const token = isLoggedIn();
   if (!token) {
     return <Navigate to="/login" replace />;
   }
@@ -64,25 +65,27 @@ const Navbar = () => {
   // Reactive auth state — reading localStorage once at render doesn't update the
   // navbar after an in-app login or a login in another tab. Re-check on route
   // change, tab focus, cross-tab storage events, and our own auth-change event.
-  const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('accessToken'));
+  const [isAuthenticated, setIsAuthenticated] = useState(() => isLoggedIn());
   const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
 
   useEffect(() => {
-    const sync = () => setIsAuthenticated(!!localStorage.getItem('accessToken'));
+    const sync = () => setIsAuthenticated(isLoggedIn());
     sync();
     window.addEventListener('storage', sync);
     window.addEventListener('focus', sync);
     window.addEventListener('ftl-auth-change', sync);
+    const timer = window.setInterval(sync, 60_000);
     return () => {
       window.removeEventListener('storage', sync);
       window.removeEventListener('focus', sync);
       window.removeEventListener('ftl-auth-change', sync);
+      window.clearInterval(timer);
     };
   }, []);
 
   // Re-check whenever the route changes (e.g. redirect to /dashboard after login).
-  useEffect(() => { setIsAuthenticated(!!localStorage.getItem('accessToken')); }, [location.pathname]);
+  useEffect(() => { setIsAuthenticated(isLoggedIn()); }, [location.pathname]);
 
   // Logged-in identity for the welcome chip. Seed from cache to avoid a flash,
   // then refresh from the server.
@@ -191,7 +194,7 @@ const Navbar = () => {
                     {firstName ? `Hi, ${firstName}` : 'Profile'}
                   </span>
                 </Link>
-                <button onClick={() => { localStorage.removeItem('accessToken'); localStorage.removeItem('ftl_user_name'); localStorage.removeItem('ftl_user_avatar'); window.location.href = '/login'; }}
+                <button onClick={() => { void logoutAndRedirect(); }}
                   className="px-3 py-1.5 rounded-lg text-sm font-semibold text-brand-muted hover:text-rose-500 transition-all duration-200">
                   Logout
                 </button>
@@ -282,7 +285,7 @@ const Navbar = () => {
                     className="w-full text-center py-3 rounded-xl font-semibold border border-brand-border text-brand-text hover:bg-brand-surface-2 transition-all">
                     Dashboard
                   </Link>
-                  <button onClick={() => { localStorage.removeItem('accessToken'); localStorage.removeItem('ftl_user_name'); localStorage.removeItem('ftl_user_avatar'); window.location.href = '/login'; }}
+                  <button onClick={() => { void logoutAndRedirect(); }}
                     className="w-full py-3 rounded-xl font-semibold text-rose-500 border border-rose-200 dark:border-rose-900/40 transition-all">
                     Logout
                   </button>

@@ -212,4 +212,13 @@ router.post('/login/2fa', twoFaLimiter, async (req, res) => {
   res.json({ accessToken: entry.accessToken, user: entry.user });
 });
 
+// POST /auth/logout - revoke the caller's session on the server so a copied
+// token stops working, not just disappears from this browser.
+router.post('/logout', async (req, res) => {
+  const auth = req.headers.authorization || '';
+  const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+  if (token) await supabase.auth.admin.signOut(token).catch(() => {});
+  res.json({ ok: true });
+});
+
 export default router;
