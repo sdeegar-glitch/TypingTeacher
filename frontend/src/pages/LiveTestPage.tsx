@@ -5,7 +5,6 @@ import { Radio, Clock, Trophy, Users, ChevronRight, Zap } from 'lucide-react';
 import Seo from '../components/Seo';
 import PageHeader from '../components/PageHeader';
 import TelegramCTA from '../components/TelegramCTA';
-import WhatsAppCTA from '../components/WhatsAppCTA';
 import { fetchTestList } from '../lib/api';
 import { getLiveTestSchedule, pickWeeklyTest, formatCountdown, LIVE_TEST_DURATION_SEC } from '../lib/liveTest';
 
@@ -208,7 +207,6 @@ export default function LiveTestPage() {
         <p className="text-xs font-bold uppercase tracking-widest text-brand-muted mb-2">Get reminded</p>
         <div className="space-y-3 mb-8">
           <TelegramCTA message="We announce the Live Test in the group before it starts, and post the results after — join to get reminded." />
-          <WhatsAppCTA message="Follow the WhatsApp channel for Live Test reminders and weekly results." />
         </div>
 
         <div className="text-sm text-brand-text-muted space-y-3">

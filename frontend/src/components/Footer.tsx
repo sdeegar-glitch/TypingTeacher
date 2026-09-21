@@ -30,57 +30,60 @@ const COMPANY_LINKS = [
   { label: 'Cookie Policy', href: '/cookie-policy/' },
 ];
 
+const linkCls = 'hover:text-brand-primary transition-colors duration-150';
+
+/**
+ * Site footer. Compact by design: brand + the one community call-to-action on
+ * the left, all links in three columns, one legal line at the bottom. This is
+ * the only place the Telegram/WhatsApp pair appears on ordinary pages.
+ */
 export default function Footer() {
   return (
-    <footer className="border-t border-brand-border py-10 px-4 sm:px-6 mt-auto" style={{ background: 'var(--brand-surface)' }}>
-      <div className="max-w-[1600px] mx-auto">
-        <div className="flex flex-col sm:flex-row items-start justify-between gap-8 mb-8">
-          {/* Brand */}
+    <footer className="border-t border-brand-border py-6 px-4 sm:px-6 mt-auto" style={{ background: 'var(--brand-surface)' }}>
+      <div className="max-w-6xl mx-auto">
+        <div className="grid gap-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,2fr)_minmax(0,1.1fr)] mb-5">
+          {/* Brand + community */}
           <div>
-            <div className="flex items-center gap-2.5 mb-2">
-              <span className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm text-white shadow-md"
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs text-white shadow-sm"
                 style={{ background: 'linear-gradient(135deg, #304C53, #2A9DAE)' }}>F</span>
-              <span className="font-black text-brand-text text-lg">FastTypingLab</span>
+              <span className="font-extrabold text-brand-text text-base">FastTypingLab</span>
             </div>
-            <p className="text-xs text-brand-muted max-w-xs leading-relaxed mb-4">
-              India's most complete free typing platform for students, professionals, and govt exam aspirants.
+            <p className="text-xs text-brand-muted max-w-xs leading-snug mb-3">
+              Free typing practice for students, professionals and govt exam aspirants.
             </p>
-            <div className="flex flex-wrap gap-2.5">
-              <TelegramCTA variant="inline" />
-              <WhatsAppCTA variant="inline" />
+            <div className="flex flex-wrap gap-2">
+              <TelegramCTA variant="inline" className="px-3! py-1.5! text-xs!" />
+              <WhatsAppCTA variant="inline" className="px-3! py-1.5! text-xs!" />
             </div>
           </div>
 
           {/* Product links */}
-          <div>
-            <h3 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-3">Explore</h3>
-            <div className="grid grid-cols-2 gap-x-10 gap-y-2 text-sm text-brand-muted">
+          <nav aria-label="Explore">
+            <h2 className="text-[11px] font-bold text-brand-text uppercase tracking-wider mb-2">Explore</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-[13px] text-brand-muted">
               {PRODUCT_LINKS.map(l => (
-                <Link key={l.href} to={l.href} className="hover:text-brand-primary transition-colors duration-150">
-                  {l.label}
-                </Link>
+                <Link key={l.href} to={l.href} className={linkCls}>{l.label}</Link>
               ))}
             </div>
-          </div>
+          </nav>
 
           {/* Company / legal links */}
-          <div>
-            <h3 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-3">Company</h3>
-            <div className="flex flex-col gap-2 text-sm text-brand-muted">
+          <nav aria-label="Company">
+            <h2 className="text-[11px] font-bold text-brand-text uppercase tracking-wider mb-2">Company</h2>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-[13px] text-brand-muted">
               {COMPANY_LINKS.map(l => (
-                <Link key={l.href} to={l.href} className="hover:text-brand-primary transition-colors duration-150">
-                  {l.label}
-                </Link>
+                <Link key={l.href} to={l.href} className={linkCls}>{l.label}</Link>
               ))}
             </div>
-          </div>
+          </nav>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-brand-border text-xs text-brand-muted">
-          <p>© 2026 FastTypingLab. All rights reserved. Made with ❤️ for India.</p>
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 pt-3 border-t border-brand-border text-xs text-brand-muted">
+          <p>© 2026 FastTypingLab. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-4">
             <VisitorCounter />
-            <a href="mailto:fasttypinglab@gmail.com" className="hover:text-brand-primary transition-colors">fasttypinglab@gmail.com</a>
+            <a href="mailto:fasttypinglab@gmail.com" className={linkCls}>fasttypinglab@gmail.com</a>
           </div>
         </div>
       </div>

@@ -3,8 +3,6 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, Clock, Calendar, Share2, ExternalLink } from 'lucide-react';
 import { BLOG_POSTS } from '../data/blogPosts';
 import Seo from '../components/Seo';
-import TelegramCTA from '../components/TelegramCTA';
-import WhatsAppCTA from '../components/WhatsAppCTA';
 import ScrollableRegion from '../components/ScrollableRegion';
 import RelatedLinks from '../components/RelatedLinks';
 
@@ -156,13 +154,6 @@ export default function BlogPostPage() {
               <ExternalLink className="w-4 h-4" /> Practice Now
             </Link>
           </div>
-
-          {/* Telegram + WhatsApp — keep readers engaged beyond this one article */}
-          <div className="mb-8 space-y-3">
-            <TelegramCTA />
-            <WhatsAppCTA />
-          </div>
-
           {/* Related posts */}
           {relatedPosts.length > 0 && (
             <div>
