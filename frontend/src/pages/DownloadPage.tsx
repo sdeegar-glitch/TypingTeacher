@@ -37,7 +37,7 @@ export default function DownloadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Download Free Typing Software for Windows | FastTypingLab"
         description="Download the free FastTypingLab typing software for Windows. Practise English and Hindi (Mangal & Kruti Dev) typing offline, with live WPM and accuracy — great for SSC, CPCT and government exam prep."
@@ -51,7 +51,7 @@ export default function DownloadPage() {
             style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
             <Monitor className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black mb-3">Download FastTypingLab for Windows</h1>
+          <h1 className="text-2xl sm:text-[28px] font-extrabold mb-3">Download FastTypingLab for Windows</h1>
           <p className="text-brand-text-muted leading-relaxed max-w-xl mx-auto mb-6">
             Free typing software for Windows with <strong className="text-brand-text">offline practice</strong> in
             English and Hindi. Build your speed and accuracy for SSC, CPCT and government typing exams — no internet required.

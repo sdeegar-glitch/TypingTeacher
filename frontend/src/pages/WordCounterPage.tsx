@@ -61,7 +61,7 @@ export default function WordCounterPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Word Counter — Free Online Tool | FastTypingLab"
         description="Free online word and character counter with reading time and keyword density. Paste or type text for instant analysis — no sign-up required."
@@ -70,7 +70,7 @@ export default function WordCounterPage() {
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-2">Word Counter</h1>
+          <h1 className="text-2xl sm:text-[28px] font-extrabold text-brand-text mb-2">Word Counter</h1>
           <p className="text-brand-text-muted">Free online word and character counter. Paste or type your text below for instant analysis.</p>
         </div>
 

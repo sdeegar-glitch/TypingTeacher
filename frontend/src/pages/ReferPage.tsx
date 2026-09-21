@@ -38,7 +38,7 @@ export default function ReferPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg px-4 sm:px-6 py-10">
+    <div className="bg-brand-bg px-4 sm:px-6 py-4 sm:py-6">
       <Seo
         title="Invite Friends & Earn Badges | FastTypingLab Referral Programme"
         description="Share FastTypingLab with friends preparing for SSC, CPCT and other government typing exams. Earn Supporter, Advocate, Ambassador and Legend badges as they join and practise."

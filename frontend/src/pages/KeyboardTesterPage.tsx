@@ -95,7 +95,7 @@ export default function KeyboardTesterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Keyboard Tester — Test Every Key Online | FastTypingLab"
         description="Free online keyboard tester. Press every key to check for stuck keys, ghosting or NKRO issues on any keyboard, right in your browser."

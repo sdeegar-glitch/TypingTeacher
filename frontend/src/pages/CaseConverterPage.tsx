@@ -58,7 +58,7 @@ export default function CaseConverterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Case Converter — Free Online Tool | FastTypingLab"
         description="Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case and more, instantly and for free."

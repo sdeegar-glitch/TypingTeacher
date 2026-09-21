@@ -52,12 +52,12 @@ export default function LeaderboardPage() {
   const rest = data.slice(3);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Global Typing Leaderboard | FastTypingLab"
         description="See the fastest typists on FastTypingLab. Global typing speed leaderboard ranked by net WPM and accuracy."
       />
-      <div className="max-w-[1600px] mx-auto">
+      <div className="max-w-6xl mx-auto">
 
         {/* Header */}
         <PageHeader

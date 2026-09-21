@@ -14,8 +14,8 @@ export default function BlogPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
-      <div className="max-w-[1600px] mx-auto">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto">
         <Seo
           title="Typing Blog — Tips, Guides & Exam Prep | FastTypingLab"
           description="Typing tips, speed-improvement guides, government exam typing preparation, and Hindi typing tutorials from the FastTypingLab team."

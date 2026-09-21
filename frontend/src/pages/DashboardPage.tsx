@@ -172,7 +172,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-6 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo title="My Dashboard | FastTypingLab" description="Your typing progress dashboard." noindex />
       <div className="container mx-auto max-w-5xl">
 

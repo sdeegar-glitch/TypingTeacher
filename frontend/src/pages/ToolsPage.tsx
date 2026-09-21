@@ -181,12 +181,12 @@ export default function ToolsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Keyboard Tools & Typing Utilities | FastTypingLab"
         description="Free typing and keyboard tools — keyboard tester, CPS test, spacebar counter, word counter, case converter and coding typing practice."
       />
-      <div className="max-w-[1600px] mx-auto">
+      <div className="max-w-6xl mx-auto">
 
         {/* Header */}
         <PageHeader

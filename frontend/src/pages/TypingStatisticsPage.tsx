@@ -82,7 +82,7 @@ export default function TypingStatisticsPage() {
   useEffect(() => { document.title = 'Typing Statistics — Average Typing Speed & WPM Benchmarks | FastTypingLab'; }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Average Typing Speed in India & Worldwide | FastTypingLab"
         description="The average typing speed in India is about 35–40 WPM. See full typing statistics — average WPM by skill level, age, profession and country, plus accuracy and Indian exam speeds."

@@ -146,7 +146,7 @@ export default function SpeedRacerPage() {
   const playerBeatsGhost = playerPct >= ghostPct;
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Speed Racer — Typing Race Game | FastTypingLab"
         description="Race a ghost typist at Easy, Medium or Hard speed in this free typing game. Beat your best WPM and climb the leaderboard."

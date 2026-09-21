@@ -182,7 +182,7 @@ export default function CertificatePage() {
   );
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Typing Certificate | FastTypingLab"
         description="Earn a verifiable FastTypingLab typing certificate with a QR code."

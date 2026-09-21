@@ -75,7 +75,7 @@ export default function KrutiDevPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Kruti Dev Typing Test & Guide | FastTypingLab"
         description="Free Kruti Dev Hindi typing test and guide. Practice the legacy Kruti Dev layout used by UP Police, Bihar SSC and court typing exams, with live WPM and accuracy."

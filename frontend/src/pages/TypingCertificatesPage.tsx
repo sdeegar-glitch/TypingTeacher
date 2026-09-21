@@ -34,12 +34,12 @@ export default function TypingCertificatesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Free Typing Certificate — Verifiable WPM Certificate | FastTypingLab"
         description="Earn a free, verifiable typing certificate. Take a timed WPM test and download a shareable certificate of your typing speed and accuracy."
       />
-      <div className="max-w-[1600px] mx-auto">
+      <div className="max-w-6xl mx-auto">
 
         <div className="flex items-center gap-2 text-xs text-brand-muted mb-6">
           <Link to="/" className="hover:text-brand-primary">Home</Link><span>/</span>

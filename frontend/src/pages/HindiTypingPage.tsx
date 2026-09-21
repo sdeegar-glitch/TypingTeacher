@@ -72,7 +72,7 @@ export default function HindiTypingPage() {
   const formattedTime = `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}`;
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Hindi Typing Test — Unicode (Mangal/INSCRIPT) | FastTypingLab"
         description="Free Hindi typing test in Unicode (Mangal/INSCRIPT). Practice Devanagari typing with real-time WPM and accuracy — ideal for SSC, CPCT and government exam prep."

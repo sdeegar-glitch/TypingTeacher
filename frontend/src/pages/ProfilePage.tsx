@@ -116,7 +116,7 @@ export default function ProfilePage() {
     : null;
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-6 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo title="My Profile | FastTypingLab" description="Manage your FastTypingLab profile." noindex />
       <div className="container mx-auto max-w-3xl">
 

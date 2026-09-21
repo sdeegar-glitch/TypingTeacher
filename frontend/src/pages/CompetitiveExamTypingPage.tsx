@@ -73,8 +73,8 @@ export default function CompetitiveExamTypingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
-      <div className="max-w-[1600px] mx-auto">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto">
         <Seo
           title="Competitive Exam Typing — SSC, CPCT, UP Police | FastTypingLab"
           description="Free typing practice for SSC CHSL, SSC CGL, CPCT, UP Police, court clerk and railway exams. Real exam duration, WPM and accuracy — in English and Hindi."

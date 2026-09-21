@@ -67,7 +67,7 @@ export default function SiteMapPage() {
   useEffect(() => { document.title = 'Site Map — All Pages | FastTypingLab'; }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Site Map — All Pages | FastTypingLab"
         description="Browse every page on FastTypingLab: typing tests, Hindi typing, exam practice, learning courses, tools, games and blog articles."

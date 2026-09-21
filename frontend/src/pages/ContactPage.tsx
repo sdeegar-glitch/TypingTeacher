@@ -9,13 +9,13 @@ export default function ContactPage() {
   useEffect(() => { document.title = 'Contact Us | FastTypingLab'; }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Contact FastTypingLab — Support, Feedback & Enquiries"
         description="Get in touch with the FastTypingLab team. Email us for support, feedback, bug reports, content suggestions or partnership enquiries."
       />
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-black mb-4">Contact Us</h1>
+        <h1 className="text-2xl sm:text-[28px] font-extrabold mb-4">Contact Us</h1>
         <p className="text-brand-text-muted leading-relaxed mb-8">
           We'd love to hear from you — whether it's feedback, a bug report, a request for a specific
           exam or content, or a partnership enquiry. The fastest way to reach us is email.

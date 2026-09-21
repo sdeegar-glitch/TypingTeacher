@@ -76,7 +76,7 @@ export default function FontConverterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Kruti Dev to Unicode Converter — Both Ways, Free | FastTypingLab"
         description="Free Kruti Dev to Unicode and Unicode to Kruti Dev converter for Hindi. Paste text, convert instantly, copy or download. Runs in your browser — no signup, nothing uploaded."

@@ -21,7 +21,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo title={exam.seoTitle} description={exam.metaDesc} canonical={`/${exam.slug}-typing-test`} jsonLd={faqLd} />
       <div className="max-w-[1000px] mx-auto">
 

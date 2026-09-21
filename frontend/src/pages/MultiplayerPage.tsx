@@ -7,7 +7,7 @@ import Seo from '../components/Seo';
 // realtime backend exists (see the completion plan, Phase 5).
 export default function MultiplayerPage() {
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-16 px-4">
+    <div className="bg-brand-bg text-brand-text py-6 px-4">
       <Seo
         title="Multiplayer Typing Race | FastTypingLab"
         description="Real-time multiplayer typing races are coming to FastTypingLab. Practice with our typing tests and games in the meantime."

@@ -16,13 +16,13 @@ export default function AboutPage() {
   useEffect(() => { document.title = 'About Us | FastTypingLab'; }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="About FastTypingLab — Free Typing & Govt Exam Practice for India"
         description="FastTypingLab is a free typing platform built for India — English & Hindi typing tests, SSC/CPCT/UPSSSC exam practice, stenography, an AI tutor and games, all free."
       />
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-black mb-4">About FastTypingLab</h1>
+        <h1 className="text-2xl sm:text-[28px] font-extrabold mb-4">About FastTypingLab</h1>
         <p className="text-brand-text-muted leading-relaxed mb-6">
           FastTypingLab is a free online typing platform built for India. Our mission is simple:
           give every student, professional and government-exam aspirant the tools to type faster and

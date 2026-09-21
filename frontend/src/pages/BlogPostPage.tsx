@@ -92,7 +92,7 @@ export default function BlogPostPage() {
   const relatedPosts = [...sameCategory, ...otherPosts].slice(0, 2);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
         <Seo
           title={post.seoTitle}

@@ -215,7 +215,7 @@ export default function TypingDrillsPage() {
   const showRunner = mode !== 'custom' || (customStarted && text.length >= 20);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Typing Drills — Number, Punctuation & Custom Practice | FastTypingLab"
         description="Free typing drills: number typing test for 10-key & data entry (KDPH), punctuation practice, top-200 common words, and custom text mode. Live WPM and accuracy."

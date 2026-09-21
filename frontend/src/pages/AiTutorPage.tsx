@@ -79,7 +79,7 @@ export default function AiTutorPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="AI Typing Tutor — Personalized Improvement Plan | FastTypingLab"
         description="Get a free, personalized typing improvement plan from our AI tutor. It analyzes your WPM, accuracy and trend, then builds a step-by-step plan and a custom practice passage."

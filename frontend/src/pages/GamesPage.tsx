@@ -124,12 +124,12 @@ export default function GamesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Typing Games — Word Rain, Zombie & Speed Racer | FastTypingLab"
         description="Free typing games to boost your speed while having fun — Word Rain, Zombie Typing and Speed Racer. Improve WPM and accuracy through play."
       />
-      <div className="max-w-[1600px] mx-auto">
+      <div className="max-w-6xl mx-auto">
 
         {/* Header */}
         <PageHeader

@@ -127,7 +127,7 @@ export default function DictationTypingPage() {
   const wpm = Math.round(typedWords.length / minutes);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Dictation Typing Test — Audio Transcription Practice | FastTypingLab"
         description="Free dictation typing test with audio. Listen to a passage read at 60/80/100 WPM and transcribe it by typing — an audio transcription typing test for SSC stenographer, court and PA exam practice."

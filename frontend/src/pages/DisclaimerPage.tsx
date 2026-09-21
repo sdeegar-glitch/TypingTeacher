@@ -18,13 +18,13 @@ export default function DisclaimerPage() {
   useEffect(() => { document.title = 'Disclaimer | FastTypingLab'; }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Disclaimer | FastTypingLab"
         description="Important disclaimers for FastTypingLab — exam information, typing results and certificates, educational content, and advertising."
       />
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl font-black mb-2">Disclaimer</h1>
+        <h1 className="text-2xl sm:text-[28px] font-extrabold mb-2">Disclaimer</h1>
         <p className="text-brand-muted text-sm mb-8">Last updated: {UPDATED}</p>
 
         <p className="text-brand-text-muted text-sm leading-relaxed mb-6">

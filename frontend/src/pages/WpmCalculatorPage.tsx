@@ -40,7 +40,7 @@ export default function WpmCalculatorPage() {
   const inputCls = 'w-full px-4 py-2.5 rounded-xl text-brand-text text-sm outline-none transition-all border bg-brand-surface-2 border-brand-border focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/15';
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="WPM Calculator — Free Typing Speed Calculator | FastTypingLab"
         description="Free WPM calculator. Enter characters typed, time and errors to get your gross and net typing speed (words per minute) and accuracy, with the exact formula explained."

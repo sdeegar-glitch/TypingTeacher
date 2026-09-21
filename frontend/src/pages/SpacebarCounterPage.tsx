@@ -80,7 +80,7 @@ export default function SpacebarCounterPage() {
   const sps = elapsed > 0 ? (presses / elapsed).toFixed(1) : '0.0';
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Spacebar Counter — Spacebar Speed Test | FastTypingLab"
         description="Free spacebar counter and speed test. See how many times you can press the spacebar in 10 seconds and compare against the world record."

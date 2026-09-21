@@ -160,7 +160,7 @@ export default function TypingTestForPage() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
+    <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo title={data.seoTitle || `${data.title} | FastTypingLab`} description={data.metaDesc} />
       {data.faqs.length > 0 && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
@@ -178,7 +178,7 @@ export default function TypingTestForPage() {
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <h1 className="text-3xl sm:text-4xl font-black text-brand-text mb-3">{heading}</h1>
+          <h1 className="text-2xl sm:text-[28px] font-extrabold text-brand-text mb-3">{heading}</h1>
           <p className="text-brand-text-muted leading-relaxed">{data.intro}</p>
         </motion.div>
 
