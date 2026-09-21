@@ -106,13 +106,14 @@ describe('useTypingEngineV2 (same shape as v1)', () => {
     expect(ev.defaultPrevented).toBe(true);
   });
 
-  it('uses the scorePractice formulas: 300 chars in 60 s with 3 errors = net 57', async () => {
+  it('deducts error WORDS from net WPM: 3 wrong letters in one word cost 1, not 3', async () => {
     const text = 'a'.repeat(400); // longer than what is typed, so the run ends on time
     const ta = setup({}, text, 60);
     typeValue(ta, 'x'.repeat(3) + 'a'.repeat(297));
     await tick(60_000);
     expect(engine.stats.isFinished).toBe(true);
     expect(engine.stats.wpm).toBe(60);
-    expect(engine.stats.netWpm).toBe(57);
+    expect(engine.stats.errors).toBe(3); // accuracy still counts characters
+    expect(engine.stats.netWpm).toBe(59); // all 3 wrong letters sit in a single word
   });
 });
