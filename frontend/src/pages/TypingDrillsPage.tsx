@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Hash, Quote, Type, FileText, RotateCcw, Zap, ChevronLeft, Target } from 'lucide-react';
 import Seo from '../components/Seo';
 import CharSpan from '../components/CharSpan';
-import { useTypingEngine } from '../hooks/useTypingEngine';
+import { useTypingEngineV2 } from '../hooks/useTypingEngineV2';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 
 // ─── Drill text generators ──────────────────────────────────────────────────
@@ -92,26 +92,14 @@ function DrillCore({ text, duration, onRestart, onNewText }: {
   text: string; duration: number; onRestart: () => void; onNewText: () => void;
 }) {
   const sound = useSoundEffects();
-  const engine = useTypingEngine(text, duration, 'timed');
-  const { stats, userInput, mistakes, skipped, processChar, processBackspace } = engine;
-
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (stats.isFinished) return;
-    const ignored = ['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Escape', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
-    if (ignored.includes(e.key)) return;
-    if (e.key === 'Tab') { e.preventDefault(); onRestart(); return; }
-    if (e.key === ' ') e.preventDefault();
-    if (e.key === 'Backspace') { sound.playKey(); processBackspace(); }
-    else if (e.key.length === 1) {
-      if (e.key === text[userInput.length]) sound.playKey(); else sound.playError();
-      processChar(e.key);
-    }
-  }, [stats.isFinished, processChar, processBackspace, sound, text, userInput.length, onRestart]);
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
+  // Shared v2 engine: a hidden textarea reads the text, so phone keyboards and
+  // IMEs work; Tab restarts (handled by the engine).
+  const engine = useTypingEngineV2(text, duration, undefined, {
+    enabled: true,
+    onRestart,
+    onKey: ({ correct }) => { if (correct) sound.playKey(); else sound.playError(); },
+  });
+  const { stats, userInput, mistakes, skipped } = engine;
 
   const formattedTime = `${Math.floor(stats.timeLeft / 60)}:${String(stats.timeLeft % 60).padStart(2, '0')}`;
 
@@ -151,7 +139,8 @@ function DrillCore({ text, duration, onRestart, onNewText }: {
   }
 
   return (
-    <div>
+    <div onClick={engine.focus}>
+      <textarea {...engine.inputProps} />
       <div className="flex items-center justify-between mb-3 px-1">
         <div className="flex items-center gap-4 font-mono text-sm">
           <span className="text-brand-text font-bold">{formattedTime}</span>

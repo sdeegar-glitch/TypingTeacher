@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { charsFromKeyEvent } from '../lib/hindiInput';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Languages } from 'lucide-react';
-import { useTypingEngine } from '../hooks/useTypingEngine';
+import { useTypingEngineV2 } from '../hooks/useTypingEngineV2';
 import { saveSession } from '../lib/api';
 import Seo from '../components/Seo';
+import ClusterText from '../components/ClusterText';
 import RelatedLinks from '../components/RelatedLinks';
 
 // ─── Passage libraries ───────────────────────────────────────────────────────
@@ -96,7 +96,9 @@ export default function HindiTypingJunglePage() {
     return () => { try { document.head.removeChild(link); } catch {} };
   }, []);
 
-  const engine = useTypingEngine(activeText, selectedDuration, 'timed', (finalStats) => {
+  const handleResetRef = useRef<() => void>(() => {});
+  // Shared v2 engine: hidden textarea (OS Hindi keyboard, IME, phone keyboard, or built-in INSCRIPT).
+  const engine = useTypingEngineV2(activeText, selectedDuration, (finalStats) => {
     saveSession({
       duration: finalStats.elapsedSeconds,
       gross_wpm: finalStats.wpm,
@@ -105,6 +107,8 @@ export default function HindiTypingJunglePage() {
       accuracy: finalStats.accuracy,
       lang: 'hindi',
       key_stats: engine.getKeyStats(),
+      engine_version: 'v2',
+      input_method: engine.inputMethod,
     });
     try {
       const hist = JSON.parse(localStorage.getItem('typingHistory') || '[]');
@@ -125,74 +129,27 @@ export default function HindiTypingJunglePage() {
       localStorage.setItem('achievementKeys', JSON.stringify(prevKeys));
       if (unlocks.length) setNewUnlocks(unlocks);
     } catch {}
-  });
+  }, { enabled: true, mangal: true, onRestart: () => handleResetRef.current() });
 
-  const { stats, userInput, mistakes, processChar, processBackspace, reset } = engine;
-
-  const hiddenInputRef = useRef<HTMLInputElement>(null);
-  const [mobileVal, setMobileVal] = useState('');
-
-  const onMobileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const nv = e.target.value;
-    engine.handleMobileInput(nv);
-    setMobileVal(nv);
-  }, [engine]);
-
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (stats.isFinished) return;
-    const skip = ['Shift','Control','Alt','Meta','CapsLock','Tab','Escape','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'];
-    if (skip.includes(e.key) || e.ctrlKey || e.metaKey) return;
-    if (e.key === ' ') e.preventDefault();
-    if (e.key === 'Backspace') processBackspace();
-    else charsFromKeyEvent(e, activeText[userInput.length], true).forEach(processChar);
-  }, [stats.isFinished, processChar, processBackspace, activeText, userInput.length]);
-
-  useEffect(() => {
-    if (!isMobile) { window.addEventListener('keydown', handleKeyDown); return () => window.removeEventListener('keydown', handleKeyDown); }
-  }, [handleKeyDown, isMobile]);
-
-  useEffect(() => {
-    if (!isMobile) return;
-    setTimeout(() => hiddenInputRef.current?.focus(), 300);
-  }, [isMobile]);
+  const { stats, userInput, mistakes, reset } = engine;
 
   const handleReset = useCallback(() => {
-    reset(); setMobileVal(''); setNewUnlocks([]);
-    if (isMobile) setTimeout(() => hiddenInputRef.current?.focus(), 100);
-  }, [reset, isMobile]);
+    reset(); setNewUnlocks([]);
+    setTimeout(() => engine.focus(), 100);
+  }, [reset, engine]);
+  handleResetRef.current = handleReset;
 
   const formattedTime = `${Math.floor(stats.timeLeft / 60)}:${String(stats.timeLeft % 60).padStart(2, '0')}`;
 
-  // ─── Render passage with coloring ─────────────────────────────────────────
-  const renderText = () => activeText.split('').map((ch, i) => {
-    const correct = i < userInput.length && !mistakes.has(i);
-    const error   = i < userInput.length && mistakes.has(i);
-    const caret   = i === userInput.length;
-    return (
-      <span key={i} className="relative">
-        {caret && <span className="typing-caret" aria-hidden />}
-        <span className={correct ? 'typing-correct' : error ? 'typing-error' : caret ? 'typing-current' : 'typing-upcoming'}>
-          {ch === ' ' ? ' ' : ch}
-        </span>
-      </span>
-    );
-  });
-
   return (
     <div className="h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none"
-      onClick={() => isMobile && hiddenInputRef.current?.focus()}>
+      onClick={() => engine.focus()}>
       <Seo
         title="Hindi Typing Jungle — Practice Hindi Typing | FastTypingLab"
         description="Practice Hindi typing with real articles, words and quotes in Kruti Dev or Unicode Mangal layout. Free timed Hindi typing test with live WPM and accuracy."
       />
 
-      {/* Hidden mobile input */}
-      {isMobile && (
-        <input ref={hiddenInputRef} type="text" value={mobileVal} onChange={onMobileChange}
-          className="fixed opacity-0 pointer-events-none w-1 h-1 top-0 left-0 z-[-1]"
-          autoCapitalize="none" autoComplete="off" autoCorrect="off"
-          spellCheck={false} inputMode="text" aria-hidden disabled={stats.isFinished} />
-      )}
+      <textarea {...engine.inputProps} />
 
       {/* ── TOP BAR ── */}
       <div className="shrink-0 bg-brand-surface border-b border-brand-border px-3 sm:px-6 h-14 flex items-center justify-between gap-3 z-40">
@@ -307,14 +264,14 @@ export default function HindiTypingJunglePage() {
         {/* ── TYPING AREA ── */}
         <div className="w-full max-w-2xl">
           <div className="relative bg-brand-surface border border-brand-border rounded-2xl px-4 sm:px-8 py-5 shadow-sm cursor-text overflow-hidden"
-            onClick={() => isMobile && hiddenInputRef.current?.focus()}>
+            onClick={() => engine.focus()}>
             {stats.isActive && (
               <div className="absolute top-0 left-0 right-0 h-px"
                 style={{ background: 'linear-gradient(90deg,transparent,rgba(188,108,80,.5),transparent)' }} />
             )}
             <div className="text-xl sm:text-2xl leading-[3.2rem] break-words overflow-y-auto"
               style={{ fontFamily: "'Noto Sans Devanagari',sans-serif", maxHeight: isMobile ? '150px' : '200px' }}>
-              {renderText()}
+              <ClusterText text={activeText} typedLength={userInput.length} mistakes={mistakes} skipped={engine.skipped} currentIndex={userInput.length} />
             </div>
             {!stats.isActive && !stats.isFinished && (
               <div className="absolute bottom-3 right-4 text-[10px] text-brand-muted/50 font-mono pointer-events-none select-none flex items-center gap-1">
