@@ -36,8 +36,8 @@ export default function HindiLessonCoursePage() {
         description="Free 30-lesson Hindi typing course in the INSCRIPT layout. Learn key by key, earn stars, and track your progress from beginner to expert."
       />
       {/* ── Sticky header ── */}
-      <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+      <div className="glass-nav border-b border-brand-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-11 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link to="/" className="font-black text-brand-text text-base hover:text-brand-primary transition-colors">
               FastTypingLab
@@ -73,7 +73,7 @@ export default function HindiLessonCoursePage() {
       </div>
 
       {/* ── Hero ── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
         <PageHeader
           icon={Languages}
           gradient="linear-gradient(135deg,#BC6C50,#CC7B5D)"
@@ -82,7 +82,7 @@ export default function HindiLessonCoursePage() {
           subtitle="30 progressive lessons — from home row to full Hindi typing mastery. Designed for SSC, CPCT, UP Police, and court exam preparation."
         >
           {/* Stats */}
-          <div className="flex items-center justify-center gap-8 mt-6">
+          <div className="flex items-center justify-center gap-6 mt-2">
             {[
               { label: 'पूर्ण', value: totalDone, color: 'text-brand-cta' },
               { label: 'शेष', value: 30 - totalDone, color: 'text-brand-muted' },
@@ -98,7 +98,7 @@ export default function HindiLessonCoursePage() {
       </div>
 
       {/* ── Lesson groups ── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
         {HINDI_LESSON_GROUPS.map(group => {
           const groupLessons = HINDI_LESSONS.filter(l => l.id >= group.range[0] && l.id <= group.range[1]);
           const groupDone = groupLessons.filter(l => progress[l.id]?.completed).length;

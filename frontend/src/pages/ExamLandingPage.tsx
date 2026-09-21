@@ -26,7 +26,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
       <div className="max-w-[1000px] mx-auto">
 
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs text-brand-muted mb-6 flex-wrap">
+        <div className="flex items-center gap-2 text-xs text-brand-muted mb-3 flex-wrap">
           <Link to="/" className="hover:text-brand-primary transition-colors">Home</Link>
           <span>/</span>
           <Link to="/competitive-exam-typing/" className="hover:text-brand-primary transition-colors">Exam Typing</Link>
@@ -36,15 +36,14 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
 
         <PageHeader
           icon={Trophy}
-          eyebrow={exam.eyebrow}
           title={exam.h1}
           subtitle={exam.intro}
         />
 
         {/* Primary CTA */}
-        <div className="flex justify-center mb-10">
+        <div className="flex justify-center mb-5">
           <Link to={exam.practiceHref}
-            className="inline-flex items-center gap-2 text-white px-7 py-3.5 rounded-2xl font-bold transition-all active:scale-95 shadow-lg"
+            className="inline-flex items-center gap-2 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 shadow-lg"
             style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
             <Keyboard className="w-5 h-5" /> {exam.practiceLabel}
             <ChevronRight className="w-4 h-4" />
@@ -52,7 +51,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
         </div>
 
         {/* Requirements table */}
-        <section className="mb-10">
+        <section className="mb-6">
           <h2 className="text-xl font-black text-brand-text mb-4 flex items-center gap-2"><Target className="w-5 h-5 text-brand-primary" /> Speed Requirements</h2>
           <div className="bg-brand-surface border border-brand-border rounded-2xl overflow-hidden">
             <ScrollableRegion label="Speed requirements table">
@@ -113,7 +112,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
         </div>
 
         {/* FAQ */}
-        <section className="mb-10">
+        <section className="mb-6">
           <h2 className="text-xl font-black text-brand-text mb-4">Frequently Asked Questions</h2>
           <div className="space-y-3">
             {exam.faqs.map((f, i) => (

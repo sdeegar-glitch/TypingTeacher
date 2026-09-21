@@ -187,14 +187,12 @@ export default function CodingTypingPage() {
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             Tools
           </Link>
-          <div className="h-4 w-px bg-brand-border" />
-          <h1 className="text-xl font-bold">Coding Typing Test</h1>
         </div>
 
         <div className="mb-6">
-          <h2 className="text-3xl font-black text-brand-text mb-2 flex items-center gap-2">
-            <Code className="w-8 h-8 text-brand-primary" /> Coding Typing Test
-          </h2>
+          <h1 className="text-2xl sm:text-[28px] font-extrabold text-brand-text mb-1 flex items-center gap-2">
+            <Code className="w-6 h-6 text-brand-primary" /> Coding Typing Test
+          </h1>
           <p className="text-brand-text-muted">Type real code snippets in JavaScript, Python, TypeScript, SQL, and more.</p>
         </div>
 

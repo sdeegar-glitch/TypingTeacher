@@ -55,8 +55,8 @@ export default function HindiCourseSelectPage() {
         description={`Free structured Hindi typing course in the ${isKrutiDev ? 'Kruti Dev' : 'Unicode Mangal'} layout. Progress through stages, earn XP and badges, and track your typing speed.`}
       />
       {/* Sticky header */}
-      <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+      <div className="glass-nav border-b border-brand-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-11 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
             <Link to="/learn-hindi-typing/" className="font-black text-brand-text text-base hover:text-brand-primary transition-colors shrink-0">
               FastTypingLab
@@ -134,7 +134,7 @@ export default function HindiCourseSelectPage() {
       </div>
 
       {/* Stage sections */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
         {STAGES.map(stage => {
           const stageLessons = course.LESSONS.filter(l => l.stage === stage.id);
           const stageDone = stageLessons.filter(l => progress?.lessons[l.id]?.completed).length;

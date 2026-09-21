@@ -39,8 +39,8 @@ export default function LearningCoursePage() {
         description="Learn to type without looking. A free structured touch-typing course from home row to full speed — 50 progressive lessons with live WPM and accuracy tracking."
       />
       {/* ── Sticky header ── */}
-      <div className="sticky top-0 z-40 glass-nav border-b border-brand-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+      <div className="glass-nav border-b border-brand-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-11 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link to="/" className="font-black text-brand-text text-base hover:text-brand-primary transition-colors">
               FastTypingLab
@@ -74,16 +74,15 @@ export default function LearningCoursePage() {
       </div>
 
       {/* ── Hero ── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
         <PageHeader
           icon={Keyboard}
           gradient="linear-gradient(135deg,#304C53,#2A9DAE)"
-          eyebrow="Structured Course"
           title={<>Your <span className="gradient-text">Typing Journey</span></>}
           subtitle="50 progressive lessons — from home row to full keyboard mastery. Complete each lesson to unlock the next."
         >
           {/* Stats */}
-          <div className="flex items-center justify-center gap-8 mt-6">
+          <div className="flex items-center justify-center gap-6 mt-2">
             {[
               { label: 'Completed', value: totalDone, color: 'text-brand-primary' },
               { label: 'Remaining', value: 50 - totalDone, color: 'text-brand-muted' },
@@ -99,7 +98,7 @@ export default function LearningCoursePage() {
       </div>
 
       {/* ── Lesson groups ── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-6">
         {LESSON_GROUPS.map(group => {
           const groupLessons = LESSONS.filter(l => l.id >= group.range[0] && l.id <= group.range[1]);
           const groupDone = groupLessons.filter(l => isCompleted(l.id)).length;
