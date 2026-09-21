@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Clock, Zap, Target, Award, RotateCcw, CheckCircle, XCircle, Trophy, Shield } from 'lucide-react';
 import { saveSession } from '../lib/api';
+import type { ScoringProfile } from '../lib/typingScoring';
 import ExamTypingInterface, { type ExamResult } from '../components/ExamTypingInterface';
 import Seo from '../components/Seo';
 
@@ -60,37 +61,49 @@ const PARAGRAPHS: Record<string, string[]> = {
 const EXAM_CONFIG: Record<string, {
   title: string; fullName: string; badge: string;
   duration: number; wpmTarget: number; accuracyTarget: number;
+  /** word-level scoring rules (lib/typingScoring) */
+  profile: ScoringProfile;
+  /** key depressions per hour required, where the exam sets one */
+  kdphTarget?: number;
+  /** passage library to draw from (defaults to the exam key) */
+  passageKey?: string;
   language: string; color: string; bg: string; border: string;
   icon: string;
   rules: string[];
 }> = {
   'ssc-chsl': {
     title: 'SSC CHSL', fullName: 'Staff Selection Commission — CHSL', badge: 'English',
-    duration: 600, wpmTarget: 35, accuracyTarget: 80,
+    duration: 600, wpmTarget: 35, accuracyTarget: 80, profile: 'ssc',
     language: 'English', color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30', icon: '🏛️',
     rules: ['Duration: 10 minutes', 'Target: 35+ WPM', 'Min accuracy: 80%', 'Backspace allowed'],
   },
   'ssc-cgl': {
     title: 'SSC CGL DEST', fullName: 'SSC CGL — Data Entry Speed Test', badge: 'English',
-    duration: 900, wpmTarget: 40, accuracyTarget: 85,
+    duration: 900, wpmTarget: 40, accuracyTarget: 85, profile: 'kdph', kdphTarget: 8000,
     language: 'English', color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/30', icon: '📊',
     rules: ['Duration: 15 minutes', 'Target: 40+ WPM', 'Min accuracy: 85%', '8000 KDPH required'],
   },
   'hindi-typing': {
     title: 'Hindi Typing', fullName: 'Hindi Typing — INSCRIPT / Remington Gail', badge: 'Hindi',
-    duration: 600, wpmTarget: 30, accuracyTarget: 80,
+    duration: 600, wpmTarget: 30, accuracyTarget: 80, profile: 'ssc',
     language: 'Hindi', color: 'text-orange-400', bg: 'bg-orange-500/10', border: 'border-orange-500/30', icon: 'अ',
     rules: ['Duration: 10 minutes', 'Target: 30+ WPM', 'Min accuracy: 80%', 'Mangal font standard'],
   },
+  'cpct-hindi': {
+    title: 'CPCT Hindi', fullName: 'MP CPCT — Hindi Typing (INSCRIPT / Remington)', badge: 'Hindi',
+    duration: 900, wpmTarget: 30, accuracyTarget: 80, profile: 'cpct', passageKey: 'hindi-typing',
+    language: 'Hindi', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/30', icon: 'क',
+    rules: ['Duration: 15 minutes', 'Target: 30+ WPM', 'Wrong words are not counted', 'Unicode Hindi (INSCRIPT)'],
+  },
   'up-police': {
     title: 'UP Police Typing', fullName: 'UP Police Computer Operator Test', badge: 'Hindi',
-    duration: 300, wpmTarget: 25, accuracyTarget: 80,
+    duration: 300, wpmTarget: 25, accuracyTarget: 80, profile: 'ssc',
     language: 'Hindi', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', icon: '👮',
     rules: ['Duration: 5 minutes', 'Target: 25+ WPM', 'Min accuracy: 80%', 'Unicode Hindi'],
   },
   'court-typing': {
     title: 'Court Typing', fullName: 'High Court / District Court Typing Test', badge: 'English',
-    duration: 600, wpmTarget: 40, accuracyTarget: 90,
+    duration: 600, wpmTarget: 40, accuracyTarget: 90, profile: 'ssc',
     language: 'English', color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/30', icon: '⚖️',
     rules: ['Duration: 10 minutes', 'Target: 40+ WPM', 'Min accuracy: 90%', 'Legal passages'],
   },
@@ -102,7 +115,7 @@ export default function ExamPage() {
   const { examId } = useParams<{ examId: string }>();
   const key = examId && EXAM_CONFIG[examId] ? examId : 'ssc-chsl';
   const exam = EXAM_CONFIG[key];
-  const paragraphs = PARAGRAPHS[key] || PARAGRAPHS['ssc-chsl'];
+  const paragraphs = PARAGRAPHS[exam.passageKey ?? key] || PARAGRAPHS['ssc-chsl'];
 
   const [screen, setScreen] = useState<Screen>('info');
   const [passageIdx, setPassageIdx] = useState(() => Math.floor(Math.random() * paragraphs.length));
@@ -118,7 +131,10 @@ export default function ExamPage() {
   const handleFinish = (r: ExamResult) => {
     setResult(r);
     setScreen('finished');
-    saveSession({ duration: r.elapsedSec || exam.duration, gross_wpm: r.grossWpm, net_wpm: r.netWpm, errors: r.errors, accuracy: r.accuracy });
+    saveSession({
+      duration: r.elapsedSec || exam.duration, gross_wpm: r.grossWpm, net_wpm: r.netWpm, errors: r.errors, accuracy: r.accuracy,
+      lang: exam.language.toLowerCase(), engine_version: 'v2', input_method: r.inputMethod,
+    });
     try {
       const hist = JSON.parse(localStorage.getItem('typingHistory') || '[]');
       hist.push({ netWpm: r.netWpm, accuracy: r.accuracy, lang: exam.language.toLowerCase(), date: new Date().toISOString() });
@@ -142,7 +158,9 @@ export default function ExamPage() {
 
   const wpm = result?.netWpm ?? 0;
   const accuracy = result?.accuracy ?? 0;
-  const passed = !!result && wpm >= exam.wpmTarget && accuracy >= exam.accuracyTarget;
+  const kdph = Math.round(result?.score.kdph ?? 0);
+  const passed = !!result && wpm >= exam.wpmTarget && accuracy >= exam.accuracyTarget
+    && (!exam.kdphTarget || kdph >= exam.kdphTarget);
 
   // ═══ ACTIVE (exam-style typing interface) ═══
   if (screen === 'active') {
@@ -153,6 +171,7 @@ export default function ExamPage() {
         durationSec={exam.duration}
         isHindi={isHindi}
         examTitle={exam.title}
+        profile={exam.profile}
         onFinish={handleFinish}
         onExit={restart}
       />
@@ -213,6 +232,8 @@ export default function ExamPage() {
               </div>
             ))}
           </div>
+
+          {result && <ScoreAudit result={result} kdphTarget={exam.kdphTarget} kdph={kdph} />}
 
           {/* Backspace / delete summary */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 flex items-center justify-around text-center">
@@ -307,6 +328,49 @@ export default function ExamPage() {
           <p className="text-center text-white/20 text-xs mt-3">A new passage is selected randomly each attempt</p>
         </motion.div>
       </div>
+    </div>
+  );
+}
+
+const REASON_LABEL: Record<string, string> = {
+  wrong: 'wrong word', omitted: 'word skipped', extra: 'extra word', repeated: 'repeated word', incomplete: 'incomplete word',
+  punctuation: 'punctuation', spacing: 'spacing', transposition: 'words swapped',
+};
+
+// Shows exactly how the score was counted so it can be checked (and trusted).
+function ScoreAudit({ result, kdphTarget, kdph }: { result: ExamResult; kdphTarget?: number; kdph: number }) {
+  const { score } = result;
+  const [open, setOpen] = useState(false);
+  const rules = score.profile === 'cpct'
+    ? 'CPCT style: wrong words are not counted; there is no deduction.'
+    : 'SSC style: a wrong, missing, extra, repeated or incomplete word is 1 full mistake; punctuation, spacing or swapped words are a half mistake (0.5). Net words = gross words (keys ÷ 5) − mistakes.';
+  const uncorrected = result.wrongChars;
+  const corrected = result.backspaces + result.deletes;
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 text-sm">
+      <div className="grid grid-cols-3 gap-2 text-center mb-3">
+        <div><div className="text-lg font-black font-mono text-white/80">{score.correctWords}/{score.typedWords}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Correct words</div></div>
+        <div><div className="text-lg font-black font-mono text-white/80">{score.fullMistakes} + {score.halfMistakes}×½</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Full + half</div></div>
+        <div><div className={`text-lg font-black font-mono ${kdphTarget ? (kdph >= kdphTarget ? 'text-emerald-400' : 'text-rose-400') : 'text-white/80'}`}>{kdph}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">KDPH{kdphTarget ? ` (need ${kdphTarget})` : ''}</div></div>
+      </div>
+      <div className="text-xs text-white/40 mb-2">Errors left in text: <b className="text-white/70">{uncorrected}</b> characters · Corrections made: <b className="text-white/70">{corrected}</b> keys</div>
+      <button onClick={() => setOpen(o => !o)} className="text-xs font-semibold text-cyan-400 hover:text-cyan-300">
+        {open ? 'Hide' : 'Show'} mistake list ({score.mistakes.length})
+      </button>
+      {open && (
+        <ul className="mt-2 max-h-48 overflow-y-auto space-y-1 text-xs">
+          {score.mistakes.length === 0 && <li className="text-emerald-400">No mistakes — clean run.</li>}
+          {score.mistakes.map((m, i) => (
+            <li key={i} className="flex flex-wrap gap-x-2 text-white/60">
+              <span className={m.kind === 'full' ? 'text-rose-400 font-bold' : 'text-amber-300 font-bold'}>{m.kind === 'full' ? 'Full' : 'Half'}</span>
+              <span>{REASON_LABEL[m.reason] ?? m.reason}</span>
+              {m.expected && <span>expected <b className="text-white/80">{m.expected}</b></span>}
+              {m.typed && <span>typed <b className="text-white/80">{m.typed}</b></span>}
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="text-[11px] text-white/25 mt-3">{rules} These rules come from public summaries of exam guidelines, so confirm them against your exam notification.</p>
     </div>
   );
 }
