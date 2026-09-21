@@ -187,49 +187,46 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════
           HERO
          ══════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[calc(100dvh-64px)] flex items-center justify-center overflow-hidden px-4 sm:px-6">
+      <section className="relative overflow-hidden px-4 sm:px-6">
         <HeroBlobs />
 
-        <div className="max-w-[1600px] mx-auto relative z-10 py-16 sm:py-20">
+        <div className="max-w-6xl mx-auto relative z-10 py-6 sm:py-8">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }} className="text-center">
 
             {/* Live badge */}
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full mb-8 text-sm font-medium shadow-sm"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 text-xs font-medium shadow-sm"
               style={{ background: 'var(--brand-surface)', border: '1px solid var(--brand-border)' }}>
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inset-0 rounded-full bg-brand-accent opacity-70" />
                 <span className="relative rounded-full h-2 w-2 bg-brand-accent" />
               </span>
-              <span className="text-brand-muted">New typing tests added daily</span>
+              <span className="text-brand-muted">India's #1 typing platform · new tests daily</span>
             </motion.div>
 
             {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6">
-              <span className="text-brand-text block">Type Faster.</span>
-              <span className="gradient-text block">Score Higher.</span>
-              <span className="text-brand-text block text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 opacity-60">
-                India's #1 Typing Platform
-              </span>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] mb-3">
+              <span className="text-brand-text">Type Faster. </span>
+              <span className="gradient-text">Score Higher.</span>
             </h1>
 
-            <p className="text-base sm:text-lg text-brand-text-muted max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+            <p className="text-sm sm:text-base text-brand-text-muted max-w-2xl mx-auto mb-4 leading-relaxed">
               Free typing speed tests, Hindi Unicode & Kruti Dev practice, SSC exam simulation, AI coaching,
               and typing games — everything you need in one place.
             </p>
 
             {/* CTA row */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
               <button type="button" onClick={() => setLearnOpen(true)}
-                className="inline-flex items-center gap-2.5 text-white font-bold px-8 py-4 rounded-2xl text-base transition-all duration-200 w-full sm:w-auto justify-center group shadow-lg active:scale-95"
+                className="inline-flex items-center gap-2.5 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-200 w-full sm:w-auto justify-center group shadow-lg active:scale-95"
                 style={{ background: 'linear-gradient(135deg, #BC6C50 0%, #CC7B5D 100%)', boxShadow: '0 6px 24px rgba(188,108,80,0.30)' }}>
                 <BookOpen className="w-5 h-5" />
                 Start Learning
               </button>
               <Link to="/tests/"
-                className="inline-flex items-center gap-2.5 text-white font-bold px-8 py-4 rounded-2xl text-base transition-all duration-200 w-full sm:w-auto justify-center group shadow-xl active:scale-95"
+                className="inline-flex items-center gap-2.5 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-200 w-full sm:w-auto justify-center group shadow-xl active:scale-95"
                 style={{ background: 'linear-gradient(135deg, #304C53 0%, #2A9DAE 100%)', boxShadow: '0 6px 24px rgba(48,76,83,0.30)' }}>
                 <Zap className="w-5 h-5" />
                 Test Your Speed
@@ -240,14 +237,14 @@ export default function HomePage() {
             {/* Live typing preview card */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25, duration: 0.5 }}
-              className="max-w-2xl mx-auto rounded-2xl p-5 sm:p-7 text-left relative overflow-hidden shadow-2xl glass-card">
+              className="max-w-2xl mx-auto rounded-2xl p-4 sm:p-5 text-left relative overflow-hidden shadow-xl glass-card">
 
               {/* Top line gradient */}
               <div className="absolute top-0 left-0 right-0 h-px"
                 style={{ background: 'linear-gradient(90deg, transparent, rgba(42,157,174,0.5), transparent)' }} />
 
               {/* Window dots */}
-              <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-full bg-rose-400" />
                   <span className="w-3 h-3 rounded-full bg-amber-400" />
@@ -261,7 +258,7 @@ export default function HomePage() {
               <TypingPreview />
 
               {/* Mini stats */}
-              <div className="flex items-center gap-6 mt-5 pt-4 border-t border-brand-border">
+              <div className="flex items-center gap-6 mt-3 pt-3 border-t border-brand-border">
                 {[
                   { label: 'WPM', value: '72', color: 'text-brand-primary' },
                   { label: 'Accuracy', value: '98%', color: 'text-brand-accent' },
@@ -287,9 +284,9 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════
           STATS STRIP
          ══════════════════════════════════════════════════════════ */}
-      <section className="py-12 px-4 sm:px-6 border-y border-brand-border"
+      <section className="py-6 px-4 sm:px-6 border-y border-brand-border"
         style={{ background: 'var(--brand-surface)' }}>
-        <div className="max-w-[1600px] mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
           {STATS.map((s, i) => (
             <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.08 }}
@@ -307,13 +304,13 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════
           FEATURES GRID
          ══════════════════════════════════════════════════════════ */}
-      <section className="py-24 px-4 sm:px-6 mesh-bg">
-        <div className="max-w-[1600px] mx-auto">
+      <section className="py-10 sm:py-12 px-4 sm:px-6 mesh-bg">
+        <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="text-center mb-14">
+            viewport={{ once: true }} className="text-center mb-6">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3">Everything you need</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-brand-text mb-4 leading-tight">
-              One platform.<br/>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text mb-2 leading-tight">
+              One platform.{' '}
               <span className="gradient-text">Your entire typing journey.</span>
             </h2>
             <p className="text-brand-text-muted max-w-xl mx-auto">
@@ -326,17 +323,14 @@ export default function HomePage() {
               <motion.div key={f.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.07 }}>
                 <Link to={f.link}
-                  className={`group flex flex-col gap-4 p-6 rounded-2xl border border-brand-border ${f.border} hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full`}
+                  className={`group flex flex-row items-start gap-3 p-4 rounded-2xl border border-brand-border ${f.border} hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full`}
                   style={{ background: 'var(--brand-surface)' }}>
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${f.iconClass} group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ${f.iconClass} group-hover:scale-110 transition-transform duration-300`}>
                     <f.icon className="w-5 h-5" />
                   </div>
                   <div className="flex-grow">
                     <h3 className="text-base font-bold text-brand-text mb-1.5">{f.title}</h3>
                     <p className="text-brand-text-muted text-sm leading-relaxed">{f.desc}</p>
-                  </div>
-                  <div className={`flex items-center gap-1 text-xs font-bold ${f.color} opacity-0 group-hover:opacity-100 transition-all -translate-x-1 group-hover:translate-x-0`}>
-                    Get started <ChevronRight className="w-3.5 h-3.5" />
                   </div>
                 </Link>
               </motion.div>
@@ -348,15 +342,15 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════
           HOW IT WORKS
          ══════════════════════════════════════════════════════════ */}
-      <section className="py-24 px-4 sm:px-6 border-y border-brand-border" style={{ background: 'var(--brand-surface)' }}>
-        <div className="max-w-[1600px] mx-auto">
+      <section className="py-10 sm:py-12 px-4 sm:px-6 border-y border-brand-border" style={{ background: 'var(--brand-surface)' }}>
+        <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="text-center mb-14">
+            viewport={{ once: true }} className="text-center mb-6">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-cta mb-3">Simple process</p>
-            <h2 className="text-3xl sm:text-4xl font-black text-brand-text">How it works</h2>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text">How it works</h2>
           </motion.div>
 
-          <div className="grid sm:grid-cols-3 gap-8 relative">
+          <div className="grid sm:grid-cols-3 gap-5 relative">
             {/* connecting line */}
             <div className="hidden sm:block absolute top-7 left-[calc(33%+1.5rem)] right-[calc(33%+1.5rem)] h-px"
               style={{ background: 'linear-gradient(90deg, var(--brand-border), var(--brand-accent), var(--brand-border))' }} />
@@ -364,9 +358,9 @@ export default function HomePage() {
             {STEPS.map((step, i) => (
               <motion.div key={step.n} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.15 }}
-                className="flex flex-col items-center text-center gap-4">
+                className="flex flex-col items-center text-center gap-2">
                 <div className="relative">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg"
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center shadow-md"
                     style={{ background: 'linear-gradient(135deg, var(--brand-surface-2), var(--brand-surface))', border: '1px solid var(--brand-border)' }}>
                     <step.icon className="w-6 h-6 text-brand-primary" />
                   </div>
@@ -386,11 +380,11 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════
           QUICK LINKS (SEO)
          ══════════════════════════════════════════════════════════ */}
-      <section className="py-16 px-4 sm:px-6">
-        <div className="max-w-[1600px] mx-auto">
+      <section className="py-8 sm:py-10 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="text-2xl font-black text-brand-text mb-2">Popular Pages</h2>
+            viewport={{ once: true }} className="text-center mb-4">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-brand-text mb-1">Popular Pages</h2>
             <p className="text-brand-text-muted text-sm">Jump directly to what you need</p>
           </motion.div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -415,12 +409,12 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════
           TESTIMONIALS
          ══════════════════════════════════════════════════════════ */}
-      <section className="py-24 px-4 sm:px-6 border-t border-brand-border mesh-bg">
-        <div className="max-w-[1600px] mx-auto">
+      <section className="py-10 sm:py-12 px-4 sm:px-6 border-t border-brand-border mesh-bg">
+        <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="text-center mb-14">
+            viewport={{ once: true }} className="text-center mb-6">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3">Social proof</p>
-            <h2 className="text-3xl sm:text-4xl font-black text-brand-text">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text">
               Loved by typists <span className="gradient-text-cta">across India</span>
             </h2>
           </motion.div>
@@ -429,7 +423,7 @@ export default function HomePage() {
             {TESTIMONIALS.map((t, i) => (
               <motion.div key={t.name} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                className="rounded-2xl p-6 glass-card flex flex-col gap-4">
+                className="rounded-2xl p-4 glass-card flex flex-col gap-3">
                 <div className="flex gap-0.5">
                   {Array.from({ length: t.rating }).map((_, j) => (
                     <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -449,10 +443,10 @@ export default function HomePage() {
       {/* ══════════════════════════════════════════════════════════
           CTA BANNER
          ══════════════════════════════════════════════════════════ */}
-      <section className="py-20 px-4 sm:px-6">
+      <section className="py-8 sm:py-10 px-4 sm:px-6">
         <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="container mx-auto max-w-3xl rounded-3xl p-10 sm:p-16 text-center text-white relative overflow-hidden shadow-2xl"
+          className="container mx-auto max-w-3xl rounded-2xl p-6 sm:p-8 text-center text-white relative overflow-hidden shadow-2xl"
           style={{ background: 'linear-gradient(135deg, #304C53 0%, #2A6A78 50%, #1E4F5C 100%)' }}>
 
           {/* Decorative blobs inside banner */}
@@ -463,24 +457,24 @@ export default function HomePage() {
           <div className="absolute inset-0 dot-grid opacity-[0.06]" />
 
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs font-bold uppercase tracking-widest mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs font-bold uppercase tracking-widest mb-3">
               <Award className="w-3.5 h-3.5" /> 100% Free Forever
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4 leading-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold mb-2 leading-tight">
               Start typing smarter today
             </h2>
-            <p className="text-white/70 mb-10 max-w-xl mx-auto leading-relaxed">
+            <p className="text-white/70 mb-5 max-w-xl mx-auto leading-relaxed">
               Join thousands of students and professionals who improved their typing speed.
               No signup required to take your first test.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link to="/tests/"
-                className="inline-flex items-center gap-2.5 bg-white font-bold px-8 py-4 rounded-2xl text-base transition-all w-full sm:w-auto justify-center hover:bg-white/90 active:scale-95 shadow-xl"
+                className="inline-flex items-center gap-2.5 bg-white font-bold px-6 py-3 rounded-xl text-sm transition-all w-full sm:w-auto justify-center hover:bg-white/90 active:scale-95 shadow-xl"
                 style={{ color: '#304C53' }}>
                 <Zap className="w-5 h-5" /> Take a Free Test
               </Link>
               <Link to="/competitive-exam-typing/"
-                className="inline-flex items-center gap-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl text-base transition-all w-full sm:w-auto justify-center active:scale-95">
+                className="inline-flex items-center gap-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all w-full sm:w-auto justify-center active:scale-95">
                 <Target className="w-5 h-5" /> Exam Prep
               </Link>
             </div>
