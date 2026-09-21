@@ -187,10 +187,10 @@ export default function DashboardPage() {
         </AnimatePresence>
 
         {/* ── Header ── */}
-        <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-brand-text">Your Dashboard</h1>
-            <p className="text-brand-text-muted text-sm mt-1">Track your progress, earn XP, unlock achievements</p>
+            <h1 className="text-2xl sm:text-[28px] font-extrabold text-brand-text">Your Dashboard</h1>
+            <p className="text-brand-text-muted text-sm mt-0.5">Track your progress, earn XP, unlock achievements</p>
           </div>
           <div className="flex gap-2">
             {!rewardClaimed ? (
@@ -211,15 +211,15 @@ export default function DashboardPage() {
         </div>
 
         {/* ── Level + XP Bar ── */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 sm:p-4 mb-6">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 sm:p-4 mb-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white font-black text-xl shadow-lg shadow-brand-primary/30">
                 {stats.level}
               </div>
               <div>
                 <div className="text-xs text-brand-muted uppercase tracking-widest font-semibold">Level {stats.level}</div>
-                <div className="text-xl font-black text-brand-text">{levelTitle}</div>
+                <div className="text-lg font-extrabold text-brand-text leading-tight">{levelTitle}</div>
                 <div className="text-xs text-brand-muted">{stats.xp} total XP</div>
               </div>
             </div>
@@ -231,7 +231,7 @@ export default function DashboardPage() {
                 { label: 'Streak', value: `${stats.streak}d`, icon: Flame, color: 'text-orange-500' },
               ].map(s => (
                 <div key={s.label}>
-                  <div className={`text-2xl font-black font-mono ${s.color}`}>{s.value}</div>
+                  <div className={`text-xl font-extrabold font-mono ${s.color}`}>{s.value}</div>
                   <div className="text-[10px] text-brand-muted uppercase tracking-wider">{s.label}</div>
                 </div>
               ))}
@@ -240,10 +240,10 @@ export default function DashboardPage() {
           {/* XP bar */}
           <div className="space-y-1.5">
             <div className="flex justify-between text-xs text-brand-muted">
-              <span>Level {stats.level} — {levelTitle}</span>
               <span>{stats.xpIntoLevel || 0} / {stats.xpNeeded || 200} XP</span>
+              <span>{xpPercent}% to Level {stats.level + 1}</span>
             </div>
-            <div className="h-2.5 bg-brand-surface-2 rounded-full overflow-hidden">
+            <div className="h-2 bg-brand-surface-2 rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-gradient-to-r from-brand-primary to-brand-secondary rounded-full"
                 initial={{ width: 0 }}
@@ -251,12 +251,11 @@ export default function DashboardPage() {
                 transition={{ duration: 1, ease: 'easeOut' }}
               />
             </div>
-            <div className="text-xs text-brand-muted text-right">{xpPercent}% to Level {stats.level + 1}</div>
           </div>
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex gap-1 bg-brand-surface-2 rounded-xl p-1 mb-6 w-fit">
+        <div className="flex gap-1 bg-brand-surface-2 rounded-xl p-1 mb-3 w-fit">
           {(['overview', 'history', 'achievements', 'coach'] as const).map(t => (
             <button key={t} onClick={() => { setTab(t); if (t === 'coach' && !aiCoach) fetchAICoach(); }}
               className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all capitalize ${
@@ -269,7 +268,7 @@ export default function DashboardPage() {
 
         {/* ── OVERVIEW TAB ── */}
         {tab === 'overview' && (
-          <div className="space-y-6">
+          <div className="space-y-3">
             {/* Streak + daily goal */}
             <StreakCard />
 
@@ -282,7 +281,7 @@ export default function DashboardPage() {
             {/* WPM Chart */}
             {chartData.length >= 2 ? (
               <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
-                <h2 className="font-bold text-brand-text mb-4 flex items-center gap-2">
+                <h2 className="font-bold text-brand-text mb-2 flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-brand-primary" /> WPM Progress
                 </h2>
                 <ResponsiveContainer width="100%" height={180}>
@@ -314,7 +313,7 @@ export default function DashboardPage() {
             {/* Recent unlocks */}
             {stats.unlockedKeys.length > 0 && (
               <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
-                <h2 className="font-bold text-brand-text mb-4 flex items-center gap-2">
+                <h2 className="font-bold text-brand-text mb-2 flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-400" /> Recent Achievements
                 </h2>
                 <div className="flex flex-wrap gap-3">

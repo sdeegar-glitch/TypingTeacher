@@ -54,49 +54,49 @@ export default function TestConfigPage() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-bg flex items-center justify-center p-4">
+    <div className="bg-brand-bg flex justify-center px-4 py-4 sm:py-6">
       <Seo
         title={`Choose Duration — ${test.title} | FastTypingLab`}
         description="Pick a test duration to start your typing test."
         noindex
       />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-lg">
+        className="w-full max-w-2xl">
 
         {/* Back */}
         <button onClick={() => navigate('/tests')}
-          className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm font-medium transition-colors mb-6 group">
+          className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text text-sm font-medium transition-colors mb-3 group">
           <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" /> Back to Tests
         </button>
 
         {/* Card */}
-        <div className="glass-card rounded-3xl overflow-hidden shadow-2xl">
+        <div className="glass-card rounded-2xl overflow-hidden shadow-lg">
           {/* Top accent bar */}
           <div className="h-1" style={{ background: 'linear-gradient(90deg,#304C53,#2A9DAE,#BC6C50)' }} />
 
-          <div className="p-8">
+          <div className="p-4 sm:p-5">
             {/* Test info */}
-            <div className="text-center mb-8">
-              <div className="w-12 h-12 rounded-2xl icon-teal flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="w-6 h-6" />
+            <div className="text-center mb-4">
+              <div className="w-9 h-9 rounded-lg icon-teal flex items-center justify-center mx-auto mb-2">
+                <BookOpen className="w-5 h-5" />
               </div>
-              <h2 className="text-xl sm:text-2xl font-black text-brand-text mb-3 tracking-tight leading-snug">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-brand-text mb-2 tracking-tight leading-snug">
                 {test.title}
-              </h2>
-              <div className="flex flex-wrap justify-center gap-2 mb-5">
+              </h1>
+              <div className="flex flex-wrap justify-center gap-2 mb-3">
                 {[
                   { icon: BookOpen, label: `${test.word_count || 1000} words` },
                   { icon: Zap,      label: test.difficulty_level || 'Medium' },
                   { icon: Clock,    label: test.category || 'Typing' },
                 ].map(b => (
                   <span key={b.label}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-brand-muted bg-brand-surface-2 border border-brand-border px-3 py-1.5 rounded-full">
+                    className="flex items-center gap-1.5 text-xs font-semibold text-brand-muted bg-brand-surface-2 border border-brand-border px-2.5 py-1 rounded-full">
                     <b.icon className="w-3 h-3" />{b.label}
                   </span>
                 ))}
               </div>
               {test.excerpt && (
-                <p className="text-brand-text-muted text-sm italic leading-relaxed border-l-2 border-brand-accent pl-4 py-1 text-left max-w-md mx-auto"
+                <p className="text-brand-text-muted text-sm italic leading-snug border-l-2 border-brand-accent pl-3 py-0.5 text-left max-w-xl mx-auto line-clamp-3"
                   style={{ borderColor: 'var(--brand-accent)' }}>
                   "{test.excerpt}"
                 </p>
@@ -104,11 +104,11 @@ export default function TestConfigPage() {
             </div>
 
             {/* Duration cards */}
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-muted mb-3">Select Duration</p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            <p className="text-xs font-bold uppercase tracking-widest text-brand-muted mb-2">Select Duration</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
               {DURATION_OPTIONS.map(opt => (
                 <button key={opt.value} onClick={() => startTest(opt.value)}
-                  className="flex flex-col items-center gap-1 py-4 rounded-2xl border font-bold text-sm transition-all duration-200 hover:shadow-lg active:scale-95 group"
+                  className="flex flex-col items-center gap-0.5 py-2.5 rounded-xl border font-bold text-sm transition-all duration-200 hover:shadow-lg active:scale-95 group"
                   style={{ background: 'var(--brand-surface-2)', borderColor: 'var(--brand-border)' }}
                   onMouseEnter={e => {
                     (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg,#304C53,#2A9DAE)';
