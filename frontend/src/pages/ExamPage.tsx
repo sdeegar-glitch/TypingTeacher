@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import CertificateButton from '../components/CertificateButton';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Clock, Zap, Target, Award, RotateCcw, CheckCircle, XCircle, Trophy, Shield } from 'lucide-react';
+import { ChevronLeft, Clock, Zap, Target, Award, RotateCcw, CheckCircle, XCircle, Shield } from 'lucide-react';
 import { saveSession } from '../lib/api';
 import type { ScoringProfile } from '../lib/typingScoring';
 import ExamTypingInterface, { type ExamResult } from '../components/ExamTypingInterface';
@@ -247,12 +248,7 @@ export default function ExamPage() {
               className={`flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-white shadow-lg ${exam.language === 'Hindi' ? 'bg-gradient-to-r from-orange-600 to-amber-600' : 'bg-gradient-to-r from-blue-600 to-indigo-600'}`}>
               <RotateCcw className="w-4 h-4" /> Try Again
             </button>
-            {passed && (
-              <Link to={`/certificate?wpm=${wpm}&acc=${accuracy}&title=${encodeURIComponent(exam.title + ' Test')}`}
-                className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500/20 transition-all">
-                <Trophy className="w-4 h-4" /> Certificate
-              </Link>
-            )}
+            <CertificateButton wpm={wpm} accuracy={accuracy} seconds={result?.elapsedSec || exam.duration} className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500/20 transition-all" />
             <button onClick={restart} className="px-5 py-3.5 rounded-xl font-bold bg-white/5 border border-white/10 text-white/50 hover:text-white/80 hover:bg-white/10 transition-all">
               <Award className="w-4 h-4" />
             </button>

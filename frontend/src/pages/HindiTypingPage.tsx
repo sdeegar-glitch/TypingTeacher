@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import CertificateButton from '../components/CertificateButton';
 import Seo from '../components/Seo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, RotateCcw, Award, Languages } from 'lucide-react';
+import { ChevronLeft, RotateCcw, Languages } from 'lucide-react';
 import { saveSession } from '../lib/api';
 import ClusterText from '../components/ClusterText';
 import { useTypingEngineV2 } from '../hooks/useTypingEngineV2';
@@ -175,10 +176,7 @@ export default function HindiTypingPage() {
                 <button onClick={reset} className="flex items-center gap-2 bg-brand-primary text-white px-6 py-2.5 rounded-xl font-bold hover:bg-brand-secondary transition-all">
                   <RotateCcw className="w-4 h-4" /> Try Again
                 </button>
-                <Link to={`/certificate?wpm=${wpm}&acc=${accuracy}&title=Hindi+Typing+Test`}
-                  className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-500 px-6 py-2.5 rounded-xl font-bold hover:bg-amber-500/20 transition-all">
-                  <Award className="w-4 h-4" /> Certificate
-                </Link>
+                <CertificateButton wpm={wpm} accuracy={accuracy} seconds={done?.elapsedSeconds ?? 0} className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-500 px-6 py-2.5 rounded-xl font-bold hover:bg-amber-500/20 transition-all" />
               </div>
             </motion.div>
           )}

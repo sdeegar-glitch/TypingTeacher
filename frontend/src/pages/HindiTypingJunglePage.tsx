@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import CertificateButton from '../components/CertificateButton';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Award, Languages } from 'lucide-react';
@@ -384,11 +385,7 @@ export default function HindiTypingJunglePage() {
                   className="flex-1 bg-brand-surface-2 hover:bg-brand-border text-brand-text py-3 rounded-xl font-bold text-sm transition-all border border-brand-border flex items-center justify-center gap-2">
                   <RotateCcw className="w-4 h-4" /> फिर करें
                 </button>
-                <Link to={`/certificate?wpm=${stats.netWpm}&acc=${stats.accuracy}&title=${encodeURIComponent('हिंदी टाइपिंग जंगल')}`}
-                  className="flex-1 py-3 rounded-xl font-bold text-sm text-white text-center transition-all hover:opacity-90 active:scale-95"
-                  style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.25)' }}>
-                  प्रमाण पत्र
-                </Link>
+                <CertificateButton wpm={stats.netWpm} accuracy={stats.accuracy} seconds={stats.elapsedSeconds} label="प्रमाण पत्र" disabledLabel="प्रमाण पत्र के योग्य नहीं" className="flex-1 py-3 rounded-xl font-bold text-sm text-white text-center bg-[linear-gradient(135deg,#BC6C50,#CC7B5D)] flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-95" />
               </div>
               <Link to="/hindi-typing-test/"
                 className="mt-2 w-full flex items-center justify-center gap-2 text-brand-muted hover:text-brand-primary text-sm font-semibold transition-colors">

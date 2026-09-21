@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
+import CertificateButton from '../components/CertificateButton';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, RotateCcw, Award, Target, MessageCircle, Send, X } from 'lucide-react';
+import { ChevronLeft, RotateCcw, Target, MessageCircle, Send, X } from 'lucide-react';
 import Seo from '../components/Seo';
 import PassageComparison from '../components/results/PassageComparison';
 import { readTypingResult } from '../lib/typingResult';
@@ -187,12 +188,7 @@ export default function TypingReportPage() {
           >
             <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" /> Telegram
           </a>
-          <Link
-            to={`/certificate?wpm=${result.netWpm}&acc=${result.accuracy}&title=${encodeURIComponent(result.testTitle)}`}
-            className="flex-1 flex items-center justify-center gap-1.5 border border-brand-border text-brand-muted hover:text-brand-primary px-2 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors"
-          >
-            <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" /> Certificate
-          </Link>
+          <CertificateButton wpm={result.netWpm} accuracy={result.accuracy} seconds={result.elapsedSeconds} disabledLabel="Not qualified" className="flex-1 flex items-center justify-center gap-1.5 border border-brand-border text-brand-muted hover:text-brand-primary px-2 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors" />
           <Link
             to="/typing-test/"
             className="flex-1 flex items-center justify-center gap-1.5 text-white px-2 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all hover:opacity-90"
