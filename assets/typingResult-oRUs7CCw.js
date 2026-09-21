@@ -1,0 +1,1 @@
+var e=`ftl_last_result`;function t(t){try{sessionStorage.setItem(e,JSON.stringify(t))}catch{}}function n(){try{let t=sessionStorage.getItem(e);if(!t)return null;let n=JSON.parse(t);return typeof n?.passage!=`string`||typeof n?.typed!=`string`?null:n}catch{return null}}export{t as n,n as t};
