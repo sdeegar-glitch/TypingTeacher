@@ -1,9 +1,12 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Seo from '../components/Seo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, RotateCcw, Trophy, Award, Languages } from 'lucide-react';
+import { ChevronLeft, RotateCcw, Award, Languages } from 'lucide-react';
 import { saveSession } from '../lib/api';
+import ClusterText from '../components/ClusterText';
+import { useTypingEngineV2 } from '../hooks/useTypingEngineV2';
+import type { TypingStats } from '../hooks/useTypingEngine';
 
 const HINDI_PASSAGES = [
   'भारत एक विशाल और विविधता से भरा देश है। यहाँ अनेक भाषाएँ, धर्म और संस्कृतियाँ एक साथ फलती-फूलती हैं। भारतीय संविधान ने सभी नागरिकों को समान अधिकार और स्वतंत्रता प्रदान की है।',
@@ -13,22 +16,40 @@ const HINDI_PASSAGES = [
   'शिक्षा प्रत्येक नागरिक का मौलिक अधिकार है। सरकार ने प्राथमिक शिक्षा को अनिवार्य और निःशुल्क बनाया है। बच्चों को गुणवत्तापूर्ण शिक्षा मिलनी चाहिए ताकि वे देश का भविष्य संवार सकें।',
 ];
 
-function countChars(str: string) { return str.length; }
-
 export default function HindiTypingPage() {
   const [passageIdx] = useState(() => Math.floor(Math.random() * HINDI_PASSAGES.length));
   const passage = HINDI_PASSAGES[passageIdx];
-  const [typed, setTyped] = useState('');
-  const [started, setStarted] = useState(false);
-  const [finished, setFinished] = useState(false);
-  const [startTime, setStartTime] = useState(0);
   const [timeMode, setTimeMode] = useState<60|120|300>(60);
-  const [timeLeft, setTimeLeft] = useState(60);
-  const [mistakes, setMistakes] = useState(0);
-  const [wpm, setWpm] = useState(0);
-  const [accuracy, setAccuracy] = useState(100);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval>>();
+  const [done, setDone] = useState<TypingStats | null>(null);
+
+  // Shared v2 engine: hidden textarea reads the text (OS Hindi keyboard, IME, phone
+  // keyboard or built-in INSCRIPT), one timer and one scoring formula.
+  const engine = useTypingEngineV2(passage, timeMode, (final) => {
+    setDone(final);
+    try {
+      const hist = JSON.parse(localStorage.getItem('typingHistory') || '[]');
+      hist.push({ netWpm: final.netWpm, accuracy: final.accuracy, lang: 'hindi', date: new Date().toISOString() });
+      localStorage.setItem('typingHistory', JSON.stringify(hist));
+    } catch {}
+    saveSession({
+      duration: final.elapsedSeconds,
+      gross_wpm: final.wpm,
+      net_wpm: final.netWpm,
+      errors: final.errors,
+      accuracy: final.accuracy,
+      lang: 'hindi',
+      key_stats: engine.getKeyStats(),
+      engine_version: 'v2',
+      input_method: engine.inputMethod,
+    });
+  }, { enabled: true, mangal: true, onRestart: () => reset() });
+  const { stats, userInput: typed, mistakes: wrongIdx, skipped } = engine;
+  const started = stats.isActive || stats.isFinished;
+  const finished = stats.isFinished;
+  const timeLeft = stats.timeLeft;
+  const wpm = done?.netWpm ?? stats.netWpm;
+  const accuracy = done?.accuracy ?? stats.accuracy;
+  const mistakes = done?.errors ?? stats.errors;
 
   useEffect(() => {
     document.title = 'Hindi Typing Test — Unicode | FastTypingLab';
@@ -40,81 +61,14 @@ export default function HindiTypingPage() {
     return () => { document.head.removeChild(link); };
   }, []);
 
-  const finish = useCallback(() => {
-    setFinished(true);
-    clearInterval(timerRef.current);
-    const elapsed = (Date.now() - startTime) / 60000;
-    const chars = countChars(typed);
-    const calculatedWpm = elapsed > 0 ? Math.round(chars / 5 / elapsed) : 0;
-    const errPct = typed.length > 0 ? Math.round(((typed.length - mistakes) / typed.length) * 100) : 100;
-    setWpm(calculatedWpm);
-    setAccuracy(errPct);
-    try {
-      const hist = JSON.parse(localStorage.getItem('typingHistory') || '[]');
-      hist.push({ netWpm: calculatedWpm, accuracy: errPct, lang: 'hindi', date: new Date().toISOString() });
-      localStorage.setItem('typingHistory', JSON.stringify(hist));
-    } catch {}
-    saveSession({
-      duration: Math.round(elapsed * 60),
-      gross_wpm: calculatedWpm,
-      net_wpm: calculatedWpm,
-      errors: mistakes,
-      accuracy: errPct,
-      lang: 'hindi',
-    });
-  }, [startTime, typed, mistakes]);
-
-  const startTimer = (mode: number) => {
-    clearInterval(timerRef.current);
-    let t = mode;
-    setTimeLeft(t);
-    timerRef.current = setInterval(() => {
-      t--;
-      setTimeLeft(t);
-      if (t <= 0) { clearInterval(timerRef.current); finish(); }
-    }, 1000);
-  };
-
-  const handleType = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const val = e.target.value;
-    if (!started) {
-      setStarted(true);
-      setStartTime(Date.now());
-      startTimer(timeMode);
-    }
-    if (finished) return;
-    // Count mistakes
-    let err = 0;
-    for (let i = 0; i < val.length; i++) {
-      if (i < passage.length && val[i] !== passage[i]) err++;
-    }
-    setMistakes(err);
-    setTyped(val.slice(0, passage.length));
-    if (val.length >= passage.length) finish();
-    // Live WPM
-    const elapsed = (Date.now() - startTime) / 60000;
-    if (elapsed > 0) setWpm(Math.round(val.length / 5 / elapsed));
-    setAccuracy(val.length > 0 ? Math.round(((val.length - err) / val.length) * 100) : 100);
-  };
-
   const reset = () => {
-    clearInterval(timerRef.current);
-    setTyped(''); setStarted(false); setFinished(false);
-    setWpm(0); setAccuracy(100); setMistakes(0);
-    setTimeLeft(timeMode);
-    textareaRef.current?.focus();
+    engine.reset();
+    setDone(null);
+    setTimeout(() => engine.focus(), 50);
   };
 
-  const progress = passage.length > 0 ? Math.round((typed.length / passage.length) * 100) : 0;
+  const progress = stats.progress;
   const formattedTime = `${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, '0')}`;
-
-  // Render colored passage
-  const renderPassage = () => passage.split('').map((ch, i) => {
-    let cls = 'text-brand-muted';
-    if (i < typed.length) cls = typed[i] === ch ? 'text-brand-accent' : 'text-rose-400 bg-rose-500/20 rounded-sm';
-    else if (i === typed.length) cls = 'text-brand-text border-b-2 border-brand-primary';
-    return <span key={i} className={cls}>{ch}</span>;
-  });
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
@@ -137,7 +91,7 @@ export default function HindiTypingPage() {
         {!started && (
           <div className="flex gap-2 mb-5">
             {([60, 120, 300] as const).map(m => (
-              <button key={m} onClick={() => { setTimeMode(m); setTimeLeft(m); }}
+              <button key={m} onClick={() => setTimeMode(m)}
                 className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all ${timeMode === m ? 'bg-brand-primary text-white border-brand-primary' : 'bg-brand-surface border-brand-border text-brand-muted hover:text-brand-text'}`}>
                 {m === 60 ? '1 min' : m === 120 ? '2 min' : '5 min'}
               </button>
@@ -173,25 +127,26 @@ export default function HindiTypingPage() {
         {/* Passage display */}
         <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-4">
           <p className="text-xl leading-9 select-none" style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>
-            {renderPassage()}
+            <ClusterText text={passage} typedLength={typed.length} mistakes={wrongIdx} skipped={skipped} currentIndex={typed.length} />
           </p>
         </div>
 
-        {/* Typing area */}
+        {/* Typing area: the real input is a hidden textarea owned by the engine */}
         {!finished && (
-          <textarea
-            ref={textareaRef}
-            value={typed}
-            onChange={handleType}
-            disabled={finished}
-            placeholder="यहाँ टाइप करना शुरू करें…"
-            rows={4}
-            autoFocus
-            spellCheck={false}
-            autoComplete="off"
-            className="w-full bg-brand-surface border-2 border-brand-border focus:border-brand-primary rounded-2xl px-5 py-4 text-brand-text text-lg outline-none resize-none transition-all"
-            style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}
-          />
+          <div
+            onClick={() => engine.focus()}
+            className="w-full min-h-[7rem] bg-brand-surface border-2 border-brand-border focus-within:border-brand-primary rounded-2xl px-5 py-4 text-brand-text text-lg cursor-text whitespace-pre-wrap break-words transition-all"
+            style={{ fontFamily: "'Noto Sans Devanagari', sans-serif" }}>
+            <textarea {...engine.inputProps} />
+            {typed || engine.composing ? (
+              <>
+                {typed}
+                {engine.composing && <span className="text-brand-muted underline">{engine.composing}</span>}
+              </>
+            ) : (
+              <span className="text-brand-muted">यहाँ टाइप करना शुरू करें…</span>
+            )}
+          </div>
         )}
 
         {/* Result */}

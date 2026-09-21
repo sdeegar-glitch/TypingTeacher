@@ -7,6 +7,7 @@ import { getFingerForKey } from '../utils/KeyboardLayout';
 
 import { ENGLISH_LESSON_MAP } from '../data/englishLessons';
 import Seo from '../components/Seo';
+import { minutesFor } from '../lib/typingScoring';
 
 const lessonData = ENGLISH_LESSON_MAP;
 
@@ -120,7 +121,7 @@ const LearningInterfacePage = () => {
   useEffect(() => {
     if (userInput.length === targetContent.length && userInput.length > 0) {
       setIsFinished(true);
-      const timeElapsed = (Date.now() - (startTime || Date.now())) / 60000;
+      const timeElapsed = minutesFor((Date.now() - (startTime || Date.now())) / 1000);
       const finalNetWpm = Math.max(0, Math.round(((userInput.length - mistakes.length) / 5) / timeElapsed));
       const finalAccuracy = Math.round(((userInput.length - mistakes.length) / userInput.length) * 100);
 
