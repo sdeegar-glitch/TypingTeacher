@@ -1,0 +1,1 @@
+var e={minWpm:30,minAccuracy:85,minSeconds:300};function t(t,n,r){let i=[];return t<e.minWpm&&i.push(`speed ${t} of ${e.minWpm} WPM`),n<e.minAccuracy&&i.push(`accuracy ${Math.round(n)}% of ${e.minAccuracy}%`),r<e.minSeconds&&i.push(`test ${Math.floor(r/60)} of ${e.minSeconds/60} min`),i}export{t as n,e as t};
