@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, RotateCcw, Star, Keyboard, Zap } from 'lucide-react';
@@ -9,6 +9,10 @@ import {
   loadHindiProgress,
 } from '../data/hindiLessons';
 import Seo from '../components/Seo';
+import ClusterText from '../components/ClusterText';
+import { useTextInputEngine } from '../hooks/useTextInputEngine';
+import { mistakeIndices } from '../lib/typingReducer';
+import { minutesFor } from '../lib/typingScoring';
 import RelatedLinks from '../components/RelatedLinks';
 
 const DEVA_FONT = "'Noto Sans Devanagari', sans-serif";
@@ -29,8 +33,6 @@ export default function HindiLessonPage() {
       || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   }, []);
 
-  const [userInput, setUserInput] = useState('');
-  const [mistakes, setMistakes] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [isFinished, setIsFinished] = useState(false);
   const [wpm, setWpm] = useState(0);
@@ -38,11 +40,20 @@ export default function HindiLessonPage() {
   const [elapsed, setElapsed] = useState(0);
   const [pressedKey, setPressedKey] = useState('');
   const [earnedStars, setEarnedStars] = useState(0);
-  const hiddenRef = useRef<HTMLInputElement>(null);
-  const [mobileVal, setMobileVal] = useState('');
-  const lastMobileRef = useRef('');
 
   const target = lesson.content;
+
+  // Shared v2 engine: hidden textarea reads the text (OS Hindi keyboard, IME, phone
+  // keyboard, or built-in INSCRIPT incl. ligature keys such as क्ष).
+  const engine = useTextInputEngine({
+    text: target,
+    options: { skipWordOnSpace: false, strict: false },
+    mangal: true,
+    disabled: isFinished,
+    onStart: () => setStartTime(Date.now()),
+  });
+  const userInput = engine.state.typed;
+  const mistakes = useMemo(() => mistakeIndices(engine.state), [engine.state]);
   const savedProgress = useMemo(() => loadHindiProgress()[id], [id]);
   const unlocked = isHindiLessonUnlocked(id);
 
@@ -68,18 +79,13 @@ export default function HindiLessonPage() {
     return () => clearInterval(t);
   }, [startTime, isFinished]);
 
-  // Auto-focus mobile
-  useEffect(() => {
-    if (isMobile) setTimeout(() => hiddenRef.current?.focus(), 300);
-  }, [isMobile]);
-
   // Finish detection
   useEffect(() => {
     if (userInput.length !== target.length || userInput.length === 0) return;
     setIsFinished(true);
-    const mins = (Date.now() - (startTime || Date.now())) / 60000;
-    const gross = Math.round((userInput.length / 5) / Math.max(mins, 0.01));
-    const net = Math.max(0, Math.round(((userInput.length - mistakes.length) / 5) / Math.max(mins, 0.01)));
+    const mins = minutesFor((Date.now() - (startTime || Date.now())) / 1000);
+    const gross = Math.round((userInput.length / 5) / mins);
+    const net = Math.max(0, Math.round(((userInput.length - mistakes.length) / 5) / mins));
     const acc = Math.round(((userInput.length - mistakes.length) / userInput.length) * 100);
     setWpm(gross); setNetWpm(net);
 
@@ -98,63 +104,28 @@ export default function HindiLessonPage() {
   // Live WPM
   useEffect(() => {
     if (!startTime || isFinished || userInput.length === 0) return;
-    const mins = (Date.now() - startTime) / 60000;
-    setWpm(Math.round((userInput.length / 5) / Math.max(mins, 0.01)));
-    setNetWpm(Math.max(0, Math.round(((userInput.length - mistakes.length) / 5) / Math.max(mins, 0.01))));
+    const mins = minutesFor((Date.now() - startTime) / 1000);
+    setWpm(Math.round((userInput.length / 5) / mins));
+    setNetWpm(Math.max(0, Math.round(((userInput.length - mistakes.length) / 5) / mins)));
   }, [userInput, startTime, isFinished, mistakes.length]);
 
-  const processChar = useCallback((ch: string) => {
-    if (isFinished) return;
-    if (!startTime) setStartTime(Date.now());
-    setUserInput(prev => {
-      if (prev.length >= target.length) return prev;
-      if (ch !== target[prev.length]) setMistakes(m => [...m, prev.length]);
-      setPressedKey(ch);
-      setTimeout(() => setPressedKey(''), 150);
-      return prev + ch;
-    });
-  }, [isFinished, startTime, target]);
-
-  const processBackspace = useCallback(() => {
-    if (isFinished) return;
-    setUserInput(prev => {
-      const newLen = prev.length - 1;
-      setMistakes(m => m.filter(i => i < newLen));
-      return prev.slice(0, newLen);
-    });
-  }, [isFinished]);
-
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (isFinished) return;
-    const skip = ['Shift','Control','Alt','Meta','CapsLock','Tab','Escape','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'];
-    if (skip.includes(e.key) || e.ctrlKey || e.metaKey) return;
-    if (e.key === ' ') e.preventDefault();
-    if (e.key === 'Backspace') processBackspace();
-    else if (e.key.length === 1) processChar(e.key);
-  }, [isFinished, processChar, processBackspace]);
-
+  // Virtual-keyboard highlight: last typed character for 150 ms.
+  const prevLen = useRef(0);
   useEffect(() => {
-    if (!isMobile) {
-      window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [handleKeyDown, isMobile]);
-
-  const handleMobileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isFinished) return;
-    const nv = e.target.value;
-    const prev = lastMobileRef.current;
-    if (nv.length > prev.length) for (const ch of nv.slice(prev.length)) processChar(ch);
-    else for (let i = 0; i < prev.length - nv.length; i++) processBackspace();
-    lastMobileRef.current = nv;
-    setMobileVal(nv);
-  }, [isFinished, processChar, processBackspace]);
+    const len = userInput.length;
+    const before = prevLen.current;
+    prevLen.current = len;
+    if (len <= before) return;
+    setPressedKey(userInput[len - 1] ?? '');
+    const t = setTimeout(() => setPressedKey(''), 150);
+    return () => clearTimeout(t);
+  }, [userInput]);
 
   const reset = () => {
-    setUserInput(''); setMistakes([]); setStartTime(null); setIsFinished(false);
+    engine.reset();
+    setStartTime(null); setIsFinished(false);
     setWpm(0); setNetWpm(0); setElapsed(0); setEarnedStars(0);
-    setMobileVal(''); lastMobileRef.current = '';
-    if (isMobile) setTimeout(() => hiddenRef.current?.focus(), 100);
+    setTimeout(() => engine.focus(), 100);
   };
 
   const nextChar = target[userInput.length] || '';
@@ -163,40 +134,19 @@ export default function HindiLessonPage() {
   const formattedTime = `${Math.floor(elapsed / 60)}:${String(elapsed % 60).padStart(2, '0')}`;
   const canPass = netWpm >= lesson.minWpm && accuracy >= 90;
 
-  // Render text with coloring
-  const renderText = () => target.split('').map((ch, i) => {
-    const correct = i < userInput.length && !mistakes.includes(i);
-    const error   = i < userInput.length && mistakes.includes(i);
-    const caret   = i === userInput.length;
-    return (
-      <span key={i} className="relative">
-        {caret && <span className="typing-caret" aria-hidden />}
-        <span className={correct ? 'typing-correct' : error ? 'typing-error' : caret ? 'typing-current' : 'typing-upcoming'}>
-          {ch}
-        </span>
-      </span>
-    );
-  });
-
   // Keymap hint entries
   const keymapEntries = Object.entries(lesson.keymapHint).slice(0, 8);
 
   return (
     <div className="h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none"
-      onClick={() => isMobile && hiddenRef.current?.focus()}
+      onClick={() => engine.focus()}
       style={{ fontFamily: 'Inter, sans-serif' }}>
       <Seo
         title={`${lesson.title} | FastTypingLab`}
         description={`Practice lesson ${id} of the Hindi typing course: ${lesson.title}. Free guided Hindi typing lesson with live WPM, accuracy and stars.`}
       />
 
-      {/* Hidden mobile input */}
-      {isMobile && (
-        <input ref={hiddenRef} type="text" value={mobileVal} onChange={handleMobileChange}
-          className="fixed opacity-0 pointer-events-none w-1 h-1 top-0 left-0 z-[-1]"
-          autoCapitalize="none" autoComplete="off" autoCorrect="off"
-          spellCheck={false} inputMode="text" aria-hidden disabled={isFinished} />
-      )}
+      <textarea {...engine.inputProps} />
 
       {/* ── TOP BAR ── */}
       <div className="shrink-0 bg-brand-surface border-b border-brand-border px-3 sm:px-6 h-14 flex items-center justify-between gap-3 z-40">
@@ -316,14 +266,14 @@ export default function HindiLessonPage() {
         {/* Typing area */}
         <div className="w-full max-w-2xl">
           <div className="relative bg-brand-surface border border-brand-border rounded-2xl px-5 sm:px-8 py-5 shadow-sm cursor-text"
-            onClick={() => isMobile && hiddenRef.current?.focus()}>
+            onClick={() => engine.focus()}>
             {startTime && !isFinished && (
               <div className="absolute top-0 left-0 right-0 h-px"
                 style={{ background: 'linear-gradient(90deg,transparent,rgba(188,108,80,.5),transparent)' }} />
             )}
             <div className="text-xl sm:text-2xl leading-[3.5rem] break-words overflow-y-auto"
               style={{ fontFamily: DEVA_FONT, maxHeight: isMobile ? '160px' : '200px' }}>
-              {renderText()}
+              <ClusterText text={target} typedLength={userInput.length} mistakes={new Set(mistakes)} skipped={new Set()} currentIndex={userInput.length} />
             </div>
             {!startTime && !isFinished && (
               <div className="absolute bottom-3 right-4 text-[10px] text-brand-muted/50 pointer-events-none select-none flex items-center gap-1" style={{ fontFamily: DEVA_FONT }}>
