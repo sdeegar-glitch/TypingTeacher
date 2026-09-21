@@ -75,3 +75,19 @@ describe('TypingTestPage with the new engine', () => {
     expect(ta.value).toBe(''); // the paste kill resets the run
   });
 });
+
+describe('passage highlighting', () => {
+  it('blinks the word to type and highlights the space after a finished word', () => {
+    const { container } = renderPage('?engine=v2');
+    // Before any key: the first word is the active (blinking) one.
+    expect(container.querySelectorAll('.typing-word-active').length).toBe(1);
+    const first = container.querySelector('.typing-word-active')!.textContent!;
+    // Type exactly the first word: the space after it becomes the target.
+    typeValue(input()!, first);
+    expect(container.querySelectorAll('.typing-space-active').length).toBe(1);
+    // Type the space: the next word is now active and the space highlight is gone.
+    typeValue(input()!, first + ' ');
+    expect(container.querySelectorAll('.typing-space-active').length).toBe(0);
+    expect(container.querySelector('.typing-word-active')!.textContent).not.toBe(first);
+  });
+});

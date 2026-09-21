@@ -3,6 +3,8 @@
  * feeds the on-page preview, the PNG download and the PDF download so they can
  * never disagree.
  */
+import { CERT_RULES } from './certificateRules';
+
 export interface CertificateData {
   id: string;
   username: string;
@@ -222,42 +224,78 @@ export function drawCertificate(canvas: HTMLCanvasElement, data: CertificateData
     cx, 724,
   );
 
-  // Stats
-  const stats: Array<[string, string, string]> = [
-    [String(data.wpm), 'NET WORDS / MINUTE', NAVY],
-    [`${Math.round(data.accuracy * 10) / 10}%`, 'ACCURACY', TEAL],
-    [dur || '—', 'TEST DURATION', GOLD],
+  // Requirements table: what the certificate demands vs what was achieved.
+  const rows: Array<[string, string, string]> = [
+    ['Typing speed (net words per minute)', `${CERT_RULES.minWpm} WPM`, `${data.wpm} WPM`],
+    ['Typing accuracy', `${CERT_RULES.minAccuracy}%`, `${Math.round(data.accuracy * 10) / 10}%`],
+    ['Test duration', `${CERT_RULES.minSeconds / 60} min`, dur || '-'],
   ];
-  const boxW = 380;
-  const gap = 36;
-  const startX = cx - (boxW * 3 + gap * 2) / 2;
-  stats.forEach(([value, label, color], i) => {
-    const x = startX + i * (boxW + gap);
-    ctx.fillStyle = 'rgba(18,48,58,0.05)';
-    ctx.beginPath();
-    ctx.roundRect(x, 770, boxW, 168, 22);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(184,137,59,0.55)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.fillStyle = color;
-    ctx.textAlign = 'center';
-    ctx.font = `bold 84px ${SERIF}`;
-    ctx.fillText(value, x + boxW / 2, 858);
-    ctx.fillStyle = MUTED;
-    ctx.font = `600 20px ${SANS}`;
-    spaced(ctx, label, x + boxW / 2 + 2, 902, 4);
+  const cols = [520, 230, 230, 200];
+  const tableW = cols.reduce((x, y) => x + y, 0);
+  const tx = cx - tableW / 2;
+  const ty = 758;
+  const headH = 48;
+  const rowH = 54;
+  ctx.fillStyle = NAVY;
+  ctx.beginPath();
+  ctx.roundRect(tx, ty, tableW, headH, [14, 14, 0, 0]);
+  ctx.fill();
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `600 20px ${SANS}`;
+  ctx.textAlign = 'left';
+  const heads = ['REQUIREMENT', 'MINIMUM', 'ACHIEVED', 'RESULT'];
+  let hx = tx;
+  heads.forEach((h, i) => {
+    if (i === 0) { ctx.textAlign = 'left'; spaced(ctx, h, hx + 28, ty + 31, 3); }
+    else { ctx.textAlign = 'center'; spaced(ctx, h, hx + cols[i] / 2 + 2, ty + 31, 3); }
+    hx += cols[i];
   });
+  rows.forEach((r, ri) => {
+    const y = ty + headH + ri * rowH;
+    ctx.fillStyle = ri % 2 === 0 ? 'rgba(18,48,58,0.05)' : 'rgba(18,48,58,0.09)';
+    ctx.fillRect(tx, y, tableW, rowH);
+    let x = tx;
+    ctx.fillStyle = INK;
+    ctx.font = `26px ${SERIF}`;
+    ctx.textAlign = 'left';
+    ctx.fillText(r[0], x + 28, y + 36);
+    x += cols[0];
+    ctx.textAlign = 'center';
+    ctx.fillStyle = MUTED;
+    ctx.font = `26px ${SANS}`;
+    ctx.fillText(r[1], x + cols[1] / 2, y + 36);
+    x += cols[1];
+    ctx.fillStyle = NAVY;
+    ctx.font = `bold 30px ${SANS}`;
+    ctx.fillText(r[2], x + cols[2] / 2, y + 37);
+    x += cols[2];
+    ctx.fillStyle = '#1E8A4C';
+    ctx.font = `bold 24px ${SANS}`;
+    ctx.fillText('✓ MET', x + cols[3] / 2, y + 36);
+  });
+  ctx.strokeStyle = 'rgba(184,137,59,0.7)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(tx, ty, tableW, headH + rowH * rows.length, 14);
+  ctx.stroke();
+  ctx.beginPath();
+  for (let i = 1; i < cols.length; i++) {
+    const lx = tx + cols.slice(0, i).reduce((p, q) => p + q, 0);
+    ctx.moveTo(lx, ty + headH); ctx.lineTo(lx, ty + headH + rowH * rows.length);
+  }
+  ctx.strokeStyle = 'rgba(184,137,59,0.35)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
 
   // Test + date
   ctx.fillStyle = INK;
   fitFont(ctx, data.test_title, '600', SANS, 28, 18, W - 500);
-  ctx.fillText(data.test_title, cx, 992);
+  ctx.fillText(data.test_title, cx, 1008);
   const dateStr = new Date(data.issued_at || Date.now())
     .toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
   ctx.fillStyle = MUTED;
   ctx.font = `24px ${SANS}`;
-  ctx.fillText(`Issued on ${dateStr}`, cx, 1032);
+  ctx.fillText(`Issued on ${dateStr}`, cx, 1046);
 
   // Footer: signature (left), seal (centre), QR (right)
   const footY = 1230;

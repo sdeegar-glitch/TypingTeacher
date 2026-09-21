@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef, memo } from 'react';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize, RefreshCw, Eye, EyeOff, Download } from 'lucide-react';
@@ -43,6 +43,32 @@ function getWordStatus(w: WordRange, typedLen: number, mistakes: Set<number>, sk
   if (typedLen < w.end) return hasError ? 'wrong' : 'current';
   return hasError ? 'wrong' : 'correct';
 }
+
+
+// One word of the passage plus the space after it. Memoised so a keystroke only
+// re-renders the words whose state changed. The word you must type now blinks,
+// and so does the space once the word is complete.
+type SpaceState = 'none' | 'target' | 'error' | 'done';
+const PassageWord = memo(function PassageWord({ text, status, active, space, highlightOn, activeRef, showSpace }: {
+  text: string; status: WordStatus; active: boolean; space: SpaceState; highlightOn: boolean;
+  activeRef?: React.Ref<HTMLSpanElement>; showSpace: boolean;
+}) {
+  const cls =
+    active ? 'text-brand-text font-semibold typing-word-active' :
+    status === 'correct' && highlightOn ? 'text-emerald-600 dark:text-emerald-400' :
+    status === 'wrong' && highlightOn ? 'text-rose-600 dark:text-rose-400 bg-rose-500/10 rounded-sm' :
+    status === 'current' ? 'text-brand-text' :
+    'text-brand-text-muted';
+  const spaceCls =
+    space === 'target' ? 'typing-space-active' :
+    space === 'error' && highlightOn ? 'bg-rose-500/40 rounded-sm' : '';
+  return (
+    <>
+      <span ref={activeRef} className={cls}>{text}</span>
+      {showSpace && <><span className={spaceCls}>{' '}</span><wbr /></>}
+    </>
+  );
+});
 
 const INPUT_METHOD_LABEL: Record<string, string> = {
   unknown: '-',
@@ -302,6 +328,26 @@ export default function TypingTestPage() {
   // Word ranges for the current passage, reused by both the passage box and
   // the typed-preview line below it (word-level, not character-level, feedback).
   const wordRanges = useMemo(() => splitWords(activeText), [activeText]);
+
+  // The word to type now: the first word not yet fully typed. It blinks, and the
+  // passage box scrolls so it stays visible (a 15-minute passage is many lines).
+  const activeWord = useMemo(() => {
+    const typedLen = userInput.length;
+    const i = wordRanges.findIndex(w => typedLen < w.end);
+    return i === -1 ? wordRanges.length - 1 : i;
+  }, [wordRanges, userInput.length]);
+  const passageBoxRef = useRef<HTMLDivElement>(null);
+  const activeWordRef = useRef<HTMLSpanElement>(null);
+  useLayoutEffect(() => {
+    const box = passageBoxRef.current;
+    const el = activeWordRef.current;
+    if (!box || !el) return;
+    // Keep the active line about one third from the top, like a teleprompter.
+    const target = el.offsetTop - box.clientHeight / 3; // box is the offsetParent (position: relative)
+    if (Math.abs(box.scrollTop - target) > el.offsetHeight / 2) {
+      box.scrollTo({ top: Math.max(0, target), behavior: 'auto' });
+    }
+  }, [activeWord, activeText]);
 
   // ── On-screen keyboard + hands guide (Phase-1 interface upgrade) ──
   const [showKeyboard, setShowKeyboard] = useState(() => {
@@ -826,21 +872,33 @@ export default function TypingTestPage() {
 
               {/* Text display — word-level color feedback */}
               <div
-                className="font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
+                ref={passageBoxRef}
+                className="relative font-mono tracking-wide leading-relaxed break-words overflow-y-auto"
                 style={{ maxHeight: isMobile ? '120px' : '160px', fontSize: `${a11y.fontSize}px` }}
               >
                 {wordRanges.map((w, wi) => {
-                  const status = getWordStatus(w, userInput.length, mistakes, skipped);
-                  const cls =
-                    status === 'correct' && highlightOn ? 'text-emerald-600 dark:text-emerald-400' :
-                    status === 'wrong' && highlightOn ? 'text-rose-600 dark:text-rose-400 bg-rose-500/10 rounded-sm' :
-                    status === 'current' && indicatorOn ? 'text-brand-text bg-amber-300/40 rounded-sm' :
-                    'text-brand-text-muted';
+                  const typedLen = userInput.length;
+                  const status = getWordStatus(w, typedLen, mistakes, skipped);
+                  const isActive = wi === activeWord;
+                  const isLast = wi === wordRanges.length - 1;
+                  // Space after this word: the next key to press once the word is complete.
+                  const spaceIdx = w.end;
+                  const space: 'none' | 'target' | 'error' | 'done' =
+                    isLast ? 'none'
+                    : typedLen === spaceIdx ? 'target'
+                    : typedLen > spaceIdx ? (mistakes.has(spaceIdx) || skipped.has(spaceIdx) ? 'error' : 'done')
+                    : 'none';
                   return (
-                    <span key={wi}>
-                      <span className={cls}>{w.text}</span>
-                      {wi < wordRanges.length - 1 ? ' ' : ''}
-                    </span>
+                    <PassageWord
+                      key={wi}
+                      text={w.text}
+                      status={status}
+                      active={isActive && indicatorOn}
+                      space={space}
+                      highlightOn={highlightOn}
+                      activeRef={isActive ? activeWordRef : undefined}
+                      showSpace={!isLast}
+                    />
                   );
                 })}
               </div>

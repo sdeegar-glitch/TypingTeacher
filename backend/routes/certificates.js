@@ -22,7 +22,7 @@ const issueLimiter = rateLimit({
 
 // Eligibility rules. Enforced here, against the saved session, never against
 // numbers sent by the browser.
-export const CERT_RULES = { minWpm: 35, minAccuracy: 85, minSeconds: 900 };
+export const CERT_RULES = { minWpm: 30, minAccuracy: 85, minSeconds: 300 };
 
 function qualifies(s) {
   return !!s &&

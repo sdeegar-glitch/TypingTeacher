@@ -14,7 +14,7 @@ import {
   errorCount, getKeyStats as reducerKeyStats, mistakeIndices,
   type BackspaceMode,
 } from '../lib/typingReducer';
-import { scorePractice } from '../lib/typingScoring';
+import { scorePractice, countErrorWords } from '../lib/typingScoring';
 import type { TypingEngineResult, TypingHistoryPoint, TypingStats } from './useTypingEngine';
 
 export interface TypingEngineV2Options {
@@ -83,6 +83,7 @@ export function useTypingEngineV2(
     errors,
     elapsedSeconds,
     rejectedKeystrokes: strict ? st.rejected : 0,
+    errorWords: strict ? undefined : countErrorWords(text, [...mistakeIndices(st), ...st.skipped]),
   });
   const stats: TypingStats = {
     wpm: score.grossWpm,
@@ -123,12 +124,13 @@ export function useTypingEngineV2(
         errors: errorCount(cur, strict),
         elapsedSeconds: elapsed,
         rejectedKeystrokes: strict ? cur.rejected : 0,
+        errorWords: strict ? undefined : countErrorWords(text, [...mistakeIndices(cur), ...cur.skipped]),
       });
       setHistory(h => [...h, { t: elapsed, wpm: Math.max(0, s.grossWpm), accuracy: s.accuracy }]);
       if (next <= 0) finish();
     }, 1000);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [startTime, isFinished, durationSeconds, strict, finish]);
+  }, [startTime, isFinished, durationSeconds, strict, finish, text]);
 
   // Passage completed => finish (v1 waited 50 ms; the state is already final here).
   useEffect(() => {

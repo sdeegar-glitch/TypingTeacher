@@ -4,6 +4,7 @@
  * Works on both desktop (keydown events) and mobile (hidden input).
  */
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { countErrorWords } from '../lib/typingScoring';
 
 export type TypingMode = 'timed' | 'passage';
 
@@ -113,7 +114,9 @@ export function useTypingEngine(
     const errorsCount = strictMode ? strictErrorCount : mistakes.size + skipped.size;
     const cpm = Math.round(totalChars / minutes);
     const grossWpm = Math.round((totalChars / 5) / minutes);
-    const netWpm = Math.max(0, Math.round(grossWpm - errorsCount / minutes));
+    // Standard net WPM: subtract error WORDS per minute, not error characters.
+    const errorWords = strictMode ? errorsCount : countErrorWords(text, [...mistakes, ...skipped]);
+    const netWpm = Math.max(0, Math.round(grossWpm - errorWords / minutes));
     const accuracyDenominator = strictMode ? totalChars + strictErrorCount : totalChars;
     const accuracy = accuracyDenominator > 0
       ? Math.round(((accuracyDenominator - errorsCount) / accuracyDenominator) * 100)

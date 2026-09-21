@@ -239,6 +239,12 @@ export interface PracticeScoreInput {
   elapsedSeconds: number;
   /** Strict mode counts rejected keystrokes in the accuracy denominator. */
   rejectedKeystrokes?: number;
+  /**
+   * Words containing at least one error. Net WPM subtracts error WORDS per minute
+   * (standard formula: gross WPM - uncorrected errors / minutes, an error being a
+   * wrong word). Falls back to the character error count.
+   */
+  errorWords?: number;
 }
 
 export interface PracticeScore {
@@ -248,13 +254,28 @@ export interface PracticeScore {
   accuracy: number;
 }
 
+/** Number of space-separated words of `text` that contain at least one index in `errorIdx`. */
+export function countErrorWords(text: string, errorIdx: Iterable<number>): number {
+  const wordOf = new Map<number, number>();
+  let word = -1;
+  let inWord = false;
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === ' ') { inWord = false; continue; }
+    if (!inWord) { word++; inWord = true; }
+    wordOf.set(i, word);
+  }
+  const bad = new Set<number>();
+  for (const i of errorIdx) { const w = wordOf.get(i); if (w !== undefined) bad.add(w); }
+  return bad.size;
+}
+
 export function scorePractice(input: PracticeScoreInput): PracticeScore {
   const minutes = minutesFor(input.elapsedSeconds);
   const grossWpm = Math.round(input.typedChars / RULES.charsPerWord / minutes);
   const denom = input.typedChars + (input.rejectedKeystrokes ?? 0);
   return {
     grossWpm,
-    netWpm: Math.max(0, Math.round(grossWpm - input.errors / minutes)),
+    netWpm: Math.max(0, Math.round(grossWpm - (input.errorWords ?? input.errors) / minutes)),
     cpm: Math.round(input.typedChars / minutes),
     accuracy: denom > 0 ? Math.round(((denom - input.errors) / denom) * 100) : 100,
   };

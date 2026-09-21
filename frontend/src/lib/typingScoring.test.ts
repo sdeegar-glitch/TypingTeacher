@@ -210,3 +210,17 @@ describe('rules are exposed for one-place correction', () => {
     expect(RULES.charsPerWord).toBe(5);
   });
 });
+
+describe('error words (standard net WPM)', () => {
+  it('counts a word once however many of its letters are wrong', async () => {
+    const { countErrorWords, scorePractice } = await import('./typingScoring');
+    const text = 'the quick brown fox';
+    expect(countErrorWords(text, [4, 5, 6])).toBe(1); // 3 wrong letters in "quick"
+    expect(countErrorWords(text, [0, 10])).toBe(2);
+    expect(countErrorWords(text, [3])).toBe(0); // a space index belongs to no word
+    // 300 chars in 60 s = 60 gross WPM; 3 wrong words => net 57, not 60 - 9.
+    const s = scorePractice({ typedChars: 300, errors: 9, errorWords: 3, elapsedSeconds: 60 });
+    expect(s.grossWpm).toBe(60);
+    expect(s.netWpm).toBe(57);
+  });
+});

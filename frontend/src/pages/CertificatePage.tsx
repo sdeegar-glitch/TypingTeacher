@@ -25,7 +25,7 @@ interface EligibleSession {
 }
 interface Rules { minWpm: number; minAccuracy: number; minSeconds: number }
 
-const DEFAULT_RULES: Rules = { minWpm: 35, minAccuracy: 85, minSeconds: 900 };
+const DEFAULT_RULES: Rules = { minWpm: 30, minAccuracy: 85, minSeconds: 300 };
 
 function authHeaders(): Record<string, string> {
   const token = localStorage.getItem('accessToken');
@@ -262,7 +262,7 @@ export default function CertificatePage() {
                   <div className="text-sm text-brand-text-muted bg-brand-surface-2 border border-brand-border rounded-xl p-4">
                     No qualifying test yet. Take a <strong>{rules.minSeconds / 60}-minute</strong> test while signed in and reach{' '}
                     <strong>{rules.minWpm}+ net WPM</strong> with <strong>{rules.minAccuracy}%+ accuracy</strong>.{' '}
-                    <Link to="/tests/?duration=900" className="text-brand-primary font-semibold hover:underline">Start a 15-minute test</Link>
+                    <Link to="/tests/?duration=300" className="text-brand-primary font-semibold hover:underline">Start a 5-minute test</Link>
                   </div>
                 )}
                 <ul className="space-y-2">

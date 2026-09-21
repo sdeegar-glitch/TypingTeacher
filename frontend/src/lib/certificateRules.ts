@@ -1,5 +1,5 @@
 /** Must match CERT_RULES in backend/routes/certificates.js (the server is the authority). */
-export const CERT_RULES = { minWpm: 35, minAccuracy: 85, minSeconds: 900 };
+export const CERT_RULES = { minWpm: 30, minAccuracy: 85, minSeconds: 300 };
 
 /** Human-readable reasons a run misses the certificate rules; empty when it qualifies. */
 export function certificateShortfalls(wpm: number, accuracy: number, seconds: number): string[] {

@@ -573,3 +573,28 @@
 .exam-passage .typing-error    { color: #fff; background: #f43f5e; border-radius: 2px; }
 .exam-passage .typing-upcoming { color: rgba(255,255,255,0.3); }
 .exam-passage .typing-current  { color: #0d0d14; background: #fcd34d; border-radius: 2px; font-weight: 400; }
+
+/* Word you must type now (blinks) and the space that follows a finished word. */
+@keyframes word-blink {
+  0%, 100% { background-color: rgba(245, 158, 11, 0.42); }
+  50%      { background-color: rgba(245, 158, 11, 0.12); }
+}
+.typing-word-active {
+  border-radius: 3px;
+  background-color: rgba(245, 158, 11, 0.42);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+  animation: word-blink 1s ease-in-out infinite;
+}
+@keyframes space-blink {
+  0%, 100% { background-color: rgba(42, 157, 174, 0.65); }
+  50%      { background-color: rgba(42, 157, 174, 0.2); }
+}
+.typing-space-active {
+  border-radius: 3px;
+  background-color: rgba(42, 157, 174, 0.65);
+  box-shadow: 0 0 0 2px rgba(42, 157, 174, 0.3);
+  animation: space-blink 0.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .typing-word-active, .typing-space-active { animation: none; }
+}
