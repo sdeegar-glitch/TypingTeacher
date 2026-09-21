@@ -1,7 +1,7 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { isLoggedIn, logoutAndRedirect } from './lib/auth';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useLocation } from 'react-router-dom';
-import { Menu, X, Moon, Sun, MessageCircle, Send } from 'lucide-react';
+import { Menu, X, Moon, Sun, MessageCircle, Send, ChevronDown } from 'lucide-react';
 import { fetchMe } from './lib/user';
 import Footer from './components/Footer';
 import { useTheme } from './store/useThemeStore';
@@ -48,9 +48,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// One "Learn Typing" menu instead of two separate English / Hindi links.
+const LEARN_LINKS = [
+  { to: '/learn/', label: 'English Typing', sub: '50 lessons · QWERTY' },
+  { to: '/learn-hindi-typing/', label: 'Hindi Typing', sub: '200 lessons · Mangal & Kruti Dev' },
+];
+
 const NAV_LINKS: { to: string; label: string; short?: string; wide?: string }[] = [
-  { to: '/learn/',                  label: 'Learn English Typing', short: 'English', wide: 'Learn English' },
-  { to: '/learn-hindi-typing/',      label: 'Learn Hindi Typing', short: 'Hindi', wide: 'Learn Hindi' },
   { to: '/tests/',                  label: 'Typing Test' },
   { to: '/competitive-exam-typing/',label: 'Exams' },
   { to: '/blog/how-to-learn-shorthand-stenography/', label: 'Shorthand' },
@@ -58,6 +62,46 @@ const NAV_LINKS: { to: string; label: string; short?: string; wide?: string }[] 
   { to: '/tools/',                  label: 'Tools' },
   { to: '/blog/',                   label: 'Blog' },
 ];
+
+/** Desktop dropdown: click (or Enter/Space) to open, Esc or outside click to close. */
+const LearnMenu = ({ pathname }: { pathname: string }) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const active = LEARN_LINKS.some(l => pathname === l.to || pathname.startsWith(l.to));
+
+  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('mousedown', onDown); document.removeEventListener('keydown', onKey); };
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(o => !o)}
+        className={`inline-flex items-center gap-1 px-2 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-all duration-200 ${
+          active || open ? 'text-brand-primary bg-brand-primary/10 font-semibold' : 'text-brand-muted hover:text-brand-text hover:bg-brand-surface-2'
+        }`}>
+        Learn Typing
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div role="menu" className="absolute left-0 top-full mt-2 w-64 rounded-xl border border-brand-border bg-brand-surface shadow-xl p-1.5 z-50">
+          {LEARN_LINKS.map(l => (
+            <Link key={l.to} to={l.to} role="menuitem"
+              className="block rounded-lg px-3 py-2 hover:bg-brand-surface-2 transition-colors">
+              <span className="block text-sm font-semibold text-brand-text">{l.label}</span>
+              <span className="block text-xs text-brand-muted">{l.sub}</span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -136,6 +180,7 @@ const Navbar = () => {
 
           {/* ── Desktop Nav Links ── */}
           <div className="hidden lg:flex items-center gap-0.5 xl:gap-1 text-[13px] xl:text-sm font-medium flex-1 justify-center min-w-0">
+            <LearnMenu pathname={location.pathname} />
             {NAV_LINKS.map(link => {
               const active = location.pathname === link.to || location.pathname.startsWith(link.to + '/');
               return (
@@ -145,7 +190,7 @@ const Navbar = () => {
                       ? 'text-brand-primary bg-brand-primary/10 font-semibold'
                       : 'text-brand-muted hover:text-brand-text hover:bg-brand-surface-2'
                   }`}>
-                  {link.short ? <><span className="2xl:hidden">{link.short}</span><span className="hidden 2xl:inline">{link.wide}</span></> : link.label}
+                  {link.label}
                 </Link>
               );
             })}
@@ -235,6 +280,16 @@ const Navbar = () => {
         }`} style={{ background: 'var(--brand-surface)', borderLeft: '1px solid var(--brand-border)' }}>
           <div className="flex flex-col h-full pt-20 pb-8 px-6 overflow-y-auto">
             <div className="flex flex-col gap-1">
+              <p className="px-4 pt-1 text-xs font-bold uppercase tracking-wider text-brand-muted">Learn Typing</p>
+              {LEARN_LINKS.map(l => (
+                <Link key={l.to} to={l.to} onClick={closeMenu}
+                  className={`flex flex-col px-4 py-2.5 rounded-xl transition-all ${
+                    location.pathname.startsWith(l.to) ? 'bg-brand-primary/10 text-brand-primary' : 'text-brand-text hover:bg-brand-surface-2 hover:text-brand-primary'
+                  }`}>
+                  <span className="font-semibold text-base">{l.label}</span>
+                  <span className="text-xs text-brand-muted">{l.sub}</span>
+                </Link>
+              ))}
               {NAV_LINKS.map(link => {
                 const active = location.pathname === link.to;
                 return (
