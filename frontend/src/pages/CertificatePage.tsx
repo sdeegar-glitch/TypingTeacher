@@ -1,310 +1,193 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Download, Share2, CheckCircle, Award, ExternalLink, ChevronLeft, Check, Lock } from 'lucide-react';
+import { Download, Share2, CheckCircle, Award, ExternalLink, ChevronLeft, Check, Lock, FileText, Clock, Target, Gauge } from 'lucide-react';
 
 import { API_URL } from '../lib/api';
-import SignupPromptBanner from '../components/SignupPromptBanner';
 import TelegramCTA from '../components/TelegramCTA';
 import WhatsAppCTA from '../components/WhatsAppCTA';
 import { isLoggedIn } from '../lib/auth';
 import { trackEvent } from '../lib/analytics';
 import Seo from '../components/Seo';
+import {
+  drawCertificate, makeQr, verifyUrl, certificateToPdf, certificateNumber,
+  type CertificateData,
+} from '../lib/certificateRender';
 
-interface CertData {
-  id: string;
-  username: string;
-  wpm: number;
+interface EligibleSession {
+  id: number;
+  started_at: string;
+  duration: number;
+  net_wpm: number;
   accuracy: number;
   errors: number;
   test_title: string;
-  issued_at: string;
-  is_valid: boolean;
+}
+interface Rules { minWpm: number; minAccuracy: number; minSeconds: number }
+
+const DEFAULT_RULES: Rules = { minWpm: 35, minAccuracy: 85, minSeconds: 900 };
+
+function authHeaders(): Record<string, string> {
+  const token = localStorage.getItem('accessToken');
+  return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-function drawCertificateOnCanvas(canvas: HTMLCanvasElement, data: CertData) {
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  const W = canvas.width;
-  const H = canvas.height;
-
-  // Background — warm sand
-  ctx.fillStyle = '#FDFAF7';
-  ctx.fillRect(0, 0, W, H);
-
-  // Top gradient bar — teal to aqua
-  const topGrad = ctx.createLinearGradient(0, 0, W, 0);
-  topGrad.addColorStop(0, '#304C53');
-  topGrad.addColorStop(0.5, '#2A9DAE');
-  topGrad.addColorStop(1, '#AFE0E7');
-  ctx.fillStyle = topGrad;
-  ctx.fillRect(0, 0, W, 18);
-
-  // Border frame — sand tint
-  ctx.strokeStyle = '#D9D4CE';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(24, 24, W - 48, H - 48);
-
-  // Decorative corner dots — terracotta
-  [24, W - 24].forEach(x => [24, H - 24].forEach(y => {
-    ctx.fillStyle = '#BC6C50';
-    ctx.beginPath();
-    ctx.arc(x, y, 5, 0, Math.PI * 2);
-    ctx.fill();
-  }));
-
-  // Logo pill — teal gradient
-  const logoGrad = ctx.createLinearGradient(W / 2 - 28, 50, W / 2 + 28, 106);
-  logoGrad.addColorStop(0, '#304C53');
-  logoGrad.addColorStop(1, '#2A9DAE');
-  ctx.fillStyle = logoGrad;
-  ctx.beginPath();
-  ctx.roundRect(W / 2 - 28, 50, 56, 56, 14);
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 30px Georgia, serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('F', W / 2, 91);
-
-  // Site name
-  ctx.fillStyle = '#1A2C31';
-  ctx.font = 'bold 22px Georgia, serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('FastTypingLab', W / 2, 130);
-
-  // Subtitle
-  ctx.fillStyle = '#7B9BA3';
-  ctx.font = '500 13px Arial, sans-serif';
-  ctx.letterSpacing = '0.3em';
-  ctx.fillText('CERTIFICATE OF ACHIEVEMENT', W / 2, 160);
-  ctx.letterSpacing = '0';
-
-  // Divider line — brand teal
-  ctx.strokeStyle = '#D9D4CE';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(W / 2 - 160, 178);
-  ctx.lineTo(W / 2 + 160, 178);
-  ctx.stroke();
-
-  // "This certifies that"
-  ctx.fillStyle = '#3E5A62';
-  ctx.font = '16px Georgia, serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('This is to certify that', W / 2, 210);
-
-  // Name — deep teal
-  ctx.fillStyle = '#1A2C31';
-  ctx.font = 'bold 40px Georgia, serif';
-  ctx.fillText(data.username, W / 2, 262);
-
-  ctx.fillStyle = '#3E5A62';
-  ctx.font = '16px Georgia, serif';
-  ctx.fillText('has successfully demonstrated typing proficiency', W / 2, 292);
-
-  // WPM & Accuracy stats
-  const leftX = W / 2 - 120;
-  const rightX = W / 2 + 120;
-  const statY = 360;
-
-  // WPM box — teal tint
-  ctx.fillStyle = 'rgba(48,76,83,0.08)';
-  ctx.beginPath();
-  ctx.roundRect(leftX - 80, statY - 42, 160, 90, 12);
-  ctx.fill();
-  ctx.fillStyle = '#304C53';
-  ctx.font = 'bold 44px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText(String(data.wpm), leftX, statY + 8);
-  ctx.fillStyle = '#7B9BA3';
-  ctx.font = '12px Arial, sans-serif';
-  ctx.fillText('WORDS PER MINUTE', leftX, statY + 34);
-
-  // Divider
-  ctx.strokeStyle = '#D9D4CE';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(W / 2, statY - 40);
-  ctx.lineTo(W / 2, statY + 40);
-  ctx.stroke();
-
-  // Accuracy box — aqua tint
-  ctx.fillStyle = 'rgba(42,157,174,0.08)';
-  ctx.beginPath();
-  ctx.roundRect(rightX - 80, statY - 42, 160, 90, 12);
-  ctx.fill();
-  ctx.fillStyle = '#2A9DAE';
-  ctx.font = 'bold 44px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText(`${data.accuracy}%`, rightX, statY + 8);
-  ctx.fillStyle = '#7B9BA3';
-  ctx.font = '12px Arial, sans-serif';
-  ctx.fillText('ACCURACY', rightX, statY + 34);
-
-  // Test title & date
-  ctx.fillStyle = '#3E5A62';
-  ctx.font = '14px Georgia, serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(`Test: ${data.test_title}`, W / 2, 476);
-  const dateStr = data.issued_at
-    ? new Date(data.issued_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
-    : new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-  ctx.font = '13px Arial, sans-serif';
-  ctx.fillStyle = '#7B9BA3';
-  ctx.fillText(dateStr, W / 2, 498);
-
-  // Footer divider
-  ctx.strokeStyle = '#D9D4CE';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(60, H - 72);
-  ctx.lineTo(W - 60, H - 72);
-  ctx.stroke();
-
-  ctx.fillStyle = '#7B9BA3';
-  ctx.font = '11px Arial, sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText('Verify at: fasttypinglab.com/certificate', 60, H - 48);
-  ctx.textAlign = 'right';
-  ctx.fillText(`ID: ${data.id.slice(0, 16)}… | FastTypingLab © 2026`, W - 60, H - 48);
-
-  // Bottom gradient bar — terracotta to teal
-  const botGrad = ctx.createLinearGradient(0, 0, W, 0);
-  botGrad.addColorStop(0, '#BC6C50');
-  botGrad.addColorStop(0.5, '#2A9DAE');
-  botGrad.addColorStop(1, '#304C53');
-  ctx.fillStyle = botGrad;
-  ctx.fillRect(0, H - 12, W, 12);
+function saveBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
 export default function CertificatePage() {
   const [searchParams] = useSearchParams();
-  const hiddenCanvasRef = useRef<HTMLCanvasElement>(null);
-  const [username, setUsername] = useState(searchParams.get('name') || '');
-  const [wpm] = useState(Number(searchParams.get('wpm') || 0));
-  const [accuracy] = useState(Number(searchParams.get('acc') || 0));
-  const [testTitle] = useState(searchParams.get('title') || 'Typing Speed Test');
-  const [certData, setCertData] = useState<CertData | null>(null);
-  const [verifyId, setVerifyId] = useState('');
-  const [verifyResult, setVerifyResult] = useState<{ valid: boolean; data?: CertData } | null>(null);
-  const [isIssuing, setIsIssuing] = useState(false);
-  const [issueError, setIssueError] = useState('');
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [showLoginGate, setShowLoginGate] = useState(false);
-  const [tab, setTab] = useState<'generate' | 'verify'>(wpm > 0 ? 'generate' : 'verify');
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const loggedIn = isLoggedIn();
 
+  const [tab, setTab] = useState<'get' | 'verify'>(searchParams.get('verify') ? 'verify' : 'get');
+  const [rules, setRules] = useState<Rules>(DEFAULT_RULES);
+  const [sessions, setSessions] = useState<EligibleSession[] | null>(null);
+  const [loadError, setLoadError] = useState('');
+  const [name, setName] = useState('');
+  const [issuingId, setIssuingId] = useState<number | null>(null);
+  const [issueError, setIssueError] = useState('');
+  const [cert, setCert] = useState<CertificateData | null>(null);
+  const [busy, setBusy] = useState<'' | 'png' | 'pdf'>('');
+  const [copied, setCopied] = useState(false);
+
+  const [verifyId, setVerifyId] = useState('');
+  const [verifyResult, setVerifyResult] = useState<{ valid: boolean; data?: CertificateData } | null>(null);
+
+  // Eligible sessions come from the server: it checks the rules against saved results.
   useEffect(() => {
-    document.title = 'Typing Certificate | FastTypingLab';
+    if (!loggedIn) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/certificates/eligible`, { headers: authHeaders() });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        if (cancelled) return;
+        setRules(data.rules || DEFAULT_RULES);
+        setSessions(data.sessions || []);
+        if (data.name) setName(n => n || data.name);
+      } catch {
+        if (!cancelled) setLoadError('Could not load your tests right now. Please refresh.');
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [loggedIn]);
+
+  const runVerify = useCallback(async (id: string) => {
+    if (!id.trim()) return;
+    try {
+      const res = await fetch(`${API_URL}/api/certificates/${id.trim()}`);
+      const data = await res.json();
+      setVerifyResult({ valid: !!data.valid, data });
+    } catch {
+      setVerifyResult({ valid: false });
+    }
   }, []);
 
-  // Deep-link: /certificate?verify=<id> (e.g. from the profile page) auto-verifies.
+  // Deep link (QR code / share link): /certificate?verify=<id>
   useEffect(() => {
     const vid = searchParams.get('verify');
     if (!vid) return;
     setTab('verify');
     setVerifyId(vid);
-    (async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/certificates/${vid.trim()}`);
-        const data = await res.json();
-        setVerifyResult({ valid: data.valid, data });
-      } catch {
-        setVerifyResult({ valid: false });
-      }
-    })();
-  }, [searchParams]);
+    runVerify(vid);
+  }, [searchParams, runVerify]);
 
-  const issueCertificate = async () => {
-    // Certificates are only issued for a real, completed test result.
-    if (!username.trim() || wpm <= 0 || accuracy <= 0) return;
-    setIsIssuing(true);
+  const issue = async (s: EligibleSession) => {
+    if (name.trim().length < 2) { setIssueError('Enter your full name as it should appear on the certificate.'); return; }
+    setIssuingId(s.id);
     setIssueError('');
     try {
-      const token = localStorage.getItem('accessToken');
       const res = await fetch(`${API_URL}/api/certificates`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({ username: username.trim(), wpm, accuracy, test_title: testTitle }),
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        body: JSON.stringify({ session_id: s.id, name: name.trim() }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || 'Could not issue certificate.');
-      setCertData(data);
+      setCert(data);
+      setSessions(list => (list || []).filter(x => x.id !== s.id));
+      trackEvent('certificate_issued');
     } catch (e) {
-      setIssueError(e instanceof Error ? e.message : 'Could not issue certificate. Please try again.');
+      setIssueError(e instanceof Error ? e.message : 'Could not issue certificate.');
     } finally {
-      setIsIssuing(false);
+      setIssuingId(null);
     }
   };
 
-  const downloadCertificate = () => {
-    if (!certData || !hiddenCanvasRef.current) return;
-    // Gate the download behind a free account — the certificate is the strongest
-    // reason a visitor has to sign up. Preview stays fully visible (good UX + AdSense),
-    // but saving/downloading the PNG requires logging in.
-    if (!isLoggedIn()) {
-      trackEvent('cert_login_gate_shown');
-      setShowLoginGate(true);
-      return;
-    }
-    setIsDownloading(true);
-    try {
-      const canvas = hiddenCanvasRef.current;
-      canvas.width = 900;
-      canvas.height = 560;
-      drawCertificateOnCanvas(canvas, certData);
-      const link = document.createElement('a');
-      link.download = `FastTypingLab-Certificate-${certData.username}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    } catch (err) {
-      console.error('Download failed:', err);
-      alert('Download failed. Please take a screenshot instead.');
-    } finally {
-      setIsDownloading(false);
-    }
+  // Paint the preview (and keep the canvas ready for PNG / PDF export).
+  useEffect(() => {
+    if (!cert || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    let cancelled = false;
+    drawCertificate(canvas, cert, null);
+    makeQr(verifyUrl(window.location.origin, cert.id))
+      .then(qr => { if (!cancelled) drawCertificate(canvas, cert, qr); })
+      .catch(() => { /* certificate still valid without the QR image */ });
+    return () => { cancelled = true; };
+  }, [cert]);
+
+  const fileBase = cert ? `FastTypingLab-Certificate-${certificateNumber(cert.id)}` : '';
+
+  const downloadPng = () => {
+    if (!cert || !canvasRef.current) return;
+    setBusy('png');
+    canvasRef.current.toBlob(b => { if (b) saveBlob(b, `${fileBase}.png`); setBusy(''); }, 'image/png');
+    trackEvent('certificate_download', { format: 'png' });
   };
 
-  const verifyCertificate = async () => {
-    if (!verifyId.trim()) return;
+  const downloadPdf = async () => {
+    if (!cert || !canvasRef.current) return;
+    setBusy('pdf');
     try {
-      const res = await fetch(`${API_URL}/api/certificates/${verifyId.trim()}`);
-      const data = await res.json();
-      setVerifyResult({ valid: data.valid, data });
+      saveBlob(await certificateToPdf(canvasRef.current), `${fileBase}.pdf`);
+      trackEvent('certificate_download', { format: 'pdf' });
     } catch {
-      setVerifyResult({ valid: false });
+      setIssueError('Could not create the PDF. Try the PNG download.');
+    } finally {
+      setBusy('');
     }
   };
 
-  const shareUrl = certData ? `${window.location.origin}/certificate?verify=${certData.id}` : '';
-
+  const shareUrl = cert ? verifyUrl(window.location.origin, cert.id) : '';
   const copyLink = () => {
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Preview canvas render
-  useEffect(() => {
-    if (!certData || !hiddenCanvasRef.current) return;
-    const canvas = hiddenCanvasRef.current;
-    canvas.width = 900;
-    canvas.height = 560;
-    drawCertificateOnCanvas(canvas, certData);
-  }, [certData]);
+  const rulesList = (
+    <div className="grid sm:grid-cols-3 gap-3">
+      {[
+        { icon: Gauge, label: 'Speed', value: `${rules.minWpm}+ net WPM` },
+        { icon: Target, label: 'Accuracy', value: `${rules.minAccuracy}% or higher` },
+        { icon: Clock, label: 'Test length', value: `${rules.minSeconds / 60} minutes or more` },
+      ].map(r => (
+        <div key={r.label} className="bg-brand-surface-2 border border-brand-border rounded-xl p-4 flex items-center gap-3">
+          <r.icon className="w-5 h-5 text-brand-primary shrink-0" />
+          <div>
+            <div className="text-xs text-brand-muted">{r.label}</div>
+            <div className="font-bold text-sm">{r.value}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text py-8 px-4 sm:px-6">
       <Seo
-        title="Your Typing Certificate | FastTypingLab"
-        description="Download your personalized FastTypingLab typing speed certificate."
+        title="Typing Certificate | FastTypingLab"
+        description="Earn a verifiable FastTypingLab typing certificate with a QR code."
         noindex
       />
-      <canvas ref={hiddenCanvasRef} style={{ display: 'none' }} />
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
           <Link to="/dashboard" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
@@ -315,126 +198,120 @@ export default function CertificatePage() {
           <h1 className="text-xl font-bold">Typing Certificate</h1>
         </div>
 
-        {/* Tabs */}
         <div className="flex gap-1 bg-brand-surface-2 rounded-xl p-1 mb-6 w-fit">
-          {(['generate', 'verify'] as const).map(t => (
+          {(['get', 'verify'] as const).map(t => (
             <button key={t} onClick={() => setTab(t)}
               className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${tab === t ? 'bg-brand-surface shadow text-brand-text' : 'text-brand-muted hover:text-brand-text'}`}>
-              {t === 'generate' ? '🎓 Generate' : '🔍 Verify'}
+              {t === 'get' ? 'Get certificate' : 'Verify'}
             </button>
           ))}
         </div>
 
-        {/* GENERATE TAB */}
-        {tab === 'generate' && (
+        {tab === 'get' && (
           <div className="space-y-6">
-            <SignupPromptBanner
-              dismissKey="signupPromptCertificate"
-              message="Nice work! 🎉 Create a free account to save this certificate, track your speed over time, and download it again anytime."
-            />
+            <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
+              <h2 className="font-bold mb-1">Who can get a certificate?</h2>
+              <p className="text-sm text-brand-text-muted mb-4">
+                Registered users who pass one full test meeting all three conditions. The result is checked on our server against your saved test.
+              </p>
+              {rulesList}
+            </div>
 
-            {!certData && (
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
-                <h2 className="font-bold text-brand-text mb-4">Your Details</h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-brand-text-muted mb-1.5">Your Full Name</label>
-                    <input type="text" value={username} onChange={e => setUsername(e.target.value)}
-                      placeholder="e.g. Rahul Sharma"
-                      className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-4 py-3 text-brand-text text-sm outline-none focus:border-brand-primary transition-all" />
+            {!loggedIn && (
+              <div className="rounded-2xl p-6 border border-brand-border bg-brand-surface flex items-start gap-4">
+                <div className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-white"
+                  style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-bold">Create a free account to earn certificates</p>
+                  <p className="text-sm text-brand-text-muted mt-1 mb-4">
+                    Your tests are saved to your account, so your certificate can be verified by anyone with the link or QR code.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Link to="/signup?next=%2Fcertificate" onClick={() => trackEvent('cert_login_gate_click', { action: 'signup' })}
+                      className="inline-flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl text-sm"
+                      style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)' }}>
+                      Create free account
+                    </Link>
+                    <Link to="/login?next=%2Fcertificate" onClick={() => trackEvent('cert_login_gate_click', { action: 'login' })}
+                      className="inline-flex items-center gap-2 bg-brand-surface-2 border border-brand-border text-brand-text font-semibold px-5 py-2.5 rounded-xl text-sm">
+                      I already have an account
+                    </Link>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div className="bg-brand-surface-2 border border-brand-border rounded-xl p-4">
-                      <div className="text-2xl font-black text-brand-primary font-mono">{wpm || 50}</div>
-                      <div className="text-xs text-brand-muted">Net WPM</div>
-                    </div>
-                    <div className="bg-brand-surface-2 border border-brand-border rounded-xl p-4">
-                      <div className="text-2xl font-black text-brand-accent font-mono">{accuracy || 90}%</div>
-                      <div className="text-xs text-brand-muted">Accuracy</div>
-                    </div>
-                  </div>
-                  {issueError && <p role="alert" className="text-sm text-red-500 mb-2">{issueError}</p>}
-                  <button onClick={issueCertificate} disabled={!username.trim() || wpm <= 0 || isIssuing}
-                    className="w-full bg-brand-primary hover:bg-brand-secondary disabled:opacity-50 text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
-                    {isIssuing
-                      ? <><div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" /> Generating…</>
-                      : <><Award className="w-4 h-4" /> Generate Certificate</>}
-                  </button>
-                  {wpm === 0 && (
-                    <p className="text-xs text-brand-muted text-center">
-                      <Link to="/tests/" className="text-brand-primary font-semibold hover:underline">Take a typing test</Link> to get your real WPM and accuracy on your certificate.
-                    </p>
-                  )}
                 </div>
               </div>
             )}
 
-            {certData && (
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-                {/* Action buttons */}
-                <div className="flex flex-wrap gap-3 mb-4">
-                  <button onClick={downloadCertificate} disabled={isDownloading}
-                    className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all disabled:opacity-60 shadow-lg shadow-brand-primary/20">
-                    {isDownloading
-                      ? <div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" />
-                      : isLoggedIn() ? <Download className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
-                    {isDownloading ? 'Downloading…' : isLoggedIn() ? 'Download PNG' : 'Sign in to Download'}
-                  </button>
-                  <button onClick={copyLink}
-                    className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text px-5 py-2.5 rounded-xl font-bold text-sm transition-all">
-                    {copied ? <Check className="w-4 h-4 text-brand-accent" /> : <Share2 className="w-4 h-4" />}
-                    {copied ? 'Copied!' : 'Copy Share Link'}
-                  </button>
-                  <button onClick={() => setCertData(null)}
-                    className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-muted px-5 py-2.5 rounded-xl font-semibold text-sm transition-all">
-                    Edit Name
-                  </button>
-                </div>
+            {loggedIn && !cert && (
+              <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
+                <label htmlFor="cert-name" className="block text-sm font-medium text-brand-text-muted mb-1.5">
+                  Name on certificate
+                </label>
+                <input id="cert-name" type="text" value={name} maxLength={60} onChange={e => setName(e.target.value)}
+                  placeholder="e.g. Rahul Sharma"
+                  className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-primary" />
+                <p className="text-xs text-brand-muted mt-1.5">Check the spelling: it is printed exactly as entered and cannot be changed later.</p>
 
-                {/* Login gate — appears when a logged-out visitor tries to download */}
-                {showLoginGate && !isLoggedIn() && (
-                  <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                    className="mb-4 rounded-2xl p-5 border overflow-hidden"
-                    style={{ background: 'linear-gradient(135deg, rgba(48,76,83,0.10), rgba(42,157,174,0.10))', borderColor: 'rgba(42,157,174,0.25)' }}>
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white shadow-md"
-                        style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-                        <Lock className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-bold text-brand-text">One quick step — create a free account</p>
-                        <p className="text-sm text-brand-text-muted mt-1 mb-3">
-                          Your certificate is saved to your profile so you can download it anytime, on any device, and share a verified link. It's free and takes 5 seconds with Google.
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          <Link to={`/signup?next=${encodeURIComponent(window.location.pathname + window.location.search)}`}
-                            onClick={() => trackEvent('cert_login_gate_click', { action: 'signup' })}
-                            className="inline-flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all active:scale-95"
-                            style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.30)' }}>
-                            Create free account
-                          </Link>
-                          <Link to={`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`}
-                            onClick={() => trackEvent('cert_login_gate_click', { action: 'login' })}
-                            className="inline-flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text font-semibold px-5 py-2.5 rounded-xl text-sm transition-all">
-                            I already have an account
-                          </Link>
+                {loadError && <p role="alert" className="text-sm text-red-500 mt-4">{loadError}</p>}
+                {issueError && <p role="alert" className="text-sm text-red-500 mt-4">{issueError}</p>}
+
+                <h3 className="font-bold mt-6 mb-3">Your qualifying tests</h3>
+                {sessions === null && !loadError && <p className="text-sm text-brand-muted">Loading…</p>}
+                {sessions?.length === 0 && (
+                  <div className="text-sm text-brand-text-muted bg-brand-surface-2 border border-brand-border rounded-xl p-4">
+                    No qualifying test yet. Take a <strong>{rules.minSeconds / 60}-minute</strong> test while signed in and reach{' '}
+                    <strong>{rules.minWpm}+ net WPM</strong> with <strong>{rules.minAccuracy}%+ accuracy</strong>.{' '}
+                    <Link to="/tests/?duration=900" className="text-brand-primary font-semibold hover:underline">Start a 15-minute test</Link>
+                  </div>
+                )}
+                <ul className="space-y-2">
+                  {sessions?.map(s => (
+                    <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 bg-brand-surface-2 border border-brand-border rounded-xl p-4">
+                      <div>
+                        <div className="font-semibold text-sm">{s.test_title}</div>
+                        <div className="text-xs text-brand-muted">
+                          {new Date(s.started_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          {' · '}{s.net_wpm} WPM · {Math.round(s.accuracy * 10) / 10}% · {Math.round(s.duration / 60)} min
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                )}
+                      <button onClick={() => issue(s)} disabled={issuingId !== null}
+                        className="bg-brand-primary hover:bg-brand-secondary disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2">
+                        {issuingId === s.id
+                          ? <div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" />
+                          : <Award className="w-4 h-4" />}
+                        Get certificate
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-                {/* Certificate Preview — pure white card rendered from canvas */}
-                <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
-                  <canvas ref={node => {
-                    if (node && certData) {
-                      node.width = 900; node.height = 560;
-                      drawCertificateOnCanvas(node, certData);
-                    }
-                  }} className="w-full h-auto" style={{ maxHeight: 480 }} />
+            {cert && (
+              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+                <div className="flex flex-wrap gap-3 mb-4">
+                  <button onClick={downloadPdf} disabled={busy !== ''}
+                    className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm disabled:opacity-60">
+                    <FileText className="w-4 h-4" /> {busy === 'pdf' ? 'Preparing…' : 'Download PDF'}
+                  </button>
+                  <button onClick={downloadPng} disabled={busy !== ''}
+                    className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border px-5 py-2.5 rounded-xl font-bold text-sm">
+                    <Download className="w-4 h-4" /> PNG image
+                  </button>
+                  <button onClick={copyLink}
+                    className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border px-5 py-2.5 rounded-xl font-bold text-sm">
+                    {copied ? <Check className="w-4 h-4 text-brand-accent" /> : <Share2 className="w-4 h-4" />}
+                    {copied ? 'Copied!' : 'Copy verify link'}
+                  </button>
                 </div>
-
-                {/* Invite into the community after they've earned a certificate */}
+                {issueError && <p role="alert" className="text-sm text-red-500 mb-3">{issueError}</p>}
+                <div className="bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-200">
+                  <canvas ref={canvasRef} className="w-full h-auto block" aria-label={`Typing certificate for ${cert.username}`} role="img" />
+                </div>
+                <p className="text-xs text-brand-muted mt-3">
+                  Anyone can confirm this certificate by scanning the QR code or opening <span className="font-mono break-all">{shareUrl}</span>
+                </p>
                 <div className="mt-4 space-y-2.5">
                   <TelegramCTA message="Share your achievement and challenge others — join our typing community for daily tests and weekly leaderboards." />
                   <WhatsAppCTA message="Follow for daily typing tests and exam-prep updates, straight in WhatsApp." />
@@ -444,43 +321,46 @@ export default function CertificatePage() {
           </div>
         )}
 
-        {/* VERIFY TAB */}
         {tab === 'verify' && (
           <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 max-w-lg">
-            <h2 className="font-bold text-brand-text mb-4 flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-brand-accent" /> Verify a Certificate
+            <h2 className="font-bold mb-4 flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-brand-accent" /> Verify a certificate
             </h2>
-            <p className="text-brand-text-muted text-sm mb-5">Enter the certificate ID found at the bottom of any FastTypingLab certificate.</p>
+            <p className="text-brand-text-muted text-sm mb-5">Scan the QR code on the certificate, or paste the certificate ID.</p>
             <div className="flex gap-2">
-              <input type="text" value={verifyId}
+              <input type="text" value={verifyId} aria-label="Certificate ID"
                 onChange={e => { setVerifyId(e.target.value); setVerifyResult(null); }}
                 placeholder="Certificate ID"
-                className="flex-1 bg-brand-surface-2 border border-brand-border rounded-xl px-4 py-3 text-sm text-brand-text outline-none focus:border-brand-primary transition-all font-mono" />
-              <button onClick={verifyCertificate}
-                className="bg-brand-primary hover:bg-brand-secondary text-white px-5 py-3 rounded-xl font-bold text-sm transition-all">
+                className="flex-1 bg-brand-surface-2 border border-brand-border rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-primary font-mono" />
+              <button onClick={() => runVerify(verifyId)}
+                className="bg-brand-primary hover:bg-brand-secondary text-white px-5 py-3 rounded-xl font-bold text-sm">
                 Verify
               </button>
             </div>
             {verifyResult && (
               <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                 className={`mt-4 p-4 rounded-xl border ${verifyResult.valid ? 'bg-brand-accent/10 border-brand-accent/30' : 'bg-rose-500/10 border-rose-500/20'}`}>
-                {verifyResult.valid ? (
+                {verifyResult.valid && verifyResult.data ? (
                   <div className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-brand-accent shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-bold text-brand-accent">Valid Certificate ✓</p>
-                      {verifyResult.data && (
-                        <div className="text-sm text-brand-text-muted mt-1 space-y-0.5">
-                          <p>Name: <span className="font-semibold text-brand-text">{verifyResult.data.username}</span></p>
-                          <p>Speed: <span className="font-semibold text-brand-text">{verifyResult.data.wpm} WPM</span></p>
-                          <p>Accuracy: <span className="font-semibold text-brand-text">{verifyResult.data.accuracy}%</span></p>
-                        </div>
+                    <div className="text-sm text-brand-text-muted space-y-0.5">
+                      <p className="font-bold text-brand-accent text-base">Valid certificate</p>
+                      <p>Name: <span className="font-semibold text-brand-text">{verifyResult.data.username}</span></p>
+                      <p>Speed: <span className="font-semibold text-brand-text">{verifyResult.data.wpm} net WPM</span></p>
+                      <p>Accuracy: <span className="font-semibold text-brand-text">{verifyResult.data.accuracy}%</span></p>
+                      {!!verifyResult.data.duration_seconds && (
+                        <p>Test length: <span className="font-semibold text-brand-text">{Math.round(verifyResult.data.duration_seconds / 60)} minutes</span></p>
                       )}
+                      <p>Test: <span className="font-semibold text-brand-text">{verifyResult.data.test_title}</span></p>
+                      <p>Issued: <span className="font-semibold text-brand-text">
+                        {new Date(verifyResult.data.issued_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      </span></p>
+                      <p>Certificate No.: <span className="font-mono text-brand-text">{certificateNumber(verifyResult.data.id)}</span></p>
                     </div>
                   </div>
                 ) : (
                   <p className="text-rose-500 font-semibold flex items-center gap-2">
-                    <ExternalLink className="w-4 h-4" /> Certificate not found or invalid.
+                    <ExternalLink className="w-4 h-4" /> Certificate not found or no longer valid.
                   </p>
                 )}
               </motion.div>
