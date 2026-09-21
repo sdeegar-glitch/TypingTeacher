@@ -113,51 +113,49 @@ export default function TestsListPage() {
   // ── Category selection screen ──
   if (!selected) {
     return (
-      <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:py-14 sm:px-6">
-        <div className="max-w-[1600px] mx-auto">
+      <div className="bg-brand-bg text-brand-text py-4 px-4 sm:py-6 sm:px-6">
+        <Seo
+          title="Typing Tests Library — English, Hindi Mangal & Kruti Dev | FastTypingLab"
+          description="Free typing speed tests in English, Hindi Mangal (Unicode) and Kruti Dev. Pick a track, then a passage, and get real-time WPM and accuracy."
+        />
+        <div className="max-w-6xl mx-auto">
           <PageHeader
             icon={Zap}
             title={<><span className="gradient-text">Typing Tests</span> Library</>}
-            subtitle="Choose a track to begin. Each track keeps English, Hindi Mangal and Hindi Kruti Dev tests separate so you practice exactly what you need."
+            subtitle="Choose a track: English, Hindi Mangal or Hindi Kruti Dev."
           />
 
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {CATEGORIES.map((cat, i) => (
               <motion.button key={cat.id}
-                initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.06 }}
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
                 onClick={() => chooseTrack(cat)}
-                className="group text-left flex items-center gap-5 p-5 sm:p-6 rounded-2xl bg-brand-surface border border-brand-border hover:border-brand-primary/40 hover:shadow-lg hover:shadow-brand-primary/8 hover:-translate-y-0.5 transition-all duration-200">
-                <div className="shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform"
+                className="group text-left flex items-start gap-3 p-4 rounded-xl bg-brand-surface border border-brand-border hover:border-brand-primary/40 hover:shadow-md transition-all duration-150">
+                <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-white shadow-sm"
                   style={{ background: cat.gradient }}>
-                  <cat.icon className="w-7 h-7" />
+                  <cat.icon className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-1"
-                    style={cat.devanagari ? { fontFamily: "'Noto Sans Devanagari',sans-serif" } : undefined}>
-                    {cat.subtitle}
-                  </div>
-                  <h3 className="text-lg font-black text-brand-text group-hover:text-brand-primary transition-colors">
+                  <h2 className="text-base font-bold text-brand-text group-hover:text-brand-primary transition-colors leading-snug">
                     {cat.title}
-                  </h3>
-                  <p className="text-sm text-brand-text-muted mt-1 leading-snug">{cat.desc}</p>
+                  </h2>
+                  <p className="text-xs text-brand-text-muted mt-0.5 leading-snug">{cat.desc}</p>
                 </div>
-                <div className="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center bg-brand-surface-2 border border-brand-border group-hover:border-brand-primary/30 group-hover:text-brand-primary text-brand-muted transition-all duration-200">
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </div>
+                <ChevronRight className="shrink-0 w-4 h-4 mt-1 text-brand-muted group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all" />
               </motion.button>
             ))}
           </div>
 
           {/* ── Helpful guides (discovery + internal linking) ── */}
-          <div className="mt-12 pt-8 border-t border-brand-border">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-brand-muted mb-4">Helpful typing guides</h2>
-            <div className="flex flex-wrap gap-2.5">
+          <div className="mt-6 pt-4 border-t border-brand-border">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-brand-muted mb-2.5">Helpful typing guides</h2>
+            <div className="flex flex-wrap gap-2">
               {RELATED_GUIDES.map(g => (
                 <Link key={g.href} to={g.href}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-text bg-brand-surface border border-brand-border hover:border-brand-primary/40 hover:text-brand-primary px-4 py-2 rounded-xl transition-all duration-150">
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-brand-text bg-brand-surface border border-brand-border hover:border-brand-primary/40 hover:text-brand-primary px-3 py-1.5 rounded-lg transition-colors duration-150">
                   {g.label}
-                  <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+                  <ChevronRight className="w-3 h-3 opacity-60" />
                 </Link>
               ))}
             </div>
@@ -169,55 +167,50 @@ export default function TestsListPage() {
 
   // ── Tests list for the selected category ──
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text py-10 px-4 sm:py-14 sm:px-6">
-      <div className="max-w-[1600px] mx-auto">
+    <div className="bg-brand-bg text-brand-text py-4 px-4 sm:py-6 sm:px-6">
+      <div className="max-w-6xl mx-auto">
         <Seo
           title="Typing Speed Tests — 1, 3, 5 & 10 Minute WPM Tests | FastTypingLab"
           description="Take free typing speed tests in English, Hindi Mangal (Unicode) and Kruti Dev. 1, 3, 5 and 10-minute WPM tests with real-time accuracy and net speed."
         />
 
-        <button onClick={() => setSelected(null)}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-muted hover:text-brand-primary transition-colors mb-5">
-          <ChevronLeft className="w-4 h-4" /> All tracks
-        </button>
-
-        {/* ── Header ── */}
+        {/* One header row: back link on the left, title centred (no eyebrow repeating the title). */}
         <PageHeader
           icon={selected.icon}
           gradient={selected.gradient}
-          eyebrow={selected.subtitle}
           devanagari={selected.devanagari}
           title={`${selected.title} Tests`}
+          actions={
+            <button onClick={() => setSelected(null)}
+              className="inline-flex items-center gap-1 text-sm font-semibold text-brand-muted hover:text-brand-primary transition-colors">
+              <ChevronLeft className="w-4 h-4" /> All tracks
+            </button>
+          }
         />
 
         {/* ── Content ── */}
         {loading ? (
-          <div className="flex justify-center items-center h-48">
-            <div className="w-10 h-10 rounded-full border-2 border-brand-primary border-t-transparent animate-spin" />
+          <div className="flex justify-center items-center h-32">
+            <div className="w-8 h-8 rounded-full border-2 border-brand-primary border-t-transparent animate-spin" />
           </div>
         ) : tests.length === 0 ? (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            className="text-center bg-brand-surface border border-brand-border rounded-3xl p-16">
-            <BookOpen className="w-12 h-12 text-brand-muted mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-brand-text mb-2">No tests yet</h3>
-            <p className="text-brand-text-muted text-sm">No {selected.title} passages are available right now — check back later, new content is added automatically.</p>
+            className="text-center bg-brand-surface border border-brand-border rounded-2xl p-8">
+            <BookOpen className="w-8 h-8 text-brand-muted mx-auto mb-2" />
+            <h2 className="text-lg font-bold text-brand-text mb-1">No tests yet</h2>
+            <p className="text-brand-text-muted text-sm">No {selected.title} passages are available right now. New content is added automatically.</p>
           </motion.div>
         ) : (
-          <div className="flex flex-col gap-3">
-            {[...tests].sort(byDifficulty).map((test, i) => (
-              <motion.div key={test.id}
-                initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: Math.min(i, 12) * 0.04 }}>
-                <TestListItem test={test} devanagari={!!selected.devanagari} />
-              </motion.div>
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+            {[...tests].sort(byDifficulty).map((test) => (
+              <TestListItem key={test.id} test={test} devanagari={!!selected.devanagari} />
             ))}
           </div>
         )}
 
-        {/* ── SEO footer note ── */}
         {!loading && tests.length > 0 && (
-          <p className="text-center text-xs text-brand-muted mt-10">
-            {tests.length} {selected.title} articles available · New content added automatically every day
+          <p className="text-center text-xs text-brand-muted mt-4">
+            {tests.length} {selected.title} passages · new ones added daily
           </p>
         )}
       </div>
@@ -229,68 +222,36 @@ function TestListItem({ test, devanagari }: { test: any; devanagari: boolean }) 
   const diff = DIFF_CONFIG[(test.difficulty_level || 'medium').toLowerCase()] || DIFF_CONFIG.medium;
   const done = isTestCompleted(test.slug || test.id);
   const date = test.created_at
-    ? new Date(test.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    ? new Date(test.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
     : null;
+  const words = test.word_count || 1000;
 
+  // One compact row (about 56px): title, then difficulty + date + length as small meta.
   return (
     <Link to={`/tests/config/${test.slug || test.id}`}
-      className={`group flex items-center gap-4 p-4 sm:p-5 rounded-2xl border hover:border-brand-primary/40 hover:shadow-lg hover:shadow-brand-primary/8 hover:-translate-y-0.5 transition-all duration-200 ${
+      className={`group flex items-center gap-3 px-3 py-2 rounded-xl border hover:border-brand-primary/40 hover:shadow-sm transition-all duration-150 ${
         done ? 'bg-emerald-500/5 border-emerald-500/25' : 'bg-brand-surface border-brand-border'
       }`}>
-
-      {/* Left: icon (green check when the passage is already done) */}
-      <div className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform ${done ? 'bg-emerald-500/15 text-emerald-500' : 'icon-teal'}`}>
-        {done ? <CheckCircle2 className="w-5 h-5" /> : <BookOpen className="w-5 h-5" />}
+      <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${done ? 'bg-emerald-500/15 text-emerald-500' : 'icon-teal'}`}>
+        {done ? <CheckCircle2 className="w-4 h-4" /> : <BookOpen className="w-4 h-4" />}
       </div>
 
-      {/* Center: text */}
       <div className="flex-1 min-w-0">
-        {date && (
-          <div className="text-[10px] text-brand-muted font-semibold uppercase tracking-wider mb-1">{date}</div>
-        )}
-        <h3 className="text-sm sm:text-base font-bold text-brand-text truncate mb-2 group-hover:text-brand-primary transition-colors"
+        <h2 className="text-sm font-semibold text-brand-text truncate group-hover:text-brand-primary transition-colors leading-snug"
           style={devanagari ? { fontFamily: "'Noto Sans Devanagari',sans-serif" } : undefined}>
           {test.title}
-        </h3>
-
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          {/* Difficulty badge */}
-          <span className={`px-2 py-0.5 rounded-md font-semibold border ${diff.bg} ${diff.color} ${diff.border}`}>
-            {diff.label}
-          </span>
-
-          {/* Completed badge */}
-          {done && (
-            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md font-semibold border bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20">
-              <CheckCircle2 className="w-3 h-3" /> Done
-            </span>
-          )}
-
-          {/* Word count */}
-          <span className="flex items-center gap-1 text-brand-muted">
-            <Clock className="w-3 h-3" />
-            {test.word_count ? `~${Math.ceil(test.word_count / 200)} min read` : '~5 min'}
-          </span>
-
-          {/* Words */}
-          <span className="flex items-center gap-1 text-brand-muted">
-            <BarChart2 className="w-3 h-3" />
-            {test.word_count || 1000} words
-          </span>
-
-          {/* Category */}
-          {test.category && (
-            <span className="hidden sm:inline text-brand-muted/60 truncate max-w-[140px]">
-              · {test.category}
-            </span>
-          )}
+        </h2>
+        <div className="flex items-center gap-x-2 text-[11px] text-brand-muted leading-tight mt-0.5">
+          <span className={`px-1.5 rounded font-semibold border ${diff.bg} ${diff.color} ${diff.border}`}>{diff.label}</span>
+          {done && <span className="font-semibold text-emerald-600 dark:text-emerald-400">Done</span>}
+          {date && <span>{date}</span>}
+          <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" />{test.word_count ? `~${Math.ceil(test.word_count / 200)} min` : '~5 min'}</span>
+          <span className="inline-flex items-center gap-1"><BarChart2 className="w-3 h-3" />{words} words</span>
+          {test.category && <span className="hidden md:inline truncate max-w-[140px] text-brand-muted/70">{test.category}</span>}
         </div>
       </div>
 
-      {/* Right: arrow */}
-      <div className="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center bg-brand-surface-2 border border-brand-border group-hover:border-brand-primary/30 group-hover:text-brand-primary text-brand-muted transition-all duration-200">
-        <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-      </div>
+      <ChevronRight className="shrink-0 w-4 h-4 text-brand-muted group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all" />
     </Link>
   );
 }
