@@ -9,7 +9,9 @@ interface PassageComparisonProps {
 }
 
 /**
- * The original passage and what was actually typed, side by side. Coloured per
+ * The original passage and what was actually typed, side by side. The right panel
+ * shows the exact text the user typed (wrong letters included), marked where it
+ * differs from the passage, not a re-colouring of the passage. Coloured per
  * grapheme cluster (ClusterText) so Devanagari conjuncts and vowel signs are
  * never split across styled spans.
  *
@@ -36,8 +38,10 @@ export default function PassageComparison({ passage, typed, mistakes, skipped }:
         <p className="shrink-0 text-[10px] font-bold uppercase tracking-widest text-brand-muted px-4 pt-3 pb-1.5">
           What you typed
         </p>
-        <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-3 font-mono text-sm leading-relaxed break-words">
-          <ClusterText text={passage} typedLength={typed.length} mistakes={mistakeSet} skipped={skipSet} />
+        <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-3 font-mono text-sm leading-relaxed break-words whitespace-pre-wrap">
+          {typed.length === 0
+            ? <span className="text-brand-muted">Nothing was typed.</span>
+            : <ClusterText text={typed} typedLength={typed.length} mistakes={mistakeSet} skipped={skipSet} />}
         </div>
       </div>
     </div>
