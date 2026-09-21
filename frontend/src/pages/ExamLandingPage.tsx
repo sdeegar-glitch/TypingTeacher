@@ -80,8 +80,8 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
         </section>
 
         {/* Format + Tips */}
-        <div className="grid md:grid-cols-2 gap-5 mb-10">
-          <section className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+        <div className="grid md:grid-cols-2 gap-5 mb-5">
+          <section className="bg-brand-surface border border-brand-border rounded-2xl p-4">
             <h2 className="font-black text-brand-text mb-3 flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-brand-accent" /> Exam Format</h2>
             <ul className="space-y-2">
               {exam.format.map((f, i) => (
@@ -89,7 +89,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
               ))}
             </ul>
           </section>
-          <section className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+          <section className="bg-brand-surface border border-brand-border rounded-2xl p-4">
             <h2 className="font-black text-brand-text mb-3 flex items-center gap-2"><Lightbulb className="w-4 h-4 text-amber-500" /> Preparation Tips</h2>
             <ul className="space-y-2">
               {exam.tips.map((t, i) => (
@@ -100,7 +100,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
         </div>
 
         {/* CTA card */}
-        <div className="bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 border border-brand-primary/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+        <div className="bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 border border-brand-primary/20 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
           <div>
             <h2 className="font-black text-brand-text text-lg mb-1">Practice the {exam.examName} typing test now</h2>
             <p className="text-brand-text-muted text-sm">Free, in the real exam format, with live WPM and accuracy.</p>
@@ -117,7 +117,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
           <div className="space-y-3">
             {exam.faqs.map((f, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+                className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <h3 className="font-bold text-brand-text mb-2">{f.q}</h3>
                 <p className="text-brand-text-muted text-sm leading-relaxed">{f.a}</p>
               </motion.div>
@@ -125,7 +125,7 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
           </div>
         </section>
         {/* Related */}
-        <section className="mb-8">
+        <section className="mb-5">
           <h2 className="text-base font-black text-brand-text mb-3">Related practice</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {exam.related.map(r => (

@@ -71,7 +71,7 @@ function Table({ head, rows }: { head: string[]; rows: string[][] }) {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+    <section className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
       <h2 className="text-lg font-black text-brand-text mb-3">{title}</h2>
       {children}
     </section>
@@ -100,7 +100,7 @@ export default function TypingStatisticsPage() {
         </div>
 
         {/* Direct answer — optimised for the "average typing speed in India" featured snippet */}
-        <div className="bg-brand-surface border-l-4 border-brand-primary rounded-r-2xl rounded-l-md p-5 mb-6">
+        <div className="bg-brand-surface border-l-4 border-brand-primary rounded-r-xl rounded-l-md p-3.5 mb-4">
           <p className="text-brand-text text-sm sm:text-base leading-relaxed">
             <strong className="text-brand-text">The average typing speed in India is about 35–40 words per minute (WPM)</strong>,
             close to the global average of roughly 40 WPM. Beginners and students typically type 25–35 WPM,
@@ -188,7 +188,7 @@ export default function TypingStatisticsPage() {
         </div>
 
         {/* FAQ */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
           <h2 className="font-black text-lg mb-4 flex items-center gap-2"><HelpCircle className="w-5 h-5 text-brand-primary" /> Frequently Asked Questions</h2>
           <div className="space-y-4">
             {FAQS.map(f => (

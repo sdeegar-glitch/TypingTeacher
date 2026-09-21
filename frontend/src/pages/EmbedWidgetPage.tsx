@@ -68,7 +68,7 @@ export default function EmbedWidgetPage() {
     <div className="min-h-[100dvh] bg-brand-bg text-brand-text flex flex-col items-center justify-center p-4">
       <Seo title="Free Embeddable Typing Speed Test Widget | FastTypingLab" description="Add a free typing speed test to your website, blog or school page — copy one line of code. Free embeddable WPM typing widget by FastTypingLab." />
 
-      <div className="w-full max-w-[600px] bg-brand-surface border border-brand-border rounded-2xl p-5 shadow-sm">
+      <div className="w-full max-w-[600px] bg-brand-surface border border-brand-border rounded-2xl p-4 shadow-sm">
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -139,7 +139,7 @@ export default function EmbedWidgetPage() {
 
       {/* Embed instructions — only when NOT embedded (i.e. viewing the page directly) */}
       {!inIframe && (
-        <div className="w-full max-w-[600px] mt-6 bg-brand-surface border border-brand-border rounded-2xl p-5">
+        <div className="w-full max-w-[600px] mt-6 bg-brand-surface border border-brand-border rounded-2xl p-4">
           <h1 className="font-black text-lg mb-1">Embed this typing test on your site — free</h1>
           <p className="text-brand-text-muted text-sm mb-3">
             Add a free typing speed test to your blog, school site or resource page. Just paste this code where you want it to appear:

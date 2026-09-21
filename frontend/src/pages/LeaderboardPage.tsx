@@ -66,7 +66,7 @@ export default function LeaderboardPage() {
           subtitle="The fastest typists on FastTypingLab. Can you make the list?"
         />
 
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-5">
           <button onClick={() => { setRefreshing(true); loadData(); }} aria-label="Refresh leaderboard"
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-surface-2 text-sm font-semibold text-brand-muted hover:text-brand-text transition-all">
             <RefreshCcw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
@@ -74,11 +74,11 @@ export default function LeaderboardPage() {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-20">
+          <div className="flex items-center justify-center py-8">
             <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
           </div>
         ) : error || data.length === 0 ? (
-          <div className="text-center py-16 bg-brand-surface border border-brand-border rounded-2xl">
+          <div className="text-center py-8 bg-brand-surface border border-brand-border rounded-2xl">
             <p className="font-bold text-brand-text mb-1">
               {error ? 'Could not load the leaderboard.' : 'No scores yet.'}
             </p>
@@ -150,7 +150,7 @@ export default function LeaderboardPage() {
             </div>
 
             {/* CTA */}
-            <div className="mt-8 text-center">
+            <div className="mt-5 text-center">
               <p className="text-brand-muted text-sm mb-3">Think you can beat the top score? 🔥</p>
               <a href="/tests/" className="inline-block bg-brand-primary hover:bg-brand-secondary text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-primary/20">
                 Take the Speed Test

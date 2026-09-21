@@ -133,7 +133,7 @@ export default function ProfilePage() {
         )}
 
         {/* ── Profile card ── */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center gap-5">
             {/* Avatar */}
             <div className="relative shrink-0 mx-auto sm:mx-0">
@@ -187,7 +187,7 @@ export default function ProfilePage() {
         </div>
 
         {/* ── Certificates ── */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
           <h2 className="font-bold text-brand-text mb-4 flex items-center gap-2">
             <Award className="w-4 h-4 text-brand-accent" /> My Certificates
             <span className="text-xs font-semibold text-brand-muted">({certs.length})</span>

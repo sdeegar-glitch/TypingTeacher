@@ -24,7 +24,6 @@ export default function LearnHindiTypingPage() {
     { title: 'Daily Streaks', desc: 'Track consecutive practice days to build a real typing habit.', icon: '🔥' },
     { title: 'Live WPM & Accuracy', desc: 'Real-time speed and accuracy tracking on every single lesson.', icon: '⚡' },
     { title: 'On-Screen Keyboard', desc: 'A visual INSCRIPT keyboard reference so you always know which key to press.', icon: '⌨️' },
-    { title: '100% Free, No Signup', desc: 'Everything is saved in your browser — no account needed to start practicing.', icon: '🆓' },
   ];
 
   const EXAMS = [
@@ -42,9 +41,9 @@ export default function LearnHindiTypingPage() {
         title="Learn Hindi Typing Online Free — INSCRIPT & Kruti Dev | FastTypingLab"
         description="Learn Hindi typing free with 200 gamified lessons for SSC, CPCT, UP Police and court exams. Choose INSCRIPT (Mangal/Unicode) or Kruti Dev and start from home row."
       />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
 
-        <div className="flex items-center gap-2 text-xs text-brand-muted mb-8">
+        <div className="flex items-center gap-2 text-xs text-brand-muted mb-2">
           <Link to="/" className="hover:text-brand-primary">Home</Link><span>/</span>
           <span className="text-brand-text">Learn Hindi Typing</span>
         </div>
@@ -57,16 +56,16 @@ export default function LearnHindiTypingPage() {
           subtitle="200 gamified lessons designed for SSC, UP Police, court, and government exam preparation. Pick your keyboard layout and start from home row to full exam-pattern passages."
         >
           {/* Two big buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-3 mb-3">
             <Link to="/learn-hindi-typing/unicode/"
-              className="group flex items-center gap-3 w-full sm:w-auto justify-center px-8 py-4 rounded-2xl font-bold text-white text-base transition-all hover:opacity-90 active:scale-95 shadow-xl"
+              className="group flex items-center gap-3 w-full sm:w-auto justify-center px-5 py-2.5 rounded-xl font-bold text-white text-sm transition-all hover:opacity-90 active:scale-95 shadow-xl"
               style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 8px 24px rgba(42,157,174,0.3)' }}>
               <Languages className="w-5 h-5" />
               Learn Unicode (Mangal)
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </Link>
             <Link to="/learn-hindi-typing/kruti-dev/"
-              className="group flex items-center gap-3 w-full sm:w-auto justify-center px-8 py-4 rounded-2xl font-bold text-white text-base transition-all hover:opacity-90 active:scale-95 shadow-xl"
+              className="group flex items-center gap-3 w-full sm:w-auto justify-center px-5 py-2.5 rounded-xl font-bold text-white text-sm transition-all hover:opacity-90 active:scale-95 shadow-xl"
               style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 8px 24px rgba(188,108,80,0.3)' }}>
               <Languages className="w-5 h-5" />
               Learn Kruti Dev
@@ -75,30 +74,30 @@ export default function LearnHindiTypingPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-2xl mx-auto">
             {[
               { label: 'Lessons', value: '200', icon: Trophy, color: 'text-brand-cta' },
               { label: 'Stages', value: '12', icon: Target, color: 'text-brand-accent' },
               { label: 'Target WPM', value: '35+', icon: Zap, color: 'text-amber-500' },
               { label: 'Cost', value: 'Free', icon: Star, color: 'text-emerald-500' },
             ].map(s => (
-              <div key={s.label} className="bg-brand-surface border border-brand-border rounded-xl p-3 text-center">
-                <s.icon className={`w-4 h-4 mx-auto mb-1 ${s.color}`} />
-                <div className={`font-black text-lg ${s.color}`}>{s.value}</div>
-                <div className="text-xs text-brand-muted">{s.label}</div>
+              <div key={s.label} className="bg-brand-surface border border-brand-border rounded-xl px-3 py-2 flex items-center justify-center gap-2">
+                <s.icon className={`w-4 h-4 shrink-0 ${s.color}`} />
+                <span className={`font-extrabold text-base leading-none ${s.color}`}>{s.value}</span>
+                <span className="text-xs text-brand-muted">{s.label}</span>
               </div>
             ))}
           </div>
         </PageHeader>
 
         {/* ── Benefits grid ── */}
-        <div className="mb-12">
-          <h2 className="text-xl font-black text-brand-text mb-4 text-center">Built for Real Exams</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="mb-6">
+          <h2 className="text-lg font-extrabold text-brand-text mb-3 text-center">Built for Real Exams</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {BENEFITS.map((b, i) => (
               <motion.div key={b.title} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-                className="bg-brand-surface border border-brand-border rounded-2xl p-5 text-center hover:shadow-md hover:-translate-y-0.5 transition-all">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mx-auto mb-3" style={{ background: `${b.color}1a` }}>
+                className="bg-brand-surface border border-brand-border rounded-2xl p-4 text-center hover:shadow-md hover:-translate-y-0.5 transition-all">
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center mx-auto mb-2" style={{ background: `${b.color}1a` }}>
                   <b.icon className="w-5 h-5" style={{ color: b.color }} />
                 </div>
                 <h3 className="font-bold text-brand-text text-sm mb-1">{b.title}</h3>
@@ -109,12 +108,12 @@ export default function LearnHindiTypingPage() {
         </div>
 
         {/* ── Features ── */}
-        <div className="mb-12">
-          <h2 className="text-xl font-black text-brand-text mb-4 text-center">Why This Course Works</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mb-6">
+          <h2 className="text-lg font-extrabold text-brand-text mb-3 text-center">Why This Course Works</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {FEATURES.map((f, i) => (
               <motion.div key={f.title} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-                className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+                className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <div className="text-2xl mb-2">{f.icon}</div>
                 <h3 className="font-bold text-brand-text text-sm mb-1">{f.title}</h3>
                 <p className="text-brand-text-muted text-xs leading-relaxed">{f.desc}</p>
@@ -123,23 +122,9 @@ export default function LearnHindiTypingPage() {
           </div>
         </div>
 
-        {/* ── Gamification strip ── */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-12 flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-          {[
-            { icon: Zap, label: 'Earn XP every lesson', color: 'text-amber-500' },
-            { icon: Award, label: '13 unlockable badges', color: 'text-brand-cta' },
-            { icon: Flame, label: 'Build a daily streak', color: 'text-orange-500' },
-            { icon: Trophy, label: 'Beginner → Master levels', color: 'text-brand-accent' },
-          ].map(g => (
-            <div key={g.label} className="flex items-center gap-2 text-sm font-semibold text-brand-text-muted">
-              <g.icon className={`w-4 h-4 ${g.color}`} />
-              {g.label}
-            </div>
-          ))}
-        </div>
-
+        
         {/* ── Exam list ── */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl mb-12 overflow-hidden">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl mb-6 overflow-hidden">
           <div className="px-5 py-4 border-b border-brand-border">
             <h2 className="font-bold text-brand-text">Exams This Course Prepares You For</h2>
           </div>
@@ -166,7 +151,7 @@ export default function LearnHindiTypingPage() {
         </div>
 
         {/* ── CTA ── */}
-        <div className="bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 border border-brand-primary/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+        <div className="bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 border border-brand-primary/20 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 mb-5">
           <div>
             <h2 className="font-black text-brand-text text-lg mb-1">Start Lesson 1 Right Now</h2>
             <p className="text-brand-text-muted text-sm">No signup needed — your progress saves automatically in this browser.</p>

@@ -177,13 +177,13 @@ export default function TypingTestForPage() {
         </div>
 
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
           <h1 className="text-2xl sm:text-[28px] font-extrabold text-brand-text mb-3">{heading}</h1>
           <p className="text-brand-text-muted leading-relaxed">{data.intro}</p>
         </motion.div>
 
         {/* Target stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-3 gap-4 mb-5">
           {[
             { label: 'Target WPM', value: `${data.targetWpm}+`, icon: Zap, color: 'text-brand-primary' },
             { label: 'Min Accuracy', value: '90%', icon: Target, color: 'text-brand-accent' },
@@ -198,7 +198,7 @@ export default function TypingTestForPage() {
         </div>
 
         {/* CTA */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 mb-5">
           <Link to="/tests/"
             className="flex-1 bg-brand-primary hover:bg-brand-secondary text-white py-4 rounded-xl font-bold text-center flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-primary/20">
             <Zap className="w-4 h-4" /> Start Typing Test
@@ -210,13 +210,13 @@ export default function TypingTestForPage() {
         </div>
 
         {/* Why it matters */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <h2 className="font-bold text-brand-text mb-3">Why typing speed matters</h2>
           <p className="text-brand-text-muted text-sm leading-relaxed">{data.whyItMatters}</p>
         </div>
 
         {/* Practice passage */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <div className="flex items-center gap-2 mb-4">
             <BookOpen className="w-4 h-4 text-brand-primary" />
             <h2 className="font-bold text-brand-text">Sample Practice Passage</h2>
@@ -227,7 +227,7 @@ export default function TypingTestForPage() {
         </div>
 
         {/* Recommended typing speed by profession — benchmark table + cross-links */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <h2 className="font-bold text-brand-text mb-4">Recommended typing speed by profession</h2>
           <ScrollableRegion label="Comparison table">
             <table className="w-full text-sm">
@@ -255,7 +255,7 @@ export default function TypingTestForPage() {
         </div>
 
         {/* How to improve */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <h2 className="font-bold text-brand-text mb-4">How to improve your typing speed</h2>
           <ul className="space-y-2.5">
             {IMPROVE_TIPS.map((tip, i) => (
@@ -269,7 +269,7 @@ export default function TypingTestForPage() {
 
         {/* FAQ */}
         {data.faqs.length > 0 && (
-          <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+          <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
             <h2 className="font-bold text-brand-text mb-4 flex items-center gap-2">
               <HelpCircle className="w-4 h-4 text-brand-primary" /> Frequently Asked Questions
             </h2>
@@ -286,7 +286,7 @@ export default function TypingTestForPage() {
 
         {/* Related exams */}
         {data.relatedExams.length > 0 && (
-          <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 mb-6">
+          <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
             <h2 className="font-bold text-brand-text mb-4 flex items-center gap-2">
               <GraduationCap className="w-4 h-4 text-brand-secondary" />
               Recommended Practice

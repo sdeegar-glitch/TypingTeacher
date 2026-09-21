@@ -77,7 +77,7 @@ export default function SiteMapPage() {
 
         <div className="grid sm:grid-cols-2 gap-6">
           {SECTIONS.map(sec => (
-            <section key={sec.title} className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+            <section key={sec.title} className="bg-brand-surface border border-brand-border rounded-2xl p-4">
               <h2 className="font-black text-brand-text mb-3">{sec.title}</h2>
               <ul className="space-y-1.5">
                 {sec.links.map(l => (
@@ -90,7 +90,7 @@ export default function SiteMapPage() {
           ))}
 
           {/* Blog — full list */}
-          <section className="bg-brand-surface border border-brand-border rounded-2xl p-5 sm:col-span-2">
+          <section className="bg-brand-surface border border-brand-border rounded-2xl p-4 sm:col-span-2">
             <h2 className="font-black text-brand-text mb-3">Blog Articles</h2>
             <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5">
               <li><Link to="/blog/" className="text-sm text-brand-primary hover:underline font-semibold">All Blog Posts</Link></li>

@@ -189,7 +189,7 @@ export default function CertificatePage() {
         noindex
       />
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-5">
           <Link to="/dashboard" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             Dashboard
@@ -209,7 +209,7 @@ export default function CertificatePage() {
 
         {tab === 'get' && (
           <div className="space-y-6">
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
+            <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
               <h2 className="font-bold mb-1">Who can get a certificate?</h2>
               <p className="text-sm text-brand-text-muted mb-4">
                 Registered users who pass one full test meeting all three conditions. The result is checked on our server against your saved test.
@@ -218,7 +218,7 @@ export default function CertificatePage() {
             </div>
 
             {!loggedIn && (
-              <div className="rounded-2xl p-6 border border-brand-border bg-brand-surface flex items-start gap-4">
+              <div className="rounded-2xl p-4 border border-brand-border bg-brand-surface flex items-start gap-4">
                 <div className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-white"
                   style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
                   <Lock className="w-5 h-5" />
@@ -244,7 +244,7 @@ export default function CertificatePage() {
             )}
 
             {loggedIn && !cert && (
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
+              <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <label htmlFor="cert-name" className="block text-sm font-medium text-brand-text-muted mb-1.5">
                   Name on certificate
                 </label>
@@ -322,7 +322,7 @@ export default function CertificatePage() {
         )}
 
         {tab === 'verify' && (
-          <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 max-w-lg">
+          <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 max-w-lg">
             <h2 className="font-bold mb-4 flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-brand-accent" /> Verify a certificate
             </h2>

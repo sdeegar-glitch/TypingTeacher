@@ -192,16 +192,16 @@ export default function ToolsPage() {
         <PageHeader
           icon={Wrench}
           title="Typing Tools & Utilities"
-          subtitle="Free online tools for typing speed tests, keyboard diagnostics, and exam preparation. All tools work directly in your browser — no download required."
+          subtitle="Free online tools for typing tests, keyboard diagnostics and exam prep. They run in your browser, no download needed."
         />
 
         {/* Tools Section */}
-        <section className="mb-12">
-          <h2 className="text-lg font-bold text-brand-text mb-4 flex items-center gap-2">
+        <section className="mb-6">
+          <h2 className="text-lg font-bold text-brand-text mb-3 flex items-center gap-2">
             <Keyboard className="w-5 h-5 text-brand-primary" />
             Keyboard & Click Tools
           </h2>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {TOOL_CARDS.map((tool, i) => (
               <motion.div
                 key={tool.href}
@@ -211,7 +211,7 @@ export default function ToolsPage() {
               >
                 <Link
                   to={tool.href}
-                  className="group flex items-start gap-4 p-5 bg-brand-surface border border-brand-border rounded-2xl hover:border-brand-primary/30 hover:shadow-lg hover:shadow-brand-primary/5 transition-all duration-300"
+                  className="group flex items-start gap-3 p-3.5 bg-brand-surface border border-brand-border rounded-2xl hover:border-brand-primary/30 hover:shadow-lg hover:shadow-brand-primary/5 transition-all duration-300"
                 >
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 ${tool.bg} group-hover:scale-105 transition-transform`}>
                     <tool.icon className={`w-5 h-5 ${tool.color}`} />
@@ -221,7 +221,7 @@ export default function ToolsPage() {
                       <h3 className="font-bold text-brand-text">{tool.title}</h3>
                       <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${tool.tagColor}`}>{tool.tag}</span>
                     </div>
-                    <p className="text-brand-text-muted text-sm leading-relaxed">{tool.desc}</p>
+                    <p className="text-brand-text-muted text-[13px] leading-snug line-clamp-3">{tool.desc}</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
                 </Link>
@@ -231,12 +231,12 @@ export default function ToolsPage() {
         </section>
 
         {/* Exam Prep Section */}
-        <section className="mb-12">
-          <h2 className="text-lg font-bold text-brand-text mb-4 flex items-center gap-2">
+        <section className="mb-6">
+          <h2 className="text-lg font-bold text-brand-text mb-3 flex items-center gap-2">
             <GraduationCap className="w-5 h-5 text-brand-secondary" />
             Government Exam Typing Practice
           </h2>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {EXAM_CARDS.map((exam, i) => (
               <motion.div
                 key={exam.href}
@@ -246,7 +246,7 @@ export default function ToolsPage() {
               >
                 <Link
                   to={exam.href}
-                  className="group flex items-center gap-4 p-5 bg-brand-surface border border-brand-border rounded-2xl hover:border-brand-secondary/30 hover:shadow-md transition-all"
+                  className="group flex items-center gap-3 p-3.5 bg-brand-surface border border-brand-border rounded-2xl hover:border-brand-secondary/30 hover:shadow-md transition-all"
                 >
                   <div className="w-10 h-10 rounded-xl bg-brand-secondary/10 border border-brand-secondary/20 flex items-center justify-center shrink-0">
                     <span className="text-xs font-black text-brand-secondary">{exam.badge}</span>
@@ -264,16 +264,16 @@ export default function ToolsPage() {
 
         {/* Coming Soon */}
         <section>
-          <h2 className="text-lg font-bold text-brand-text mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-brand-text mb-3 flex items-center gap-2">
             <Clock className="w-5 h-5 text-brand-muted" />
             Coming Soon
           </h2>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {[
               { title: 'Typing Trainer AI', desc: 'AI-generated drills targeting your weakest keys and common error patterns.' },
               { title: 'Typing History Export', desc: 'Export your full typing history as CSV or PDF for analysis.' },
             ].map(t => (
-              <div key={t.title} className="p-5 bg-brand-surface border border-dashed border-brand-border rounded-2xl">
+              <div key={t.title} className="p-4 bg-brand-surface border border-dashed border-brand-border rounded-2xl">
                 <h3 className="font-bold text-brand-text mb-1">{t.title}</h3>
                 <p className="text-brand-text-muted text-sm">{t.desc}</p>
                 <span className="mt-2 inline-block text-[10px] bg-brand-surface-2 border border-brand-border px-2 py-0.5 rounded-full text-brand-muted font-semibold uppercase">Coming Soon</span>

@@ -102,7 +102,7 @@ export default function KeyboardTesterPage() {
       />
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-5">
           <Link to="/tools/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             Tools
@@ -112,7 +112,7 @@ export default function KeyboardTesterPage() {
         </div>
 
         {/* Progress + Info */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
             <div>
               <p className="text-sm text-brand-muted mb-1">Keys Tested</p>
@@ -171,7 +171,7 @@ export default function KeyboardTesterPage() {
         </div>
 
         {/* Keyboard */}
-        <ScrollableRegion label="On-screen keyboard" className="bg-brand-surface border border-brand-border rounded-2xl p-4 sm:p-6">
+        <ScrollableRegion label="On-screen keyboard" className="bg-brand-surface border border-brand-border rounded-2xl p-4 sm:p-4">
           <div className="flex flex-col gap-2 min-w-[640px]">
             {ROWS.map((row, ri) => (
               <div key={ri} className="flex gap-2">
@@ -202,7 +202,7 @@ export default function KeyboardTesterPage() {
         </div>
 
         {/* SEO Content */}
-        <div className="mt-10 prose max-w-none text-brand-text-muted space-y-4">
+        <div className="mt-5 prose max-w-none text-brand-text-muted space-y-4">
           <div>
             <h2 className="text-lg font-bold text-brand-text mb-2">What is a Keyboard Tester?</h2>
             <p className="text-sm leading-relaxed">

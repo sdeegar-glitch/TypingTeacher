@@ -90,7 +90,7 @@ export default function CompetitiveExamTypingPage() {
         />
 
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-xs text-brand-muted mb-6">
+        <div className="flex items-center gap-2 text-xs text-brand-muted mb-3">
           <Link to="/" className="hover:text-brand-primary transition-colors">Home</Link>
           <span>/</span>
           <span className="text-brand-text">Competitive Exam Typing</span>
@@ -102,34 +102,34 @@ export default function CompetitiveExamTypingPage() {
           title="Competitive Exam Typing Practice"
           subtitle="SSC, CPCT, UP Police, Court Clerk, Railway — all exams covered"
         >
-          <div className="grid grid-cols-3 gap-3 mt-6 max-w-xl mx-auto">
+          <div className="grid grid-cols-3 gap-2 mt-3 max-w-xl mx-auto">
             {[
               { label: 'Exams Covered', value: '10+', color: 'text-brand-primary' },
               { label: 'Min WPM Required', value: '25–35', color: 'text-brand-accent' },
               { label: 'Practice Tests', value: 'Free', color: 'text-amber-500' },
             ].map(s => (
-              <div key={s.label} className="bg-brand-surface border border-brand-border rounded-xl p-3 text-center">
-                <div className={`text-2xl font-black font-mono ${s.color}`}>{s.value}</div>
-                <div className="text-xs text-brand-muted">{s.label}</div>
+              <div key={s.label} className="bg-brand-surface border border-brand-border rounded-xl px-3 py-2 flex items-center justify-center gap-2">
+                <span className={`text-base font-extrabold font-mono leading-none ${s.color}`}>{s.value}</span>
+                <span className="text-xs text-brand-muted">{s.label}</span>
               </div>
             ))}
           </div>
         </PageHeader>
 
         {/* Exam list */}
-        <div className="mb-10">
-          <h2 className="text-xl font-black text-brand-text mb-4">Practice by Exam</h2>
-          <div className="grid sm:grid-cols-2 gap-4">
+        <div className="mb-5">
+          <h2 className="text-lg font-extrabold text-brand-text mb-3">Practice by Exam</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {EXAMS.map((exam, i) => (
               <motion.div key={exam.name}
                 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
                 <Link to={exam.href}
-                  className={`group block bg-brand-surface border ${exam.border} hover:border-brand-primary/40 rounded-2xl p-5 transition-all hover:shadow-md hover:-translate-y-0.5`}>
-                  <div className="flex items-start justify-between mb-3">
+                  className={`group block bg-brand-surface border ${exam.border} hover:border-brand-primary/40 rounded-2xl p-4 transition-all hover:shadow-md hover:-translate-y-0.5`}>
+                  <div className="flex items-start justify-between mb-2">
                     <div className={`px-2.5 py-1 rounded-lg text-xs font-bold ${exam.bg} ${exam.color}`}>{exam.name}</div>
                     <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all" />
                   </div>
-                  <p className="text-xs text-brand-muted mb-3 leading-relaxed">{exam.full}</p>
+                  <p className="text-xs text-brand-muted mb-2 leading-snug">{exam.full}</p>
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div className="bg-brand-surface-2 rounded-lg p-2">
                       <div className={`font-black text-sm ${exam.color}`}>{exam.wpm}+</div>
@@ -152,7 +152,7 @@ export default function CompetitiveExamTypingPage() {
         </div>
 
         {/* In-depth exam guides */}
-        <div className="mb-10">
+        <div className="mb-5">
           <h2 className="text-xl font-black text-brand-text mb-4">In-Depth Exam Typing Guides</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
@@ -183,7 +183,7 @@ export default function CompetitiveExamTypingPage() {
         </div>
 
         {/* Tips */}
-        <div className="mb-10">
+        <div className="mb-5">
           <h2 className="text-xl font-black text-brand-text mb-4">Expert Preparation Tips</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {TIPS.map((tip, i) => (
@@ -201,7 +201,7 @@ export default function CompetitiveExamTypingPage() {
         </div>
 
         {/* CTA strip */}
-        <div className="grid sm:grid-cols-3 gap-3 mb-10">
+        <div className="grid sm:grid-cols-3 gap-3 mb-5">
           {[
             { label: 'English Typing Test', desc: '1/2/5/10 min tests', href: '/tests/', color: 'bg-brand-primary' },
             { label: 'Hindi Typing Test', desc: 'Unicode Devanagari', href: '/hindi-typing-test/', color: 'bg-orange-500' },
@@ -219,11 +219,11 @@ export default function CompetitiveExamTypingPage() {
         </div>
 
         {/* FAQ */}
-        <div className="mb-8">
+        <div className="mb-5">
           <h2 className="text-xl font-black text-brand-text mb-4">Frequently Asked Questions</h2>
           <div className="space-y-3">
             {FAQS.map((faq, i) => (
-              <div key={i} className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+              <div key={i} className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <h3 className="font-bold text-brand-text mb-2">{faq.q}</h3>
                 <p className="text-brand-text-muted text-sm leading-relaxed">{faq.a}</p>
               </div>

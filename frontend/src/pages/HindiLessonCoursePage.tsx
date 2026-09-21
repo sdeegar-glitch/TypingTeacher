@@ -225,7 +225,7 @@ export default function HindiLessonCoursePage() {
 
       {/* Footer CTA */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-16">
-        <div className="rounded-2xl p-6 text-center"
+        <div className="rounded-2xl p-4 text-center"
           style={{ background: 'linear-gradient(135deg,rgba(188,108,80,0.08),rgba(221,173,156,0.06))', border: '1px solid rgba(188,108,80,0.2)' }}>
           <h3 className="font-black text-brand-text text-lg mb-2"
             style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>

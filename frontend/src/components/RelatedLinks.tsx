@@ -18,7 +18,7 @@ interface RelatedLinksProps {
 export default function RelatedLinks({ title = 'Related pages', items, className = '' }: RelatedLinksProps) {
   if (items.length === 0) return null;
   return (
-    <section className={`mt-10 ${className}`}>
+    <section className={`mt-5 ${className}`}>
       <h2 className="text-base font-black text-brand-text mb-3">{title}</h2>
       <div className={`grid grid-cols-1 ${items.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-3`}>
         {items.map(item => (

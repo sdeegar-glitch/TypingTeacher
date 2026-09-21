@@ -25,7 +25,7 @@ export default function CookiePolicyPage() {
       />
       <div className="max-w-3xl mx-auto">
         <h1 className="text-2xl sm:text-[28px] font-extrabold mb-2">Cookie Policy</h1>
-        <p className="text-brand-muted text-sm mb-8">Last updated: {UPDATED}</p>
+        <p className="text-brand-muted text-sm mb-5">Last updated: {UPDATED}</p>
 
         <p className="text-brand-text-muted text-sm leading-relaxed mb-6">
           This Cookie Policy explains what cookies and similar technologies (such as browser local
@@ -74,7 +74,7 @@ export default function CookiePolicyPage() {
           </p>
         </Section>
 
-        <p className="text-brand-muted text-xs mt-8">
+        <p className="text-brand-muted text-xs mt-5">
           This policy is provided for general information and is not legal advice.
         </p>
       </div>

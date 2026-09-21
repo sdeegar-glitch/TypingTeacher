@@ -137,7 +137,7 @@ export default function LiveTestPage() {
         </div>
 
         {/* This week's passage */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-2">
             This week's passage · {schedule.weekKey}
           </p>
@@ -187,7 +187,7 @@ export default function LiveTestPage() {
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-3 mb-8">
+        <div className="flex flex-wrap gap-3 mb-5">
           <Link
             to="/leaderboard/"
             className="inline-flex items-center gap-2 text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all hover:opacity-90"
@@ -205,7 +205,7 @@ export default function LiveTestPage() {
 
         {/* Reminders */}
         <p className="text-xs font-bold uppercase tracking-widest text-brand-muted mb-2">Get reminded</p>
-        <div className="space-y-3 mb-8">
+        <div className="space-y-3 mb-5">
           <TelegramCTA message="We announce the Live Test in the group before it starts, and post the results after — join to get reminded." />
         </div>
 

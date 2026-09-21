@@ -59,7 +59,7 @@ export default function ReferPage() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-brand-surface border border-brand-border rounded-2xl p-6 text-center"
+            className="bg-brand-surface border border-brand-border rounded-2xl p-4 text-center"
           >
             <h2 className="font-black text-brand-text text-lg mb-2">Get your invite link</h2>
             <p className="text-sm text-brand-muted mb-5 max-w-md mx-auto">
@@ -88,11 +88,11 @@ export default function ReferPage() {
         )}
 
         {/* How it works */}
-        <section className="mt-10">
+        <section className="mt-5">
           <h2 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-4">How it works</h2>
           <div className="grid sm:grid-cols-3 gap-4">
             {STEPS.map(({ icon: Icon, title, body }) => (
-              <div key={title} className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+              <div key={title} className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <Icon className="w-5 h-5 text-brand-accent mb-3" />
                 <h3 className="font-bold text-brand-text text-sm mb-1.5">{title}</h3>
                 <p className="text-xs text-brand-muted leading-relaxed">{body}</p>
@@ -103,7 +103,7 @@ export default function ReferPage() {
 
         {/* Tiers — shown here too, because logged-out visitors can't see the card */}
         {!loggedIn && (
-          <section className="mt-8">
+          <section className="mt-5">
             <h2 className="text-xs font-bold text-brand-text uppercase tracking-wider mb-4">What you earn</h2>
             <div className="bg-brand-surface border border-brand-border rounded-2xl divide-y divide-brand-border">
               {REFERRAL_TIERS.map(t => (
@@ -122,7 +122,7 @@ export default function ReferPage() {
         )}
 
         {/* Being straight about what the rewards are, and are not */}
-        <section className="mt-8 bg-brand-surface-2 border border-brand-border rounded-2xl p-5">
+        <section className="mt-5 bg-brand-surface-2 border border-brand-border rounded-2xl p-4">
           <h2 className="font-bold text-brand-text text-sm mb-2">The honest version</h2>
           <p className="text-xs text-brand-muted leading-relaxed">
             There is no cash payout, and there never will be — FastTypingLab has no subscriptions and no paywalled
@@ -137,7 +137,7 @@ export default function ReferPage() {
           </ul>
         </section>
 
-        <section className="mt-8 text-center">
+        <section className="mt-5 text-center">
           <p className="text-sm text-brand-muted mb-3">Monthly shout-outs are posted in the community group.</p>
           <div className="flex justify-center">
             <TelegramCTA variant="inline" />

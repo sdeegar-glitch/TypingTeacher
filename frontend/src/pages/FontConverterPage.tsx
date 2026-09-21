@@ -196,7 +196,7 @@ export default function FontConverterPage() {
         </div>
 
         {/* SEO content */}
-        <div className="mt-10 space-y-4 text-sm text-brand-text-muted">
+        <div className="mt-5 space-y-4 text-sm text-brand-text-muted">
           <h2 className="text-lg font-black text-brand-text">Kruti Dev vs Unicode — what's the difference?</h2>
           <p>
             <strong className="text-brand-text">Kruti Dev</strong> is a legacy font encoding. A Kruti Dev file actually stores ordinary Latin characters — the Kruti Dev font simply draws Devanagari shapes on top of them. That's why Kruti Dev text looks like <span className="font-mono">Hkkjr ,d fo'kky</span> on any computer that doesn't have the font installed.
@@ -225,7 +225,7 @@ export default function FontConverterPage() {
         </div>
 
         {/* FAQ */}
-        <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-6">
+        <div className="mt-5 bg-brand-surface border border-brand-border rounded-2xl p-4">
           <h2 className="font-black text-lg mb-4 text-brand-text">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {FAQS.map(f => (

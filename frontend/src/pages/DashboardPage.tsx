@@ -211,10 +211,10 @@ export default function DashboardPage() {
         </div>
 
         {/* ── Level + XP Bar ── */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 sm:p-6 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 sm:p-4 mb-6">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white font-black text-xl shadow-lg shadow-brand-primary/30">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white font-black text-xl shadow-lg shadow-brand-primary/30">
                 {stats.level}
               </div>
               <div>
@@ -281,7 +281,7 @@ export default function DashboardPage() {
 
             {/* WPM Chart */}
             {chartData.length >= 2 ? (
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+              <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <h2 className="font-bold text-brand-text mb-4 flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-brand-primary" /> WPM Progress
                 </h2>
@@ -313,7 +313,7 @@ export default function DashboardPage() {
 
             {/* Recent unlocks */}
             {stats.unlockedKeys.length > 0 && (
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+              <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <h2 className="font-bold text-brand-text mb-4 flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-400" /> Recent Achievements
                 </h2>
@@ -337,7 +337,7 @@ export default function DashboardPage() {
             )}
 
             {/* Available Tests */}
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+            <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-brand-text">Available Tests</h2>
                 <Link to="/tests/" className="text-sm text-brand-primary font-semibold hover:underline">View all →</Link>
@@ -445,7 +445,7 @@ export default function DashboardPage() {
               </div>
             ) : aiCoach ? (
               <>
-                <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+                <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-2xl">🤖</span>
                     <h2 className="font-bold text-brand-text">Your Performance Analysis</h2>
@@ -457,7 +457,7 @@ export default function DashboardPage() {
                 </div>
 
                 {aiCoach.weakAreas?.length > 0 && (
-                  <div className="bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-2xl p-5">
+                  <div className="bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-2xl p-4">
                     <h3 className="font-bold text-rose-700 dark:text-rose-400 mb-3 flex items-center gap-2">
                       <Target className="w-4 h-4" /> Weak Areas to Focus On
                     </h3>
@@ -470,7 +470,7 @@ export default function DashboardPage() {
                 )}
 
                 {aiCoach.suggestions?.length > 0 && (
-                  <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+                  <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                     <h3 className="font-bold text-brand-text mb-3">💡 Actionable Tips</h3>
                     <ul className="space-y-2">
                       {aiCoach.suggestions.map((s: string, i: number) => (
@@ -484,7 +484,7 @@ export default function DashboardPage() {
                 )}
 
                 {aiCoach.practiceText && (
-                  <div className="bg-brand-primary/5 border border-brand-primary/20 rounded-2xl p-5">
+                  <div className="bg-brand-primary/5 border border-brand-primary/20 rounded-2xl p-4">
                     <h3 className="font-bold text-brand-text mb-3 flex items-center gap-2">
                       <Zap className="w-4 h-4 text-brand-primary" /> Custom Practice Passage
                     </h3>

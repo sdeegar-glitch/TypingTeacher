@@ -115,7 +115,7 @@ export default function AiTutorPage() {
 
         {/* ── No data yet ── */}
         {!stats && !plan && (
-          <div className="max-w-xl mx-auto bg-brand-surface border border-brand-border rounded-2xl p-6 text-center mb-6">
+          <div className="max-w-xl mx-auto bg-brand-surface border border-brand-border rounded-2xl p-4 text-center mb-6">
             <Keyboard className="w-8 h-8 mx-auto mb-3 text-brand-muted" />
             <h2 className="font-black text-brand-text mb-1">Take a test first for a tailored plan</h2>
             <p className="text-brand-text-muted text-sm mb-4">The tutor personalizes your plan from your real WPM and accuracy. Take a quick test, then come back — or get a beginner starter plan now.</p>
@@ -133,7 +133,7 @@ export default function AiTutorPage() {
 
         {/* ── Goal + analyze ── */}
         {(stats || plan) && (
-          <div className="max-w-2xl mx-auto mb-8">
+          <div className="max-w-2xl mx-auto mb-5">
             <label className="block text-xs font-bold uppercase tracking-wide text-brand-muted mb-1.5">Your goal (optional)</label>
             <input
               value={goal} onChange={e => setGoal(e.target.value)}
@@ -165,7 +165,7 @@ export default function AiTutorPage() {
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
 
             {/* Analysis + level + target */}
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
+            <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
               <div className="flex flex-wrap items-center gap-3 mb-3">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-brand-primary/10 text-brand-primary">
                   <Brain className="w-3.5 h-3.5" /> {plan.level}
@@ -181,7 +181,7 @@ export default function AiTutorPage() {
 
             {/* Strengths / weak areas */}
             <div className="grid sm:grid-cols-2 gap-5">
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+              <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <h3 className="font-black text-brand-text mb-3 flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Strengths</h3>
                 <ul className="space-y-2">
                   {plan.strengths?.map((s, i) => (
@@ -189,7 +189,7 @@ export default function AiTutorPage() {
                   ))}
                 </ul>
               </div>
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+              <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <h3 className="font-black text-brand-text mb-3 flex items-center gap-2"><Target className="w-4 h-4 text-rose-500" /> Focus areas</h3>
                 <ul className="space-y-2">
                   {plan.weakAreas?.map((s, i) => (
@@ -204,7 +204,7 @@ export default function AiTutorPage() {
               <h2 className="text-lg font-black text-brand-text mb-3">Your step-by-step plan</h2>
               <div className="grid sm:grid-cols-2 gap-4">
                 {plan.plan?.map((step, i) => (
-                  <div key={i} className="bg-brand-surface border border-brand-border rounded-2xl p-5 flex gap-4">
+                  <div key={i} className="bg-brand-surface border border-brand-border rounded-2xl p-4 flex gap-4">
                     <div className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-black text-white text-sm" style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>{i + 1}</div>
                     <div>
                       <h3 className="font-bold text-brand-text text-sm mb-1">{step.title}</h3>
@@ -217,7 +217,7 @@ export default function AiTutorPage() {
 
             {/* Daily routine */}
             {!!plan.dailyRoutine?.length && (
-              <div className="bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 border border-brand-primary/20 rounded-2xl p-6">
+              <div className="bg-gradient-to-r from-brand-primary/10 to-brand-accent/10 border border-brand-primary/20 rounded-2xl p-4">
                 <h2 className="text-lg font-black text-brand-text mb-3 flex items-center gap-2"><Zap className="w-5 h-5 text-amber-500" /> Daily routine</h2>
                 <ul className="space-y-2">
                   {plan.dailyRoutine.map((r, i) => (
@@ -231,7 +231,7 @@ export default function AiTutorPage() {
 
             {/* Practice text */}
             {plan.practiceText && (
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
+              <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
                 <div className="flex items-center justify-between mb-3 gap-3">
                   <h2 className="text-lg font-black text-brand-text flex items-center gap-2"><Keyboard className="w-5 h-5 text-brand-primary" /> Your custom practice passage</h2>
                   <button onClick={() => practiceThis(plan.practiceText)} className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-brand-primary hover:opacity-80">

@@ -92,9 +92,9 @@ export default function KrutiDevPage() {
         </div>
 
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-2xl">क</div>
+            <div className="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-2xl">क</div>
             <div>
               <h1 className="text-3xl font-black text-brand-text">Kruti Dev Typing Guide</h1>
               <p className="text-brand-text-muted text-sm mt-0.5">Complete guide + practice for Kruti Dev Hindi typing exams</p>
@@ -117,10 +117,10 @@ export default function KrutiDevPage() {
         </motion.div>
 
         {/* Guide steps */}
-        <div className="grid sm:grid-cols-2 gap-4 mb-8">
+        <div className="grid sm:grid-cols-2 gap-4 mb-5">
           {STEPS.map((step, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
-              className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+              className="bg-brand-surface border border-brand-border rounded-2xl p-4">
               <div className="text-3xl mb-3">{step.icon}</div>
               <h2 className="font-bold text-brand-text mb-2">{step.title}</h2>
               <p className="text-brand-text-muted text-sm leading-relaxed">{step.content}</p>
@@ -129,7 +129,7 @@ export default function KrutiDevPage() {
         </div>
 
         {/* Key mapping table */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl mb-8 overflow-hidden">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl mb-5 overflow-hidden">
           <div className="px-5 py-4 border-b border-brand-border flex items-center gap-2">
             <Keyboard className="w-5 h-5 text-brand-primary" />
             <h2 className="font-bold text-brand-text">Kruti Dev 010 Key Mapping (Common Keys)</h2>
@@ -159,7 +159,7 @@ export default function KrutiDevPage() {
         </div>
 
         {/* Exams table */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl mb-8 overflow-hidden">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl mb-5 overflow-hidden">
           <div className="px-5 py-4 border-b border-brand-border flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-brand-secondary" />
             <h2 className="font-bold text-brand-text">Exams Using Kruti Dev / Hindi Typing</h2>
@@ -187,7 +187,7 @@ export default function KrutiDevPage() {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-brand-primary/10 to-brand-secondary/10 border border-brand-primary/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-gradient-to-r from-brand-primary/10 to-brand-secondary/10 border border-brand-primary/20 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <h2 className="font-black text-brand-text text-lg mb-1">Ready to Practice?</h2>
             <p className="text-brand-text-muted text-sm">Use our Hindi Typing Test to practice Unicode Hindi — the modern standard for most exams.</p>
@@ -205,7 +205,7 @@ export default function KrutiDevPage() {
         </div>
 
         {/* SEO text */}
-        <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-2">
+        <div className="mt-5 bg-brand-surface border border-brand-border rounded-2xl p-4 text-sm text-brand-text-muted space-y-2">
           <h2 className="text-base font-bold text-brand-text">Kruti Dev Typing — FAQ</h2>
           <p><strong className="text-brand-text">What is Kruti Dev?</strong> Kruti Dev is a popular Hindi font encoding used in government offices across India. It is not Unicode — it maps QWERTY keys to Hindi characters through a special font.</p>
           <p><strong className="text-brand-text">Which exams require Kruti Dev typing?</strong> UP Police, Bihar SSC, Rajasthan Patwari, court clerk exams, and various state PSC exams commonly require Kruti Dev. Always check your exam notification for the specific requirement.</p>

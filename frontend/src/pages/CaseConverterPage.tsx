@@ -64,7 +64,7 @@ export default function CaseConverterPage() {
         description="Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case and more, instantly and for free."
       />
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-5">
           <Link to="/tools/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             Tools
@@ -150,7 +150,7 @@ export default function CaseConverterPage() {
         )}
 
         {/* SEO */}
-        <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-4">
+        <div className="mt-5 bg-brand-surface border border-brand-border rounded-2xl p-4 text-sm text-brand-text-muted space-y-4">
           <div className="space-y-2">
             <h2 className="text-base font-bold text-brand-text">About Case Converter</h2>
             <p>This free online case converter transforms text between 10 case formats including UPPERCASE, lowercase, Title Case, Sentence case, camelCase, PascalCase, snake_case, kebab-case, aLtErNaTiNg, and iNVERSE. Useful for developers, writers, students, and content creators.</p>

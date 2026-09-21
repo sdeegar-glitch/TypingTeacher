@@ -61,7 +61,7 @@ export default function WpmCalculatorPage() {
         </p>
 
         {/* Calculator */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-8">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-5">
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-brand-muted mb-1.5">Characters typed</label>
@@ -103,7 +103,7 @@ export default function WpmCalculatorPage() {
         </div>
 
         {/* Formula */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <h2 className="font-black text-lg mb-2">The WPM formula</h2>
           <p className="text-brand-text-muted text-sm leading-relaxed mb-3">
             Typing tests treat every <strong className="text-brand-text">5 characters as one word</strong> (including spaces). So:
@@ -116,7 +116,7 @@ export default function WpmCalculatorPage() {
         </div>
 
         {/* Benchmarks */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <h2 className="font-black text-lg mb-3">What is a good typing speed?</h2>
           <ScrollableRegion label="WPM reference table">
             <table className="w-full text-sm">
@@ -133,7 +133,7 @@ export default function WpmCalculatorPage() {
         </div>
 
         {/* FAQ */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
           <h2 className="font-black text-lg mb-4 flex items-center gap-2"><HelpCircle className="w-5 h-5 text-brand-primary" /> FAQ</h2>
           <div className="space-y-4">
             {FAQS.map(f => (

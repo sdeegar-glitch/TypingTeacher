@@ -25,7 +25,7 @@ export default function DisclaimerPage() {
       />
       <div className="max-w-3xl mx-auto">
         <h1 className="text-2xl sm:text-[28px] font-extrabold mb-2">Disclaimer</h1>
-        <p className="text-brand-muted text-sm mb-8">Last updated: {UPDATED}</p>
+        <p className="text-brand-muted text-sm mb-5">Last updated: {UPDATED}</p>
 
         <p className="text-brand-text-muted text-sm leading-relaxed mb-6">
           The information and tools on fasttypinglab.com ("the Service") are provided in good faith,
@@ -69,7 +69,7 @@ export default function DisclaimerPage() {
           </p>
         </Section>
 
-        <p className="text-brand-muted text-xs mt-8">
+        <p className="text-brand-muted text-xs mt-5">
           This Disclaimer is provided for general information and is not legal advice.
         </p>
       </div>

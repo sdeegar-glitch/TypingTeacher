@@ -100,7 +100,7 @@ export default function HindiCourseSelectPage() {
           eyebrow={isKrutiDev ? 'Kruti Dev 010 — Remington Gail Keyboard' : 'INSCRIPT — Unicode / Mangal Keyboard'}
           title={<><span style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>हिंदी टाइपिंग</span>{' '}<span className="gradient-text-cta">मास्टरी कोर्स</span></>}
           subtitle="200 progressive lessons across 12 stages — home row to SSC/UP Police/court exam mastery."
-          className="mb-8"
+          className="mb-5"
         />
 
         {/* Stat cards */}
@@ -222,7 +222,7 @@ export default function HindiCourseSelectPage() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-16">
-        <div className="rounded-2xl p-6 text-center"
+        <div className="rounded-2xl p-4 text-center"
           style={{ background: 'linear-gradient(135deg,rgba(188,108,80,0.08),rgba(221,173,156,0.06))', border: '1px solid rgba(188,108,80,0.2)' }}>
           <h3 className="font-black text-brand-text text-lg mb-2" style={{ fontFamily: "'Noto Sans Devanagari',sans-serif" }}>
             परीक्षा की तैयारी करें

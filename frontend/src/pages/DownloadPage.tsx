@@ -46,18 +46,18 @@ export default function DownloadPage() {
 
       <div className="max-w-3xl mx-auto">
         {/* Hero */}
-        <div className="text-center mb-10">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-white shadow-lg"
+        <div className="text-center mb-5">
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center mx-auto mb-2 text-white shadow-md"
             style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-            <Monitor className="w-8 h-8" />
+            <Monitor className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl sm:text-[28px] font-extrabold mb-3">Download FastTypingLab for Windows</h1>
-          <p className="text-brand-text-muted leading-relaxed max-w-xl mx-auto mb-6">
+          <h1 className="text-2xl sm:text-[28px] font-extrabold mb-2">Download FastTypingLab for Windows</h1>
+          <p className="text-brand-text-muted text-sm leading-relaxed max-w-xl mx-auto mb-4">
             Free typing software for Windows with <strong className="text-brand-text">offline practice</strong> in
             English and Hindi. Build your speed and accuracy for SSC, CPCT and government typing exams — no internet required.
           </p>
           <a href={WINDOWS_DOWNLOAD_URL} target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 text-white px-7 py-3.5 rounded-xl font-bold transition-all hover:opacity-90 active:scale-95 shadow-lg"
+            className="inline-flex items-center gap-2.5 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 active:scale-95 shadow-lg"
             style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 6px 20px rgba(188,108,80,.35)' }}>
             <Download className="w-5 h-5" /> Download for Windows (Free)
           </a>
@@ -72,9 +72,9 @@ export default function DownloadPage() {
         </div>
 
         {/* Features */}
-        <div className="grid sm:grid-cols-2 gap-4 mb-10">
+        <div className="grid sm:grid-cols-2 gap-3 mb-4">
           {FEATURES.map(f => (
-            <div key={f.title} className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+            <div key={f.title} className="bg-brand-surface border border-brand-border rounded-2xl p-4">
               <f.icon className="w-5 h-5 text-brand-primary mb-2" />
               <h2 className="font-bold text-sm mb-1">{f.title}</h2>
               <p className="text-brand-text-muted text-xs leading-relaxed">{f.desc}</p>
@@ -83,7 +83,7 @@ export default function DownloadPage() {
         </div>
 
         {/* How to install */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-10">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-5">
           <h2 className="font-bold text-lg mb-3">How to install</h2>
           <ol className="space-y-2.5 text-brand-text-muted text-sm">
             {[
@@ -106,7 +106,7 @@ export default function DownloadPage() {
         </div>
 
         {/* Prefer the browser */}
-        <div className="flex items-center gap-3 bg-brand-surface-2 border border-brand-border rounded-2xl p-5 mb-10">
+        <div className="flex items-center gap-3 bg-brand-surface-2 border border-brand-border rounded-2xl p-4 mb-5">
           <CheckCircle2 className="w-5 h-5 text-brand-accent shrink-0" />
           <p className="text-sm text-brand-text-muted">
             Prefer not to install anything? You can use the full{' '}
@@ -117,9 +117,9 @@ export default function DownloadPage() {
 
         {/* FAQ */}
         <h2 className="text-xl font-black mb-4">Frequently asked questions</h2>
-        <div className="space-y-3 mb-10">
+        <div className="space-y-3 mb-5">
           {FAQS.map(f => (
-            <div key={f.q} className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+            <div key={f.q} className="bg-brand-surface border border-brand-border rounded-2xl p-4">
               <h3 className="font-bold text-sm mb-1.5">{f.q}</h3>
               <p className="text-brand-text-muted text-sm leading-relaxed">{f.a}</p>
             </div>

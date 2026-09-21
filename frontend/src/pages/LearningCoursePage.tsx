@@ -212,7 +212,7 @@ export default function LearningCoursePage() {
 
       {/* Footer CTA */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-16">
-        <div className="rounded-2xl p-6 text-center"
+        <div className="rounded-2xl p-4 text-center"
           style={{ background: 'linear-gradient(135deg,rgba(48,76,83,0.08),rgba(42,157,174,0.06))', border: '1px solid rgba(48,76,83,0.2)' }}>
           <h3 className="font-black text-brand-text text-lg mb-2">Ready to test your speed?</h3>
           <p className="text-brand-text-muted text-sm mb-4">

@@ -69,7 +69,7 @@ export default function WordCounterPage() {
       <div className="max-w-4xl mx-auto">
 
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-5">
           <h1 className="text-2xl sm:text-[28px] font-extrabold text-brand-text mb-2">Word Counter</h1>
           <p className="text-brand-text-muted">Free online word and character counter. Paste or type your text below for instant analysis.</p>
         </div>
@@ -124,7 +124,7 @@ export default function WordCounterPage() {
 
           {/* Keyword density sidebar */}
           <div className="space-y-4">
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+            <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
               <h2 className="font-bold text-brand-text mb-4 text-sm">Top Keywords</h2>
               {stats.topKeywords.length === 0 ? (
                 <p className="text-brand-muted text-xs">Start typing to see keyword frequency.</p>
@@ -147,7 +147,7 @@ export default function WordCounterPage() {
             </div>
 
             {/* Quick presets */}
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+            <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
               <h2 className="font-bold text-brand-text mb-3 text-sm">Test Samples</h2>
               <div className="space-y-2">
                 {[
@@ -165,7 +165,7 @@ export default function WordCounterPage() {
         </div>
 
         {/* SEO text */}
-        <div className="mt-10 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed space-y-4">
+        <div className="mt-5 bg-brand-surface border border-brand-border rounded-2xl p-4 text-sm text-brand-text-muted leading-relaxed space-y-4">
           <div className="space-y-2">
             <h2 className="text-base font-bold text-brand-text">About This Word Counter</h2>
             <p>This free online word counter tool counts words, characters (with and without spaces), sentences, paragraphs, and estimates your reading time in real time. It also shows keyword density — how often specific words appear in your text.</p>

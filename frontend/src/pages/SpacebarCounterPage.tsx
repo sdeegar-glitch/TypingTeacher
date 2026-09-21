@@ -87,7 +87,7 @@ export default function SpacebarCounterPage() {
       />
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-5">
           <Link to="/tools/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             Tools
@@ -115,7 +115,7 @@ export default function SpacebarCounterPage() {
         {/* Main press area */}
         <motion.div
           className={`
-            relative rounded-3xl border-2 cursor-pointer select-none overflow-hidden transition-all duration-150
+            relative rounded-2xl border-2 cursor-pointer select-none overflow-hidden transition-all duration-150
             ${state === 'idle' ? 'border-brand-border bg-brand-surface' :
               state === 'active' ? 'border-brand-primary bg-brand-primary/5' :
               'border-brand-border bg-brand-surface-2'}
@@ -198,7 +198,7 @@ export default function SpacebarCounterPage() {
         )}
 
         {/* SEO content */}
-        <div className="mt-8 text-sm text-brand-text-muted leading-relaxed space-y-4">
+        <div className="mt-5 text-sm text-brand-text-muted leading-relaxed space-y-4">
           <div className="space-y-2">
             <h2 className="text-base font-bold text-brand-text">Spacebar Counter — Test Your Spacebar Speed</h2>
             <p>The Spacebar Counter test measures how many times you can press the spacebar in 10 seconds. It's popular for checking keyboard responsiveness and for gaming challenges like Minecraft "spacebar clicking" records.</p>

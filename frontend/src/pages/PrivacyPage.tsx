@@ -25,7 +25,7 @@ export default function PrivacyPage() {
       />
       <div className="max-w-3xl mx-auto">
         <h1 className="text-2xl sm:text-[28px] font-extrabold mb-2">Privacy Policy</h1>
-        <p className="text-brand-muted text-sm mb-8">Last updated: {UPDATED}</p>
+        <p className="text-brand-muted text-sm mb-5">Last updated: {UPDATED}</p>
 
         <p className="text-brand-text-muted text-sm leading-relaxed mb-6">
           This Privacy Policy explains what information FastTypingLab ("we", "us") collects when you use
@@ -89,7 +89,7 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
-        <p className="text-brand-muted text-xs mt-8">
+        <p className="text-brand-muted text-xs mt-5">
           This policy is provided for general information and is not legal advice.
         </p>
       </div>

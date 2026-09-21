@@ -82,7 +82,7 @@ export default function CpsTestPage() {
       />
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-5">
           <Link to="/tools/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             Tools
@@ -109,7 +109,7 @@ export default function CpsTestPage() {
         {/* Main click area */}
         <motion.div
           className={`
-            relative rounded-3xl border-2 cursor-pointer select-none overflow-hidden transition-all duration-200
+            relative rounded-2xl border-2 cursor-pointer select-none overflow-hidden transition-all duration-200
             ${state === 'idle' ? 'border-brand-border bg-brand-surface hover:border-brand-primary/50' :
               state === 'active' ? 'border-brand-primary bg-brand-primary/5 hover:bg-brand-primary/8' :
               'border-brand-border bg-brand-surface-2'}
@@ -208,7 +208,7 @@ export default function CpsTestPage() {
         </div>
 
         {/* CPS Rating Table */}
-        <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-5">
+        <div className="mt-5 bg-brand-surface border border-brand-border rounded-2xl p-4">
           <h2 className="font-bold text-brand-text mb-4">CPS Rating Chart</h2>
           <div className="space-y-2 text-sm">
             {[
@@ -227,7 +227,7 @@ export default function CpsTestPage() {
         </div>
 
         {/* SEO content */}
-        <div className="mt-8 text-sm text-brand-text-muted leading-relaxed space-y-4">
+        <div className="mt-5 text-sm text-brand-text-muted leading-relaxed space-y-4">
           <div className="space-y-2">
             <h2 className="text-base font-bold text-brand-text">What is CPS (Clicks Per Second)?</h2>
             <p>CPS stands for Clicks Per Second — a measure of how fast you can click a mouse button. It's widely used in gaming (Minecraft PvP), data entry, and performance benchmarking.</p>

@@ -16,13 +16,13 @@ export default function ContactPage() {
       />
       <div className="max-w-2xl mx-auto">
         <h1 className="text-2xl sm:text-[28px] font-extrabold mb-4">Contact Us</h1>
-        <p className="text-brand-text-muted leading-relaxed mb-8">
+        <p className="text-brand-text-muted leading-relaxed mb-5">
           We'd love to hear from you — whether it's feedback, a bug report, a request for a specific
           exam or content, or a partnership enquiry. The fastest way to reach us is email.
         </p>
 
         {/* Email card */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-6">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
           <div className="flex items-start gap-4">
             <div className="w-11 h-11 rounded-xl bg-brand-primary/10 flex items-center justify-center shrink-0">
               <Mail className="w-5 h-5 text-brand-primary" />
@@ -36,13 +36,13 @@ export default function ContactPage() {
         </div>
 
         {/* What to reach out about */}
-        <div className="grid sm:grid-cols-2 gap-4 mb-8">
-          <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+        <div className="grid sm:grid-cols-2 gap-4 mb-5">
+          <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
             <MessageCircle className="w-5 h-5 text-brand-accent mb-2" />
             <h3 className="font-bold text-sm mb-1">Feedback & requests</h3>
             <p className="text-brand-text-muted text-xs leading-relaxed">Want a specific exam, layout or feature added? Tell us — a lot of our content comes from user requests.</p>
           </div>
-          <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+          <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
             <HelpCircle className="w-5 h-5 text-brand-secondary mb-2" />
             <h3 className="font-bold text-sm mb-1">Help & bug reports</h3>
             <p className="text-brand-text-muted text-xs leading-relaxed">Something not working? Email us with your device/browser and what happened, and we'll fix it.</p>

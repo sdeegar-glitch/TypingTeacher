@@ -139,7 +139,7 @@ export default function GamesPage() {
         />
 
         {/* Stats strip */}
-        <div className="grid grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-3 gap-2 mb-4">
           {[
             { label: 'XP Earned', value: (() => { try { return JSON.parse(localStorage.getItem('typingHistory') || '[]').length * 15; } catch { return 0; } })(), icon: Zap, color: 'text-brand-primary' },
             { label: 'Games Played', value: (getBest('wordrain_best') ? 1 : 0) + (getBest('zombie_best') ? 1 : 0), icon: Gamepad2, color: 'text-brand-accent' },
@@ -154,7 +154,7 @@ export default function GamesPage() {
         </div>
 
         {/* Games grid */}
-        <div className="grid sm:grid-cols-2 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {GAMES.map((game, i) => {
             const best = getBest(game.bestKey);
             const isLive = !game.href.includes('/games') || game.href !== '/games';
@@ -163,7 +163,7 @@ export default function GamesPage() {
                 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08 }}>
                 <Link to={game.href}
-                  className={`group block relative overflow-hidden bg-brand-surface border ${game.border} rounded-3xl p-6 hover:shadow-xl transition-all duration-300 ${!isLive ? 'opacity-60 cursor-not-allowed' : 'hover:-translate-y-1'}`}
+                  className={`group block relative overflow-hidden bg-brand-surface border ${game.border} rounded-2xl p-5 hover:shadow-xl transition-all duration-300 ${!isLive ? 'opacity-60 cursor-not-allowed' : 'hover:-translate-y-1'}`}
                   onClick={e => !isLive && e.preventDefault()}>
 
                   {/* Gradient blob */}
@@ -171,7 +171,7 @@ export default function GamesPage() {
 
                   <div className="relative">
                     <div className="flex items-start justify-between mb-4">
-                      <div className={`w-14 h-14 rounded-2xl ${game.bg} border ${game.border} flex items-center justify-center text-3xl`}>
+                      <div className={`w-10 h-10 rounded-xl ${game.bg} border ${game.border} flex items-center justify-center text-3xl`}>
                         {game.emoji}
                       </div>
                       <div className="flex flex-col items-end gap-2">
@@ -186,8 +186,8 @@ export default function GamesPage() {
                       </div>
                     </div>
 
-                    <h2 className="text-xl font-black text-brand-text mb-2">{game.title}</h2>
-                    <p className="text-brand-text-muted text-sm leading-relaxed mb-4">{game.desc}</p>
+                    <h2 className="text-base font-extrabold text-brand-text mb-1">{game.title}</h2>
+                    <p className="text-brand-text-muted text-sm leading-snug mb-2 line-clamp-3">{game.desc}</p>
 
                     <div className={`flex items-center gap-2 text-sm font-bold ${isLive ? 'text-brand-primary' : 'text-brand-muted'}`}>
                       {isLive ? (
@@ -207,7 +207,7 @@ export default function GamesPage() {
         <GameLeaderboard />
 
         {/* XP info */}
-        <div className="mt-10 bg-brand-surface border border-brand-border rounded-2xl p-5 flex items-start gap-4">
+        <div className="mt-5 bg-brand-surface border border-brand-border rounded-2xl p-4 flex items-start gap-4">
           <div className="w-10 h-10 rounded-xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center shrink-0">
             <Zap className="w-5 h-5 text-brand-primary" />
           </div>

@@ -16,7 +16,7 @@ export default function MultiplayerPage() {
       <div className="max-w-xl mx-auto text-center">
         <Users className="w-10 h-10 mx-auto mb-4 text-brand-primary" />
         <h1 className="text-3xl font-black mb-3">Multiplayer Race — Coming Soon</h1>
-        <p className="text-brand-muted mb-8">
+        <p className="text-brand-muted mb-5">
           We're building real head-to-head typing races against other people. Until it's ready,
           sharpen your speed with a timed test or one of our typing games.
         </p>
