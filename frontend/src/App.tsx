@@ -385,7 +385,7 @@ const AppContent = () => {
     <div className={`min-h-screen flex flex-col font-sans bg-brand-bg transition-colors ${isLearningInterface ? 'h-screen overflow-hidden' : ''}`}>
       {!isLearningInterface && <Navbar />}
       <main className={`flex-grow ${isLearningInterface ? 'overflow-hidden' : ''}`}>
-        <Suspense fallback={<div className="min-h-screen" />}>
+        <Suspense fallback={<div className="min-h-[70vh]" aria-busy="true" />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           
