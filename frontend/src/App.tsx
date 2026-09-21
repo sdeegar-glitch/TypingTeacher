@@ -48,9 +48,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-const NAV_LINKS = [
-  { to: '/learn/',                  label: 'Learn English Typing' },
-  { to: '/learn-hindi-typing/',      label: 'Learn Hindi Typing' },
+const NAV_LINKS: { to: string; label: string; short?: string; wide?: string }[] = [
+  { to: '/learn/',                  label: 'Learn English Typing', short: 'English', wide: 'Learn English' },
+  { to: '/learn-hindi-typing/',      label: 'Learn Hindi Typing', short: 'Hindi', wide: 'Learn Hindi' },
   { to: '/tests/',                  label: 'Typing Test' },
   { to: '/competitive-exam-typing/',label: 'Exams' },
   { to: '/blog/how-to-learn-shorthand-stenography/', label: 'Shorthand' },
@@ -123,9 +123,9 @@ const Navbar = () => {
   return (
     <>
       <nav className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'glass-nav shadow-lg shadow-black/5' : 'bg-transparent border-b border-transparent'
+        scrolled ? 'glass-nav shadow-lg shadow-black/5' : 'glass-nav'
       }`}>
-        <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3 xl:gap-4">
 
           {/* ── Logo ── */}
           <Link to="/" onClick={closeMenu}
@@ -135,17 +135,17 @@ const Navbar = () => {
           </Link>
 
           {/* ── Desktop Nav Links ── */}
-          <div className="hidden md:flex items-center gap-1 text-sm font-medium flex-1 justify-center">
+          <div className="hidden lg:flex items-center gap-0.5 xl:gap-1 text-[13px] xl:text-sm font-medium flex-1 justify-center min-w-0">
             {NAV_LINKS.map(link => {
               const active = location.pathname === link.to || location.pathname.startsWith(link.to + '/');
               return (
-                <Link key={link.to} to={link.to}
-                  className={`px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                <Link key={link.to} to={link.to} title={link.label}
+                  className={`px-2 xl:px-3 py-1.5 rounded-lg whitespace-nowrap transition-all duration-200 ${
                     active
                       ? 'text-brand-primary bg-brand-primary/10 font-semibold'
                       : 'text-brand-muted hover:text-brand-text hover:bg-brand-surface-2'
                   }`}>
-                  {link.label}
+                  {link.short ? <><span className="2xl:hidden">{link.short}</span><span className="hidden 2xl:inline">{link.wide}</span></> : link.label}
                 </Link>
               );
             })}
@@ -153,8 +153,8 @@ const Navbar = () => {
 
           {/* ── Right Side ── */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Community links — desktop only */}
-            <div className="hidden md:flex items-center gap-1.5">
+            {/* Community links — wide desktop only (always in the mobile menu) */}
+            <div className="hidden xl:flex items-center gap-1.5">
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" title="Join our WhatsApp channel"
                 onClick={() => trackEvent('whatsapp_cta_click', { variant: 'navbar', page: window.location.pathname })}
                 className="w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all hover:opacity-90 hover:-translate-y-px"
@@ -179,34 +179,34 @@ const Navbar = () => {
 
             {/* Auth buttons — desktop only */}
             {isAuthenticated ? (
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden lg:flex items-center gap-1 xl:gap-2">
                 <Link to="/dashboard"
-                  className="px-3 py-1.5 rounded-lg text-sm font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
+                  className="px-2 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-sm font-semibold whitespace-nowrap text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
                   Dashboard
                 </Link>
                 <Link to="/profile" title="View profile"
-                  className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-brand-border hover:bg-brand-surface-2 transition-all duration-200">
+                  className="flex items-center gap-2 pl-1 xl:pr-3 py-1 rounded-full border border-brand-border hover:bg-brand-surface-2 transition-all duration-200">
                   <span className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-[11px] font-bold shrink-0"
                     style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
                     {me.avatar ? <img src={me.avatar} alt="" className="w-full h-full object-cover" /> : avatarInitials}
                   </span>
-                  <span className="text-sm font-semibold text-brand-text max-w-[120px] truncate">
+                  <span className="hidden xl:inline text-sm font-semibold text-brand-text max-w-[120px] truncate">
                     {firstName ? `Hi, ${firstName}` : 'Profile'}
                   </span>
                 </Link>
                 <button onClick={() => { void logoutAndRedirect(); }}
-                  className="px-3 py-1.5 rounded-lg text-sm font-semibold text-brand-muted hover:text-rose-500 transition-all duration-200">
+                  className="px-2 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-sm font-semibold whitespace-nowrap text-brand-muted hover:text-rose-500 transition-all duration-200">
                   Logout
                 </button>
               </div>
             ) : (
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden lg:flex items-center gap-2">
                 <Link to="/login"
-                  className="px-3 py-1.5 rounded-lg text-sm font-semibold text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
+                  className="px-3 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
                   Log in
                 </Link>
                 <Link to="/signup"
-                  className="px-4 py-1.5 rounded-xl text-sm font-bold text-white transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-px active:scale-95"
+                  className="px-4 py-1.5 rounded-xl text-sm font-bold whitespace-nowrap text-white transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-px active:scale-95"
                   style={{ background: 'linear-gradient(135deg, #BC6C50 0%, #CC7B5D 100%)', boxShadow: '0 3px 12px rgba(188,108,80,0.35)' }}>
                   Sign up
                 </Link>
@@ -214,8 +214,8 @@ const Navbar = () => {
             )}
 
             {/* Mobile hamburger */}
-            <button className="md:hidden z-50 relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-brand-surface-2 text-brand-text transition-all"
-              onClick={() => setIsMobileMenuOpen(v => !v)} aria-label="Toggle menu">
+            <button className="lg:hidden z-50 relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-brand-surface-2 text-brand-text transition-all"
+              onClick={() => setIsMobileMenuOpen(v => !v)} aria-label="Toggle menu" aria-expanded={isMobileMenuOpen}>
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
@@ -223,7 +223,7 @@ const Navbar = () => {
       </nav>
 
       {/* ── Mobile Menu Overlay ── */}
-      <div className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
+      <div className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
         isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}>
         {/* Backdrop */}
