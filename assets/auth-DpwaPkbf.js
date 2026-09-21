@@ -1,1 +1,0 @@
-function e(){try{return!!localStorage.getItem(`accessToken`)}catch{return!1}}export{e as t};
