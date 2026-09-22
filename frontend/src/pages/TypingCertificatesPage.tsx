@@ -59,9 +59,9 @@ export default function TypingCertificatesPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
           {[
             { k: 'Account', v: 'Free login', c: 'text-brand-primary' },
-            { k: 'Speed', v: '30+ net WPM', c: 'text-emerald-600' },
-            { k: 'Accuracy', v: '85% or more', c: 'text-brand-accent' },
-            { k: 'Test length', v: '5 min or more', c: 'text-amber-600' },
+            { k: 'Speed', v: '30+ net WPM', c: 'text-emerald-700 dark:text-emerald-400' },
+            { k: 'Accuracy', v: '85% or more', c: 'text-brand-primary dark:text-brand-accent' },
+            { k: 'Test length', v: '5 min or more', c: 'text-amber-700 dark:text-amber-400' },
           ].map(r => (
             <div key={r.k} className="bg-brand-surface border border-brand-border rounded-xl px-3 py-2 text-center">
               <div className="text-[10px] uppercase tracking-wider text-brand-muted">{r.k}</div>
