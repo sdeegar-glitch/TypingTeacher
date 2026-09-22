@@ -354,7 +354,11 @@ export default function TypingTestPage() {
     try { return localStorage.getItem('ftl_showKeyboard') !== '0'; } catch { return true; }
   });
   const [showHands, setShowHands] = useState(() => {
-    try { return localStorage.getItem('ftl_showHands') === '1'; } catch { return false; }
+    // Default ON (opt-out, not opt-in) to match showKeyboard above and every
+    // reference typing platform (Ratatype/typing.com/Monkeytype/Keybr) -- a
+    // first-time user should see the finger guide without hunting for a
+    // toolbar toggle.
+    try { return localStorage.getItem('ftl_showHands') !== '0'; } catch { return true; }
   });
   const toggleKeyboard = useCallback(() => setShowKeyboard(v => {
     try { localStorage.setItem('ftl_showKeyboard', v ? '0' : '1'); } catch {}
@@ -1032,7 +1036,7 @@ export default function TypingTestPage() {
               aria-pressed={showKeyboard}
               aria-label={showKeyboard ? 'Hide on-screen keyboard' : 'Show on-screen keyboard'}
               title="On-screen keyboard"
-              className={`hidden lg:flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`hidden md:flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 showKeyboard
                   ? 'bg-brand-primary text-white border-transparent'
                   : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
@@ -1045,7 +1049,7 @@ export default function TypingTestPage() {
               aria-pressed={showHands}
               aria-label={showHands ? 'Hide finger guide' : 'Show finger guide'}
               title="Finger guide"
-              className={`hidden lg:flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`hidden md:flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 showHands
                   ? 'bg-brand-primary text-white border-transparent'
                   : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'
@@ -1089,27 +1093,21 @@ export default function TypingTestPage() {
           )}
         </div>
 
-        {/* ── On-screen keyboard + finger guide (desktop) ── */}
+        {/* ── On-screen keyboard + finger guide (tablet and up) ── */}
         {showKeyboard && !stats.isFinished && (
-          <div className="hidden lg:flex items-center justify-center gap-3 mt-4 select-none" aria-hidden="true">
+          <div className="hidden md:flex items-center justify-center gap-3 mt-4 select-none transform scale-[0.5] lg:scale-[0.62] origin-top" aria-hidden="true">
             {showHands && (
-              <div style={{ zoom: 0.5 }}>
-                <HandGuide
-                  hand="left"
-                  activeFinger={activeFinger && (activeFinger.startsWith('left') || activeFinger === 'thumb') ? activeFinger : ''}
-                />
-              </div>
+              <HandGuide
+                hand="left"
+                activeFinger={activeFinger && (activeFinger.startsWith('left') || activeFinger === 'thumb') ? activeFinger : ''}
+              />
             )}
-            <div style={{ zoom: 0.62 }}>
-              <VirtualKeyboard activeKey={keyboardActiveKey} />
-            </div>
+            <VirtualKeyboard activeKey={keyboardActiveKey} />
             {showHands && (
-              <div style={{ zoom: 0.5 }}>
-                <HandGuide
-                  hand="right"
-                  activeFinger={activeFinger && (activeFinger.startsWith('right') || activeFinger === 'thumb') ? activeFinger : ''}
-                />
-              </div>
+              <HandGuide
+                hand="right"
+                activeFinger={activeFinger && (activeFinger.startsWith('right') || activeFinger === 'thumb') ? activeFinger : ''}
+              />
             )}
           </div>
         )}
