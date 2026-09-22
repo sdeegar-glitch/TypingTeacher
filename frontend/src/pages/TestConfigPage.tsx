@@ -7,10 +7,10 @@ import { getLastDuration, setLastDuration } from '../lib/testProgress';
 import Seo from '../components/Seo';
 
 const DURATION_OPTIONS = [
-  { label: '1 Min',  value: 1,  desc: 'Quick warm-up' },
-  { label: '3 Min',  value: 3,  desc: 'Standard test' },
-  { label: '5 Min',  value: 5,  desc: 'Exam practice' },
-  { label: '10 Min', value: 10, desc: 'Endurance run' },
+  { label: '2 Min',  value: 2,  desc: 'Quick warm-up' },
+  { label: '5 Min',  value: 5,  desc: 'Standard test' },
+  { label: '10 Min', value: 10, desc: 'Exam practice' },
+  { label: '15 Min', value: 15, desc: 'Endurance run' },
 ];
 
 export default function TestConfigPage() {
