@@ -447,7 +447,6 @@ const AppContent = () => {
           {/* Programmatic SEO Routes */}
           <Route path="/typing-test" element={<TypingTestPage />} />
           <Route path="/typing-test/:duration" element={<TypingTestPage />} />
-          <Route path="/typing-test-for/:profession" element={<TypingTestPage />} />
           <Route path="/typing-test/language/:language" element={<TypingTestPage />} />
           <Route path="/results" element={<TypingReportPage />} />
           
