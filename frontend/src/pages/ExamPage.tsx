@@ -15,6 +15,11 @@ const LANDING_CANONICAL: Record<string, string> = {
   'ssc-cgl': '/ssc-cgl-typing-test/',
   'up-police': '/up-police-typing-test/',
   'court-typing': '/court-typing-test/',
+  // 'cpct-hindi' is the practice-mode version of the CPCT exam covered by
+  // this landing page — canonicalize there instead of competing for the
+  // same "CPCT typing test" search intent. 'hindi-typing' has no landing
+  // page of its own (a self-canonical default is correct for it).
+  'cpct-hindi': '/cpct-typing-test/',
 };
 
 // ─── Paragraph Library ──────────────────────────────────────────────────────
