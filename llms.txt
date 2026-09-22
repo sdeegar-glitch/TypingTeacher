@@ -1,0 +1,27 @@
+# FastTypingLab
+
+> Free online typing platform: WPM speed tests, a 50-lesson touch-typing course, Hindi typing (Unicode Mangal/INSCRIPT and Kruti Dev), government exam practice (SSC, CPCT, UP Police and more), an AI typing tutor, typing games and browser-based keyboard tools. No signup required to try.
+
+## Typing Tests
+- [Typing Tests Library](https://fasttypinglab.com/tests/): English, Hindi Mangal and Kruti Dev tracks, 1/3/5/10-minute durations, live WPM and accuracy.
+- [WPM Calculator](https://fasttypinglab.com/wpm-calculator/): the exact gross/net WPM formula, explained.
+- [Typing Statistics](https://fasttypinglab.com/typing-statistics/): average typing speed by age, profession and country.
+
+## Learn Typing
+- [Learn Touch Typing](https://fasttypinglab.com/learn/): free 50-lesson progressive course from home row to full speed.
+- [Learn Hindi Typing](https://fasttypinglab.com/learn-hindi-typing/): INSCRIPT (Mangal/Unicode) and Kruti Dev courses.
+- [Hindi Typing Test](https://fasttypinglab.com/hindi-typing-test/): timed Unicode Mangal test with live WPM/accuracy.
+- [AI Typing Tutor](https://fasttypinglab.com/ai-tutor/): personalized improvement plan from your own typing history.
+
+## Government Exam Practice
+- [Competitive Exam Typing](https://fasttypinglab.com/competitive-exam-typing/): SSC CHSL, SSC CGL, CPCT, UP Police, Railway NTPC, court clerk/stenographer and more, each in its real exam format and duration.
+
+## Games & Tools
+- [Typing Games](https://fasttypinglab.com/games/): Word Rain, Zombie Typing, Speed Racer, Ninja Slash and more.
+- [Keyboard & Typing Tools](https://fasttypinglab.com/tools/): keyboard tester, CPS test, Kruti Dev ↔ Unicode converter, word counter, case converter and more — all run in-browser, nothing uploaded.
+
+## Blog
+- [Typing Blog](https://fasttypinglab.com/blog/): technique guides, exam-specific prep articles, and typing-speed reference content.
+
+## Full site index
+- [All Pages](https://fasttypinglab.com/all-pages/): a complete directory of every page on FastTypingLab.
