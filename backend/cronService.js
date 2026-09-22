@@ -13,18 +13,44 @@ const SLOTS_PER_DAY = {
   hi_kruti: 4,
 };
 
-function runSlotInner(slot) {
-  if (slot === 'en') return generateEnglishTest();
-  if (slot === 'hi_mangal') return generateHindiTest('mangal_inscript');
-  if (slot === 'hi_kruti') return generateHindiTest('kruti_dev');
+/**
+ * Difficulty for each test generated in a slot, in order. Guarantees at
+ * least one easy, one medium and one hard test per section per day — the
+ * model no longer decides this itself, which is why almost everything used
+ * to come out "medium" (every prompt asked for the same word-mix regardless
+ * of what the self-reported difficulty_level ended up saying).
+ * Extra slots beyond 3 repeat the historically weighted tiers (medium, then
+ * easy, then hard) so a 4-a-day section reads as 1 easy / 2 medium / 1 hard.
+ *
+ * A single test (the manual admin "top up one test" case, not the daily
+ * batch) keeps the old plain "medium" default rather than always being
+ * "easy" — the guarantee only matters once there's more than one test to
+ * spread across the three tiers.
+ */
+export function difficultyPlanForCount(count) {
+  const base = ['easy', 'medium', 'hard'];
+  if (count <= 0) return [];
+  if (count === 1) return ['medium'];
+  if (count <= 3) return base.slice(0, count);
+  const extras = ['medium', 'easy', 'hard'];
+  const plan = [...base];
+  let i = 0;
+  while (plan.length < count) { plan.push(extras[i % extras.length]); i++; }
+  return plan;
+}
+
+function runSlotInner(slot, targetDifficulty) {
+  if (slot === 'en') return generateEnglishTest(targetDifficulty);
+  if (slot === 'hi_mangal') return generateHindiTest('mangal_inscript', targetDifficulty);
+  if (slot === 'hi_kruti') return generateHindiTest('kruti_dev', targetDifficulty);
   throw new Error(`Unknown slot: ${slot}`);
 }
 
 // Hard cap on a single generation so a hung network call can never freeze the
 // pipeline (which would leave isRunning stuck true and block all future runs).
-export async function runSlot(slot) {
+export async function runSlot(slot, targetDifficulty = 'medium') {
   return Promise.race([
-    runSlotInner(slot),
+    runSlotInner(slot, targetDifficulty),
     new Promise((_, reject) => setTimeout(() => reject(new Error('generation timed out after 180s')), 180000)),
   ]);
 }
@@ -61,6 +87,11 @@ export async function fetchAndGenerateTests(options = {}) {
   let isFirst = true;
 
   for (const { slot, count } of plan) {
+    // An explicit difficulty (manual admin trigger) always wins; otherwise
+    // spread the batch across easy/medium/hard (see difficultyPlanForCount).
+    const difficulties = options.difficulty
+      ? Array(count).fill(options.difficulty)
+      : difficultyPlanForCount(count);
     for (let i = 0; i < count; i++) {
       if (!isFirst) {
         console.log('  Waiting 30s before next test (rate-limit friendly)...');
@@ -68,9 +99,10 @@ export async function fetchAndGenerateTests(options = {}) {
       }
       isFirst = false;
 
-      console.log(`\n  → Generating slot "${slot}" (${i + 1}/${count})`);
+      const targetDifficulty = difficulties[i] || 'medium';
+      console.log(`\n  → Generating slot "${slot}" (${i + 1}/${count}), difficulty "${targetDifficulty}"`);
       try {
-        const result = await runSlot(slot);
+        const result = await runSlot(slot, targetDifficulty);
         results.push({ slot, ...result });
         console.log(`  ${result.status === 'success' ? '✅' : '⚠️'} ${slot}: ${result.status}${result.error ? ' — ' + result.error : ''}`);
         if (result.status === 'success') await postTestToTelegram(result);

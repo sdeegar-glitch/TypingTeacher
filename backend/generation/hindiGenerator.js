@@ -4,29 +4,28 @@ import { getRandomTopic } from './topicPool.js';
 import { findSourceMaterial } from './sourceEngine.js';
 import { findSimilarTest } from './embeddings.js';
 import { validateTest, countWords, makeSlug } from './qualityGate.js';
-import { DIFFICULTY_MIX_INSTRUCTIONS, buildDifficultyJsonField, normalizeDifficultyBreakdown } from './difficultyMixer.js';
+import { difficultyMixInstructions, buildDifficultyJsonField, normalizeDifficultyBreakdown } from './difficultyMixer.js';
 import { unicodeToKrutiDev } from './krutiDevConverter.js';
 import { rewriteWithFallback } from './groqClient.js';
 
-async function rewriteToHindiTest(topic, foundTitle, foundContent, isExamGk = false) {
+async function rewriteToHindiTest(topic, foundTitle, foundContent, isExamGk = false, targetDifficulty = 'medium') {
   const prompt = `आप हिंदी टंकण (typing) अभ्यास के लिए मूल लेख लिखने वाले एक कुशल शिक्षण-लेखक हैं।
 
 विषय "${topic}" पर स्रोत सामग्री:
 शीर्षक: ${foundTitle}
 सामग्री: ${foundContent}
 
-इसे 600-1500 शब्दों (लक्ष्य ~1000 शब्द) के एक मूल, अद्वितीय हिंदी लेख के रूप में फिर से लिखें — टंकण अभ्यास के लिए। आवश्यकताएँ:
+इसे कम से कम 1000 शब्दों और अधिकतम 1800 शब्दों (लक्ष्य ~1200 शब्द) के एक मूल, अद्वितीय हिंदी लेख के रूप में फिर से लिखें — टंकण अभ्यास के लिए। आवश्यकताएँ:
 - केवल शुद्ध यूनिकोड देवनागरी पाठ — कोई मार्कडाउन, बुलेट पॉइंट या हेडिंग नहीं, केवल प्रवाहमयी अनुच्छेद
 - उत्कृष्ट व्याकरण, स्पष्ट वाक्य
 - स्रोत से पर्याप्त भिन्न ताकि यह मूल रचना हो (अपने स्वयं के शब्दों और संरचना में)
 ${isExamGk ? `- यह सामग्री भारतीय सरकारी परीक्षाओं (SSC, CPCT, UPSSSC, राज्य क्लर्क) के सामान्य ज्ञान खंड की पुनरावृत्ति के लिए है। तथ्यात्मक रूप से सटीक और जानकारी से भरपूर रखें: जिन नामों, तिथियों, अनुच्छेदों, संख्याओं और परिभाषाओं पर प्रश्न पूछे जाते हैं, उन्हें स्वाभाविक रूप से गद्य में शामिल करें। पढ़ने वाला टाइप करते-करते वास्तविक परीक्षा सामग्री दोहराए।` : ''}
-${DIFFICULTY_MIX_INSTRUCTIONS}
-केवल मान्य JSON लौटाएँ (सभी मान हिंदी में, except difficulty_level/category जो अंग्रेज़ी में रहें):
+${difficultyMixInstructions(targetDifficulty)}
+केवल मान्य JSON लौटाएँ (सभी मान हिंदी में, except category जो अंग्रेज़ी में रहे):
 {
   "title": "आकर्षक शीर्षक (हिंदी में)",
-  "content": "600-1500 शब्दों का पूर्ण हिंदी पाठ...",
+  "content": "कम से कम 1000 शब्दों का पूर्ण हिंदी पाठ...",
   "excerpt": "2-3 वाक्यों का सारांश (हिंदी में)",
-  "difficulty_level": "easy|medium|hard",
   "category": "Technology|Science|Health|Society|History|Economy|Nature|...",
   "seo_title": "Title | FastTypingLab Hindi Typing",
   "seo_description": "150-160 अक्षरों का मेटा विवरण",
@@ -42,6 +41,8 @@ ${DIFFICULTY_MIX_INSTRUCTIONS}
   const data = JSON.parse(jsonString);
   if (!data.title || !data.content) throw new Error('Parsed JSON missing title or content');
   data.content = cleanTypingText(data.content); // keep passages typable on a normal keyboard
+  // The tier is what we asked for, not the model's own guess — see difficultyMixer.js.
+  data.difficulty_level = targetDifficulty;
   return data;
 }
 
@@ -62,7 +63,7 @@ async function logAttempt({ slot, topic, status, testId = null, error = null, at
  *         'kruti_dev' (content run through unicodeToKrutiDev before storage).
  * Always resolves (never throws) — failures are logged and reported back.
  */
-export async function generateHindiTest(layout) {
+export async function generateHindiTest(layout, targetDifficulty = 'medium') {
   if (!['mangal_inscript', 'kruti_dev'].includes(layout)) {
     throw new Error(`Unknown Hindi keyboard layout: ${layout}`);
   }
@@ -81,7 +82,7 @@ export async function generateHindiTest(layout) {
       }
 
       const isExamGk = typeof category === 'string' && category.startsWith('GK —');
-      const data = await rewriteToHindiTest(topic, source.title, source.content, isExamGk);
+      const data = await rewriteToHindiTest(topic, source.title, source.content, isExamGk, targetDifficulty);
       const { valid, reasons } = validateTest(data);
       if (!valid) {
         lastError = reasons.join('; ');

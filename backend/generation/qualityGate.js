@@ -8,8 +8,8 @@ const REQUIRED_FIELDS = [
   'seo_title', 'seo_description', 'keywords', 'tags',
 ];
 
-const MIN_WORDS = 600;
-const MAX_WORDS = 1500;
+const MIN_WORDS = 1000;
+const MAX_WORDS = 1800;
 
 export function countWords(text) {
   return text.trim().split(/\s+/).filter(Boolean).length;

@@ -137,15 +137,21 @@ router.get('/', async (req, res) => {
 });
 
 // POST /api/tests/generate - Trigger AI generation manually
-// Body (optional): { slot: 'en' | 'hi_mangal' | 'hi_kruti', count: number }
-// Omit body to run the full daily 12-test batch.
+// Body (optional): { slot: 'en' | 'hi_mangal' | 'hi_kruti', count: number, difficulty: 'easy'|'medium'|'hard' }
+// Omit body to run the full daily 12-test batch (each section gets at least
+// one easy, one medium and one hard test — see cronService.js). Pass
+// `difficulty` to force every test in this manual run to that one tier
+// instead of the automatic easy/medium/hard spread.
 router.post('/generate', requireAdmin, async (req, res) => {
   try {
-    const { slot, count } = req.body || {};
-    const options = slot ? { slot, count } : {};
+    const { slot, count, difficulty } = req.body || {};
+    if (difficulty && !['easy', 'medium', 'hard'].includes(difficulty)) {
+      return res.status(400).json({ error: 'difficulty must be easy, medium or hard.' });
+    }
+    const options = slot ? { slot, count, difficulty } : {};
     // Non-blocking background generation
     fetchAndGenerateTests(options).catch(err => console.error("Manual generation failed:", err));
-    logActivity({ action: 'ai_generation_triggered', entity: 'typing_test', actor_email: req.adminUser.email, ip: req.ip, meta: { slot: slot || 'full_batch', count: count || null } });
+    logActivity({ action: 'ai_generation_triggered', entity: 'typing_test', actor_email: req.adminUser.email, ip: req.ip, meta: { slot: slot || 'full_batch', count: count || null, difficulty: difficulty || null } });
     res.status(202).json({ message: slot ? `Generating slot "${slot}" in the background.` : 'Full daily batch (12 tests) started in the background.' });
   } catch (err) {
     res.status(500).json({ error: err.message });

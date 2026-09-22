@@ -4,28 +4,27 @@ import { getRandomTopic } from './topicPool.js';
 import { findSourceMaterial } from './sourceEngine.js';
 import { findSimilarTest } from './embeddings.js';
 import { validateTest, countWords, makeSlug } from './qualityGate.js';
-import { DIFFICULTY_MIX_INSTRUCTIONS, buildDifficultyJsonField, normalizeDifficultyBreakdown } from './difficultyMixer.js';
+import { difficultyMixInstructions, buildDifficultyJsonField, normalizeDifficultyBreakdown } from './difficultyMixer.js';
 import { rewriteWithFallback } from './groqClient.js';
 
-async function rewriteToTest(topic, foundTitle, foundContent, isExamGk = false) {
+async function rewriteToTest(topic, foundTitle, foundContent, isExamGk = false, targetDifficulty = 'medium') {
   const prompt = `You are an expert educational writer creating typing practice content for a competitive-exam-style passage.
 
 Source material about "${topic}":
 TITLE: ${foundTitle}
 CONTENT: ${foundContent}
 
-Rewrite this as a unique, original 600-1500 word article (aim for ~1000 words) for typing practice. Requirements:
+Rewrite this as a unique, original article for typing practice, at LEAST 1000 words and no more than 1800 words (aim for ~1200). Requirements:
 - Plain text only, NO markdown, no bullet points, no headers — just flowing paragraphs
 - Excellent grammar, clear sentences
 - Different enough from the source to be plagiarism-free (your own words and structure)
 ${isExamGk ? `- This is General Awareness revision material for Indian government exams (SSC, CPCT, UPSSSC, state clerk). Keep it factually accurate and densely informative: include the specific names, dates, articles, numbers and definitions a candidate would be tested on, worked naturally into the prose. The reader should be revising real exam content while they type.` : ''}
-${DIFFICULTY_MIX_INSTRUCTIONS}
+${difficultyMixInstructions(targetDifficulty)}
 Return ONLY valid JSON:
 {
   "title": "Engaging SEO title",
-  "content": "Full 600-1500 word plain text article...",
+  "content": "Full plain text article, at least 1000 words...",
   "excerpt": "2-3 sentence summary.",
-  "difficulty_level": "easy|medium|hard",
   "category": "Technology|Science|Health|Society|History|Economy|Nature|...",
   "seo_title": "Title | FastTypingLab",
   "seo_description": "150-160 char meta description",
@@ -41,6 +40,8 @@ Return ONLY valid JSON:
   const data = JSON.parse(jsonString);
   if (!data.title || !data.content) throw new Error('Parsed JSON missing title or content');
   data.content = cleanTypingText(data.content); // keep passages typable on a normal keyboard
+  // The tier is what we asked for, not the model's own guess — see difficultyMixer.js.
+  data.difficulty_level = targetDifficulty;
   return data;
 }
 
@@ -60,7 +61,7 @@ async function logAttempt({ slot, topic, status, testId = null, error = null, at
  * attempt fails quality/duplicate checks. Always resolves (never throws) —
  * failures are logged to generation_log and reported in the return value.
  */
-export async function generateEnglishTest() {
+export async function generateEnglishTest(targetDifficulty = 'medium') {
   const MAX_ATTEMPTS = 2;
   let lastError = null;
 
@@ -75,7 +76,7 @@ export async function generateEnglishTest() {
       }
 
       const isExamGk = typeof category === 'string' && category.startsWith('GK —');
-      const data = await rewriteToTest(topic, source.title, source.content, isExamGk);
+      const data = await rewriteToTest(topic, source.title, source.content, isExamGk, targetDifficulty);
       const { valid, reasons } = validateTest(data);
       if (!valid) {
         lastError = reasons.join('; ');

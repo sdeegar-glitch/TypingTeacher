@@ -1,12 +1,24 @@
-// Shared prompt fragment + parsing helpers for the easy/medium/hard word-mix
+// Shared prompt fragments + parsing helpers for the easy/medium/hard word-mix
 // and "real exam passage" content requirements, reused by the English and
 // Hindi rewrite prompts so both stay consistent.
+//
+// The overall difficulty tier (easy/medium/hard) for a test is decided by the
+// CALLER before generation (see cronService.js's difficultyPlanForCount) and
+// baked into the prompt below, then written to the database as-is — it is no
+// longer left to the model to self-report after the fact. Letting the model
+// choose freely, while every prompt asked for the same word-mix regardless of
+// tier, is why nearly every generated test ended up classified "medium".
 
-export const DIFFICULTY_MIX_INSTRUCTIONS = `
-Difficulty mix (apply across the whole passage, by word/phrase difficulty):
-- ~40% easy words/phrases (common, short, everyday vocabulary)
-- ~40% medium words/phrases (moderately complex, domain-relevant vocabulary)
-- ~20% hard words/phrases (technical, formal, or low-frequency vocabulary)
+const TIER_INSTRUCTIONS = {
+  easy: `Overall difficulty: EASY. Use mostly short, common, everyday words and simple sentence structure — the kind a beginner typist (home-row level) can read and type comfortably. Roughly 70% easy words, 25% medium, 5% hard/technical.`,
+  medium: `Overall difficulty: MEDIUM. A mix of everyday and moderately complex, domain-relevant vocabulary, with some longer sentences — the level of a typical newspaper feature. Roughly 40% easy words, 40% medium, 20% hard/technical.`,
+  hard: `Overall difficulty: HARD. Favour technical, formal or low-frequency vocabulary, longer and more complex sentences, and denser factual content — the level of an exam-prep or professional/academic passage. Roughly 15% easy words, 35% medium, 50% hard/technical.`,
+};
+
+export function difficultyMixInstructions(tier) {
+  const key = ['easy', 'medium', 'hard'].includes(tier) ? tier : 'medium';
+  return `
+${TIER_INSTRUCTIONS[key]}
 
 Also include, naturally woven into the passage (not as a checklist):
 - Numbers (e.g. statistics, counts)
@@ -17,8 +29,12 @@ Also include, naturally woven into the passage (not as a checklist):
 - At least one special symbol (%, &, @, #, or similar) where natural
 - A mix of long and short sentences, like a real competitive-exam reading passage
 `;
+}
 
 export function buildDifficultyJsonField() {
+  // Still asked as a self-reported estimate for the internal word-level mix
+  // (used for analytics only) — the stored difficulty_level itself comes
+  // from the caller's target tier, not from this or from the model.
   return `"difficulty_breakdown": {"easy_pct": 40, "medium_pct": 40, "hard_pct": 20}`;
 }
 
