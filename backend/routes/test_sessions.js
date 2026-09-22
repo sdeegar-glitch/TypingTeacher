@@ -23,6 +23,42 @@ const submitLimiter = rateLimit({
 const ENGINE_VERSIONS = new Set(['v1', 'v2']);
 const INPUT_METHODS = new Set(['key-events', 'os-layout', 'built-in-inscript', 'ime', 'touch', 'unknown']);
 
+// Every real duration offered anywhere on the site (main test 15s, exams up
+// to 900s, the weekly Live Test at one minute, drills, Hindi Jungle, etc.)
+// is at least this long -- a shorter "session" was never produced by our own
+// UI, so it is rejected outright rather than scored at all.
+const MIN_PLAUSIBLE_DURATION = 10;
+
+// Sessions this short are the easiest to fake a headline WPM for (few real
+// keystrokes needed to hit a big number) and the hardest to sanity-check any
+// other way, so they get a tighter ceiling than the flat 400 applied to
+// longer, harder-to-fake sessions. 250 WPM sustained for 10-29s is already
+// far beyond any verified human typist (world-record sustained pace is
+// ~216 WPM) -- generous on purpose, so a real fast typist is never rejected.
+const SHORT_SESSION_MAX_SECONDS = 30;
+const SHORT_SESSION_MAX_WPM = 250;
+
+/**
+ * Duration-aware plausibility check, on top of the flat 0-400 range already
+ * enforced by the caller. Pure and independently testable.
+ * Returns a reason string when implausible, or null when the session passes.
+ */
+export function implausibleSessionReason({ duration, gross_wpm, net_wpm }) {
+  if (duration < MIN_PLAUSIBLE_DURATION) {
+    return `duration ${duration}s is shorter than any real test on this site.`;
+  }
+  // Net speed can never exceed gross speed -- net is gross minus a penalty
+  // for errors, never a bonus. A submission with net > gross did not come
+  // from the site's own scoring formula (lib/typingScoring.ts).
+  if (net_wpm > gross_wpm) {
+    return `net_wpm (${net_wpm}) exceeds gross_wpm (${gross_wpm}), which the scoring formula cannot produce.`;
+  }
+  if (duration < SHORT_SESSION_MAX_SECONDS && (gross_wpm > SHORT_SESSION_MAX_WPM || net_wpm > SHORT_SESSION_MAX_WPM)) {
+    return `${Math.max(gross_wpm, net_wpm)} WPM in a ${duration}s session exceeds the short-session ceiling (${SHORT_SESSION_MAX_WPM}).`;
+  }
+  return null;
+}
+
 // Validates the optional per-key breakdown sent by the typing engine. Returns
 // a cleaned array (max 200 keys) or [] if absent/invalid -- never fails the
 // session save because of it.
@@ -56,6 +92,12 @@ router.post('/', requireBrowserOrigin, submitLimiter, optionalUser, async (req, 
     gross_wpm < 0 || gross_wpm > 400 || net_wpm < 0 || net_wpm > 400 ||
     (accuracy !== undefined && (typeof accuracy !== 'number' || accuracy < 0 || accuracy > 100))
   ) {
+    return res.status(400).json({ error: 'Missing or implausible metrics' });
+  }
+
+  const implausibleReason = implausibleSessionReason({ duration, gross_wpm, net_wpm });
+  if (implausibleReason) {
+    console.warn(`[test_sessions] rejected implausible session from ${req.ip}: ${implausibleReason}`);
     return res.status(400).json({ error: 'Missing or implausible metrics' });
   }
 
