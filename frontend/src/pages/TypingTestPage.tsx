@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef, memo } from 'react';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize, RefreshCw, Eye, EyeOff, Download } from 'lucide-react';
+import { RotateCcw, ChevronLeft, Zap, Target, Clock, Activity, Volume2, VolumeX, Minus, Plus, Contrast, Keyboard as KeyboardIcon, Hand, Maximize, Minimize, RefreshCw, Eye, EyeOff, Download, Info } from 'lucide-react';
 import VirtualKeyboard from '../components/VirtualKeyboard';
 import HandGuide from '../components/HandGuide';
 import { getFingerForKey } from '../utils/KeyboardLayout';
@@ -371,6 +371,11 @@ export default function TypingTestPage() {
 
   // ── Live engine display prefs (Highlight / Indicator / Backspace mode) ──
   const [showPassage, setShowPassage] = useState(true);
+  // The per-passage "About this passage" blurb (testContent.excerpt) is
+  // primarily there for SEO/meta description purposes -- kept out of the
+  // default layout and shown only on demand via the (i) button next to the
+  // passage pill, instead of as its own always-visible card.
+  const [showExcerptInfo, setShowExcerptInfo] = useState(false);
   const [highlightOn, setHighlightOn] = useState(() => {
     try { return localStorage.getItem('ftl_highlight') !== '0'; } catch { return true; }
   });
@@ -741,6 +746,26 @@ export default function TypingTestPage() {
             style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
             <span className="opacity-80 font-semibold">Passage:</span> <span className="truncate">{testContent.title}</span>
           </span>
+          {testContent.excerpt && (
+            <div className="relative shrink-0">
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowExcerptInfo(v => !v); }}
+                title="About this passage"
+                aria-expanded={showExcerptInfo}
+                className={`flex items-center p-1.5 rounded-lg border transition-colors ${showExcerptInfo ? 'bg-brand-primary text-white border-transparent' : 'bg-brand-surface border-brand-border text-brand-muted hover:border-brand-primary/40 hover:text-brand-text'}`}
+              >
+                <Info className="w-3.5 h-3.5" />
+              </button>
+              {showExcerptInfo && (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute z-50 top-full mt-2 left-0 w-72 bg-brand-surface border border-brand-border rounded-xl p-3 text-xs text-brand-text-muted leading-relaxed shadow-lg"
+                >
+                  {testContent.excerpt}
+                </div>
+              )}
+            </div>
+          )}
           <div className="ml-auto flex items-center gap-1.5">
             <button
               onClick={handleChangePassage}
@@ -1112,12 +1137,8 @@ export default function TypingTestPage() {
         {/* About this test — hidden while actively typing to stay out of the way */}
         {!stats.isActive && (
           <div className="w-full max-w-2xl" onClick={e => e.stopPropagation()}>
-            {testContent.excerpt && (
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed mb-3">
-                <h2 className="text-base font-bold text-brand-text mb-1.5">About this passage</h2>
-                <p>{testContent.excerpt}</p>
-              </div>
-            )}
+            {/* The excerpt itself now lives behind the (i) button next to the
+                passage pill above, instead of its own always-visible card. */}
             <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted leading-relaxed space-y-2">
               <h2 className="text-base font-bold text-brand-text">How WPM, accuracy and errors are calculated</h2>
               <p><strong className="text-brand-text">Gross WPM</strong> counts every character you typed, divided by 5, over your time in minutes. <strong className="text-brand-text">Net WPM</strong> subtracts your mistakes first, so it's a truer measure of usable speed — this is the number most exams and employers care about.</p>
