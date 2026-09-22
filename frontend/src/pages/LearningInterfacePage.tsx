@@ -167,7 +167,9 @@ const LearningInterfacePage = () => {
 
   return (
     <div
-      className="h-[100dvh] text-[#1e293b] flex flex-col overflow-hidden"
+      // 100dvh minus the shared site navbar's h-16 (4rem), which now renders
+      // above this page instead of being suppressed.
+      className="h-[calc(100dvh-4rem)] text-[#1e293b] flex flex-col overflow-hidden"
       style={{ fontFamily: "'Inter', sans-serif", background: '#ebebea' }}
       onClick={() => isMobile && hiddenInputRef.current?.focus()}
     >

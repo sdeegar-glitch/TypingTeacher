@@ -424,13 +424,6 @@ export default function TypingTestPage() {
     URL.revokeObjectURL(url);
   }, [testContent]);
 
-  const greetingName = useMemo(() => {
-    try {
-      const raw = (localStorage.getItem('ftl_user_name') || '').trim().split(/\s+/)[0];
-      return raw || '';
-    } catch { return ''; }
-  }, []);
-
   // Which physical key to highlight: ASCII passes straight through (English +
   // Kruti Dev keystroke text); Devanagari (Mangal) maps via the INSCRIPT table.
   const keyboardActiveKey = useMemo(() => {
@@ -648,7 +641,9 @@ export default function TypingTestPage() {
 
   return (
     <div
-      className={`h-[100dvh] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none ${a11y.highContrast ? 'typing-high-contrast' : ''}`}
+      // 100dvh minus the shared site navbar's h-16 (4rem), which now renders
+      // above this page instead of being suppressed.
+      className={`h-[calc(100dvh-4rem)] bg-brand-bg text-brand-text flex flex-col overflow-hidden select-none ${a11y.highContrast ? 'typing-high-contrast' : ''}`}
       onClick={() => focusInput()}
     >
       {/* Every test now carries a real, AI-written per-passage excerpt (Phase 2a of
@@ -693,49 +688,9 @@ export default function TypingTestPage() {
         />
       )}
 
-      {/* ── TOP BAR ─────────────────────────────────── */}
-      <div className="shrink-0 bg-brand-surface border-b border-brand-border px-3 sm:px-6 h-14 flex items-center justify-between gap-3 z-40">
-        {/* Left */}
-        <div className="flex items-center gap-3 min-w-0">
-          <Link to="/tests/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm font-medium group shrink-0">
-            <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-            <span className="hidden sm:inline">Back</span>
-          </Link>
-          <div className="h-5 w-px bg-brand-border hidden sm:block" />
-          <div className="min-w-0 hidden sm:block">
-            <h1 className="text-sm font-semibold text-brand-text truncate max-w-[200px]">{testContent.title}</h1>
-          </div>
-          {strictMode && (
-            <span
-              title="Wrong keystrokes are rejected until corrected — set by the site admin"
-              className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg shrink-0 bg-rose-500/10 text-rose-500 border border-rose-500/20"
-            >
-              Strict
-            </span>
-          )}
-        </div>
-
-        {/* Center: live label when active, empty when setup */}
-        {stats.isActive && (
-          <span className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg"
-            style={{ background: 'rgba(48,76,83,0.12)', color: 'var(--brand-primary)' }}>
-            LIVE
-          </span>
-        )}
-
-        {/* Right: Restart (live numbers now live in the stat-pills row below) */}
-        <div className="flex items-center gap-3 sm:gap-5 shrink-0">
-          <button
-            onClick={(e) => { e.stopPropagation(); handleReset(); }}
-            className="flex items-center gap-1.5 bg-brand-surface-2 hover:bg-brand-border text-brand-muted hover:text-brand-text px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border border-brand-border"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Restart</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Progress bar */}
+      {/* Progress bar — the site navbar sits above this page now, so this is
+          the first thing on the page itself rather than under a page-owned
+          top bar. */}
       <div className="shrink-0 h-0.5 bg-brand-border">
         <motion.div
           className="h-full"
@@ -746,14 +701,43 @@ export default function TypingTestPage() {
       </div>
 
       {/* ── MAIN CONTENT ────────────────────────────── */}
-      <div className="flex-grow flex flex-col items-center justify-start gap-4 px-3 sm:px-6 py-4 sm:py-6 overflow-y-auto">
+      <div className="flex-grow flex flex-col items-center justify-start gap-3 px-3 sm:px-6 py-3 sm:py-4 overflow-y-auto">
 
-        {/* ── Welcome header: greeting + passage pill + Change/Hide/Download ── */}
-        <div className="w-full max-w-2xl flex flex-wrap items-center gap-2">
-          <h2 className="text-sm sm:text-base font-black text-brand-text shrink-0">
-            {greetingName ? `Welcome, ${greetingName}` : 'Welcome!'}
-          </h2>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-white truncate max-w-[45%] sm:max-w-xs"
+        {/* ── One compact control row: Back / Restart / Strict / Live / passage pill / Change / Hide / Download ──
+            Replaces the old separate top bar + "Welcome" line + passage-pill row.
+            The passage title lives here once (previously duplicated in the top
+            bar's <h1> too) and in the <Seo> title above for search engines --
+            it doesn't need its own dedicated on-page heading. */}
+        <div className="w-full max-w-2xl flex flex-wrap items-center gap-1.5">
+          <Link
+            to="/tests/"
+            title="Back to test list"
+            className="flex items-center bg-brand-surface border border-brand-border hover:border-brand-primary/40 text-brand-muted hover:text-brand-text p-1.5 rounded-lg transition-colors shrink-0"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+          </Link>
+          <button
+            onClick={(e) => { e.stopPropagation(); handleReset(); }}
+            title="Restart"
+            className="flex items-center bg-brand-surface border border-brand-border hover:border-brand-primary/40 text-brand-muted hover:text-brand-text p-1.5 rounded-lg transition-colors shrink-0"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+          </button>
+          {strictMode && (
+            <span
+              title="Wrong keystrokes are rejected until corrected — set by the site admin"
+              className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg shrink-0 bg-rose-500/10 text-rose-500 border border-rose-500/20"
+            >
+              Strict
+            </span>
+          )}
+          {stats.isActive && (
+            <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-lg shrink-0"
+              style={{ background: 'rgba(48,76,83,0.12)', color: 'var(--brand-primary)' }}>
+              Live
+            </span>
+          )}
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-white truncate max-w-[35%] sm:max-w-xs"
             style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
             <span className="opacity-80 font-semibold">Passage:</span> <span className="truncate">{testContent.title}</span>
           </span>
@@ -783,12 +767,15 @@ export default function TypingTestPage() {
           </div>
         </div>
 
-        {/* ── STAT PILLS (Gross · Delete · Backspace · Time Left) ── */}
+        {/* ── STAT PILLS (Gross · Net · Accuracy · Time Left) ──
+            Promoted Net/Accuracy here since they're the numbers users actually
+            watch mid-test; Delete/Backspace (debug-ish counters) moved down to
+            the compact meta line below instead. */}
         <div className="grid grid-cols-4 gap-1.5 sm:gap-2 w-full max-w-2xl">
           {[
             { label: 'Gross', value: stats.wpm, icon: Zap, cls: 'bg-brand-primary/10 border-brand-primary/30 text-brand-primary' },
-            { label: 'Delete', value: deleteCount, icon: RotateCcw, cls: 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400' },
-            { label: 'Backspace', value: backspaceCount, icon: RotateCcw, cls: 'bg-rose-500/10 border-rose-500/30 text-rose-500' },
+            { label: 'Net', value: stats.netWpm, icon: Zap, cls: 'bg-brand-accent/10 border-brand-accent/30 text-brand-accent' },
+            { label: 'Accuracy', value: `${stats.accuracy}%`, icon: Target, cls: stats.accuracy >= 90 ? 'bg-brand-accent/10 border-brand-accent/30 text-brand-accent' : 'bg-rose-500/10 border-rose-500/30 text-rose-500' },
             { label: 'Time Left', value: formattedTime, icon: Clock, cls: stats.timeLeft <= 10 && stats.isActive ? 'bg-rose-500/15 border-rose-500/40 text-rose-500 animate-pulse' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400' },
           ].map(s => (
             <div key={s.label} className={`rounded-xl px-1.5 py-1.5 sm:py-2 text-center border ${s.cls}`}>
@@ -800,10 +787,10 @@ export default function TypingTestPage() {
           ))}
         </div>
 
-        {/* ── Compact meta line: Net WPM · Accuracy · Errors ── */}
+        {/* ── Compact meta line: Delete · Backspace · Errors ── */}
         <div className="w-full max-w-2xl flex items-center gap-4 text-xs text-brand-muted font-semibold">
-          <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> Net: <span className="font-mono font-bold text-brand-text">{stats.netWpm}</span></span>
-          <span className="flex items-center gap-1"><Target className="w-3 h-3" /> Accuracy: <span className={`font-mono font-bold ${stats.accuracy >= 90 ? 'text-brand-accent' : 'text-rose-500'}`}>{stats.accuracy}%</span></span>
+          <span className="flex items-center gap-1"><RotateCcw className="w-3 h-3" /> Delete: <span className="font-mono font-bold text-brand-text">{deleteCount}</span></span>
+          <span className="flex items-center gap-1"><RotateCcw className="w-3 h-3" /> Backspace: <span className="font-mono font-bold text-brand-text">{backspaceCount}</span></span>
           <span>Errors: <span className="font-mono font-bold text-rose-500">{stats.errors}</span></span>
         </div>
 

@@ -84,7 +84,9 @@ export default function TypingReportPage() {
   }, [result]);
 
   return (
-    <div className="h-[100dvh] overflow-hidden flex flex-col bg-brand-bg text-brand-text">
+    // 100dvh minus the shared site navbar's h-16 (4rem), which now renders
+    // above this page instead of being suppressed.
+    <div className="h-[calc(100dvh-4rem)] overflow-hidden flex flex-col bg-brand-bg text-brand-text">
       <Seo
         title={`Typing Report — ${result.netWpm} WPM | FastTypingLab`}
         description={`${result.netWpm} WPM, ${result.accuracy}% accuracy on ${result.testTitle}.`}

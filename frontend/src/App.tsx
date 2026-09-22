@@ -436,19 +436,20 @@ const AppContent = () => {
     captureReferralFromUrl(location.search);
   }, [location.search]);
 
-  const isLearningInterface =
-    location.pathname.startsWith('/embed') ||
-    (location.pathname.startsWith('/learn/') && location.pathname !== '/learn' && location.pathname !== '/learn/') ||
-    (location.pathname.startsWith('/tests/') && location.pathname !== '/tests' && location.pathname !== '/tests/' && !location.pathname.includes('/config/')) ||
-    location.pathname === '/results';
+  // Only /embed/* stays navbar-less -- it's rendered inside other sites'
+  // iframes, where the parent site's own nav would be broken/pointless.
+  // Every other full-height practice/lesson page now carries the shared
+  // navbar too (it used to be suppressed there as well); each of those
+  // pages' own height calc accounts for the navbar's height instead.
+  const isEmbed = location.pathname.startsWith('/embed');
 
   return (
     // No font-sans here: that Tailwind utility sets the generic ui-sans-serif
     // stack and, being closer than body, would override body's Inter for
     // every element on the site (it did, until this was found and removed).
-    <div className={`min-h-screen flex flex-col bg-brand-bg transition-colors ${isLearningInterface ? 'h-screen overflow-hidden' : ''}`}>
-      {!isLearningInterface && <Navbar />}
-      <main className={`flex-grow ${isLearningInterface ? 'overflow-hidden' : ''}`}>
+    <div className={`min-h-screen flex flex-col bg-brand-bg transition-colors ${isEmbed ? 'h-screen overflow-hidden' : ''}`}>
+      {!isEmbed && <Navbar />}
+      <main className={`flex-grow ${isEmbed ? 'overflow-hidden' : ''}`}>
         <Suspense fallback={<div className="min-h-[70vh]" aria-busy="true" />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -558,7 +559,7 @@ const AppContent = () => {
         </Routes>
         </Suspense>
       </main>
-      {!isLearningInterface && <Footer />}
+      {!isEmbed && <Footer />}
     </div>
   );
 };
