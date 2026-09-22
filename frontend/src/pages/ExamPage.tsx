@@ -202,31 +202,31 @@ export default function ExamPage() {
   // ═══ FINISHED ═══
   if (screen === 'finished') {
     return (
-      <div className="min-h-screen bg-[#0d0d14] text-white flex flex-col items-center justify-center px-4 py-12">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-xl">
-          <div className="text-center mb-8">
+      <div className="bg-[#0d0d14] text-white flex flex-col items-center justify-center px-4 py-6 sm:py-8">
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-xl">
+          <div className="text-center mb-4">
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 14, delay: 0.1 }}
-              className={`w-24 h-24 rounded-3xl mx-auto mb-5 flex items-center justify-center text-5xl ${passed ? 'bg-emerald-500/15 border border-emerald-500/30' : 'bg-rose-500/15 border border-rose-500/30'}`}>
+              className={`w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center text-2xl ${passed ? 'bg-emerald-500/15 border border-emerald-500/30' : 'bg-rose-500/15 border border-rose-500/30'}`}>
               {passed ? '🏆' : '💪'}
             </motion.div>
-            <h2 className={`text-4xl font-black mb-2 ${passed ? 'text-emerald-400' : 'text-white'}`}>{passed ? 'Test Passed!' : 'Keep Pushing!'}</h2>
-            <p className="text-white/40">
+            <h1 className={`text-2xl sm:text-[28px] font-extrabold mb-1.5 ${passed ? 'text-emerald-400' : 'text-white'}`}>{passed ? 'Test Passed!' : 'Keep Pushing!'}</h1>
+            <p className="text-white/40 text-sm">
               {passed ? `You met the ${exam.title} requirements. You're exam-ready!` : `Need ${exam.wpmTarget} WPM & ${exam.accuracyTarget}% accuracy. You're getting closer!`}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-2 gap-2 mb-4">
             {[
               { label: 'Net WPM', value: wpm, suffix: '', pass: wpm >= exam.wpmTarget, big: true, targetLabel: `Need ${exam.wpmTarget}+` },
               { label: 'Accuracy', value: accuracy, suffix: '%', pass: accuracy >= exam.accuracyTarget, big: true, targetLabel: `Need ${exam.accuracyTarget}%+` },
               { label: 'Gross WPM', value: result?.grossWpm ?? 0, suffix: '', pass: true, big: false, targetLabel: '' },
               { label: 'Errors', value: result?.errors ?? 0, suffix: '', pass: (result?.errors ?? 0) <= 5, big: false, targetLabel: '' },
             ].map(s => (
-              <div key={s.label} className={`rounded-2xl p-5 border text-center ${s.pass ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-rose-500/5 border-rose-500/20'}`}>
-                <div className={`font-black font-mono ${s.big ? 'text-4xl' : 'text-2xl'} ${s.pass ? 'text-emerald-400' : 'text-rose-400'}`}>{s.value}{s.suffix}</div>
-                <div className="text-xs text-white/30 uppercase tracking-wider mt-1">{s.label}</div>
+              <div key={s.label} className={`rounded-xl p-3 border text-center ${s.pass ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-rose-500/5 border-rose-500/20'}`}>
+                <div className={`font-black font-mono ${s.big ? 'text-2xl' : 'text-lg'} ${s.pass ? 'text-emerald-400' : 'text-rose-400'}`}>{s.value}{s.suffix}</div>
+                <div className="text-xs text-white/30 uppercase tracking-wider mt-0.5">{s.label}</div>
                 {s.targetLabel && (
-                  <div className={`text-xs mt-1.5 font-semibold flex items-center justify-center gap-1 ${s.pass ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  <div className={`text-xs mt-1 font-semibold flex items-center justify-center gap-1 ${s.pass ? 'text-emerald-400' : 'text-rose-400'}`}>
                     {s.pass ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}{s.pass ? 'Passed' : s.targetLabel}
                   </div>
                 )}
@@ -237,23 +237,23 @@ export default function ExamPage() {
           {result && <ScoreAudit result={result} kdphTarget={exam.kdphTarget} kdph={kdph} />}
 
           {/* Backspace / delete summary */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 flex items-center justify-around text-center">
-            <div><div className="text-lg font-black font-mono text-white/80">{result?.chars ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Chars</div></div>
-            <div><div className="text-lg font-black font-mono text-white/80">{result?.backspaces ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Backspace</div></div>
-            <div><div className="text-lg font-black font-mono text-white/80">{result?.deletes ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Delete</div></div>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-3 mb-4 flex items-center justify-around text-center">
+            <div><div className="text-base font-black font-mono text-white/80">{result?.chars ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Chars</div></div>
+            <div><div className="text-base font-black font-mono text-white/80">{result?.backspaces ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Backspace</div></div>
+            <div><div className="text-base font-black font-mono text-white/80">{result?.deletes ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Delete</div></div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-2.5">
             <button onClick={tryAgain}
-              className={`flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-white shadow-lg ${exam.language === 'Hindi' ? 'bg-gradient-to-r from-orange-600 to-amber-600' : 'bg-gradient-to-r from-blue-600 to-indigo-600'}`}>
+              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm text-white shadow-lg ${exam.language === 'Hindi' ? 'bg-gradient-to-r from-orange-600 to-amber-600' : 'bg-gradient-to-r from-blue-600 to-indigo-600'}`}>
               <RotateCcw className="w-4 h-4" /> Try Again
             </button>
-            <CertificateButton wpm={wpm} accuracy={accuracy} seconds={result?.elapsedSec || exam.duration} className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500/20 transition-all" />
-            <button onClick={restart} className="px-5 py-3.5 rounded-xl font-bold bg-white/5 border border-white/10 text-white/50 hover:text-white/80 hover:bg-white/10 transition-all">
+            <CertificateButton wpm={wpm} accuracy={accuracy} seconds={result?.elapsedSec || exam.duration} className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500/20 transition-all" />
+            <button onClick={restart} className="px-4 py-3 rounded-xl font-bold bg-white/5 border border-white/10 text-white/50 hover:text-white/80 hover:bg-white/10 transition-all">
               <Award className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-center text-white/15 text-xs mt-4">Each attempt uses a different paragraph from our exam library</p>
+          <p className="text-center text-white/15 text-xs mt-3">Each attempt uses a different paragraph from our exam library</p>
         </motion.div>
       </div>
     );
@@ -261,45 +261,45 @@ export default function ExamPage() {
 
   // ═══ INFO (default) ═══
   return (
-    <div className="min-h-screen bg-[#0d0d14] text-white flex flex-col">
+    <div className="bg-[#0d0d14] text-white flex flex-col">
       <Seo
         title={`${exam.title} Mock Test | FastTypingLab`}
         description={`Free ${exam.title} typing mock test — ${exam.duration / 60} minutes, target ${exam.wpmTarget}+ WPM at ${exam.accuracyTarget}%+ accuracy. Practice with real exam-style passages.`}
         canonical={LANDING_CANONICAL[key]}
       />
-      <div className="px-6 py-4">
+      <div className="px-6 py-3">
         <Link to="/competitive-exam-typing/" className="flex items-center gap-1.5 text-white/40 hover:text-white/80 text-sm transition-colors w-fit">
           <ChevronLeft className="w-4 h-4" /> All Exams
         </Link>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-4 py-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-2xl">
-          <div className="flex items-center gap-3 mb-6">
-            <span className={`text-4xl w-14 h-14 rounded-2xl ${exam.bg} border ${exam.border} flex items-center justify-center`}>{exam.icon}</span>
+      <div className="flex-1 flex items-center justify-center px-4 py-4 sm:py-6">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-2xl">
+          <div className="flex items-center gap-3 mb-4">
+            <span className={`text-lg w-9 h-9 rounded-lg ${exam.bg} border ${exam.border} flex items-center justify-center shrink-0`}>{exam.icon}</span>
             <div>
-              <div className={`text-xs font-bold uppercase tracking-widest ${exam.color} mb-1`}>{exam.badge} Typing Test</div>
-              <h1 className="text-3xl font-black text-white">{exam.title}</h1>
+              <div className={`text-[11px] font-bold uppercase tracking-widest ${exam.color} mb-0.5`}>{exam.badge} Typing Test</div>
+              <h1 className="text-2xl sm:text-[28px] font-extrabold leading-tight text-white">{exam.title}</h1>
               <p className="text-white/40 text-sm mt-0.5">{exam.fullName}</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="grid grid-cols-3 gap-2 mb-4">
             {[
               { label: 'Duration', value: `${exam.duration / 60} min`, icon: Clock, color: 'text-white' },
               { label: 'Target WPM', value: `${exam.wpmTarget}+`, icon: Zap, color: exam.color },
               { label: 'Min Accuracy', value: `${exam.accuracyTarget}%`, icon: Target, color: 'text-amber-400' },
             ].map(s => (
-              <div key={s.label} className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center backdrop-blur">
-                <s.icon className={`w-4 h-4 mx-auto mb-2 ${s.color}`} />
-                <div className={`text-2xl font-black font-mono ${s.color}`}>{s.value}</div>
-                <div className="text-xs text-white/30 mt-1 uppercase tracking-wider">{s.label}</div>
+              <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl p-3 text-center backdrop-blur">
+                <s.icon className={`w-4 h-4 mx-auto mb-1.5 ${s.color}`} />
+                <div className={`text-lg font-black font-mono ${s.color}`}>{s.value}</div>
+                <div className="text-[11px] text-white/30 mt-0.5 uppercase tracking-wider">{s.label}</div>
               </div>
             ))}
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
-            <div className="flex items-center gap-2 text-white/60 text-xs font-bold uppercase tracking-widest mb-3">
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+            <div className="flex items-center gap-2 text-white/60 text-xs font-bold uppercase tracking-widest mb-2.5">
               <Shield className="w-3.5 h-3.5" /> Exam Rules
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -311,17 +311,17 @@ export default function ExamPage() {
             </div>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-8">
-            <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-3">Passage Preview</div>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-5">
+            <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-2.5">Passage Preview</div>
             <p className={`text-white/40 text-sm leading-relaxed line-clamp-2 ${isHindi ? '' : 'font-mono'}`} style={isHindi ? { fontFamily: "'Noto Sans Devanagari', sans-serif" } : undefined}>{passage}</p>
             <div className="mt-2 text-[11px] text-white/20">{passage.length} characters · {passage.split(' ').length} words</div>
           </div>
 
           <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={startCountdown}
-            className={`w-full py-4 rounded-2xl font-black text-lg text-white transition-all shadow-2xl flex items-center justify-center gap-3 ${exam.language === 'Hindi' ? 'bg-gradient-to-r from-orange-600 to-amber-600 shadow-orange-500/20' : 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-500/20'}`}>
+            className={`w-full py-3.5 rounded-xl font-black text-base text-white transition-all shadow-2xl flex items-center justify-center gap-3 ${exam.language === 'Hindi' ? 'bg-gradient-to-r from-orange-600 to-amber-600 shadow-orange-500/20' : 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-500/20'}`}>
             <Zap className="w-5 h-5" /> Start Mock Test
           </motion.button>
-          <p className="text-center text-white/20 text-xs mt-3">A new passage is selected randomly each attempt</p>
+          <p className="text-center text-white/20 text-xs mt-2.5">A new passage is selected randomly each attempt</p>
         </motion.div>
       </div>
     </div>
