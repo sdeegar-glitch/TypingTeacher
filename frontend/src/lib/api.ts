@@ -24,6 +24,35 @@ export async function fetchTestList(query: Record<string, string> = {}): Promise
   }
 }
 
+export interface TestPage {
+  data: any[];
+  meta: { total: number; page: number; limit: number; totalPages: number };
+}
+
+/**
+ * One page of a track's test list, via the server-paginated /api/tests
+ * (unlike fetchTestList's /api/tests/latest, which returns up to 100 at once
+ * with no paging — used by the tests hub, whose catalogue grows every day).
+ * Falls back to slicing the bundled offline list the same way on failure.
+ */
+export async function fetchTestPage(query: Record<string, string>, page: number, limit = 12): Promise<TestPage> {
+  const params = new URLSearchParams({ ...query, page: String(page), limit: String(limit) }).toString();
+  try {
+    const res = await fetch(`${API_URL}/api/tests?${params}`, { signal: AbortSignal.timeout(NET_TIMEOUT()) });
+    if (!res.ok) throw new Error(`status ${res.status}`);
+    const json = await res.json();
+    if (!Array.isArray(json?.data)) throw new Error('unexpected response shape');
+    return json;
+  } catch {
+    const all = offlineList(query);
+    const start = (page - 1) * limit;
+    return {
+      data: all.slice(start, start + limit),
+      meta: { total: all.length, page, limit, totalPages: Math.max(1, Math.ceil(all.length / limit)) },
+    };
+  }
+}
+
 /** Fetch a single test by slug/id, falling back to the bundled offline copy. */
 export async function fetchTestBySlug(slug: string): Promise<any | null> {
   try {

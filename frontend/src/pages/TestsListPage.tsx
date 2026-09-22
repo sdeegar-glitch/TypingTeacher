@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import Seo from '../components/Seo';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, ChevronRight, Zap, Clock, BarChart2, ChevronLeft, Languages, Keyboard, CheckCircle2 } from 'lucide-react';
+import { BookOpen, ChevronRight, Zap, Clock, BarChart2, ChevronLeft, ChevronsLeft, ChevronsRight, Languages, Keyboard, CheckCircle2 } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { isTestCompleted, getLastTrack, setLastTrack } from '../lib/testProgress';
 
-import { fetchTestList } from '../lib/api';
+import { fetchTestPage } from '../lib/api';
+
+const PAGE_SIZE = 12;
 
 const DIFF_CONFIG: Record<string, { label: string; color: string; bg: string; border: string }> = {
   easy:   { label: 'Easy',   color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
@@ -87,8 +89,11 @@ export default function TestsListPage() {
   });
   const [tests, setTests] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
-  const chooseTrack = (cat: Category) => { setSelected(cat); setLastTrack(cat.id); };
+  const chooseTrack = (cat: Category) => { setSelected(cat); setLastTrack(cat.id); setPage(1); };
 
   useEffect(() => {
     document.title = 'Typing Tests Library | FastTypingLab';
@@ -102,13 +107,24 @@ export default function TestsListPage() {
 
   useEffect(() => {
     if (!selected) return;
+    let cancelled = false;
     setLoading(true);
-    setTests([]);
-    fetchTestList(selected.query)
-      .then(d => { if (Array.isArray(d)) setTests(d); })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [selected]);
+    fetchTestPage(selected.query, page, PAGE_SIZE)
+      .then(({ data, meta }) => {
+        if (cancelled) return;
+        setTests(Array.isArray(data) ? data : []);
+        setTotalPages(Math.max(1, meta?.totalPages || 1));
+        setTotal(meta?.total || 0);
+      })
+      .catch(() => { if (!cancelled) { setTests([]); setTotalPages(1); setTotal(0); } })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [selected, page]);
+
+  // Jumping pages: land back at the top of the list, not mid-scroll from the previous page.
+  useEffect(() => {
+    if (selected) window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, [page, selected]);
 
   // ── Category selection screen ──
   if (!selected) {
@@ -201,20 +217,65 @@ export default function TestsListPage() {
             <p className="text-brand-text-muted text-sm">No {selected.title} passages are available right now. New content is added automatically.</p>
           </motion.div>
         ) : (
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
-            {[...tests].sort(byDifficulty).map((test) => (
-              <TestListItem key={test.id} test={test} devanagari={!!selected.devanagari} />
-            ))}
-          </div>
-        )}
+          <>
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+              {[...tests].sort(byDifficulty).map((test) => (
+                <TestListItem key={test.id} test={test} devanagari={!!selected.devanagari} />
+              ))}
+            </div>
 
-        {!loading && tests.length > 0 && (
-          <p className="text-center text-xs text-brand-muted mt-4">
-            {tests.length} {selected.title} passages · new ones added daily
-          </p>
+            {totalPages > 1 && <Pager page={page} totalPages={totalPages} onChange={setPage} />}
+
+            <p className="text-center text-xs text-brand-muted mt-3">
+              {total} {selected.title} passages · new ones added daily
+            </p>
+          </>
         )}
       </div>
     </div>
+  );
+}
+
+/**
+ * Compact pager: prev/next arrows, first/last jump, and up to 5 page numbers
+ * centred on the current page (with the first/last page always shown so the
+ * catalogue's real size is never hidden behind an endless "Next").
+ */
+function Pager({ page, totalPages, onChange }: { page: number; totalPages: number; onChange: (p: number) => void }) {
+  const windowSize = 5;
+  let start = Math.max(1, page - Math.floor(windowSize / 2));
+  const end = Math.min(totalPages, start + windowSize - 1);
+  start = Math.max(1, end - windowSize + 1);
+  const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+
+  const btn = (active: boolean) =>
+    `min-w-[2rem] h-8 px-2 rounded-lg text-sm font-semibold transition-colors ${
+      active ? 'bg-brand-primary text-white' : 'text-brand-text hover:bg-brand-surface-2 border border-brand-border'
+    }`;
+  const iconBtn = 'w-8 h-8 rounded-lg flex items-center justify-center border border-brand-border text-brand-muted hover:text-brand-primary hover:border-brand-primary/40 disabled:opacity-35 disabled:pointer-events-none transition-colors';
+
+  return (
+    <nav aria-label="Test list pages" className="flex items-center justify-center gap-1.5 mt-4">
+      <button type="button" onClick={() => onChange(1)} disabled={page === 1} aria-label="First page" className={iconBtn}>
+        <ChevronsLeft className="w-4 h-4" />
+      </button>
+      <button type="button" onClick={() => onChange(page - 1)} disabled={page === 1} aria-label="Previous page" className={iconBtn}>
+        <ChevronLeft className="w-4 h-4" />
+      </button>
+      {start > 1 && <span className="px-1 text-brand-muted text-sm">…</span>}
+      {pages.map(p => (
+        <button key={p} type="button" onClick={() => onChange(p)} aria-current={p === page ? 'page' : undefined} className={btn(p === page)}>
+          {p}
+        </button>
+      ))}
+      {end < totalPages && <span className="px-1 text-brand-muted text-sm">…</span>}
+      <button type="button" onClick={() => onChange(page + 1)} disabled={page === totalPages} aria-label="Next page" className={iconBtn}>
+        <ChevronRight className="w-4 h-4" />
+      </button>
+      <button type="button" onClick={() => onChange(totalPages)} disabled={page === totalPages} aria-label="Last page" className={iconBtn}>
+        <ChevronsRight className="w-4 h-4" />
+      </button>
+    </nav>
   );
 }
 
