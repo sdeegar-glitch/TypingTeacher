@@ -39,8 +39,22 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 curl -fsS --max-time 15 https://www.cloudflare.com/ips-v4 >  "$TMP_NEW"
+# A missing trailing newline on the v4 fetch would otherwise glue its last
+# range to the v6 list's first range into one invalid CIDR entry (this bit
+# a real run once) -- force a separator regardless of what curl returned.
+printf '\n' >> "$TMP_NEW"
 curl -fsS --max-time 15 https://www.cloudflare.com/ips-v6 >> "$TMP_NEW"
 sed -i '/^\s*$/d' "$TMP_NEW"
+
+# Defense in depth against the same class of bug: drop (and warn about) any
+# line that isn't a plausible IPv4 or IPv6 CIDR before it ever reaches ufw,
+# rather than trusting the fetch was clean.
+awk '
+  /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+$/ { print; next }
+  /^[0-9a-fA-F:]+\/[0-9]+$/ { print; next }
+  { print "Dropping malformed entry: " $0 > "/dev/stderr" }
+' "$TMP_NEW" > "${TMP_NEW}.clean"
+mv "${TMP_NEW}.clean" "$TMP_NEW"
 
 # Safety net: Cloudflare has published 15+ IPv4 ranges for years. If the
 # fetch failed/returned something truncated, a low count is the tell --
