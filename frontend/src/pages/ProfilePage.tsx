@@ -140,7 +140,7 @@ export default function ProfilePage() {
               <div className="w-24 h-24 rounded-2xl overflow-hidden flex items-center justify-center text-white text-2xl font-black shadow-lg"
                 style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
                 {profile.avatar_url
-                  ? <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                  ? <img src={profile.avatar_url} alt="" width={96} height={96} className="w-full h-full object-cover" />
                   : initials(profile.name, profile.email)}
               </div>
               <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}

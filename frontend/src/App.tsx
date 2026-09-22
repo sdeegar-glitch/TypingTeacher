@@ -233,7 +233,7 @@ const Navbar = () => {
                   className="flex items-center gap-2 pl-1 xl:pr-3 py-1 rounded-full border border-brand-border hover:bg-brand-surface-2 transition-all duration-200">
                   <span className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-[11px] font-bold shrink-0"
                     style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-                    {me.avatar ? <img src={me.avatar} alt="" className="w-full h-full object-cover" /> : avatarInitials}
+                    {me.avatar ? <img src={me.avatar} alt="" width={28} height={28} className="w-full h-full object-cover" /> : avatarInitials}
                   </span>
                   <span className="hidden xl:inline text-sm font-semibold text-brand-text max-w-[120px] truncate">
                     {firstName ? `Hi, ${firstName}` : 'Profile'}
@@ -329,7 +329,7 @@ const Navbar = () => {
                     className="w-full flex items-center gap-3 py-2.5 px-3 rounded-xl border border-brand-border hover:bg-brand-surface-2 transition-all">
                     <span className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold shrink-0"
                       style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-                      {me.avatar ? <img src={me.avatar} alt="" className="w-full h-full object-cover" /> : avatarInitials}
+                      {me.avatar ? <img src={me.avatar} alt="" width={36} height={36} className="w-full h-full object-cover" /> : avatarInitials}
                     </span>
                     <span className="min-w-0">
                       <span className="block text-sm font-bold text-brand-text truncate">{firstName ? `Hi, ${firstName}` : 'My Profile'}</span>
@@ -437,7 +437,10 @@ const AppContent = () => {
     location.pathname === '/results';
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans bg-brand-bg transition-colors ${isLearningInterface ? 'h-screen overflow-hidden' : ''}`}>
+    // No font-sans here: that Tailwind utility sets the generic ui-sans-serif
+    // stack and, being closer than body, would override body's Inter for
+    // every element on the site (it did, until this was found and removed).
+    <div className={`min-h-screen flex flex-col bg-brand-bg transition-colors ${isLearningInterface ? 'h-screen overflow-hidden' : ''}`}>
       {!isLearningInterface && <Navbar />}
       <main className={`flex-grow ${isLearningInterface ? 'overflow-hidden' : ''}`}>
         <Suspense fallback={<div className="min-h-[70vh]" aria-busy="true" />}>

@@ -12,15 +12,15 @@
 
     <!-- Preconnect to origins used before/during first paint, so the browser
          starts DNS+TCP+TLS setup immediately instead of after JS discovers them. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://www.clarity.ms" />
 
-    <!-- Google Fonts as a direct <link> (not a CSS @import) so the browser's
-         preload scanner finds it while parsing this HTML, in parallel with the
-         JS bundle — instead of only after our own CSS finishes loading. -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+    <!-- Inter and JetBrains Mono are self-hosted (src/fonts.css) — no more
+         fonts.googleapis.com/fonts.gstatic.com request. Preload the one file
+         almost every page needs (upright Inter, Latin) so it starts fetching
+         before our CSS bundle is parsed; the browser's preload scanner finds
+         this tag directly in the HTML. -->
+    <link rel="preload" href="/fonts/Inter-var-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Microsoft Clarity -->
     <script type="text/javascript">
