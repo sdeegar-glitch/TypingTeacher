@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Camera, Loader2, Check, Award, Mail, Phone, User, Calendar, ChevronLeft, ExternalLink, ShieldCheck } from 'lucide-react';
 import Seo from '../components/Seo';
+import PageHeader from '../components/PageHeader';
 import { isLoggedIn } from '../lib/auth';
 import { fetchMe, updateMe, uploadAvatar, fetchMyCertificates, type MeProfile, type MyCertificate } from '../lib/user';
 
@@ -120,13 +121,15 @@ export default function ProfilePage() {
       <Seo title="My Profile | FastTypingLab" description="Manage your FastTypingLab profile." noindex />
       <div className="container mx-auto max-w-3xl">
 
-        <div className="flex items-center gap-3 mb-6">
-          <Link to="/dashboard" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
-            <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" /> Dashboard
-          </Link>
-          <div className="h-4 w-px bg-brand-border" />
-          <h1 className="text-xl font-bold">My Profile</h1>
-        </div>
+        <PageHeader
+          icon={User}
+          title="My Profile"
+          actions={
+            <Link to="/dashboard" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-text transition-colors text-sm group">
+              <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" /> Dashboard
+            </Link>
+          }
+        />
 
         {error && (
           <div className="mb-4 text-sm text-rose-500 bg-rose-500/10 border border-rose-500/20 px-4 py-2.5 rounded-xl">{error}</div>

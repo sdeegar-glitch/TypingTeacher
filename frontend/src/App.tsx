@@ -464,8 +464,12 @@ const AppContent = () => {
           <Route path="/login" element={<AuthPage />} />
           <Route path="/signup" element={<AuthPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
+          {/* Dashboard is intentionally usable while logged out (local practice
+              stats from localStorage) — not wrapped. Profile is account-only
+              and previously redirected itself only after mount (a brief flash
+              of the page shell); ProtectedRoute now redirects before it renders. */}
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminDashboardPage />} />
 
           {/* Phase 2: Tools & Utilities */}
