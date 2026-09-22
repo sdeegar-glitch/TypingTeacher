@@ -12,15 +12,15 @@
 
     <!-- Preconnect to origins used before/during first paint, so the browser
          starts DNS+TCP+TLS setup immediately instead of after JS discovers them. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://www.clarity.ms" />
 
-    <!-- Google Fonts as a direct <link> (not a CSS @import) so the browser's
-         preload scanner finds it while parsing this HTML, in parallel with the
-         JS bundle — instead of only after our own CSS finishes loading. -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+    <!-- Inter and JetBrains Mono are self-hosted (src/fonts.css) — no more
+         fonts.googleapis.com/fonts.gstatic.com request. Preload the one file
+         almost every page needs (upright Inter, Latin) so it starts fetching
+         before our CSS bundle is parsed; the browser's preload scanner finds
+         this tag directly in the HTML. -->
+    <link rel="preload" href="/fonts/Inter-var-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Microsoft Clarity -->
     <script type="text/javascript">
@@ -93,7 +93,7 @@
       "description": "Learn touch typing from scratch and test your speed with AI-curated editorial content."
     }]
     </script>
-    <script type="module" crossorigin src="/assets/index-CU3h8siI.js"></script>
+    <script type="module" crossorigin src="/assets/index-DomahJba.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/chunk-BNv3lrIs.js">
     <link rel="modulepreload" crossorigin href="/assets/preload-helper-rov5CBGT.js">
     <link rel="modulepreload" crossorigin href="/assets/supabase-DzfLfyvS.js">
@@ -103,7 +103,7 @@
     <link rel="modulepreload" crossorigin href="/assets/analytics-CZ8YnW33.js">
     <link rel="modulepreload" crossorigin href="/assets/api-Dy1nkPHP.js">
     <link rel="modulepreload" crossorigin href="/assets/social-vfbZ7H_u.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-C04g8fdu.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-4VkV3mVT.css">
       <link rel="canonical" href="https://fasttypinglab.com/blog/how-to-pass-a-typing-test/">
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to Pass a Typing Test: 8 Tips That Work","description":"Eight proven tips to pass a pre-employment or certification typing test — warm up, pace yourself, prioritise accuracy, and practise.","datePublished":"2026-08-24","image":"https://fasttypinglab.com/og-image.png","author":{"@type":"Organization","name":"FastTypingLab"},"publisher":{"@type":"Organization","name":"FastTypingLab","url":"https://fasttypinglab.com","logo":{"@type":"ImageObject","url":"https://fasttypinglab.com/favicon-512x512.png"}},"mainEntityOfPage":"https://fasttypinglab.com/blog/how-to-pass-a-typing-test"}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://fasttypinglab.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://fasttypinglab.com/blog/"},{"@type":"ListItem","position":3,"name":"How to Pass a Typing Test — 8 Proven Tips (2026)","item":"https://fasttypinglab.com/blog/how-to-pass-a-typing-test/"}]}</script>
