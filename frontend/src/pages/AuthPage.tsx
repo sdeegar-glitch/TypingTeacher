@@ -4,6 +4,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Keyboard, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { storeSession } from '../lib/auth';
 import { getStoredReferral, clearStoredReferral } from '../lib/referral';
 import TurnstileWidget from '../components/TurnstileWidget';
 
@@ -46,9 +47,11 @@ const AuthPage = () => {
           const j = await res.json().catch(() => ({}));
           throw new Error(j.error || 'Google sign-in could not be completed.');
         }
-        localStorage.setItem('accessToken', accessToken);
+        // No refreshToken here — Google sessions are kept alive by Supabase's own
+        // autoRefreshToken (see lib/supabase.ts), mirrored into this key by
+        // initAuthRefresh's onAuthStateChange listener as it renews.
+        storeSession(accessToken);
         clearStoredReferral();
-        window.dispatchEvent(new Event('ftl-auth-change'));
         setSuccess('Signed in with Google! Redirecting…');
         const dest = sessionStorage.getItem('postAuthNext') || '/dashboard';
         sessionStorage.removeItem('postAuthNext');
@@ -109,8 +112,7 @@ const AuthPage = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || (isLogin ? 'Login failed. Check your credentials.' : 'Registration failed. Please try again.'));
       if (data.accessToken) {
-        localStorage.setItem('accessToken', data.accessToken);
-        window.dispatchEvent(new Event('ftl-auth-change'));
+        storeSession(data.accessToken, data.refreshToken);
       }
       // Only on signup: the code has now been redeemed. Logging into an existing
       // account leaves it stored, since that account was never eligible anyway.

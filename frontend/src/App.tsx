@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { isLoggedIn, logoutAndRedirect } from './lib/auth';
+import { isLoggedIn, logoutAndRedirect, initAuthRefresh } from './lib/auth';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useParams, useLocation } from 'react-router-dom';
 import { Menu, X, Moon, Sun, MessageCircle, Send, ChevronDown } from 'lucide-react';
 import { fetchMe } from './lib/user';
@@ -417,6 +417,12 @@ const AppContent = () => {
     sessionStorage.setItem('ftl_visit_tracked', '1');
     trackVisit(window.location.pathname);
   }, []);
+
+  // Silently renews the session before the access token expires, so a logged-in
+  // visitor is never bounced back to /login just for staying on the site for
+  // over an hour. One subscription for the whole app lifetime (AppContent is
+  // never remounted by routing).
+  useEffect(() => initAuthRefresh(), []);
 
   // GA4 page view on every SPA route change.
   useEffect(() => {

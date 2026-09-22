@@ -116,8 +116,15 @@ router.post('/signup', signupLimiter, requireTurnstile, async (req, res) => {
 
   // Sign the new user in immediately so signup logs them in (createUser does not
   // create a session). Returning accessToken lets the frontend store it like login.
+  // refreshToken lets it silently renew that session past the ~1hr access-token
+  // expiry instead of forcing a re-login (see POST /auth/refresh below).
   const { data: signInData } = await supabase.auth.signInWithPassword({ email, password });
-  res.status(201).json({ user_id: data?.user?.id, email, accessToken: signInData?.session?.access_token });
+  res.status(201).json({
+    user_id: data?.user?.id,
+    email,
+    accessToken: signInData?.session?.access_token,
+    refreshToken: signInData?.session?.refresh_token,
+  });
 });
 
 // POST /auth/oauth-sync — called by the frontend right after a Google (OAuth)
@@ -185,13 +192,18 @@ router.post('/login', loginLimiter, requireTurnstile, async (req, res) => {
 
   if (profile?.totp_enabled) {
     // Real session token is withheld until the TOTP code is verified below.
-    const pendingToken = createPendingLogin({ accessToken: data.session.access_token, user: data.user, email });
+    const pendingToken = createPendingLogin({
+      accessToken: data.session.access_token,
+      refreshToken: data.session.refresh_token,
+      user: data.user,
+      email,
+    });
     logActivity({ action: 'login_2fa_pending', entity: 'auth', actor_email: email, ip: req.ip });
     return res.json({ requires2FA: true, pendingToken });
   }
 
   logActivity({ action: 'login_success', entity: 'auth', actor_email: email, ip: req.ip, status: 'success' });
-  res.json({ accessToken: data.session?.access_token, user: data.user });
+  res.json({ accessToken: data.session?.access_token, refreshToken: data.session?.refresh_token, user: data.user });
 });
 
 router.post('/login/2fa', twoFaLimiter, async (req, res) => {
@@ -209,7 +221,39 @@ router.post('/login/2fa', twoFaLimiter, async (req, res) => {
 
   consumePendingLogin(pendingToken);
   logActivity({ action: 'login_success', entity: 'auth', actor_email: entry.email, ip: req.ip, status: 'success', meta: { via: '2fa' } });
-  res.json({ accessToken: entry.accessToken, user: entry.user });
+  res.json({ accessToken: entry.accessToken, refreshToken: entry.refreshToken, user: entry.user });
+});
+
+// POST /auth/refresh - exchange a refresh token for a new access token, so the
+// frontend can keep a session alive past the ~1hr access-token expiry without
+// asking the user to log in again. Supabase rotates the refresh token on every
+// use (the old one is invalidated), so the caller must store the new pair.
+const refreshLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many refresh attempts.' },
+});
+
+router.post('/refresh', refreshLimiter, async (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken || typeof refreshToken !== 'string') {
+    return res.status(400).json({ error: 'refreshToken is required' });
+  }
+
+  const { data, error } = await supabase.auth.refreshSession({ refresh_token: refreshToken });
+  if (error || !data?.session) {
+    // Expected and unremarkable when the refresh token itself has expired or was
+    // already rotated by a previous call — the frontend falls back to logging
+    // the user out, so this is not logged as a security event.
+    return res.status(401).json({ error: 'Session expired. Please log in again.' });
+  }
+
+  res.json({
+    accessToken: data.session.access_token,
+    refreshToken: data.session.refresh_token,
+  });
 });
 
 // POST /auth/logout - revoke the caller's session on the server so a copied
