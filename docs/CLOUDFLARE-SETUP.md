@@ -28,7 +28,7 @@ Deploy: `git pull && sudo nginx -t && sudo systemctl reload nginx`.
 
 Set once the zone is Active:
 - **SSL/TLS -> Overview**: **Full (strict)**. Works immediately — the VPS already serves a valid Let's Encrypt cert via certbot, which Full (strict) trusts; no need for a separate Cloudflare Origin CA certificate.
-- **SSL/TLS -> Edge Certificates**: **Always Use HTTPS** on, **Automatic HTTPS Rewrites** on, **Minimum TLS Version** 1.2.
+- **SSL/TLS -> Edge Certificates**: **Always Use HTTPS** on, **Automatic HTTPS Rewrites** on, **Minimum TLS Version** 1.2, **HTTP Strict Transport Security (HSTS)** enabled (Max-Age 6 months; leave **preload** off initially — it's effectively irreversible once submitted to browsers' preload lists, so only turn it on after HSTS itself has been stable for a while). Covers both `fasttypinglab.com` and `www.fasttypinglab.com` in one setting (a Semrush audit flagged both subdomains for missing HSTS, Sep 2026).
 - **Caching -> Cache Rules**: one rule bypassing cache for `api.fasttypinglab.com/*` — Cloudflare doesn't cache dynamic JSON by default, but an API should never risk serving a stale cached response, so it's made explicit.
 - **Security -> Bots**: left off/default for now (see out-of-scope note below).
 
