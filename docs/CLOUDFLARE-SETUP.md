@@ -83,6 +83,8 @@ One-time setup on the VPS:
 
 Test: manually trip the rate limit a few times from a throwaway connection, confirm the IP shows up under Cloudflare dashboard -> Security -> WAF -> Tools -> IP Access Rules with a "block" action, and that `fail2ban-client status ftl-api-abuse` lists it under both actions' bans.
 
+**Bug hit and fixed during real deployment**: `cloudflare-unban.sh`'s regex for extracting the rule ID assumed compact JSON (`"id":"..."` with no space), but Cloudflare's API actually returns `"id": "..."` with a space after the colon -- the regex silently never matched, so `RULE_ID` always came out empty and unban was a no-op (ban worked fine; only unban was affected). Fixed to tolerate the space. Verified with a manual ban/unban round-trip against a real (safe, reserved-for-documentation) test IP, `198.51.100.1`.
+
 ## Out of scope, deliberately
 
 - **Authenticated Origin Pulls (mTLS)** — cryptographically stronger than IP-allowlisting (Cloudflare presents a client cert nginx verifies), but adds real operational overhead: the origin-pull cert rotates periodically and nginx's `ssl_client_certificate`/`ssl_verify_client` config has to track it. Worth considering later as an upgrade over step 4's IP allowlist; not needed given the layers already in place (IP allowlist + fail2ban + Turnstile + app-layer checks).
