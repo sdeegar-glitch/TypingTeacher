@@ -16,11 +16,17 @@ fi
 # shellcheck disable=SC1090
 source "$ENV_FILE"
 
+# Cloudflare's API returns JSON with a space after the colon (`"id": "..."`),
+# not `"id":"..."` -- the original regex assumed no space and silently never
+# matched, so RULE_ID always came out empty and unban was a no-op (hit on a
+# real VPS run). Allow zero-or-more spaces, and extract the hex value with a
+# second pass instead of `cut -d'"' -f4` so field-order/spacing changes don't
+# silently break this again.
 RULE_ID=$(curl -s \
   "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/firewall/access_rules/rules?configuration.target=ip&configuration.value=${IP}" \
   -H "Authorization: Bearer ${CF_API_TOKEN}" \
   -H "Content-Type: application/json" \
-  | grep -o '"id":"[a-f0-9]*"' | head -1 | cut -d'"' -f4)
+  | grep -o '"id": *"[a-f0-9]*"' | head -1 | grep -o '[a-f0-9]\{8,\}')
 
 if [ -z "$RULE_ID" ]; then
   echo "[cloudflare-unban] no matching Cloudflare access rule found for ${IP} (already removed?)" >&2
