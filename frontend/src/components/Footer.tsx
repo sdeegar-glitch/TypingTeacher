@@ -7,6 +7,7 @@ const PRODUCT_LINKS = [
   { label: 'Typing Tests', href: '/tests/' },
   { label: 'Live Test', href: '/live-test/' },
   { label: 'Hindi Typing', href: '/hindi-typing-test/' },
+  { label: 'Marathi Typing', href: '/marathi-typing-test/' },
   { label: 'Learn Typing', href: '/learn/' },
   { label: 'Exam Prep', href: '/competitive-exam-typing/' },
   { label: 'Shorthand', href: '/blog/how-to-learn-shorthand-stenography/' },

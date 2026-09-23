@@ -26,6 +26,7 @@ const SECTIONS: { title: string; links: { label: string; to: string }[] }[] = [
       { label: 'Typing Test for Beginners', to: '/typing-test-for/beginners/' },
       { label: 'Typing Test for Programmers', to: '/typing-test-for/programmers/' },
       { label: 'Hindi Typing Test', to: '/hindi-typing-test/' },
+      { label: 'Marathi Typing Test', to: '/marathi-typing-test/' },
       { label: 'Kruti Dev Typing Test', to: '/kruti-dev-typing/' },
       { label: 'Dictation Typing Test', to: '/dictation-typing-test/' },
       { label: 'Typing Drills', to: '/typing-drills/' },

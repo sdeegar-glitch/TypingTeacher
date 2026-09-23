@@ -4,6 +4,8 @@
 
 ## Typing Tests
 - [Typing Tests Library](https://fasttypinglab.com/tests/): English, Hindi Mangal and Kruti Dev tracks, 1/3/5/10-minute durations, live WPM and accuracy.
+- [Hindi Typing Test](https://fasttypinglab.com/hindi-typing-test/): Unicode Mangal/INSCRIPT Devanagari typing test.
+- [Marathi Typing Test](https://fasttypinglab.com/marathi-typing-test/): Unicode Mangal/INSCRIPT Devanagari typing test for Marathi, useful for MPSC and Maharashtra government exam prep.
 - [WPM Calculator](https://fasttypinglab.com/wpm-calculator/): the exact gross/net WPM formula, explained.
 - [Typing Statistics](https://fasttypinglab.com/typing-statistics/): average typing speed by age, profession and country.
 
