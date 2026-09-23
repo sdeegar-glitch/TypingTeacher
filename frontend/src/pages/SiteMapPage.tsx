@@ -40,6 +40,7 @@ const SECTIONS: { title: string; links: { label: string; to: string }[] }[] = [
     links: [
       { label: 'Learn English Typing', to: '/learn/' },
       { label: 'Learn Hindi Typing', to: '/learn-hindi-typing/' },
+      { label: 'Hindi Alphabet', to: '/hindi-alphabet/' },
       { label: 'Learn Hindi (Mangal/Unicode)', to: '/learn-hindi-typing/unicode/' },
       { label: 'Learn Kruti Dev', to: '/learn-hindi-typing/kruti-dev/' },
       { label: 'AI Typing Tutor', to: '/ai-tutor/' },

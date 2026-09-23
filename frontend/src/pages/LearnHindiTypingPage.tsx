@@ -73,6 +73,10 @@ export default function LearnHindiTypingPage() {
             </Link>
           </div>
 
+          <p className="text-center text-xs text-brand-muted mb-3">
+            New to Devanagari? Start with the <Link to="/hindi-alphabet/" className="text-brand-primary hover:underline font-semibold">Hindi alphabet</Link> — vowels, consonants and matras explained first.
+          </p>
+
           {/* Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-2xl mx-auto">
             {[

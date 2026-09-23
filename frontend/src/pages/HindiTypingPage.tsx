@@ -187,6 +187,7 @@ export default function HindiTypingPage() {
           <h2 className="text-base font-bold text-brand-text">Hindi Typing Test — Unicode</h2>
           <p>यह हिंदी टाइपिंग टेस्ट SSC, CPCT, न्यायालय और अन्य सरकारी परीक्षाओं की तैयारी के लिए बनाया गया है। यूनिकोड हिंदी टाइपिंग का अभ्यास करें और अपनी गति (WPM) बढ़ाएं।</p>
           <p>This Hindi typing test uses Unicode Devanagari script and is designed for SSC, CPCT, court typing, and other government exam preparation. Target: 25–30 WPM for most government posts.</p>
+          <p>Use it for regular hindi typing test practice — real hindi matter for typing test drills at increasing difficulty, similar to an advance hindi typing test, so you're not stuck retyping the same hindi typing test sample paper every time. New to the script? Start with the <Link to="/hindi-alphabet/" className="text-brand-primary hover:underline font-semibold">Hindi alphabet</Link> first.</p>
         </div>
       </div>
     </div>
