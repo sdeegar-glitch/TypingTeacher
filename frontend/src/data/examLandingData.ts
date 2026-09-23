@@ -629,6 +629,45 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     ],
   },
 
+  'ctsp': {
+    slug: 'ctsp',
+    examName: 'CTSP Chhattisgarh',
+    h1: 'CTSP Typing Test — Chhattisgarh Typing & Stenography Practice',
+    seoTitle: 'CTSP Typing Test Online — Chhattisgarh Typing Practice | FastTypingLab',
+    metaDesc: 'Free CTSP (Chhattisgarh Computer Typing Skill Test) practice — Hindi and English typing for 5000/8000/10000 KDPH speed levels, with live WPM and accuracy.',
+    eyebrow: 'CTSP / Chhattisgarh',
+    intro: 'CTSP (ctsp.cg.nic.in) is the Chhattisgarh Computer Typing Skill Test and Stenography Examination, conducted in Hindi and English at 5000, 8000 and 10000 key depressions per hour (KDPH). A valid CTSP result is required for posts like Data Entry Operator, Assistant Programmer, Assistant Grade-3 and Stenographer/Stenographer Typist in Chhattisgarh government, semi-government and autonomous offices. Each speed level and language is a separate application, so confirm the exact KDPH and language your post requires before you start practicing.',
+    requirements: [
+      { language: 'English', layout: 'QWERTY', speed: '5,000 / 8,000 / 10,000 KDPH', duration: 'Timed skill test' },
+      { language: 'Hindi', layout: 'Mangal / Kruti Dev', speed: '5,000 / 8,000 / 10,000 KDPH', duration: 'Timed skill test' },
+    ],
+    format: [
+      'You type a given passage on the computer; speed is scored in key depressions per hour (KDPH), not WPM directly.',
+      '8,000 KDPH is roughly 27–35 WPM sustained; scale up or down for the 5,000 and 10,000 levels.',
+      'Hindi and English are separate applications — apply for the correct language and speed level for your post.',
+      'Accuracy matters: errors reduce your effective KDPH score.',
+    ],
+    tips: [
+      'Confirm the exact KDPH level and language required for your target post before applying.',
+      'Convert your target KDPH to an approximate WPM and practice timed tests at that pace daily.',
+      'For Hindi, check whether your post expects Mangal (Unicode) or Kruti Dev, and practice that specific layout.',
+      'Build sustained accuracy — CTSP rewards consistent, clean typing over short bursts of speed.',
+    ],
+    faqs: [
+      { q: 'What is CTSP?', a: 'CTSP is the Chhattisgarh Computer Typing Skill Test and Stenography Examination (ctsp.cg.nic.in), required for Data Entry Operator, Assistant Grade-3, Stenographer and similar Chhattisgarh government posts.' },
+      { q: 'What speeds does the CTSP typing test use?', a: 'CTSP is conducted at 5,000, 8,000 and 10,000 key depressions per hour (KDPH) in both Hindi and English — each is a separate application.' },
+      { q: 'Does CTSP use Kruti Dev or Mangal for Hindi?', a: 'It depends on your specific post and notification — always confirm from your official CTSP notification and practice that exact layout.' },
+      { q: 'How can I practice for CTSP for free?', a: 'FastTypingLab offers free English and Hindi (Mangal and Kruti Dev) typing tests with live WPM and accuracy, so you can practice at your target speed before applying.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Start Typing Practice',
+    related: [
+      { label: 'CPCT Typing Test', href: '/cpct-typing-test/' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
+    ],
+  },
+
   'psssb': {
     slug: 'psssb',
     examName: 'PSSSB Punjab',

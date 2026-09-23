@@ -207,6 +207,11 @@ const ROUTES = [
     ['Is the RRB typing test qualifying?', 'Yes, for typist posts it is a qualifying skill test — you must meet the required speed and accuracy to be selected.'],
     ['How can I practise the RRB typing test free?', 'FastTypingLab offers free English and Hindi typing tests with live WPM and accuracy in the exam format.'],
   ]) },
+  { path: '/ctsp-typing-test', title: 'CTSP Typing Test Online — Chhattisgarh Typing Practice | FastTypingLab', description: 'Free CTSP (Chhattisgarh Computer Typing Skill Test) practice — Hindi and English typing for 5000/8000/10000 KDPH speed levels, with live WPM and accuracy.', jsonLd: faqLd([
+    ['What is CTSP?', 'CTSP is the Chhattisgarh Computer Typing Skill Test and Stenography Examination (ctsp.cg.nic.in), required for Data Entry Operator, Assistant Grade-3, Stenographer and similar Chhattisgarh government posts.'],
+    ['What speeds does the CTSP typing test use?', 'CTSP is conducted at 5,000, 8,000 and 10,000 key depressions per hour (KDPH) in both Hindi and English — each is a separate application.'],
+    ['How can I practice for CTSP for free?', 'FastTypingLab offers free English and Hindi (Mangal and Kruti Dev) typing tests with live WPM and accuracy, so you can practice at your target speed before applying.'],
+  ]) },
   { path: '/psssb-typing-test', title: 'PSSSB Typing Test Online — Punjab Clerk & Steno Practice | FastTypingLab', description: 'Free PSSSB (Punjab Subordinate Services Selection Board) typing test practice — English and Punjabi/Hindi clerk typing, with live WPM and accuracy.', jsonLd: faqLd([
     ['What typing speed is required for PSSSB Clerk?', 'PSSSB typing tests typically require about 30 WPM in English or 25 WPM in Hindi, though it can vary by post — always confirm from your official notification.'],
     ['Which Hindi font does PSSSB use for typing?', 'It is commonly Mangal (Unicode) or Kruti Dev depending on the post and year. Check your notification and practise that specific layout.'],
