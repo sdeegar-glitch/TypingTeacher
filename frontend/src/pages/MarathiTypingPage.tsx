@@ -18,7 +18,13 @@ const MARATHI_PASSAGES = [
   'मराठी ही महाराष्ट्राची राजभाषा असून कोट्यवधी लोक ती बोलतात. मराठी टायपिंग शिकणे सरकारी नोकऱ्यांसाठी खूप उपयुक्त आहे. रोज सराव केल्याने टायपिंगचा वेग सुधारतो.',
   'भारतीय अर्थव्यवस्था वेगाने प्रगती करत आहे. डिजिटल पेमेंट प्रणालीमुळे व्यापार सोपा आणि सोयीस्कर झाला आहे. तरुणांसाठी रोजगाराच्या नव्या संधी निर्माण होत आहेत.',
   'शिक्षण हा प्रत्येक नागरिकाचा मूलभूत हक्क आहे. सरकारने प्राथमिक शिक्षण सक्तीचे आणि मोफत केले आहे. मुलांना दर्जेदार शिक्षण मिळाले पाहिजे जेणेकरून ते देशाचे भविष्य घडवू शकतील.',
+  'महाराष्ट्र शासनाने प्रशासकीय कामकाज अधिक पारदर्शक आणि गतिमान करण्यासाठी अनेक सुधारणा राबवल्या आहेत. ई-गव्हर्नन्स प्रणालीमुळे नागरिकांना विविध सेवा ऑनलाइन उपलब्ध झाल्या असून वेळ आणि पैसा दोन्हींची बचत होत आहे. लोकसेवा हक्क कायद्यामुळे शासकीय कार्यालयांतील कामकाजाला ठराविक कालमर्यादा निश्चित करण्यात आली आहे.',
+  'स्पर्धा परीक्षांची तयारी करणाऱ्या उमेदवारांसाठी नियमित सराव अत्यंत महत्त्वाचा असतो. टायपिंग चाचणी उत्तीर्ण होण्यासाठी वेग आणि अचूकता या दोन्ही गोष्टींवर लक्ष केंद्रित करणे आवश्यक आहे. रोज ठराविक वेळ सराव केल्यास आत्मविश्वास वाढतो आणि प्रत्यक्ष परीक्षेत चांगली कामगिरी करता येते.',
 ];
+// Note: these passages are original text written for typing practice, not
+// sourced from a native-speaker-reviewed or official corpus — flagged the
+// same way to the site owner as the original five. Fine for general typing
+// practice; treat as unverified if used to make exam-accuracy claims.
 
 export default function MarathiTypingPage() {
   const [passageIdx] = useState(() => Math.floor(Math.random() * MARATHI_PASSAGES.length));
@@ -78,7 +84,7 @@ export default function MarathiTypingPage() {
     <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
       <Seo
         title="Marathi Typing Test — Unicode (Mangal/INSCRIPT) | FastTypingLab"
-        description="Free Marathi typing test in Unicode (Mangal/INSCRIPT). Practice Devanagari typing with real-time WPM and accuracy — ideal for MPSC and Maharashtra government exam prep."
+        description="Free Marathi typing test in Unicode Mangal/INSCRIPT — the layout used by GCC-TBC. Practice with real-time WPM and accuracy, plus the real MPSC Clerk-Typist speed and error-limit rules."
       />
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
@@ -187,9 +193,9 @@ export default function MarathiTypingPage() {
 
         {/* SEO content */}
         <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-2">
-          <h2 className="text-base font-bold text-brand-text">Marathi Typing Test — Unicode</h2>
-          <p>हा मराठी टायपिंग टेस्ट MPSC आणि इतर महाराष्ट्र शासकीय परीक्षांच्या तयारीसाठी बनवला आहे. युनिकोड मराठी टायपिंगचा सराव करा आणि तुमचा वेग (WPM) वाढवा.</p>
-          <p>This Marathi typing test uses Unicode Devanagari script (Mangal/INSCRIPT layout) and is designed for MPSC and other Maharashtra government exam preparation. It also works well for general Marathi typing practice.</p>
+          <h2 className="text-base font-bold text-brand-text">Marathi Typing Test — Unicode Mangal/INSCRIPT</h2>
+          <p>हा मराठी टायपिंग टेस्ट युनिकोड मंगल (INSCRIPT) कळफलकावर आधारित आहे — GCC-TBC प्रमाणपत्र परीक्षेत वापरला जाणारा तोच लेआउट. सराव करा आणि तुमचा वेग (WPM) वाढवा.</p>
+          <p>This test uses the Unicode Mangal/INSCRIPT keyboard layout — the same layout used by GCC-TBC (Government Certificate in Computer Typing Basic Course, MSCE Pune), which grades typing at 30 and 40 WPM. For MPSC Clerk-Typist / Group C, Marathi is usually tested at around 30 WPM net (~1,500 keystrokes in 10 minutes) with a 7% error limit and no backspace — see the <Link to="/mpsc-clerk-typist-typing-test/" className="text-brand-primary hover:underline font-semibold">MPSC Clerk-Typist typing test guide</Link> for the full requirements. Note: some MPSC-track posts have historically required the legacy Remington (typewriter-style) layout instead of Unicode — always confirm the required layout from your own official notification before you start practicing seriously, since the two are not interchangeable.</p>
         </div>
       </div>
     </div>
