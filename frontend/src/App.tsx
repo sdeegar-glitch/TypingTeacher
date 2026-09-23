@@ -539,6 +539,8 @@ const AppContent = () => {
           <Route path="/ahc-ro-aro-typing-test" element={<ExamLandingPage slug="ahc-ro-aro" />} />
           <Route path="/delhi-police-typing-test" element={<ExamLandingPage slug="delhi-police" />} />
           <Route path="/rrb-typing-test" element={<ExamLandingPage slug="rrb" />} />
+          <Route path="/psssb-typing-test" element={<ExamLandingPage slug="psssb" />} />
+          <Route path="/hartron-typing-test" element={<ExamLandingPage slug="hartron" />} />
           <Route path="/all-pages" element={<SiteMapPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/download" element={<DownloadPage />} />

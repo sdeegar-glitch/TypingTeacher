@@ -628,6 +628,84 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
+
+  'psssb': {
+    slug: 'psssb',
+    examName: 'PSSSB Punjab',
+    h1: 'PSSSB Typing Test — Punjab Subordinate Services Practice',
+    seoTitle: 'PSSSB Typing Test Online — Punjab Clerk & Steno Practice | FastTypingLab',
+    metaDesc: 'Free PSSSB (Punjab Subordinate Services Selection Board) typing test practice — English and Punjabi/Hindi clerk typing, with live WPM and accuracy.',
+    eyebrow: 'PSSSB / Punjab',
+    intro: 'The Punjab Subordinate Services Selection Board (PSSSB) includes a qualifying typing skill test for Clerk, Junior Assistant and similar posts advertised through the Punjab exam portal. Candidates usually type a passage in English or Hindi/Punjabi on a computer within a fixed duration. The exact speed and language vary by post and notification, so always confirm and practise the exact format daily on a physical keyboard.',
+    requirements: [
+      { language: 'English', layout: 'QWERTY', speed: '30 WPM', duration: 'Qualifying skill test' },
+      { language: 'Hindi', layout: 'Mangal / Kruti Dev', speed: '25 WPM', duration: 'Qualifying skill test' },
+    ],
+    format: [
+      'A passage is typed on the computer in English or Hindi within a set time.',
+      'The exact speed, font and language are set in the post notification — always check.',
+      'Both speed and accuracy are assessed; mistakes reduce your effective speed.',
+      'The test is conducted on a desktop computer — practise only on a physical keyboard.',
+    ],
+    tips: [
+      'Confirm the required language, speed and Hindi font from your PSSSB notification.',
+      'Aim a few WPM above the minimum so exam nerves do not pull you below it.',
+      'Practise Hindi matras and half-letters, which slow most candidates down.',
+      'Do daily 10-minute timed tests in the exam format to build stamina.',
+    ],
+    faqs: [
+      { q: 'What typing speed is required for PSSSB Clerk?', a: 'PSSSB typing tests typically require about 30 WPM in English or 25 WPM in Hindi, though it can vary by post — always confirm from your official notification.' },
+      { q: 'Which Hindi font does PSSSB use for typing?', a: 'It is commonly Mangal (Unicode) or Kruti Dev depending on the post and year. Check your notification and practise that specific layout.' },
+      { q: 'Is the PSSSB typing test qualifying?', a: 'Yes, for most posts it is a qualifying skill test — you must meet the required speed and accuracy, though it may not add to your merit score.' },
+      { q: 'How can I practise the PSSSB typing test free?', a: 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy, in the exam format.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Start Typing Practice',
+    related: [
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'RSMSSB Typing Test', href: '/rsmssb-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
+    ],
+  },
+
+  'hartron': {
+    slug: 'hartron',
+    examName: 'HARTRON / SETC Haryana',
+    h1: 'HARTRON / SETC Typing Test — Haryana Practice',
+    seoTitle: 'HARTRON SETC Typing Test Online — Haryana Practice | FastTypingLab',
+    metaDesc: 'Free HARTRON / SETC (Haryana) typing test practice for computer proficiency certification — English and Hindi typing, with live WPM and accuracy.',
+    eyebrow: 'HARTRON / SETC, Haryana',
+    intro: 'HARTRON conducts the State Eligibility Test for Computers (SETC), a computer proficiency certification recognised for several Haryana government posts, which includes a typing skill component. Candidates type a passage in English or Hindi on a computer within a fixed duration. The exact speed and format vary by post and notification, so always confirm and practise the exact format daily on a physical keyboard.',
+    requirements: [
+      { language: 'English', layout: 'QWERTY', speed: '30 WPM', duration: 'Qualifying skill test' },
+      { language: 'Hindi', layout: 'Mangal / Kruti Dev', speed: '25 WPM', duration: 'Qualifying skill test' },
+    ],
+    format: [
+      'A passage is typed on the computer in English or Hindi within a set time.',
+      'The exact speed, font and language are set in the SETC/post notification — always check.',
+      'Both speed and accuracy are assessed; mistakes reduce your effective speed.',
+      'The test is conducted on a desktop computer — practise only on a physical keyboard.',
+    ],
+    tips: [
+      'Confirm the required language, speed and Hindi font from your HARTRON/SETC notification.',
+      'Aim a few WPM above the minimum so exam nerves do not pull you below it.',
+      'Practise Hindi matras and half-letters, which slow most candidates down.',
+      'Do daily 10-minute timed tests in the exam format to build stamina.',
+    ],
+    faqs: [
+      { q: 'What is HARTRON SETC?', a: 'SETC (State Eligibility Test for Computers) is a computer proficiency certification conducted via HARTRON, recognised for several Haryana government posts, and typically includes a typing skill component.' },
+      { q: 'What typing speed is required for HARTRON SETC?', a: 'SETC typing components typically expect about 30 WPM in English or 25 WPM in Hindi, though it can vary by post — always confirm from your official notification.' },
+      { q: 'Which Hindi font does HARTRON SETC use for typing?', a: 'It is commonly Mangal (Unicode) or Kruti Dev depending on the notification. Check yours and practise that specific layout.' },
+      { q: 'How can I practise the HARTRON SETC typing test free?', a: 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy, in the exam format.' },
+    ],
+    practiceHref: '/tests',
+    practiceLabel: 'Start Typing Practice',
+    related: [
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'PSSSB Typing Test', href: '/psssb-typing-test/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
+    ],
+  },
 };
 
 export const EXAM_LANDING_ROUTES = Object.values(EXAM_LANDINGS).map(e => ({

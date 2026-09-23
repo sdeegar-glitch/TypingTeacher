@@ -206,6 +206,16 @@ const ROUTES = [
     ['Is the RRB typing test qualifying?', 'Yes, for typist posts it is a qualifying skill test — you must meet the required speed and accuracy to be selected.'],
     ['How can I practise the RRB typing test free?', 'FastTypingLab offers free English and Hindi typing tests with live WPM and accuracy in the exam format.'],
   ]) },
+  { path: '/psssb-typing-test', title: 'PSSSB Typing Test Online — Punjab Clerk & Steno Practice | FastTypingLab', description: 'Free PSSSB (Punjab Subordinate Services Selection Board) typing test practice — English and Punjabi/Hindi clerk typing, with live WPM and accuracy.', jsonLd: faqLd([
+    ['What typing speed is required for PSSSB Clerk?', 'PSSSB typing tests typically require about 30 WPM in English or 25 WPM in Hindi, though it can vary by post — always confirm from your official notification.'],
+    ['Which Hindi font does PSSSB use for typing?', 'It is commonly Mangal (Unicode) or Kruti Dev depending on the post and year. Check your notification and practise that specific layout.'],
+    ['How can I practise the PSSSB typing test free?', 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy, in the exam format.'],
+  ]) },
+  { path: '/hartron-typing-test', title: 'HARTRON SETC Typing Test Online — Haryana Practice | FastTypingLab', description: 'Free HARTRON / SETC (Haryana) typing test practice for computer proficiency certification — English and Hindi typing, with live WPM and accuracy.', jsonLd: faqLd([
+    ['What is HARTRON SETC?', 'SETC (State Eligibility Test for Computers) is a computer proficiency certification conducted via HARTRON, recognised for several Haryana government posts, and typically includes a typing skill component.'],
+    ['What typing speed is required for HARTRON SETC?', 'SETC typing components typically expect about 30 WPM in English or 25 WPM in Hindi, though it can vary by post — always confirm from your official notification.'],
+    ['How can I practise the HARTRON SETC typing test free?', 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy, in the exam format.'],
+  ]) },
   { path: '/leaderboard', title: 'Global Typing Leaderboard | FastTypingLab', description: 'See the fastest typists on FastTypingLab. Global typing speed leaderboard ranked by net WPM and accuracy.' },
 
   { path: '/keyboard-tester', title: 'Online Keyboard Tester — Test Every Key | FastTypingLab', description: 'Free online keyboard tester. Press any key to check it registers correctly — test your full keyboard, function keys and modifiers in the browser.' },
