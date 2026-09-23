@@ -1568,4 +1568,108 @@ Relaxed hands move faster and more accurately than tense ones. Good posture lets
 ## Practice With Good Form
 
 Set up your posture correctly, then take a free typing test on FastTypingLab. Practising with good ergonomics from the start builds fast, pain-free typing that lasts — exactly what you need for long exam passages and daily work.
+    `},{slug:`how-to-type-faster-on-mobile`,title:`How to Type Faster on Your Phone`,seoTitle:`How to Type Faster on Your Phone — 7 Tips (2026) | FastTypingLab`,metaDesc:`Typing on a phone keyboard is a different skill from typing on a desktop. Learn two-thumb technique, swipe typing, autocorrect discipline and more to type faster on mobile.`,category:`Basics`,readTime:`5 min`,date:`2026-09-23`,emoji:`📱`,content:`
+## Phone Typing Is a Different Skill
+
+Most typing advice — home row, all ten fingers, touch typing — is written for a physical keyboard. A phone screen is a completely different input device, and the techniques that make you fast on a desktop don't transfer directly. Here's what actually helps you type faster on a phone.
+
+## 1. Master Two-Thumb Typing
+
+For most people, two thumbs beat one finger by a wide margin. Hold the phone with both hands, keep your thumbs hovering near the middle of the keyboard rather than reaching to the edges, and let each thumb cover its natural half of the screen. It feels slow at first if you're used to one-finger poking, but it's the single biggest speed jump most people can make.
+
+## 2. Learn to Trust (and Tame) Swipe Typing
+
+Gesture/swipe keyboards (Gboard, SwiftKey and similar) let you drag a finger across letters instead of tapping each one — for common words it's often faster than tapping. It takes practice to trust the predictions, and it works best when you already know roughly where each letter sits, so a little tap-typing practice first makes swipe typing faster too.
+
+## 3. Use Autocorrect Deliberately, Not Blindly
+
+Autocorrect speeds you up when you let it fix typos on common words, and slows you down when it silently "corrects" a word you meant to type differently (names, slang, exam-specific terms). The fastest phone typists don't turn autocorrect off — they learn to glance at the suggestion bar and tap the right word instead of typing it out, which is often quicker than typing the whole word.
+
+## 4. Adjust Your Keyboard Height and Size
+
+Most phone keyboards let you resize or reposition the keyboard in settings. A keyboard that's too small forces mis-taps; one that's too tall for your hand forces awkward stretches. A few minutes tuning this once pays off on every message you type afterward.
+
+## 5. Don't Fight the Predictive Bar
+
+The word-suggestion bar above the keyboard exists because tapping a suggested word is almost always faster than typing the rest of it. Get in the habit of glancing at it after 2-3 letters — for longer or repeated words, it saves real time.
+
+## 6. Practice With Real Messages, Not Just Tests
+
+Desktop typing speed builds fastest through dedicated practice sessions; phone typing speed builds fastest through everyday use — texts, notes, quick replies. Pay attention to which words you keep mistyping and adjust your technique for those specifically, rather than trying to practice phone typing the way you'd practice a WPM test.
+
+## Phone WPM Isn't Desktop WPM
+
+If you've taken a [desktop typing test](/tests) and then tried typing the same passage on a phone, you already know the two numbers aren't comparable — even fast phone typists usually type at a fraction of their desktop WPM, because two thumbs on a small screen is a fundamentally different motion than ten fingers on a full keyboard. That's normal, not a sign you're doing something wrong.
+
+## Keep Building Desktop Speed Too
+
+Phone typing matters for daily life, but most jobs, exams and certifications still measure typing speed on a physical keyboard. If you're preparing for a [typing test for a job](/blog/typing-test-for-jobs) or a government exam, keep building your desktop WPM with [free practice tests](/tests) alongside your everyday phone typing.
+    `},{slug:`how-to-type-without-a-keyboard`,title:`How to Type Without a Physical Keyboard`,seoTitle:`How to Type Without a Keyboard — Voice Typing & Alternatives (2026) | FastTypingLab`,metaDesc:`Need to type without a physical keyboard? Learn about voice-to-text dictation, on-screen keyboards, and when each alternative input method actually makes sense.`,category:`Basics`,readTime:`5 min`,date:`2026-09-23`,emoji:`🎙️`,content:`
+## Why You Might Need to Type Without a Keyboard
+
+A physical keyboard isn't always available or usable — a hand injury, a long-term accessibility need, a phone with no keyboard attachment, or simply wanting a hands-free way to write. This is a real, legitimate need, and there are good tools for it. This isn't about shortcuts for a typing test (most typing tests specifically measure keyboard input, so voice input won't help there) — it's about getting words onto a screen when a keyboard genuinely isn't the right tool.
+
+## 1. Built-In Voice Typing
+
+Most modern operating systems have free, built-in dictation:
+
+- **Windows**: Win + H opens Windows Voice Typing in any text field.
+- **macOS**: System Settings → Keyboard → Dictation, then tap the function key twice (or your chosen shortcut).
+- **Android / iOS**: The microphone icon on the on-screen keyboard, or "Hey Google" / "Hey Siri" for hands-free dictation.
+
+These work directly in most apps — word processors, browsers, messaging apps — with no extra software.
+
+## 2. Dictation in Word Processors
+
+Google Docs (Tools → Voice typing) and Microsoft Word (Home → Dictate) have their own built-in dictation that's often more accurate for long-form writing than the OS-level tools, and includes basic voice commands for punctuation ("comma", "new paragraph", "period").
+
+## 3. On-Screen and Virtual Keyboards
+
+If tapping is possible but a physical keyboard isn't (a touchscreen device, or an accessibility need that makes a full keyboard uncomfortable), on-screen keyboards — including switch-access and eye-tracking keyboards for more significant accessibility needs — remain a reliable option, and most operating systems ship one built in under Accessibility settings.
+
+## 4. When Voice Typing Actually Works Well
+
+Voice-to-text is genuinely fast and accurate for straightforward, conversational text: emails, messages, notes, first drafts. It struggles more with technical vocabulary, code, unusual names, and anything needing precise formatting — for those, a mix of voice for the bulk of the text and manual correction for the tricky parts tends to work best.
+
+## 5. It's a Real Accessibility Tool, Not a Typing-Test Shortcut
+
+If you're recovering from an injury or have a condition that makes typing difficult, voice typing and switch-access keyboards are legitimate, well-supported tools — use them without hesitation. If your actual goal is passing a keyboard-based typing test or building typing speed for a job, voice input won't help with that specific goal, since those measure keystrokes on a physical keyboard; in that case, [regular typing practice](/tests) is the more direct path once you're able to type again.
+
+## Getting Back to Typing
+
+If an injury or temporary limitation is the reason you're looking at alternatives, easing back into typing with short, low-pressure sessions — rather than jumping straight into a timed test — is usually the more comfortable path back. FastTypingLab's [free typing tests](/tests) let you practice at your own pace with no account required.
+    `},{slug:`typing-lessons-for-kids-beginners-guide`,title:`Typing Lessons for Kids: A Beginner's Guide`,seoTitle:`Typing Lessons for Kids — A Beginner's Guide (2026) | FastTypingLab`,metaDesc:`How to teach kids to type properly from the start — home-row-first method, realistic session lengths by age, good habits, and free lessons to get going.`,category:`Kids & Education`,readTime:`6 min`,date:`2026-09-23`,emoji:`🧒`,content:`
+## Why Structured Lessons Beat "Just Let Them Type"
+
+Kids pick up computer habits fast — including bad typing habits. A child who learns to hunt-and-peck with two fingers early on tends to keep doing it for years, because it feels fast enough for schoolwork until it suddenly isn't. A few structured lessons up front, teaching correct finger placement from day one, save years of relearning later. The good news: kids often pick up touch typing faster than adults, since they're not unlearning an existing habit.
+
+## Start With the Home Row, Not the Whole Keyboard
+
+Don't hand a child the full keyboard and a random paragraph. Start with just the [home row keys](/blog/home-row-keys-finger-placement) (ASDF JKL;) and which finger rests on which key. Once that's automatic — usually after a few short sessions — add one or two new keys at a time. This is exactly how FastTypingLab's [free 50-lesson course](/learn) is structured, so kids (and adults) build the skill in the same order it actually needs to be learned.
+
+## Keep Sessions Short
+
+Typing practice for kids works best in short, frequent bursts rather than long sessions:
+
+- **Ages 6-8**: 10-15 minutes, 3-4 times a week is plenty.
+- **Ages 9-12**: 15-20 minutes most days.
+- **Teens**: can usually handle 20-30 minute sessions like an adult, once the basics are solid.
+
+A tired, restless kid grinding through a 45-minute session builds worse habits than a focused 10-minute one.
+
+## Make Correct Posture a Habit Early
+
+Posture habits set in early stick around. Feet flat, back supported, screen at eye height, wrists floating rather than resting on the desk — the same fundamentals from our [posture and ergonomics guide](/blog/typing-posture-and-ergonomics-guide) apply just as much to a 9-year-old as an adult, and it's much easier to build the habit correctly the first time than to fix a slouch years later.
+
+## Accuracy First, Always
+
+It's tempting to cheer a fast WPM number, but for kids especially, accuracy should come before speed. A child who learns to type quickly-but-sloppily has to unlearn that habit later; a child who learns to type slowly-but-accurately naturally speeds up over time without ever having to relearn technique.
+
+## Games Make the Fun Part, Lessons Make the Skill Part
+
+Once the fundamentals are in place, [typing games](/blog/best-typing-games-for-kids) are a genuinely great way to keep motivation high — but they work best as a reward layered on top of real technique, not a replacement for it. Think of it as: lessons build the skill, games make practicing it fun.
+
+## Getting Started
+
+FastTypingLab's [Learn Typing course](/learn) is free, requires no account, and starts exactly where a beginner (of any age) should — the home row. Pair 10-15 minutes of lessons with a typing game a few times a week, and most kids build genuinely solid touch-typing habits within a few weeks.
     `}];export{e as t};
