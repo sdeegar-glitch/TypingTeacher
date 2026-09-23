@@ -745,6 +745,45 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
     ],
   },
+
+  'mpsc-clerk-typist': {
+    slug: 'mpsc-clerk-typist',
+    examName: 'MPSC Clerk-Typist',
+    h1: 'MPSC Clerk-Typist Typing Test — Marathi & English Practice',
+    seoTitle: 'MPSC Clerk-Typist Typing Test — Marathi & English Practice | FastTypingLab',
+    metaDesc: 'Free MPSC Clerk-Typist (Group C) typing test practice — 30 WPM Marathi and 35–40 WPM English, with the real net-WPM, error-limit and no-backspace rules, live WPM and accuracy.',
+    eyebrow: 'MPSC Group C',
+    intro: 'The MPSC (Maharashtra Public Service Commission) Clerk-Typist / Group C skill test (covering Clerk-Typist, Tax Assistant and Bailiff posts) requires both a Marathi and an English typing test. Marathi is typically around 30 WPM net (roughly 1,500 keystrokes in 10 minutes), with a 7% error limit and no backspace allowed; English is usually 35–40 WPM. It is qualifying only — no marks are added for typing beyond the cut-off, but you must clear it to be selected. Many candidates first earn a GCC-TBC (Government Certificate in Computer Typing Basic Course) certificate, which uses the Unicode Mangal/INSCRIPT layout and is a common prerequisite for MPSC Clerk-Typist eligibility.',
+    requirements: [
+      { language: 'Marathi', layout: 'Mangal/INSCRIPT or Remington (confirm from notification)', speed: '30 WPM net (~1,500 keystrokes/10 min)', duration: '10 minutes' },
+      { language: 'English', layout: 'QWERTY', speed: '35–40 WPM', duration: '10 minutes' },
+    ],
+    format: [
+      'Separate Marathi and English typing passages, each typed within a set time.',
+      'Marathi speed is commonly expressed as keystrokes rather than WPM directly — about 1,500 keystrokes in 10 minutes.',
+      'A 7% error limit applies, and backspace/corrections are typically not allowed during the test.',
+      'The test is qualifying only — you must clear the cut-off, but it does not add to your merit score.',
+    ],
+    tips: [
+      'Confirm whether your specific MPSC notification requires Remington or Unicode Mangal for Marathi — sources differ, and it can vary by post and recruitment cycle, so always check your own notification rather than assume.',
+      'Since backspace is not allowed, practice typing cleanly rather than relying on corrections.',
+      'A GCC-TBC certificate (Unicode Mangal) is a common prerequisite — consider earning it if your target post requires it.',
+      'Practice the full 10-minute format daily to build the sustained accuracy this test rewards.',
+    ],
+    faqs: [
+      { q: 'What Marathi typing speed does MPSC Clerk-Typist require?', a: 'Typically around 30 WPM net, or about 1,500 keystrokes in 10 minutes, with a 7% error limit and no backspace allowed.' },
+      { q: 'Does MPSC use Remington or Unicode Mangal for Marathi typing?', a: 'Public sources differ — some say Remington (the legacy typewriter-style layout) is required for MPSC Group C, others say Unicode Mangal/INSCRIPT is now standard. This can vary by post and notification year, so always confirm from your own official MPSC notification before choosing which layout to practice.' },
+      { q: 'What is GCC-TBC and how does it relate to MPSC Clerk-Typist?', a: 'GCC-TBC (Government Certificate in Computer Typing Basic Course) is a Unicode Mangal/INSCRIPT typing certification from MSCE Pune, offered at 30/40 WPM grades, and is a common prerequisite qualification for MPSC Clerk-Typist eligibility.' },
+      { q: 'How can I practise for MPSC Clerk-Typist free?', a: 'FastTypingLab offers a free Marathi typing test (Unicode Mangal) and English typing tests with live WPM and accuracy, in a comparable timed format.' },
+    ],
+    practiceHref: '/marathi-typing-test',
+    practiceLabel: 'Start Marathi Typing Practice',
+    related: [
+      { label: 'Marathi Typing Test', href: '/marathi-typing-test/' },
+      { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
+      { label: 'All Exam Typing', href: '/competitive-exam-typing/' },
+    ],
+  },
 };
 
 export const EXAM_LANDING_ROUTES = Object.values(EXAM_LANDINGS).map(e => ({

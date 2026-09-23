@@ -222,6 +222,11 @@ const ROUTES = [
     ['What typing speed is required for HARTRON SETC?', 'SETC typing components typically expect about 30 WPM in English or 25 WPM in Hindi, though it can vary by post — always confirm from your official notification.'],
     ['How can I practise the HARTRON SETC typing test free?', 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy, in the exam format.'],
   ]) },
+  { path: '/mpsc-clerk-typist-typing-test', title: 'MPSC Clerk-Typist Typing Test — Marathi & English Practice | FastTypingLab', description: 'Free MPSC Clerk-Typist (Group C) typing test practice — 30 WPM Marathi and 35–40 WPM English, with the real net-WPM, error-limit and no-backspace rules, live WPM and accuracy.', jsonLd: faqLd([
+    ['What Marathi typing speed does MPSC Clerk-Typist require?', 'Typically around 30 WPM net, or about 1,500 keystrokes in 10 minutes, with a 7% error limit and no backspace allowed.'],
+    ['Does MPSC use Remington or Unicode Mangal for Marathi typing?', 'Public sources differ — some say Remington is required for MPSC Group C, others say Unicode Mangal/INSCRIPT is now standard. This can vary by post and notification year, so always confirm from your own official MPSC notification.'],
+    ['How can I practise for MPSC Clerk-Typist free?', 'FastTypingLab offers a free Marathi typing test (Unicode Mangal) and English typing tests with live WPM and accuracy, in a comparable timed format.'],
+  ]) },
   { path: '/leaderboard', title: 'Global Typing Leaderboard | FastTypingLab', description: 'See the fastest typists on FastTypingLab. Global typing speed leaderboard ranked by net WPM and accuracy.' },
 
   { path: '/keyboard-tester', title: 'Online Keyboard Tester — Test Every Key | FastTypingLab', description: 'Free online keyboard tester. Press any key to check it registers correctly — test your full keyboard, function keys and modifiers in the browser.' },
