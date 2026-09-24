@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CertificateButton from '../components/CertificateButton';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -74,43 +74,47 @@ const EXAM_CONFIG: Record<string, {
   /** passage library to draw from (defaults to the exam key) */
   passageKey?: string;
   language: string; color: string; bg: string; border: string;
+  /** Explicit bullet-dot background. Kept as its own field rather than derived
+      from `color` at runtime — a string-munged class name is invisible to
+      Tailwind's static scanner and gets purged from the build. */
+  dotBg: string;
   icon: string;
   rules: string[];
 }> = {
   'ssc-chsl': {
     title: 'SSC CHSL', fullName: 'Staff Selection Commission — CHSL', badge: 'English',
     duration: 600, wpmTarget: 35, accuracyTarget: 80, profile: 'ssc',
-    language: 'English', color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30', icon: '🏛️',
+    language: 'English', color: 'text-brand-primary', bg: 'bg-brand-primary/10', border: 'border-brand-primary/20', dotBg: 'bg-brand-primary', icon: '🏛️',
     rules: ['Duration: 10 minutes', 'Target: 35+ WPM', 'Min accuracy: 80%', 'Backspace allowed'],
   },
   'ssc-cgl': {
     title: 'SSC CGL DEST', fullName: 'SSC CGL — Data Entry Speed Test', badge: 'English',
     duration: 900, wpmTarget: 40, accuracyTarget: 85, profile: 'kdph', kdphTarget: 8000,
-    language: 'English', color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/30', icon: '📊',
+    language: 'English', color: 'text-brand-accent', bg: 'bg-brand-accent/10', border: 'border-brand-accent/20', dotBg: 'bg-brand-accent', icon: '📊',
     rules: ['Duration: 15 minutes', 'Target: 40+ WPM', 'Min accuracy: 85%', '8000 KDPH required'],
   },
   'hindi-typing': {
     title: 'Hindi Typing', fullName: 'Hindi Typing — INSCRIPT / Remington Gail', badge: 'Hindi',
     duration: 600, wpmTarget: 30, accuracyTarget: 80, profile: 'ssc',
-    language: 'Hindi', color: 'text-orange-400', bg: 'bg-orange-500/10', border: 'border-orange-500/30', icon: 'अ',
+    language: 'Hindi', color: 'text-brand-cta', bg: 'bg-brand-cta/10', border: 'border-brand-cta/20', dotBg: 'bg-brand-cta', icon: 'अ',
     rules: ['Duration: 10 minutes', 'Target: 30+ WPM', 'Min accuracy: 80%', 'Mangal font standard'],
   },
   'cpct-hindi': {
     title: 'CPCT Hindi', fullName: 'MP CPCT — Hindi Typing (INSCRIPT / Remington)', badge: 'Hindi',
     duration: 900, wpmTarget: 30, accuracyTarget: 80, profile: 'cpct', passageKey: 'hindi-typing',
-    language: 'Hindi', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/30', icon: 'क',
+    language: 'Hindi', color: 'text-rose-500', bg: 'bg-rose-500/10', border: 'border-rose-500/20', dotBg: 'bg-rose-500', icon: 'क',
     rules: ['Duration: 15 minutes', 'Target: 30+ WPM', 'Wrong words are not counted', 'Unicode Hindi (INSCRIPT)'],
   },
   'up-police': {
     title: 'UP Police Typing', fullName: 'UP Police Computer Operator Test', badge: 'Hindi',
     duration: 300, wpmTarget: 25, accuracyTarget: 80, profile: 'ssc',
-    language: 'Hindi', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', icon: '👮',
+    language: 'Hindi', color: 'text-brand-secondary', bg: 'bg-brand-secondary/10', border: 'border-brand-secondary/20', dotBg: 'bg-brand-secondary', icon: '👮',
     rules: ['Duration: 5 minutes', 'Target: 25+ WPM', 'Min accuracy: 80%', 'Unicode Hindi'],
   },
   'court-typing': {
     title: 'Court Typing', fullName: 'High Court / District Court Typing Test', badge: 'English',
     duration: 600, wpmTarget: 40, accuracyTarget: 90, profile: 'ssc',
-    language: 'English', color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/30', icon: '⚖️',
+    language: 'English', color: 'text-brand-primary', bg: 'bg-brand-primary/10', border: 'border-brand-primary/20', dotBg: 'bg-brand-primary', icon: '⚖️',
     rules: ['Duration: 10 minutes', 'Target: 40+ WPM', 'Min accuracy: 90%', 'Legal passages'],
   },
 };
@@ -131,8 +135,6 @@ export default function ExamPage() {
 
   const passage = paragraphs[passageIdx];
   const isHindi = exam.language === 'Hindi';
-
-  useEffect(() => { document.title = `${exam.title} Mock Test | FastTypingLab`; }, [exam.title]);
 
   const handleFinish = (r: ExamResult) => {
     setResult(r);
@@ -168,37 +170,53 @@ export default function ExamPage() {
   const passed = !!result && wpm >= exam.wpmTarget && accuracy >= exam.accuracyTarget
     && (!exam.kdphTarget || kdph >= exam.kdphTarget);
 
+  // Rendered by every screen below. It used to live only inside the info
+  // screen, so the moment a test started the canonical/title/description tags
+  // unmounted and the document was left with whatever the previous route set.
+  const seo = (
+    <Seo
+      title={`${exam.title} Mock Test | FastTypingLab`}
+      description={`Free ${exam.title} typing mock test — ${exam.duration / 60} minutes, target ${exam.wpmTarget}+ WPM at ${exam.accuracyTarget}%+ accuracy. Practice with real exam-style passages.`}
+      canonical={LANDING_CANONICAL[key]}
+    />
+  );
+
   // ═══ ACTIVE (exam-style typing interface) ═══
   if (screen === 'active') {
     return (
-      <ExamTypingInterface
-        key={runId}
-        passage={passage}
-        durationSec={exam.duration}
-        isHindi={isHindi}
-        examTitle={exam.title}
-        profile={exam.profile}
-        onFinish={handleFinish}
-        onExit={restart}
-      />
+      <>
+        {seo}
+        <ExamTypingInterface
+          key={runId}
+          passage={passage}
+          durationSec={exam.duration}
+          isHindi={isHindi}
+          examTitle={exam.title}
+          profile={exam.profile}
+          onFinish={handleFinish}
+          onExit={restart}
+        />
+      </>
     );
   }
 
   // ═══ COUNTDOWN ═══
   if (screen === 'countdown') {
     return (
-      <div className="h-[100dvh] bg-[#0d0d14] flex items-center justify-center">
+      // 100dvh minus the shared navbar's h-16, which renders above this page.
+      <div className="h-[calc(100dvh-4rem)] bg-brand-bg text-brand-text flex items-center justify-center">
+        {seo}
         <div className="text-center">
           <AnimatePresence mode="wait">
             <motion.div key={countdown}
               initial={{ scale: 1.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.35 }}>
               {countdown > 0
-                ? <div className="text-[12rem] font-black text-white leading-none">{countdown}</div>
-                : <div className="text-7xl font-black text-emerald-400">GO!</div>}
+                ? <div className="text-[12rem] font-black text-brand-text leading-none">{countdown}</div>
+                : <div className="text-7xl font-black text-emerald-500">GO!</div>}
             </motion.div>
           </AnimatePresence>
-          <p className="text-white/30 text-lg mt-4">Get ready…</p>
+          <p className="text-brand-muted text-lg mt-4">Get ready…</p>
         </div>
       </div>
     );
@@ -207,15 +225,16 @@ export default function ExamPage() {
   // ═══ FINISHED ═══
   if (screen === 'finished') {
     return (
-      <div className="bg-[#0d0d14] text-white flex flex-col items-center justify-center px-4 py-6 sm:py-8">
+      <div className="bg-brand-bg text-brand-text flex flex-col items-center justify-center px-4 py-6 sm:py-8">
+        {seo}
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-xl">
           <div className="text-center mb-4">
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 14, delay: 0.1 }}
               className={`w-12 h-12 rounded-2xl mx-auto mb-3 flex items-center justify-center text-2xl ${passed ? 'bg-emerald-500/15 border border-emerald-500/30' : 'bg-rose-500/15 border border-rose-500/30'}`}>
               {passed ? '🏆' : '💪'}
             </motion.div>
-            <h1 className={`text-2xl sm:text-[28px] font-extrabold mb-1.5 ${passed ? 'text-emerald-400' : 'text-white'}`}>{passed ? 'Test Passed!' : 'Keep Pushing!'}</h1>
-            <p className="text-white/40 text-sm">
+            <h1 className={`text-2xl sm:text-[28px] font-extrabold mb-1.5 ${passed ? 'text-emerald-600' : 'text-brand-text'}`}>{passed ? 'Test Passed!' : 'Keep Pushing!'}</h1>
+            <p className="text-brand-text-muted text-sm">
               {passed ? `You met the ${exam.title} requirements. You're exam-ready!` : `Need ${exam.wpmTarget} WPM & ${exam.accuracyTarget}% accuracy. You're getting closer!`}
             </p>
           </div>
@@ -228,10 +247,10 @@ export default function ExamPage() {
               { label: 'Errors', value: result?.errors ?? 0, suffix: '', pass: (result?.errors ?? 0) <= 5, big: false, targetLabel: '' },
             ].map(s => (
               <div key={s.label} className={`rounded-xl p-3 border text-center ${s.pass ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-rose-500/5 border-rose-500/20'}`}>
-                <div className={`font-black font-mono ${s.big ? 'text-2xl' : 'text-lg'} ${s.pass ? 'text-emerald-400' : 'text-rose-400'}`}>{s.value}{s.suffix}</div>
-                <div className="text-xs text-white/30 uppercase tracking-wider mt-0.5">{s.label}</div>
+                <div className={`font-black font-mono ${s.big ? 'text-2xl' : 'text-lg'} ${s.pass ? 'text-emerald-600' : 'text-rose-500'}`}>{s.value}{s.suffix}</div>
+                <div className="text-xs text-brand-muted uppercase tracking-wider mt-0.5">{s.label}</div>
                 {s.targetLabel && (
-                  <div className={`text-xs mt-1 font-semibold flex items-center justify-center gap-1 ${s.pass ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  <div className={`text-xs mt-1 font-semibold flex items-center justify-center gap-1 ${s.pass ? 'text-emerald-600' : 'text-rose-500'}`}>
                     {s.pass ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}{s.pass ? 'Passed' : s.targetLabel}
                   </div>
                 )}
@@ -242,23 +261,24 @@ export default function ExamPage() {
           {result && <ScoreAudit result={result} kdphTarget={exam.kdphTarget} kdph={kdph} />}
 
           {/* Backspace / delete summary */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-3 mb-4 flex items-center justify-around text-center">
-            <div><div className="text-base font-black font-mono text-white/80">{result?.chars ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Chars</div></div>
-            <div><div className="text-base font-black font-mono text-white/80">{result?.backspaces ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Backspace</div></div>
-            <div><div className="text-base font-black font-mono text-white/80">{result?.deletes ?? 0}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Delete</div></div>
+          <div className="bg-brand-surface border border-brand-border rounded-xl p-3 mb-4 flex items-center justify-around text-center">
+            <div><div className="text-base font-black font-mono text-brand-text">{result?.chars ?? 0}</div><div className="text-[10px] text-brand-muted uppercase tracking-wider">Chars</div></div>
+            <div><div className="text-base font-black font-mono text-brand-text">{result?.backspaces ?? 0}</div><div className="text-[10px] text-brand-muted uppercase tracking-wider">Backspace</div></div>
+            <div><div className="text-base font-black font-mono text-brand-text">{result?.deletes ?? 0}</div><div className="text-[10px] text-brand-muted uppercase tracking-wider">Delete</div></div>
           </div>
 
           <div className="flex gap-2.5">
             <button onClick={tryAgain}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm text-white shadow-lg ${exam.language === 'Hindi' ? 'bg-gradient-to-r from-orange-600 to-amber-600' : 'bg-gradient-to-r from-blue-600 to-indigo-600'}`}>
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm text-white shadow-lg transition-all hover:opacity-90 active:scale-95"
+              style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
               <RotateCcw className="w-4 h-4" /> Try Again
             </button>
-            <CertificateButton wpm={wpm} accuracy={accuracy} seconds={result?.elapsedSec || exam.duration} className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm bg-amber-500/10 border border-amber-500/20 text-amber-400 hover:bg-amber-500/20 transition-all" />
-            <button onClick={restart} className="px-4 py-3 rounded-xl font-bold bg-white/5 border border-white/10 text-white/50 hover:text-white/80 hover:bg-white/10 transition-all">
+            <CertificateButton wpm={wpm} accuracy={accuracy} seconds={result?.elapsedSec || exam.duration} className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm bg-amber-500/10 border border-amber-500/20 text-amber-600 hover:bg-amber-500/20 transition-all" />
+            <button onClick={restart} className="px-4 py-3 rounded-xl font-bold bg-brand-surface border border-brand-border text-brand-muted hover:text-brand-text hover:border-brand-primary/40 transition-all">
               <Award className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-center text-white/15 text-xs mt-3">Each attempt uses a different paragraph from our exam library</p>
+          <p className="text-center text-brand-muted text-xs mt-3">Each attempt uses a different paragraph from our exam library</p>
         </motion.div>
       </div>
     );
@@ -266,14 +286,10 @@ export default function ExamPage() {
 
   // ═══ INFO (default) ═══
   return (
-    <div className="bg-[#0d0d14] text-white flex flex-col">
-      <Seo
-        title={`${exam.title} Mock Test | FastTypingLab`}
-        description={`Free ${exam.title} typing mock test — ${exam.duration / 60} minutes, target ${exam.wpmTarget}+ WPM at ${exam.accuracyTarget}%+ accuracy. Practice with real exam-style passages.`}
-        canonical={LANDING_CANONICAL[key]}
-      />
+    <div className="bg-brand-bg text-brand-text flex flex-col">
+      {seo}
       <div className="px-6 py-3">
-        <Link to="/competitive-exam-typing/" className="flex items-center gap-1.5 text-white/40 hover:text-white/80 text-sm transition-colors w-fit">
+        <Link to="/competitive-exam-typing/" className="flex items-center gap-1.5 text-brand-muted hover:text-brand-primary text-sm transition-colors w-fit">
           <ChevronLeft className="w-4 h-4" /> All Exams
         </Link>
       </div>
@@ -284,49 +300,50 @@ export default function ExamPage() {
             <span className={`text-lg w-9 h-9 rounded-lg ${exam.bg} border ${exam.border} flex items-center justify-center shrink-0`}>{exam.icon}</span>
             <div>
               <div className={`text-[11px] font-bold uppercase tracking-widest ${exam.color} mb-0.5`}>{exam.badge} Typing Test</div>
-              <h1 className="text-2xl sm:text-[28px] font-extrabold leading-tight text-white">{exam.title}</h1>
-              <p className="text-white/40 text-sm mt-0.5">{exam.fullName}</p>
+              <h1 className="text-2xl sm:text-[28px] font-extrabold leading-tight text-brand-text">{exam.title}</h1>
+              <p className="text-brand-text-muted text-sm mt-0.5">{exam.fullName}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2 mb-4">
             {[
-              { label: 'Duration', value: `${exam.duration / 60} min`, icon: Clock, color: 'text-white' },
+              { label: 'Duration', value: `${exam.duration / 60} min`, icon: Clock, color: 'text-brand-text' },
               { label: 'Target WPM', value: `${exam.wpmTarget}+`, icon: Zap, color: exam.color },
-              { label: 'Min Accuracy', value: `${exam.accuracyTarget}%`, icon: Target, color: 'text-amber-400' },
+              { label: 'Min Accuracy', value: `${exam.accuracyTarget}%`, icon: Target, color: 'text-amber-600' },
             ].map(s => (
-              <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl p-3 text-center backdrop-blur">
+              <div key={s.label} className="bg-brand-surface border border-brand-border rounded-xl p-3 text-center">
                 <s.icon className={`w-4 h-4 mx-auto mb-1.5 ${s.color}`} />
                 <div className={`text-lg font-black font-mono ${s.color}`}>{s.value}</div>
-                <div className="text-[11px] text-white/30 mt-0.5 uppercase tracking-wider">{s.label}</div>
+                <div className="text-[11px] text-brand-muted mt-0.5 uppercase tracking-wider">{s.label}</div>
               </div>
             ))}
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
-            <div className="flex items-center gap-2 text-white/60 text-xs font-bold uppercase tracking-widest mb-2.5">
+          <div className="bg-brand-surface border border-brand-border rounded-xl p-4 mb-4">
+            <div className="flex items-center gap-2 text-brand-text-muted text-xs font-bold uppercase tracking-widest mb-2.5">
               <Shield className="w-3.5 h-3.5" /> Exam Rules
             </div>
             <div className="grid grid-cols-2 gap-2">
               {exam.rules.map((r, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-white/50">
-                  <span className={`w-1.5 h-1.5 rounded-full ${exam.color.replace('text-', 'bg-')} shrink-0`} />{r}
+                <div key={i} className="flex items-center gap-2 text-sm text-brand-text-muted">
+                  <span className={`w-1.5 h-1.5 rounded-full ${exam.dotBg} shrink-0`} />{r}
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-5">
-            <div className="text-xs font-bold uppercase tracking-widest text-white/30 mb-2.5">Passage Preview</div>
-            <p className={`text-white/40 text-sm leading-relaxed line-clamp-2 ${isHindi ? '' : 'font-mono'}`} style={isHindi ? { fontFamily: "'Noto Sans Devanagari', sans-serif" } : undefined}>{passage}</p>
-            <div className="mt-2 text-[11px] text-white/20">{passage.length} characters · {passage.split(' ').length} words</div>
+          <div className="bg-brand-surface border border-brand-border rounded-xl p-4 mb-5">
+            <div className="text-xs font-bold uppercase tracking-widest text-brand-muted mb-2.5">Passage Preview</div>
+            <p className={`text-brand-text-muted text-sm leading-relaxed line-clamp-2 ${isHindi ? '' : 'font-mono'}`} style={isHindi ? { fontFamily: "'Noto Sans Devanagari', sans-serif" } : undefined}>{passage}</p>
+            <div className="mt-2 text-[11px] text-brand-muted">{passage.length} characters · {passage.split(' ').length} words</div>
           </div>
 
           <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={startCountdown}
-            className={`w-full py-3.5 rounded-xl font-black text-base text-white transition-all shadow-2xl flex items-center justify-center gap-3 ${exam.language === 'Hindi' ? 'bg-gradient-to-r from-orange-600 to-amber-600 shadow-orange-500/20' : 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-500/20'}`}>
+            className="w-full py-3.5 rounded-xl font-black text-base text-white transition-all shadow-lg shadow-brand-primary/20 flex items-center justify-center gap-3"
+            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
             <Zap className="w-5 h-5" /> Start Mock Test
           </motion.button>
-          <p className="text-center text-white/20 text-xs mt-2.5">A new passage is selected randomly each attempt</p>
+          <p className="text-center text-brand-muted text-xs mt-2.5">A new passage is selected randomly each attempt</p>
         </motion.div>
       </div>
     </div>
@@ -348,30 +365,30 @@ function ScoreAudit({ result, kdphTarget, kdph }: { result: ExamResult; kdphTarg
   const uncorrected = result.wrongChars;
   const corrected = result.backspaces + result.deletes;
   return (
-    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 text-sm">
+    <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6 text-sm">
       <div className="grid grid-cols-3 gap-2 text-center mb-3">
-        <div><div className="text-lg font-black font-mono text-white/80">{score.correctWords}/{score.typedWords}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Correct words</div></div>
-        <div><div className="text-lg font-black font-mono text-white/80">{score.fullMistakes} + {score.halfMistakes}×½</div><div className="text-[10px] text-white/30 uppercase tracking-wider">Full + half</div></div>
-        <div><div className={`text-lg font-black font-mono ${kdphTarget ? (kdph >= kdphTarget ? 'text-emerald-400' : 'text-rose-400') : 'text-white/80'}`}>{kdph}</div><div className="text-[10px] text-white/30 uppercase tracking-wider">KDPH{kdphTarget ? ` (need ${kdphTarget})` : ''}</div></div>
+        <div><div className="text-lg font-black font-mono text-brand-text">{score.correctWords}/{score.typedWords}</div><div className="text-[10px] text-brand-muted uppercase tracking-wider">Correct words</div></div>
+        <div><div className="text-lg font-black font-mono text-brand-text">{score.fullMistakes} + {score.halfMistakes}×½</div><div className="text-[10px] text-brand-muted uppercase tracking-wider">Full + half</div></div>
+        <div><div className={`text-lg font-black font-mono ${kdphTarget ? (kdph >= kdphTarget ? 'text-emerald-600' : 'text-rose-500') : 'text-brand-text'}`}>{kdph}</div><div className="text-[10px] text-brand-muted uppercase tracking-wider">KDPH{kdphTarget ? ` (need ${kdphTarget})` : ''}</div></div>
       </div>
-      <div className="text-xs text-white/40 mb-2">Errors left in text: <b className="text-white/70">{uncorrected}</b> characters · Corrections made: <b className="text-white/70">{corrected}</b> keys</div>
-      <button onClick={() => setOpen(o => !o)} className="text-xs font-semibold text-cyan-400 hover:text-cyan-300">
+      <div className="text-xs text-brand-text-muted mb-2">Errors left in text: <b className="text-brand-text">{uncorrected}</b> characters · Corrections made: <b className="text-brand-text">{corrected}</b> keys</div>
+      <button onClick={() => setOpen(o => !o)} className="text-xs font-semibold text-brand-primary hover:underline">
         {open ? 'Hide' : 'Show'} mistake list ({score.mistakes.length})
       </button>
       {open && (
         <ul className="mt-2 max-h-48 overflow-y-auto space-y-1 text-xs">
-          {score.mistakes.length === 0 && <li className="text-emerald-400">No mistakes — clean run.</li>}
+          {score.mistakes.length === 0 && <li className="text-emerald-600">No mistakes — clean run.</li>}
           {score.mistakes.map((m, i) => (
-            <li key={i} className="flex flex-wrap gap-x-2 text-white/60">
-              <span className={m.kind === 'full' ? 'text-rose-400 font-bold' : 'text-amber-300 font-bold'}>{m.kind === 'full' ? 'Full' : 'Half'}</span>
+            <li key={i} className="flex flex-wrap gap-x-2 text-brand-text-muted">
+              <span className={m.kind === 'full' ? 'text-rose-500 font-bold' : 'text-amber-600 font-bold'}>{m.kind === 'full' ? 'Full' : 'Half'}</span>
               <span>{REASON_LABEL[m.reason] ?? m.reason}</span>
-              {m.expected && <span>expected <b className="text-white/80">{m.expected}</b></span>}
-              {m.typed && <span>typed <b className="text-white/80">{m.typed}</b></span>}
+              {m.expected && <span>expected <b className="text-brand-text">{m.expected}</b></span>}
+              {m.typed && <span>typed <b className="text-brand-text">{m.typed}</b></span>}
             </li>
           ))}
         </ul>
       )}
-      <p className="text-[11px] text-white/25 mt-3">{rules} These rules come from public summaries of exam guidelines, so confirm them against your exam notification.</p>
+      <p className="text-[11px] text-brand-muted mt-3">{rules} These rules come from public summaries of exam guidelines, so confirm them against your exam notification.</p>
     </div>
   );
 }

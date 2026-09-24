@@ -173,14 +173,14 @@ export default function ExamTypingInterface({ passage, durationSec, isHindi, exa
   const focusInput = () => engine.focus();
 
   return (
-    <div className="min-h-[100dvh] bg-[#0d0d14] text-white px-4 py-4" onClick={focusInput} onKeyDown={onRootKeyDown}>
+    <div className="min-h-[calc(100dvh-4rem)] bg-brand-bg text-brand-text px-4 py-4" onClick={focusInput} onKeyDown={onRootKeyDown}>
       <textarea {...engine.inputProps} />
 
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
-          <button onClick={onExit} className="text-sm text-white/40 hover:text-white transition-colors">← Exit</button>
-          <span className="text-sm font-bold text-white/80 truncate px-2">{examTitle} — Typing Test</span>
+          <button onClick={onExit} className="text-sm text-brand-muted hover:text-brand-primary transition-colors">← Exit</button>
+          <span className="text-sm font-bold text-brand-text truncate px-2">{examTitle} — Typing Test</span>
           <button onClick={computeAndFinish}
             className="text-sm font-bold text-white px-3.5 py-1.5 rounded-lg transition-all hover:opacity-90 active:scale-95 shadow-lg"
             style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
@@ -191,10 +191,10 @@ export default function ExamTypingInterface({ passage, durationSec, isHindi, exa
         {/* Stat bar */}
         <div className="grid grid-cols-4 gap-2 mb-3">
           {[
-            { label: 'Gross', value: grossWpm, cls: 'bg-teal-500/10 border-teal-500/30 text-teal-300' },
-            { label: 'Delete', value: deletes, cls: 'bg-amber-500/10 border-amber-500/30 text-amber-300' },
-            { label: 'Backspace', value: backspaces, cls: 'bg-rose-500/10 border-rose-500/30 text-rose-300' },
-            { label: 'Time Left', value: mmss, cls: urgent ? 'bg-rose-500/20 border-rose-500/50 text-rose-400 animate-pulse' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300' },
+            { label: 'Gross', value: grossWpm, cls: 'bg-brand-primary/10 border-brand-primary/20 text-brand-primary' },
+            { label: 'Delete', value: deletes, cls: 'bg-amber-500/10 border-amber-500/20 text-amber-600' },
+            { label: 'Backspace', value: backspaces, cls: 'bg-rose-500/10 border-rose-500/20 text-rose-500' },
+            { label: 'Time Left', value: mmss, cls: urgent ? 'bg-rose-500/20 border-rose-500/40 text-rose-500 animate-pulse' : 'bg-brand-accent/10 border-brand-accent/20 text-brand-accent' },
           ].map(s => (
             <div key={s.label} className={`rounded-xl px-2 py-2.5 text-center border ${s.cls}`}>
               <div className="text-[9px] sm:text-[10px] uppercase tracking-widest opacity-70">{s.label}</div>
@@ -205,17 +205,17 @@ export default function ExamTypingInterface({ passage, durationSec, isHindi, exa
 
         {/* Controls */}
         <div className="flex items-center gap-4 text-sm mb-2 flex-wrap">
-          <button onClick={() => setShowPassage(s => !s)} className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors">
+          <button onClick={() => setShowPassage(s => !s)} className="font-semibold text-brand-primary hover:underline transition-colors">
             {showPassage ? 'Hide Passage' : 'Show Passage'}
           </button>
-          <span className="text-white/40">Accuracy: <span className={`font-bold ${accuracy >= 90 ? 'text-emerald-400' : 'text-rose-400'}`}>{accuracy}%</span></span>
-          <span className="text-white/40">Errors: <span className="font-bold text-rose-400">{errors}</span></span>
-          <span className="text-white/40 hidden sm:inline">Net: <span className="font-bold text-white">{live ? Math.round(live.netWpm) : 0}</span></span>
+          <span className="text-brand-text-muted">Accuracy: <span className={`font-bold ${accuracy >= 90 ? 'text-emerald-600' : 'text-rose-500'}`}>{accuracy}%</span></span>
+          <span className="text-brand-text-muted">Errors: <span className="font-bold text-rose-500">{errors}</span></span>
+          <span className="text-brand-text-muted hidden sm:inline">Net: <span className="font-bold text-brand-text">{live ? Math.round(live.netWpm) : 0}</span></span>
         </div>
 
         {/* Passage box (cluster-aware so Devanagari conjuncts keep their shape) */}
         {showPassage && (
-          <div ref={passageBoxRef} className="bg-white/[0.04] border border-white/10 rounded-xl p-4 mb-3 h-40 sm:h-44 overflow-y-auto leading-[2.5rem] text-lg sm:text-xl select-none exam-passage" style={devFont}>
+          <div ref={passageBoxRef} className="bg-brand-surface border border-brand-border rounded-xl p-4 mb-3 h-40 sm:h-44 overflow-y-auto leading-[2.5rem] text-lg sm:text-xl select-none" style={devFont}>
             <ClusterText text={passage} typedLength={typedLen} mistakes={wrongIdx} skipped={noSkipped} currentIndex={typedLen} />
           </div>
         )}
@@ -223,37 +223,37 @@ export default function ExamTypingInterface({ passage, durationSec, isHindi, exa
         {/* Input box (capped + scrolls) */}
         <div
           ref={inputBoxRef}
-          className="bg-white/[0.06] border-2 border-cyan-500/40 focus-within:border-cyan-400 rounded-xl p-4 h-28 overflow-y-auto text-lg sm:text-xl leading-relaxed cursor-text transition-colors"
+          className="bg-brand-surface border-2 border-brand-accent/40 focus-within:border-brand-accent rounded-xl p-4 h-28 overflow-y-auto text-lg sm:text-xl leading-relaxed cursor-text transition-colors"
           style={devFont}>
           {typedLen || engine.composing ? (
-            <span className="text-white whitespace-pre-wrap break-words">
+            <span className="text-brand-text whitespace-pre-wrap break-words">
               {st.typed}
-              {engine.composing && <span className="text-white/60 underline">{engine.composing}</span>}
-              <span className="inline-block w-0.5 h-6 align-middle bg-cyan-400 animate-pulse ml-px" />
+              {engine.composing && <span className="text-brand-text-muted underline">{engine.composing}</span>}
+              <span className="inline-block w-0.5 h-6 align-middle bg-brand-accent animate-pulse ml-px" />
             </span>
           ) : (
-            <span className="text-white/30">Start typing — the timer begins on your first keystroke…</span>
+            <span className="text-brand-muted">Start typing — the timer begins on your first keystroke…</span>
           )}
         </div>
 
         {/* Options */}
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-3 text-sm text-white/60">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-3 text-sm text-brand-text-muted">
           <label className="flex items-center gap-2 cursor-pointer select-none">
-            <input type="checkbox" checked={autoScroll} onChange={e => setAutoScroll(e.target.checked)} className="accent-cyan-500" />
+            <input type="checkbox" checked={autoScroll} onChange={e => setAutoScroll(e.target.checked)} className="accent-brand-accent" />
             Highlight &amp; AutoScroll
           </label>
           <div className="flex items-center gap-3">
-            <span className="font-semibold text-white/80">Backspace:</span>
+            <span className="font-semibold text-brand-text">Backspace:</span>
             {([['full', 'Fully Enable'], ['word', 'Within Word'], ['disabled', 'Disable']] as [BackspaceMode, string][]).map(([val, label]) => (
               <label key={val} className="flex items-center gap-1 cursor-pointer select-none">
-                <input type="radio" name="bsmode" checked={bsMode === val} onChange={() => setBsMode(val)} className="accent-cyan-500" />
+                <input type="radio" name="bsmode" checked={bsMode === val} onChange={() => setBsMode(val)} className="accent-brand-accent" />
                 {label}
               </label>
             ))}
           </div>
         </div>
 
-        <p className="text-xs text-white/25 mt-2">Type the passage exactly · <span className="text-emerald-400">green</span> = correct · <span className="text-rose-400">red</span> = wrong · <span className="text-amber-300">yellow</span> = current position. Marks are per character; your score is counted per word. Click "Result" any time to finish.</p>
+        <p className="text-xs text-brand-muted mt-2">Type the passage exactly · <span className="text-emerald-600">green</span> = correct · <span className="text-rose-500">red</span> = wrong · <span className="text-amber-600">yellow</span> = current position. Marks are per character; your score is counted per word. Click "Result" any time to finish.</p>
       </div>
     </div>
   );

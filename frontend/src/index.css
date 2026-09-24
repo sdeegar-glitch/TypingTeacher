@@ -582,11 +582,12 @@
 }
 .dark .icon-sand { color: #DDAD9C; border-color: rgba(221,173,156,0.2); }
 
-/* Exam typing screen (always dark): keep the green / red / yellow feedback */
-.exam-passage .typing-correct  { color: #34d399; }
-.exam-passage .typing-error    { color: #fff; background: #f43f5e; border-radius: 2px; }
-.exam-passage .typing-upcoming { color: rgba(255,255,255,0.3); }
-.exam-passage .typing-current  { color: #0d0d14; background: #fcd34d; border-radius: 2px; font-weight: 400; }
+/* The exam screen used to override .typing-* here for an always-dark panel
+   (#0d0d14). Those overrides hardcoded light-on-dark colours — notably
+   `.typing-upcoming { color: rgba(255,255,255,.3) }`, which was invisible once
+   the screen moved onto the brand tokens and follows light mode. The default
+   .typing-* rules above already handle both themes plus high-contrast, so the
+   exam screen now just uses them. */
 
 /* Word you must type now (blinks) and the space that follows a finished word. */
 @keyframes word-blink {
