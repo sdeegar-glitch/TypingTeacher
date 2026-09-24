@@ -169,8 +169,7 @@ const LearningInterfacePage = () => {
     <div
       // 100dvh minus the shared site navbar's h-16 (4rem), which now renders
       // above this page instead of being suppressed.
-      className="h-[calc(100dvh-4rem)] text-[#1e293b] flex flex-col overflow-hidden"
-      style={{ fontFamily: "'Inter', sans-serif", background: '#ebebea' }}
+      className="h-[calc(100dvh-4rem)] bg-brand-bg text-brand-text flex flex-col overflow-hidden"
       onClick={() => isMobile && hiddenInputRef.current?.focus()}
     >
       <Seo
@@ -196,68 +195,68 @@ const LearningInterfacePage = () => {
       )}
 
       {/* ── TOP HEADER ── */}
-      <div className="shrink-0 bg-white border-b border-gray-200 px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-between z-50 shadow-sm gap-2">
+      <div className="shrink-0 bg-brand-surface border-b border-brand-border px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-between z-50 shadow-sm gap-2">
         {/* Left */}
         <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-shrink">
           <Link
             to="/learn/"
-            className="flex items-center gap-1 text-slate-500 hover:text-slate-900 transition-colors text-sm font-medium group flex-shrink-0"
+            className="flex items-center gap-1 text-brand-muted hover:text-brand-text transition-colors text-sm font-medium group flex-shrink-0"
           >
             <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
             </svg>
             <span className="hidden sm:inline">Back</span>
           </Link>
-          <div className="w-px h-5 bg-slate-200 hidden sm:block" />
+          <div className="w-px h-5 bg-brand-border hidden sm:block" />
           <div className="min-w-0">
-            <span className="text-[9px] font-bold text-indigo-500 uppercase tracking-widest block">Level {lessonId}</span>
-            <h1 className="text-xs sm:text-sm font-bold text-slate-800 leading-none truncate max-w-[100px] sm:max-w-xs">{currentLesson.title}</h1>
+            <span className="text-[9px] font-bold text-brand-primary uppercase tracking-widest block">Level {lessonId}</span>
+            <h1 className="text-xs sm:text-sm font-bold text-brand-text leading-none truncate max-w-[100px] sm:max-w-xs">{currentLesson.title}</h1>
           </div>
         </div>
 
         {/* Center: finger hint — desktop only */}
         {nextChar && !isFinished && !isMobile && (
-          <div className="hidden md:flex items-center gap-2 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-full">
-            <span className="text-xs text-indigo-600">Type</span>
-            <kbd className="bg-indigo-600 text-white text-xs font-black px-2 py-0.5 rounded-md min-w-[24px] text-center">
+          <div className="hidden md:flex items-center gap-2 bg-brand-primary/10 border border-brand-primary/20 px-3 py-1.5 rounded-full">
+            <span className="text-xs text-brand-primary">Type</span>
+            <kbd className="bg-brand-primary text-white text-xs font-black px-2 py-0.5 rounded-md min-w-[24px] text-center">
               {nextChar === ' ' ? '⎵' : nextChar.toUpperCase()}
             </kbd>
-            <span className="text-xs text-indigo-600">with <span className="text-indigo-800 font-semibold">{activeFinger.replace('left-', 'L ').replace('right-', 'R ')}</span></span>
+            <span className="text-xs text-brand-primary">with <span className="text-brand-text font-semibold">{activeFinger.replace('left-', 'L ').replace('right-', 'R ')}</span></span>
           </div>
         )}
 
         {/* Right: Stats */}
         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
           <div className="text-center">
-            <span className="text-[8px] sm:text-[9px] text-slate-400 uppercase tracking-widest block">Time</span>
-            <span className="text-sm sm:text-lg font-black text-slate-800 tabular-nums">{formattedTime}</span>
+            <span className="text-[8px] sm:text-[9px] text-brand-muted uppercase tracking-widest block">Time</span>
+            <span className="text-sm sm:text-lg font-black text-brand-text tabular-nums">{formattedTime}</span>
           </div>
           <div className="hidden sm:block text-center">
-            <span className="text-[9px] text-slate-400 uppercase tracking-widest block">Gross</span>
-            <span className={`text-sm sm:text-lg font-black tabular-nums ${wpm >= currentLesson.minWpm ? 'text-indigo-400' : 'text-slate-400'}`}>{wpm}</span>
+            <span className="text-[9px] text-brand-muted uppercase tracking-widest block">Gross</span>
+            <span className={`text-sm sm:text-lg font-black tabular-nums ${wpm >= currentLesson.minWpm ? 'text-brand-accent' : 'text-brand-muted'}`}>{wpm}</span>
           </div>
           <div className="text-center">
-            <span className="text-[8px] sm:text-[9px] text-slate-400 uppercase tracking-widest block">Net WPM</span>
-            <span className={`text-sm sm:text-lg font-black tabular-nums ${netWpm >= currentLesson.minWpm ? 'text-indigo-600' : 'text-slate-400'}`}>{netWpm}</span>
+            <span className="text-[8px] sm:text-[9px] text-brand-muted uppercase tracking-widest block">Net WPM</span>
+            <span className={`text-sm sm:text-lg font-black tabular-nums ${netWpm >= currentLesson.minWpm ? 'text-brand-primary' : 'text-brand-muted'}`}>{netWpm}</span>
           </div>
           <div className="text-center">
-            <span className="text-[8px] sm:text-[9px] text-slate-400 uppercase tracking-widest block">Acc</span>
+            <span className="text-[8px] sm:text-[9px] text-brand-muted uppercase tracking-widest block">Acc</span>
             <span className={`text-sm sm:text-lg font-black tabular-nums ${accuracy >= 90 ? 'text-emerald-600' : 'text-rose-500'}`}>{accuracy}%</span>
           </div>
           {prevLesson && (
             <Link to={`/learn/${prevLesson.id}`}
-              className="hidden sm:flex items-center gap-1 text-slate-500 hover:text-slate-800 px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              className="hidden sm:flex items-center gap-1 text-brand-muted hover:text-brand-text px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
               title={prevLesson.title}>
               ← Prev
             </Link>
           )}
           <button onClick={() => setShowAbout(s => !s)}
-            className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 sm:px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-slate-300">
+            className="flex items-center gap-1 bg-brand-surface-2 hover:bg-brand-border text-brand-text px-2 sm:px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-brand-border">
             About
           </button>
           <button
             onClick={() => window.location.reload()}
-            className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 sm:px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-slate-300"
+            className="flex items-center gap-1 bg-brand-surface-2 hover:bg-brand-border text-brand-text px-2 sm:px-3 py-1.5 rounded-lg font-semibold text-xs transition-all border border-brand-border"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -266,7 +265,7 @@ const LearningInterfacePage = () => {
           </button>
           {nextLessonNav && (
             <Link to={`/learn/${nextLessonNav.id}`}
-              className="hidden sm:flex items-center gap-1 text-slate-500 hover:text-slate-800 px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
+              className="hidden sm:flex items-center gap-1 text-brand-muted hover:text-brand-text px-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all"
               title={nextLessonNav.title}>
               Next →
             </Link>
@@ -275,7 +274,7 @@ const LearningInterfacePage = () => {
       </div>
 
       {/* Progress bar */}
-      <div className="shrink-0 h-1 bg-slate-200">
+      <div className="shrink-0 h-1 bg-brand-surface-2">
         <div
           className="h-full transition-all duration-300"
           style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #3b82f6, #60a5fa)' }}
@@ -287,8 +286,8 @@ const LearningInterfacePage = () => {
 
         {/* About this lesson — compact, pre-start only to avoid crowding the fixed-height layout */}
         {showAbout && !startTime && !isFinished && (
-          <div className="w-full max-w-2xl bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-2.5">
-            <p className="text-xs text-indigo-900 leading-relaxed">{currentLesson.description}</p>
+          <div className="w-full max-w-2xl bg-brand-primary/10 border border-brand-primary/20 rounded-xl px-4 py-2.5">
+            <p className="text-xs text-brand-text leading-relaxed">{currentLesson.description}</p>
           </div>
         )}
 
@@ -308,7 +307,7 @@ const LearningInterfacePage = () => {
 
         {/* ── MULTILINE TYPING AREA ── */}
         <div className="w-full max-w-2xl">
-          <div className="bg-white border border-gray-200 rounded-2xl px-4 sm:px-8 py-4 relative overflow-hidden shadow-lg">
+          <div className="bg-brand-surface border border-brand-border rounded-2xl px-4 sm:px-8 py-4 relative overflow-hidden shadow-lg">
             <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent)' }} />
 
             <div
@@ -327,8 +326,12 @@ const LearningInterfacePage = () => {
                     className={`relative transition-colors duration-75 inline
                       ${status === 'correct' ? 'text-emerald-600' : ''}
                       ${status === 'error' ? 'text-white bg-red-500 rounded' : ''}
-                      ${status === 'upcoming' ? (inWord ? 'text-slate-700 bg-amber-200/70 rounded' : 'text-slate-400') : ''}
-                      ${status === 'current' ? 'text-indigo-800 bg-amber-300/80 rounded' : ''}`}
+                      ${/* The amber chip is a fixed light surface in BOTH themes, so the text on
+                            it stays explicitly dark rather than following --brand-text (which goes
+                            near-white in dark mode and would vanish). Same pairing index.css uses
+                            for .typing-high-contrast .typing-current: black on yellow. */ ''}
+                      ${status === 'upcoming' ? (inWord ? 'text-slate-900 bg-amber-200/70 rounded' : 'text-brand-muted') : ''}
+                      ${status === 'current' ? 'text-slate-900 bg-amber-300/80 rounded' : ''}`}
                   >
                     {char === ' ' ? '\u00A0' : char}
                   </span>
@@ -343,18 +346,18 @@ const LearningInterfacePage = () => {
         <div className="w-full max-w-2xl">
           <div
             ref={inputBoxRef}
-            className="bg-white border-2 border-indigo-300 rounded-2xl px-4 sm:px-6 py-3.5 h-[4.5rem] overflow-y-auto text-lg sm:text-xl font-mono leading-relaxed shadow-sm cursor-text transition-colors"
+            className="bg-brand-surface border-2 border-brand-primary/40 rounded-2xl px-4 sm:px-6 py-3.5 h-[4.5rem] overflow-y-auto text-lg sm:text-xl font-mono leading-relaxed shadow-sm cursor-text transition-colors"
             onClick={() => isMobile && hiddenInputRef.current?.focus()}
           >
             {userInput ? (
               <span className="whitespace-pre-wrap break-words">
                 {userInput.split('').map((c, i) => (
-                  <span key={i} className={mistakes.includes(i) ? 'text-red-500' : 'text-slate-800'}>{c}</span>
+                  <span key={i} className={mistakes.includes(i) ? 'text-red-500' : 'text-brand-text'}>{c}</span>
                 ))}
-                <span className="inline-block w-0.5 h-5 align-middle bg-indigo-500 animate-pulse ml-px" />
+                <span className="inline-block w-0.5 h-5 align-middle bg-brand-primary animate-pulse ml-px" />
               </span>
             ) : (
-              <span className="text-slate-400">{isMobile ? 'Tap here & type to begin…' : 'Start typing here to begin…'}</span>
+              <span className="text-brand-muted">{isMobile ? 'Tap here & type to begin…' : 'Start typing here to begin…'}</span>
             )}
           </div>
         </div>
@@ -384,9 +387,9 @@ const LearningInterfacePage = () => {
 
         {/* Mobile: next-key indicator */}
         {isMobile && nextChar && !isFinished && startTime && (
-          <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-5 py-3 shadow-sm">
-            <span className="text-xs text-slate-500">Next key:</span>
-            <kbd className="bg-blue-600 text-white font-black px-3 py-1.5 rounded-lg text-lg min-w-[44px] text-center">
+          <div className="flex items-center gap-3 bg-brand-surface border border-brand-border rounded-xl px-5 py-3 shadow-sm">
+            <span className="text-xs text-brand-muted">Next key:</span>
+            <kbd className="bg-brand-primary text-white font-black px-3 py-1.5 rounded-lg text-lg min-w-[44px] text-center">
               {nextChar === ' ' ? '⎵' : nextChar.toUpperCase()}
             </kbd>
           </div>
@@ -396,7 +399,7 @@ const LearningInterfacePage = () => {
         {!isFinished && startTime && (
           <button
             onClick={() => setIsFinished(true)}
-            className="flex items-center gap-2 bg-white/50 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-slate-500 hover:text-rose-600 px-5 py-2 rounded-full font-semibold text-xs sm:text-sm transition-all"
+            className="flex items-center gap-2 bg-brand-surface hover:bg-rose-500/10 border border-brand-border hover:border-rose-500/30 text-brand-muted hover:text-rose-600 px-5 py-2 rounded-full font-semibold text-xs sm:text-sm transition-all"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -409,33 +412,33 @@ const LearningInterfacePage = () => {
       {/* ── RESULT MODAL ── */}
       {isFinished && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[100] p-4">
-          <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-10 max-w-md w-full text-center shadow-2xl">
+          <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 sm:p-10 max-w-md w-full text-center shadow-2xl">
             {canPass ? (
               <>
                 <div className="text-5xl sm:text-6xl mb-4">🏆</div>
-                <h2 className="text-3xl sm:text-4xl font-black text-slate-800 mb-1">Level Complete!</h2>
-                <p className="text-slate-500 mb-6 text-sm">You passed this level with flying colors.</p>
+                <h2 className="text-3xl sm:text-4xl font-black text-brand-text mb-1">Level Complete!</h2>
+                <p className="text-brand-muted mb-6 text-sm">You passed this level with flying colors.</p>
                 <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-                  <div className="bg-slate-50 border border-slate-200 p-3 sm:p-4 rounded-2xl">
-                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Gross</span>
-                    <span className="text-xl sm:text-2xl font-black text-slate-700">{wpm} WPM</span>
+                  <div className="bg-brand-surface-2 border border-brand-border p-3 sm:p-4 rounded-2xl">
+                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Gross</span>
+                    <span className="text-xl sm:text-2xl font-black text-brand-text">{wpm} WPM</span>
                   </div>
-                  <div className="bg-indigo-50 border border-indigo-200 p-3 sm:p-4 rounded-2xl">
-                    <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest block mb-1">Net</span>
-                    <span className="text-xl sm:text-2xl font-black text-indigo-600">{netWpm} WPM</span>
+                  <div className="bg-brand-primary/10 border border-brand-primary/20 p-3 sm:p-4 rounded-2xl">
+                    <span className="text-[9px] font-bold text-brand-accent uppercase tracking-widest block mb-1">Net</span>
+                    <span className="text-xl sm:text-2xl font-black text-brand-primary">{netWpm} WPM</span>
                   </div>
-                  <div className="bg-emerald-50 border border-emerald-200 p-3 sm:p-4 rounded-2xl">
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 sm:p-4 rounded-2xl">
                     <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Acc</span>
                     <span className="text-xl sm:text-2xl font-black text-emerald-600">{accuracy}%</span>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <Link to="/learn/" className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl font-bold text-sm transition-all border border-slate-300 text-center">
+                  <Link to="/learn/" className="flex-1 bg-brand-surface-2 hover:bg-brand-border text-brand-text py-3 rounded-xl font-bold text-sm transition-all border border-brand-border text-center">
                     Course Map
                   </Link>
                   <button
                     onClick={() => navigate(`/learn/${Number(lessonId) + 1}`)}
-                    className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/30 transition-all"
+                    className="flex-1 bg-brand-primary hover:bg-brand-secondary text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all"
                   >
                     Next Level →
                   </button>
@@ -444,25 +447,25 @@ const LearningInterfacePage = () => {
             ) : (
               <>
                 <div className="text-5xl sm:text-6xl mb-4">💪</div>
-                <h2 className="text-3xl sm:text-4xl font-black text-slate-800 mb-1">Keep Going!</h2>
-                <p className="text-slate-500 mb-4 text-sm">Need <span className="text-rose-500 font-bold">{currentLesson.minWpm} WPM</span> to pass.</p>
+                <h2 className="text-3xl sm:text-4xl font-black text-brand-text mb-1">Keep Going!</h2>
+                <p className="text-brand-muted mb-4 text-sm">Need <span className="text-rose-500 font-bold">{currentLesson.minWpm} WPM</span> to pass.</p>
                 <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-                  <div className="bg-slate-100 p-3 rounded-2xl">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Gross</span>
-                    <span className="text-xl font-black text-slate-800">{wpm} WPM</span>
+                  <div className="bg-brand-surface-2 p-3 rounded-2xl">
+                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Gross</span>
+                    <span className="text-xl font-black text-brand-text">{wpm} WPM</span>
                   </div>
-                  <div className="bg-slate-100 p-3 rounded-2xl">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Net</span>
-                    <span className="text-xl font-black text-slate-800">{netWpm} WPM</span>
+                  <div className="bg-brand-surface-2 p-3 rounded-2xl">
+                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Net</span>
+                    <span className="text-xl font-black text-brand-text">{netWpm} WPM</span>
                   </div>
-                  <div className="bg-slate-100 p-3 rounded-2xl">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Acc</span>
-                    <span className="text-xl font-black text-slate-800">{accuracy}%</span>
+                  <div className="bg-brand-surface-2 p-3 rounded-2xl">
+                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Acc</span>
+                    <span className="text-xl font-black text-brand-text">{accuracy}%</span>
                   </div>
                 </div>
                 <button
                   onClick={() => window.location.reload()}
-                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/30 transition-all"
+                  className="w-full bg-brand-primary hover:bg-brand-secondary text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all"
                 >
                   Try Again
                 </button>
