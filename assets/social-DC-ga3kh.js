@@ -1,0 +1,1 @@
+var e=`https://t.me/fasttypinglab`,t=`https://whatsapp.com/channel/0029Vb8PaeCK0IBarnP2J31D`,n=`https://www.youtube.com/@fasttypinglab`,r=`https://x.com/fasttypinglab`;export{n as i,t as n,r,e as t};

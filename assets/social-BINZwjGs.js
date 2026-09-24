@@ -1,1 +1,0 @@
-var e=`https://t.me/fasttypinglab`,t=`https://whatsapp.com/channel/0029Vb8PaeCK0IBarnP2J31D`;export{t as n,e as t};
