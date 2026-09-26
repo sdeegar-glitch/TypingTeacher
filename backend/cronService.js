@@ -72,13 +72,16 @@ export async function runSlot(slot, targetDifficulty = 'medium') {
   ]);
 }
 
-// Topics used in recent days, newest first, per language — so the topic picker
-// skips them even right after a pm2 restart (its window is in-memory).
+// Topics with a published test, newest first, per language — so the picker
+// hands out the least recently used topics, even right after a pm2 restart
+// (its window is in-memory). Only successes count: a failed attempt doesn't
+// make a topic "used".
 async function loadRecentTopics() {
-  const since = new Date(Date.now() - 45 * 24 * 3600 * 1000).toISOString();
+  const since = new Date(Date.now() - 120 * 24 * 3600 * 1000).toISOString();
   const { data, error } = await supabase
     .from('generation_log')
     .select('slot, topic')
+    .eq('status', 'success')
     .gte('created_at', since)
     .order('created_at', { ascending: false })
     .limit(2000);

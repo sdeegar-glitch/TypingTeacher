@@ -17,8 +17,11 @@ const SIMILARITY_THRESHOLD = 0.90; // max allowed similarity (90%) vs recent tes
 // older article, and a fresh rewrite on the same topic lands at 92-96% vs
 // that old one — which blocked nearly every slot. Only tests from the last
 // DEDUP_WINDOW_DAYS count as duplicates at 90%; older tests only block a
-// near-verbatim copy (>= 97%).
-const DEDUP_WINDOW_DAYS = 60;
+// near-verbatim copy (>= 97%). Measured on live data (2026-09-26): unrelated
+// articles score 0.49-0.62, same-topic articles 0.87-0.96. The topic picker
+// only hands out topics with no successful test for ~15+ days (see
+// topicPool.RECENT_WINDOW), so the window must stay below that.
+const DEDUP_WINDOW_DAYS = 14;
 const NEAR_VERBATIM_THRESHOLD = 0.97;
 
 export function normalizeForHash(text) {

@@ -221,7 +221,10 @@ const EXAM_BIAS = { hi: 0.55, en: 0.3 };
 // start of every batch (seedRecentTopics) — an in-memory-only window reset on
 // every pm2 restart, so the same few topics kept coming back and failing the
 // duplicate check.
-const RECENT_WINDOW = 100; // of ~150 topics: always leaves ~50 fresh ones
+// Of ~150 topics, the 120 most recently *published* are excluded, so picks come
+// from the ~30 least recently used: at Hindi's 8 tests/day that's 15+ days since
+// the topic's last test (English: ~30), outside embeddings' 14-day dedup window.
+const RECENT_WINDOW = 120;
 const recentByLang = { en: new Set(), hi: new Set() };
 
 /** Replace a language's recent-topic window, newest first. */
@@ -240,16 +243,23 @@ export function getRandomTopic(lang = 'en') {
   const recent = recentByLang[lang] || (recentByLang[lang] = new Set());
 
   // Bias a share of generations toward the exam-syllabus pool so daily content
-  // doubles as General Awareness revision. Falls back to the general pool if
-  // every exam topic is already in the recent window.
+  // doubles as General Awareness revision. Falls back to any fresh topic from
+  // either pool, and only if there is none, to the least recently used one.
   const bias = EXAM_BIAS[lang] ?? EXAM_BIAS.en;
   const useExamPool = Math.random() < bias;
   const sourcePool = useExamPool ? EXAM_GK_TOPICS : TOPICS;
+  const everyTopic = [...TOPICS, ...EXAM_GK_TOPICS];
 
   const available = sourcePool.filter(t => !recent.has(t.topic));
-  const fallback = TOPICS.filter(t => !recent.has(t.topic));
-  const pool = available.length > 0 ? available : (fallback.length > 0 ? fallback : TOPICS);
-  const choice = pool[Math.floor(Math.random() * pool.length)];
+  const fallback = everyTopic.filter(t => !recent.has(t.topic));
+  let choice;
+  if (available.length > 0) choice = available[Math.floor(Math.random() * available.length)];
+  else if (fallback.length > 0) choice = fallback[Math.floor(Math.random() * fallback.length)];
+  else {
+    const oldest = recent.values().next().value;
+    choice = everyTopic.find(t => t.topic === oldest) || everyTopic[0];
+    recent.delete(choice.topic); // re-added below as the newest
+  }
   recent.add(choice.topic);
   if (recent.size > RECENT_WINDOW) {
     const first = recent.values().next().value;
