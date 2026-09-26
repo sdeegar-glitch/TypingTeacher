@@ -54,3 +54,6 @@ FastTypingLab Master Plan.pdf
 /frontend/blob-report/
 /frontend/playwright/.cache/
 /frontend/coverage/
+
+# Local deploy config (VPS host/key)
+/scripts/deploy.local.env
