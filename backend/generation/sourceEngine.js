@@ -20,7 +20,11 @@ export async function withRetry(fn, maxRetries = 3, baseDelayMs = 20000) {
       return await fn();
     } catch (err) {
       const is429 = err.message?.includes('429') || err.message?.includes('Too Many Requests');
-      if (is429 && attempt < maxRetries) {
+      // A per-DAY quota (Gemini free tier: 20 requests/day) won't clear in
+      // 20-40s — retrying just burns a minute per attempt. Fail fast so the
+      // caller moves straight to its fallback (Wikipedia / next provider).
+      const isDailyQuota = /PerDay/i.test(err.message || '');
+      if (is429 && !isDailyQuota && attempt < maxRetries) {
         const delay = baseDelayMs * attempt;
         console.warn(`[SourceEngine] Rate limited. Retrying in ${delay / 1000}s... (${attempt}/${maxRetries})`);
         await new Promise(r => setTimeout(r, delay));

@@ -7,6 +7,7 @@ import { validateTest, countWords, makeSlug } from './qualityGate.js';
 import { difficultyMixInstructions, buildDifficultyJsonField, normalizeDifficultyBreakdown } from './difficultyMixer.js';
 import { unicodeToKrutiDev } from './krutiDevConverter.js';
 import { rewriteWithFallback } from './groqClient.js';
+import { extendToMinimum } from './extendPassage.js';
 
 async function rewriteToHindiTest(topic, foundTitle, foundContent, isExamGk = false, targetDifficulty = 'medium') {
   const prompt = `आप हिंदी टंकण (typing) अभ्यास के लिए मूल लेख लिखने वाले एक कुशल शिक्षण-लेखक हैं।
@@ -68,7 +69,7 @@ export async function generateHindiTest(layout, targetDifficulty = 'medium') {
     throw new Error(`Unknown Hindi keyboard layout: ${layout}`);
   }
   const slot = layout === 'kruti_dev' ? 'hi_kruti' : 'hi_mangal';
-  const MAX_ATTEMPTS = 4; // duplicate/short-passage rejections are common; a fresh topic usually passes
+  const MAX_ATTEMPTS = 3; // duplicate/short-passage rejections are common; a fresh topic usually passes
   let lastError = null;
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -83,6 +84,7 @@ export async function generateHindiTest(layout, targetDifficulty = 'medium') {
 
       const isExamGk = typeof category === 'string' && category.startsWith('GK —');
       const data = await rewriteToHindiTest(topic, source.title, source.content, isExamGk, targetDifficulty);
+      data.content = await extendToMinimum(data.content, 'hi');
       const { valid, reasons } = validateTest(data);
       if (!valid) {
         lastError = reasons.join('; ');

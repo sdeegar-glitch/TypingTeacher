@@ -30,7 +30,7 @@ param(
   [switch]$NoVps
 )
 
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Continue'  # native tools are judged by $LASTEXITCODE, not stderr
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot
 
@@ -38,7 +38,14 @@ function Step($text) { Write-Host "`n==> $text" -ForegroundColor Cyan }
 function Info($text) { Write-Host "    $text" -ForegroundColor Gray }
 function Warn($text) { Write-Host "    ! $text" -ForegroundColor Yellow }
 function Fail($text) { Write-Host "`nX $text" -ForegroundColor Red; exit 1 }
-function Invoke-Git { & git.exe @args; if ($LASTEXITCODE -ne 0) { Fail "git $($args -join ' ') failed" } }
+# git writes warnings (e.g. LF->CRLF) to stderr; under 'Stop' PowerShell 5.1
+# turns those into terminating errors when output is redirected. Judge git by
+# its exit code only.
+function Invoke-Git {
+  $ErrorActionPreference = 'Continue'
+  & git.exe @args 2>&1 | ForEach-Object { "$_" } | Where-Object { $_ -notmatch '^warning: in the working copy' }
+  if ($LASTEXITCODE -ne 0) { Fail "git $($args -join ' ') failed" }
+}
 
 # ── Config (VPS connection details live in an untracked local file) ──────────
 $Config = @{

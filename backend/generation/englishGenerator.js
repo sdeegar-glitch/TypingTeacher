@@ -6,6 +6,7 @@ import { findSimilarTest } from './embeddings.js';
 import { validateTest, countWords, makeSlug } from './qualityGate.js';
 import { difficultyMixInstructions, buildDifficultyJsonField, normalizeDifficultyBreakdown } from './difficultyMixer.js';
 import { rewriteWithFallback } from './groqClient.js';
+import { extendToMinimum } from './extendPassage.js';
 
 async function rewriteToTest(topic, foundTitle, foundContent, isExamGk = false, targetDifficulty = 'medium') {
   const prompt = `You are an expert educational writer creating typing practice content for a competitive-exam-style passage.
@@ -62,7 +63,7 @@ async function logAttempt({ slot, topic, status, testId = null, error = null, at
  * failures are logged to generation_log and reported in the return value.
  */
 export async function generateEnglishTest(targetDifficulty = 'medium') {
-  const MAX_ATTEMPTS = 4; // duplicate/short-passage rejections are common; a fresh topic usually passes
+  const MAX_ATTEMPTS = 3; // duplicate/short-passage rejections are common; a fresh topic usually passes
   let lastError = null;
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -77,6 +78,7 @@ export async function generateEnglishTest(targetDifficulty = 'medium') {
 
       const isExamGk = typeof category === 'string' && category.startsWith('GK —');
       const data = await rewriteToTest(topic, source.title, source.content, isExamGk, targetDifficulty);
+      data.content = await extendToMinimum(data.content, 'en');
       const { valid, reasons } = validateTest(data);
       if (!valid) {
         lastError = reasons.join('; ');

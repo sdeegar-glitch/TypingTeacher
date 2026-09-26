@@ -60,6 +60,11 @@ export async function rewriteWithGroq(prompt) {
         // mid-JSON, but that just fails the JSON.parse and retries — safer
         // than routinely blowing the TPM budget.
         max_completion_tokens: 3500,
+        // gpt-oss is a reasoning model and its hidden reasoning counts against
+        // max_completion_tokens — at the default effort it ate a large share of
+        // the budget, leaving Hindi passages at ~700 words. Low effort is plenty
+        // for a rewrite.
+        ...(GROQ_MODEL.startsWith('openai/gpt-oss') ? { reasoning_effort: 'low' } : {}),
       }),
     });
 

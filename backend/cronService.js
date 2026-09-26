@@ -49,10 +49,10 @@ function runSlotInner(slot, targetDifficulty) {
 
 // Hard cap on a single generation so a hung network call can never freeze the
 // pipeline (which would leave isRunning stuck true and block all future runs).
-// Up to 4 attempts per slot (source search + rewrite + embedding each), so the
-// cap is generous. A slot that finishes after the cap has still saved its test,
+// Up to 3 attempts per slot (source search + rewrite, up to 2 one-minute-spaced
+// continuation requests for short passages, embedding), so the cap is generous. A slot that finishes after the cap has still saved its test,
 // so it still gets its Telegram post instead of silently skipping it.
-const SLOT_TIMEOUT_MS = 10 * 60 * 1000;
+const SLOT_TIMEOUT_MS = 15 * 60 * 1000;
 
 export async function runSlot(slot, targetDifficulty = 'medium') {
   const work = runSlotInner(slot, targetDifficulty);
