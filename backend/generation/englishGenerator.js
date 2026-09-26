@@ -14,7 +14,7 @@ Source material about "${topic}":
 TITLE: ${foundTitle}
 CONTENT: ${foundContent}
 
-Rewrite this as a unique, original article for typing practice, at LEAST 1000 words and no more than 1800 words (aim for ~1200). Requirements:
+Rewrite this as a unique, original article for typing practice, at LEAST 1000 words and no more than 1800 words (aim for about 1300 words — passages under 1000 words are rejected, so do not stop early). Requirements:
 - Plain text only, NO markdown, no bullet points, no headers — just flowing paragraphs
 - Excellent grammar, clear sentences
 - Different enough from the source to be plagiarism-free (your own words and structure)
@@ -62,7 +62,7 @@ async function logAttempt({ slot, topic, status, testId = null, error = null, at
  * failures are logged to generation_log and reported in the return value.
  */
 export async function generateEnglishTest(targetDifficulty = 'medium') {
-  const MAX_ATTEMPTS = 2;
+  const MAX_ATTEMPTS = 4; // duplicate/short-passage rejections are common; a fresh topic usually passes
   let lastError = null;
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {

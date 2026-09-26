@@ -15,7 +15,7 @@ async function rewriteToHindiTest(topic, foundTitle, foundContent, isExamGk = fa
 शीर्षक: ${foundTitle}
 सामग्री: ${foundContent}
 
-इसे कम से कम 1000 शब्दों और अधिकतम 1800 शब्दों (लक्ष्य ~1200 शब्द) के एक मूल, अद्वितीय हिंदी लेख के रूप में फिर से लिखें — टंकण अभ्यास के लिए। आवश्यकताएँ:
+इसे कम से कम 1000 शब्दों और अधिकतम 1800 शब्दों (लक्ष्य लगभग 1300 शब्द — 1000 से कम शब्दों वाला लेख अस्वीकार हो जाता है, इसलिए बीच में न रुकें) के एक मूल, अद्वितीय हिंदी लेख के रूप में फिर से लिखें — टंकण अभ्यास के लिए। आवश्यकताएँ:
 - केवल शुद्ध यूनिकोड देवनागरी पाठ — कोई मार्कडाउन, बुलेट पॉइंट या हेडिंग नहीं, केवल प्रवाहमयी अनुच्छेद
 - उत्कृष्ट व्याकरण, स्पष्ट वाक्य
 - स्रोत से पर्याप्त भिन्न ताकि यह मूल रचना हो (अपने स्वयं के शब्दों और संरचना में)
@@ -68,7 +68,7 @@ export async function generateHindiTest(layout, targetDifficulty = 'medium') {
     throw new Error(`Unknown Hindi keyboard layout: ${layout}`);
   }
   const slot = layout === 'kruti_dev' ? 'hi_kruti' : 'hi_mangal';
-  const MAX_ATTEMPTS = 2;
+  const MAX_ATTEMPTS = 4; // duplicate/short-passage rejections are common; a fresh topic usually passes
   let lastError = null;
 
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {

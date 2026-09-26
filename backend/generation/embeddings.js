@@ -12,7 +12,14 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 // style/length land naturally in the 40-65% range with this model (verified
 // empirically — two manually-confirmed-unrelated Hindi articles scored 57%).
 // 90% reliably catches genuine near-duplicates/paraphrases instead.
-const SIMILARITY_THRESHOLD = 0.90; // max allowed similarity (90%)
+const SIMILARITY_THRESHOLD = 0.90; // max allowed similarity (90%) vs recent tests
+// The topic pool is finite (~150), so after a few months every topic has an
+// older article, and a fresh rewrite on the same topic lands at 92-96% vs
+// that old one — which blocked nearly every slot. Only tests from the last
+// DEDUP_WINDOW_DAYS count as duplicates at 90%; older tests only block a
+// near-verbatim copy (>= 97%).
+const DEDUP_WINDOW_DAYS = 60;
+const NEAR_VERBATIM_THRESHOLD = 0.97;
 
 export function normalizeForHash(text) {
   return text.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -66,7 +73,7 @@ export async function findSimilarTest(content, lang) {
   const { data: matches, error } = await supabase.rpc('match_typing_test_embedding', {
     query_embedding: embedding,
     match_language: lang,
-    match_limit: 1,
+    match_limit: 10,
   });
 
   if (error) {
@@ -74,6 +81,21 @@ export async function findSimilarTest(content, lang) {
     return { isDuplicate: false, maxSimilarity: 0, hash, embedding };
   }
 
-  const maxSimilarity = matches?.[0]?.similarity ?? 0;
-  return { isDuplicate: maxSimilarity >= SIMILARITY_THRESHOLD, maxSimilarity, hash, embedding };
+  const close = (matches || []).filter(m => m.similarity >= SIMILARITY_THRESHOLD);
+  if (close.length === 0) {
+    return { isDuplicate: false, maxSimilarity: matches?.[0]?.similarity ?? 0, hash, embedding };
+  }
+
+  const { data: rows } = await supabase
+    .from('typing_test')
+    .select('id, created_at')
+    .in('id', close.map(m => m.id));
+  const createdAt = new Map((rows || []).map(r => [r.id, new Date(r.created_at).getTime()]));
+  const windowStart = Date.now() - DEDUP_WINDOW_DAYS * 24 * 3600 * 1000;
+
+  const blocking = close.filter(m =>
+    m.similarity >= NEAR_VERBATIM_THRESHOLD || (createdAt.get(m.id) ?? Date.now()) >= windowStart
+  );
+  const maxSimilarity = blocking[0]?.similarity ?? close[0].similarity;
+  return { isDuplicate: blocking.length > 0, maxSimilarity, hash, embedding };
 }

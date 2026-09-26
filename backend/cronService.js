@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import { generateEnglishTest } from './generation/englishGenerator.js';
 import { generateHindiTest } from './generation/hindiGenerator.js';
 import { supabase } from './supabaseClient.js';
+import { seedRecentTopics } from './generation/topicPool.js';
 import { postTestToTelegram, postLeaderboardToTelegram, postPollToTelegram, postLiveTestAnnouncement, postTopReferrersToTelegram } from './services/telegram.js';
 
 // Guard against overlapping runs
@@ -48,11 +49,44 @@ function runSlotInner(slot, targetDifficulty) {
 
 // Hard cap on a single generation so a hung network call can never freeze the
 // pipeline (which would leave isRunning stuck true and block all future runs).
+// Up to 4 attempts per slot (source search + rewrite + embedding each), so the
+// cap is generous. A slot that finishes after the cap has still saved its test,
+// so it still gets its Telegram post instead of silently skipping it.
+const SLOT_TIMEOUT_MS = 10 * 60 * 1000;
+
 export async function runSlot(slot, targetDifficulty = 'medium') {
+  const work = runSlotInner(slot, targetDifficulty);
+  let timedOut = false;
+  work.then(async (result) => {
+    if (timedOut && result?.status === 'success') {
+      console.log(`  ↪ ${slot} finished after the timeout — posting it to Telegram now.`);
+      await postTestToTelegram(result);
+    }
+  }).catch(() => {});
   return Promise.race([
-    runSlotInner(slot, targetDifficulty),
-    new Promise((_, reject) => setTimeout(() => reject(new Error('generation timed out after 180s')), 180000)),
+    work,
+    new Promise((_, reject) => setTimeout(() => {
+      timedOut = true;
+      reject(new Error(`generation timed out after ${SLOT_TIMEOUT_MS / 1000}s`));
+    }, SLOT_TIMEOUT_MS)),
   ]);
+}
+
+// Topics used in recent days, newest first, per language — so the topic picker
+// skips them even right after a pm2 restart (its window is in-memory).
+async function loadRecentTopics() {
+  const since = new Date(Date.now() - 45 * 24 * 3600 * 1000).toISOString();
+  const { data, error } = await supabase
+    .from('generation_log')
+    .select('slot, topic')
+    .gte('created_at', since)
+    .order('created_at', { ascending: false })
+    .limit(2000);
+  if (error) { console.warn('[CronService] could not load recent topics:', error.message); return; }
+  const byLang = { en: [], hi: [] };
+  for (const row of data || []) byLang[row.slot === 'en' ? 'en' : 'hi'].push(row.topic);
+  seedRecentTopics('en', byLang.en);
+  seedRecentTopics('hi', byLang.hi);
 }
 
 /**
@@ -78,6 +112,8 @@ export async function fetchAndGenerateTests(options = {}) {
     isRunning = false;
     return { error: 'GEMINI_API_KEY missing' };
   }
+
+  await loadRecentTopics();
 
   const plan = options.slot
     ? [{ slot: options.slot, count: options.count || 1 }]

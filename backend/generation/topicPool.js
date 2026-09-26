@@ -217,8 +217,24 @@ export const EXAM_GK_TOPICS = [
 const EXAM_BIAS = { hi: 0.55, en: 0.3 };
 
 // recentTopics tracked per language so English/Hindi generation never starve
-// each other's pool within the same day.
+// each other's pool within the same day. Seeded from generation_log at the
+// start of every batch (seedRecentTopics) — an in-memory-only window reset on
+// every pm2 restart, so the same few topics kept coming back and failing the
+// duplicate check.
+const RECENT_WINDOW = 100; // of ~150 topics: always leaves ~50 fresh ones
 const recentByLang = { en: new Set(), hi: new Set() };
+
+/** Replace a language's recent-topic window, newest first. */
+export function seedRecentTopics(lang, topics) {
+  const newest = [];
+  for (const t of topics) {
+    if (newest.length >= RECENT_WINDOW) break;
+    if (t && !newest.includes(t)) newest.push(t);
+  }
+  // Insert oldest first: getRandomTopic evicts in insertion order, so the
+  // oldest topic must be the first one out.
+  recentByLang[lang] = new Set(newest.reverse());
+}
 
 export function getRandomTopic(lang = 'en') {
   const recent = recentByLang[lang] || (recentByLang[lang] = new Set());
@@ -235,7 +251,7 @@ export function getRandomTopic(lang = 'en') {
   const pool = available.length > 0 ? available : (fallback.length > 0 ? fallback : TOPICS);
   const choice = pool[Math.floor(Math.random() * pool.length)];
   recent.add(choice.topic);
-  if (recent.size > 30) {
+  if (recent.size > RECENT_WINDOW) {
     const first = recent.values().next().value;
     recent.delete(first);
   }
