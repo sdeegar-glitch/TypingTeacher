@@ -259,6 +259,52 @@ export async function postTopReferrersToTelegram() {
   return result;
 }
 
+/**
+ * DMs the weekly SEO/content audit report to the admin only — this is an
+ * internal findings report, not community content, so it never touches the
+ * public group/channel (uses chatId directly, not sendMessage's default
+ * TELEGRAM_CHAT_ID target). No-op when TELEGRAM_ADMIN_CHAT_ID isn't set.
+ * @param {{ranAt:string, mechanical:object, examClaims:object, blogQuality:object}} report
+ */
+export async function postSeoAuditToTelegram(report) {
+  const adminChatId = process.env.TELEGRAM_ADMIN_CHAT_ID;
+  if (!adminChatId) return { skipped: 'not-configured' };
+
+  const { mechanical, examClaims, blogQuality } = report;
+  const mechIssues = mechanical.findings || [];
+  const claimIssues = examClaims.findings || [];
+  const blogIssues = blogQuality.findings || [];
+  const totalIssues = mechIssues.length + claimIssues.length + blogIssues.length;
+
+  let text = `🔍 <b>Weekly SEO Audit</b>\n${new Date(report.ranAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long' })}\n\n`;
+
+  text += `<b>Mechanical</b> — ${mechanical.checked || 0} page(s) checked, ${mechIssues.length} issue(s)\n`;
+  if (mechIssues.length) {
+    text += mechIssues.slice(0, 10).map(f => `• ${escapeHtml(f.url.replace(SITE, ''))} — ${escapeHtml(f.issue)}`).join('\n') + '\n';
+    if (mechIssues.length > 10) text += `…and ${mechIssues.length - 10} more\n`;
+  }
+
+  text += `\n<b>Exam claims</b> — ${examClaims.checked || 0}/${examClaims.total || 0} in rotation, ${claimIssues.length} flagged\n`;
+  if (claimIssues.length) {
+    text += claimIssues.map(f => `• <b>${escapeHtml(f.exam)}</b> (${f.verdict}): ${escapeHtml(f.detail)}`).join('\n') + '\n';
+  }
+
+  text += `\n<b>Content quality</b> — ${blogQuality.checked || 0}/${blogQuality.total || 0} in rotation, ${blogIssues.length} flagged\n`;
+  if (blogIssues.length) {
+    text += blogIssues.map(f => `• <b>${escapeHtml(f.post)}</b>: ${escapeHtml(f.detail)}`).join('\n') + '\n';
+  }
+
+  if (totalIssues === 0) text += `\nNothing flagged this run. ✅`;
+
+  // Telegram caps messages at 4096 chars -- stay well under it rather than
+  // risk the API rejecting the whole report over a long findings list.
+  if (text.length > 3800) text = text.slice(0, 3800) + '\n…(truncated, see server logs for the rest)';
+
+  const result = await sendMessage({ text, chatId: adminChatId, disablePreview: true });
+  if (result.ok) console.log(`[Telegram] Posted SEO audit to admin (${totalIssues} issue(s)).`);
+  return result;
+}
+
 export async function postPollToTelegram() {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;

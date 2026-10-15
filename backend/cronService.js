@@ -3,7 +3,8 @@ import { generateEnglishTest } from './generation/englishGenerator.js';
 import { generateHindiTest } from './generation/hindiGenerator.js';
 import { supabase } from './supabaseClient.js';
 import { seedRecentTopics } from './generation/topicPool.js';
-import { postTestToTelegram, postLeaderboardToTelegram, postPollToTelegram, postLiveTestAnnouncement, postTopReferrersToTelegram } from './services/telegram.js';
+import { postTestToTelegram, postLeaderboardToTelegram, postPollToTelegram, postLiveTestAnnouncement, postTopReferrersToTelegram, postSeoAuditToTelegram } from './services/telegram.js';
+import { runWeeklyAudit } from './services/seoAuditor.js';
 
 // Guard against overlapping runs
 let isRunning = false;
@@ -279,6 +280,23 @@ export const initCronJobs = () => {
     if (result?.ok) await setMarker(POLL_MARKER_KEY, istIsoWeekKey(istNow()));
   });
   console.log('[CronService] Scheduled: engagement poll to Telegram — Wednesday 7:00 PM IST.');
+
+  // Weekly SEO/content audit, DM'd to the admin only — Sunday 8:00 AM IST
+  // (= 2:30 UTC). Mechanical checks run against every sitemap URL every time
+  // (cheap, no AI cost); the Gemini-judged exam-claims and content-quality
+  // checks run on a small rotating sample each week (see services/
+  // seoAuditor.js for why — Gemini API quota, not the Gemini Pro consumer
+  // subscription, governs this). Never throws: a failed audit just logs and
+  // skips this week rather than taking down the other scheduled jobs.
+  cron.schedule('30 2 * * 0', async () => {
+    try {
+      const report = await runWeeklyAudit();
+      await postSeoAuditToTelegram(report);
+    } catch (err) {
+      console.error('[CronService] SEO audit failed:', err.message);
+    }
+  });
+  console.log('[CronService] Scheduled: weekly SEO audit (DM to admin) — Sunday 8:00 AM IST.');
 
   // No catch-up/keep-alive logic needed here. This process runs 24/7 on a VPS
   // (PM2, single fork-mode instance) rather than a free-tier host that sleeps
