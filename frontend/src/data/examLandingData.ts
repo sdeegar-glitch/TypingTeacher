@@ -214,7 +214,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     examName: 'Court / Steno',
     h1: 'Court & Steno Typing Test — Free Practice',
     seoTitle: 'Court & Stenographer Typing Test — Free Practice | FastTypingLab',
-    metaDesc: 'Free court clerk and stenographer typing test practice in Hindi and English. Practice legal-format passages with live WPM and accuracy for high court & district court exams.',
+    metaDesc: 'Free court clerk and stenographer typing test practice in Hindi and English, with live WPM and accuracy for high court & district court exams.',
     eyebrow: 'Court / Stenographer',
     intro: 'District and High Court clerk, typist and stenographer posts include a typing test, usually in Hindi and sometimes English. Court passages use formal, legal-style language — petitions, affidavits and orders — so practicing real exam-style text matters as much as raw speed. Stenographer posts require higher speeds than clerical posts.',
     requirements: [
@@ -291,7 +291,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     examName: 'DEO',
     h1: 'DEO Typing Test — Free Data Entry Practice',
     seoTitle: 'DEO Typing Test — Free Data Entry Practice (8000 KDPH) | FastTypingLab',
-    metaDesc: 'Free DEO (Data Entry Operator) typing test — practise 8,000 key depressions per hour (~27-35 WPM) with live speed & accuracy, in the exact government exam format.',
+    metaDesc: 'Free DEO typing test — practise 8,000 key depressions per hour (~27-35 WPM) with live speed & accuracy, in the exact government exam format.',
     eyebrow: 'Data Entry Operator',
     intro: 'Data Entry Operator (DEO) posts across SSC and many departments require a data-entry speed test measured in key depressions per hour (KDPH) rather than WPM directly. The common benchmark is 8,000 KDPH, with some posts requiring more. Sustained accuracy over the full duration is what this test rewards.',
     requirements: [
@@ -481,7 +481,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     examName: 'UPSSSC',
     h1: 'UPSSSC Typing Test — Free Hindi & English Practice',
     seoTitle: 'UPSSSC Typing Test Online — Junior Assistant Practice | FastTypingLab',
-    metaDesc: 'Free UPSSSC typing test practice for Junior Assistant and clerical posts — around 25 WPM Hindi (Mangal/Kruti Dev) and 30 WPM English, with live WPM and accuracy.',
+    metaDesc: 'Free UPSSSC typing test practice for Junior Assistant posts — around 25 WPM Hindi and 30 WPM English, with live WPM and accuracy.',
     eyebrow: 'UPSSSC / Uttar Pradesh',
     intro: 'The UPSSSC (Uttar Pradesh Subordinate Services Selection Commission) conducts a typing skill test for Junior Assistant, Lower Division Assistant and similar clerical posts. Candidates are usually required to type around 25 WPM in Hindi and 30 WPM in English on a computer. The exact speed and font can vary by post and notification, so always confirm and practise the exact format daily on a physical keyboard.',
     requirements: [
@@ -520,7 +520,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     examName: 'AHC RO/ARO',
     h1: 'Allahabad High Court RO/ARO Typing Test — Free Practice',
     seoTitle: 'AHC RO/ARO Typing Test Online — Allahabad HC Practice | FastTypingLab',
-    metaDesc: 'Free Allahabad High Court (AHC) RO/ARO typing test practice — Hindi (Mangal/Kruti Dev) and English, with live WPM and accuracy for the RO/ARO computer typing test.',
+    metaDesc: 'Free Allahabad High Court (AHC) RO/ARO typing test practice — Hindi and English, with live WPM and accuracy for the computer typing test.',
     eyebrow: 'AHC / Allahabad High Court',
     intro: 'The Allahabad High Court (AHC) recruitment for Review Officer (RO) and Assistant Review Officer (ARO) posts includes a computer typing test as a qualifying stage. Candidates are typically required to type in Hindi and/or English on a computer at the speed set in the notification. Speeds and the Hindi font can vary by post and year, so always confirm your official notification and practise the exact format daily.',
     requirements: [
@@ -672,7 +672,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     slug: 'psssb',
     examName: 'PSSSB Punjab',
     h1: 'PSSSB Typing Test — Punjab Subordinate Services Practice',
-    seoTitle: 'PSSSB Typing Test Online — Punjab Clerk & Steno Practice | FastTypingLab',
+    seoTitle: 'PSSSB Typing Test Online — Punjab Clerk & Steno | FastTypingLab',
     metaDesc: 'Free PSSSB (Punjab Subordinate Services Selection Board) typing test practice — English and Punjabi/Hindi clerk typing, with live WPM and accuracy.',
     eyebrow: 'PSSSB / Punjab',
     intro: 'The Punjab Subordinate Services Selection Board (PSSSB) includes a qualifying typing skill test for Clerk, Junior Assistant and similar posts advertised through the Punjab exam portal. Candidates usually type a passage in English or Hindi/Punjabi on a computer within a fixed duration. The exact speed and language vary by post and notification, so always confirm and practise the exact format daily on a physical keyboard.',
@@ -750,8 +750,8 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     slug: 'mpsc-clerk-typist',
     examName: 'MPSC Clerk-Typist',
     h1: 'MPSC Clerk-Typist Typing Test — Marathi & English Practice',
-    seoTitle: 'MPSC Clerk-Typist Typing Test — Marathi & English Practice | FastTypingLab',
-    metaDesc: 'Free MPSC Clerk-Typist (Group C) typing test practice — 30 WPM Marathi and 35–40 WPM English, with the real net-WPM, error-limit and no-backspace rules, live WPM and accuracy.',
+    seoTitle: 'MPSC Clerk-Typist Typing Test — Marathi & English | FastTypingLab',
+    metaDesc: 'Free MPSC Clerk-Typist typing test practice — 30 WPM Marathi, 35-40 WPM English, with the real net-WPM and error-limit rules, live tracking.',
     eyebrow: 'MPSC Group C',
     intro: 'The MPSC (Maharashtra Public Service Commission) Clerk-Typist / Group C skill test (covering Clerk-Typist, Tax Assistant and Bailiff posts) requires both a Marathi and an English typing test. Marathi is typically around 30 WPM net (roughly 1,500 keystrokes in 10 minutes), with a 7% error limit and no backspace allowed; English is usually 35–40 WPM. It is qualifying only — no marks are added for typing beyond the cut-off, but you must clear it to be selected. Many candidates first earn a GCC-TBC (Government Certificate in Computer Typing Basic Course) certificate, which uses the Unicode Mangal/INSCRIPT layout and is a common prerequisite for MPSC Clerk-Typist eligibility.',
     requirements: [
