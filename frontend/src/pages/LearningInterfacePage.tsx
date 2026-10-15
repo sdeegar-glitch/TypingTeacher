@@ -282,7 +282,7 @@ const LearningInterfacePage = () => {
       </div>
 
       {/* ── MAIN CONTENT ── */}
-      <div className="flex-grow flex flex-col items-center justify-start gap-3 sm:gap-4 px-3 sm:px-4 py-4 sm:py-6 overflow-hidden">
+      <div className="flex-grow flex flex-col items-center justify-start gap-3 sm:gap-4 px-3 sm:px-4 py-4 sm:py-6 overflow-y-auto">
 
         {/* About this lesson — compact, pre-start only to avoid crowding the fixed-height layout */}
         {showAbout && !startTime && !isFinished && (
