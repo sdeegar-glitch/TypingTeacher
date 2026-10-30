@@ -97,6 +97,23 @@ async function fetchText(url) {
   return { status: res.status, text: res.status === 200 ? await res.text() : '' };
 }
 
+// Titles/descriptions are pulled straight out of raw HTML, where & shows up
+// as the 5-character entity &amp; (and similarly for the others below) --
+// measuring that raw string overcounts length by several characters per
+// entity and produces false "too long" findings for any title containing
+// an ampersand, which is common ("WPM & Accuracy", "SSC & CPCT", etc.).
+// Decode before measuring so the count matches what a reader/search engine
+// actually sees.
+function decodeHtmlEntities(s) {
+  return s
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'");
+}
+
 export async function auditMechanical() {
   const findings = [];
   const { status: sitemapStatus, text: sitemapXml } = await fetchText(`${SITE}/sitemap.xml`);
@@ -111,8 +128,8 @@ export async function auditMechanical() {
       checked++;
       if (status !== 200) { findings.push({ url, issue: `HTTP ${status}` }); continue; }
 
-      const title = (text.match(/<title>(.*?)<\/title>/)?.[1] || '').trim();
-      const desc = (text.match(/<meta name="description" content="(.*?)"/)?.[1] || '').trim();
+      const title = decodeHtmlEntities((text.match(/<title>(.*?)<\/title>/)?.[1] || '').trim());
+      const desc = decodeHtmlEntities((text.match(/<meta name="description" content="(.*?)"/)?.[1] || '').trim());
       const canonical = (text.match(/<link rel="canonical" href="(.*?)"/)?.[1] || '').trim();
 
       if (!title) findings.push({ url, issue: 'missing <title>' });
