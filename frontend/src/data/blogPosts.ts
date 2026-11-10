@@ -927,6 +927,14 @@ The Data Entry Speed Test (DEST) is different from a regular typing test:
 | Friday | Full mock + AI coach review | 45 min |
 | Saturday | Rest or light practice | 15 min |
 | Sunday | Self-assessment test | 20 min |
+
+## SSC CHSL vs SSC CGL DEST: Don't Treat Them as the Same Test
+
+Candidates sometimes assume clearing one typing test prepares them for the other, but the two measure different things. SSC CHSL's typing test is a straightforward WPM/accuracy test on a standard passage. SSC CGL's DEST instead measures key depressions per hour (KDPH) on data-entry-style content — numbers, codes, and mixed alphanumeric strings rather than flowing prose. Practicing only flowing-text passages leaves a real gap for DEST, where numeric sequences and symbol-heavy strings behave differently under your fingers than ordinary words. If you're preparing for CGL specifically, dedicate separate practice time to numeric and mixed-content typing, not just English prose.
+
+## What If You Fail the Typing Test Once?
+
+Most SSC typing tests allow re-attempts in a future recruitment cycle — failing one typing skill test does not permanently disqualify you from the exam series, though it does mean redoing the written stages for that cycle. The practical lesson from most repeat test-takers is the same: the gap is almost always stamina or layout confusion, not raw finger speed. Before your next attempt, specifically retest your WPM at the full exam duration (not just 1-minute bursts) and reconfirm the exact layout required in your notification.
     `,
   },
   {
@@ -985,6 +993,14 @@ INSCRIPT is the standard Indian government keyboard layout, built into all moder
 9. **Focus on passages from exam topics** — Government schemes, national events, and administrative topics are most common in Hindi exam passages.
 
 10. **Aim for 35 WPM to be safe** — The requirement is 25–30 WPM, but always aim higher for a buffer. 35+ WPM at 90%+ accuracy is a strong performance.
+
+## Why Hindi Typing Feels Slower Than English at First
+
+Most candidates type English faster than Hindi even after weeks of practice, and that's expected, not a sign you're doing something wrong. Devanagari script requires combination keystrokes for matras and conjuncts that English simply doesn't have — a single Hindi character on screen can take two or three keypresses to produce. Government exam cut-offs for Hindi (25-30 WPM) are set lower than English cut-offs (30-35 WPM) specifically because of this, so don't benchmark your Hindi speed against your English speed; benchmark it against the Hindi-specific cut-off for your exam.
+
+## A Realistic Timeline
+
+Candidates starting from zero Hindi typing experience typically need 6-8 weeks of consistent daily practice (20-30 minutes) to comfortably clear a 25-30 WPM cut-off, assuming they commit to learning the correct layout from day one rather than switching layouts partway through. Switching layouts mid-preparation is the single most common reason candidates run out of time before their exam — confirm your layout once, from your official notification, and stick with it.
     `,
   },
   {
@@ -1044,6 +1060,14 @@ Yes — and it's worth it. The switch typically takes:
 3. Use FastTypingLab's learning module which starts with home row
 4. Practice 20 minutes per day minimum
 5. Never go back to hunt-and-peck, even when it's tempting
+
+## A Quick Self-Test
+
+Not sure which camp you're in? Type a sentence and watch your hands, not the screen. If your eyes drop to the keyboard more than once or twice, or you're typing with fewer than 8 fingers actively engaged, you're hunt-and-peck — even if your WPM feels decent. This matters because the ceiling is real: hunt-and-peck typists plateau once they've memorized the handful of keys they use most, while touch typists keep gaining speed as their whole-hand muscle memory matures.
+
+## The Hidden Cost: Strain, Not Just Speed
+
+Beyond speed, hunt-and-peck typing tends to involve more awkward wrist angles and neck strain from constantly glancing down, since the posture isn't built around a stable home-row position. Touch typing, done with correct posture (wrists floating, not resting on the desk edge), tends to be the more ergonomically sound habit over years of daily use — one more reason the switch pays off beyond the WPM number.
 
 ## The Verdict
 
@@ -1127,6 +1151,24 @@ The average professional spends 8+ hours per day at a computer. Learning keyboar
 | Ctrl + ; | Insert today's date |
 | F2 | Edit cell |
 
+## macOS Equivalents
+
+Most of these shortcuts swap Ctrl for Cmd on a Mac, but a few differ in behavior, not just the key name:
+
+| Windows | macOS | Action |
+|---------|-------|--------|
+| Ctrl + C / V / X | Cmd + C / V / X | Copy / Paste / Cut |
+| Alt + Tab | Cmd + Tab | Switch between apps |
+| Win + D | Cmd + F3 (or Mission Control) | Show desktop |
+| Ctrl + Shift + Esc | Cmd + Option + Esc | Force-quit apps |
+| Alt + F4 | Cmd + Q | Quit current app |
+
+Note that Alt+F4 only closes the active window on Windows, while Cmd+Q quits the entire app on Mac — a common trip-up for people switching platforms.
+
+## Why Shortcuts Compound With Typing Speed
+
+Shortcuts and raw typing speed solve different parts of the same problem: typing speed reduces the time spent producing text, while shortcuts reduce the time spent on everything around the text — formatting, navigating, switching windows, saving. A fast typist who still reaches for the mouse to copy and paste is leaving a large chunk of the time savings on the table. Building both together compounds rather than adds.
+
 ## Pro Tip: Practice Shortcut Muscle Memory
 
 The reason most people don't use shortcuts is they forget them under pressure. The solution is to **deliberately use one new shortcut per day** until it becomes automatic. After 20 working days, you'll have all 20 shortcuts as second nature.
@@ -1184,6 +1226,14 @@ Do short 2-minute bursts slightly faster than comfortable to raise your top spee
 - Looking at the keyboard, which caps speed at around 35 WPM forever.
 - Never practicing on a full physical keyboard.
 
+## Why 35 WPM Trips Up Candidates Who "Feel" Fast
+
+Many candidates self-estimate their speed from casual typing — messages, notes, assignments — and assume they'll clear 35 WPM comfortably. The gap shows up under exam conditions: a formal government passage uses less familiar vocabulary than everyday text, nerves introduce new errors that didn't show up in relaxed practice, and the strict 10-minute window removes the option to pause and collect yourself. Always benchmark against a timed, formal-passage mock test — not your general sense of how fast you type.
+
+## What Happens If You're Right at the Cut-Off
+
+Scoring exactly 35 WPM in practice isn't a safe margin, because real exam conditions typically shave a few WPM off your practiced speed due to nerves and passage unfamiliarity. Treat 35 WPM as a floor to clear in practice, not a target — aim for a comfortable 40-42 WPM in your mock tests so the inevitable dip on exam day still leaves you above the cut-off.
+
 ## Practice Free for SSC CHSL
 
 Take a real 10-minute SSC CHSL-style mock test on FastTypingLab in both English and Hindi, with live WPM and accuracy. Pair it with the AI Tutor to get a personalized plan that targets your weak keys. Consistent daily practice for 4-6 weeks is enough for most candidates to clear the cut-off comfortably.
@@ -1234,6 +1284,26 @@ Drill the most common 200 English words until they are automatic. They make up a
 ### Reach 80+ WPM
 After each test, find your 3 slowest keys and drill them. Train steady rhythm, not bursts.
 
+## Net WPM vs Gross WPM — Which Number Actually Counts
+
+Almost every benchmark above refers to **net WPM**, not gross WPM, and mixing the two is why people overestimate their own speed. Gross WPM just counts how many 5-character "words" you typed in the time window, with no penalty for mistakes. Net WPM subtracts your errors, and it's the number every real exam, job test, and typing certificate actually reports:
+
+**Net WPM = (Total characters typed ÷ 5 − Errors) ÷ Minutes**
+
+So if you type 300 characters in 1 minute with 5 errors, that's (300 ÷ 5 − 5) ÷ 1 = **55 net WPM**, not the 60 gross WPM it might feel like. The gap between your gross and net number is a direct measure of how much your errors are costing you — if it's wide, accuracy training will raise your real WPM faster than speed drilling will.
+
+## Typing Speed by Country and Age
+
+Averages vary by region and generation, mostly because of how much formal keyboarding instruction a school system provides. Adults in countries with widespread touch-typing education (common in parts of North America and Northern Europe) tend to average closer to 45–55 WPM, while self-taught adult typists elsewhere often sit nearer the global 40 WPM average. Age matters too: typists in their teens and twenties who grew up typing on phones and laptops daily often clock similar or slightly higher averages than older adults who learned on a keyboard later in life, but phone-first typists sometimes lag on physical-keyboard speed specifically until they log dedicated practice on one.
+
+## Common Plateaus and How to Break Them
+
+Most self-taught typists get stuck at a predictable point:
+
+- **Stuck around 25–30 WPM**: usually still looking at the keys. No drilling fixes this — only forcing yourself to type without looking, even slowly at first, breaks the habit.
+- **Stuck around 45–50 WPM**: fingers know the layout but still "hunt" slightly for less common letters (q, z, x, punctuation). Target drills on your specific weak keys close this gap faster than generic practice.
+- **Stuck around 65–70 WPM**: the ceiling here is usually rhythm, not finger speed — short hesitations before common word pairs or digit sequences. Typing longer, varied passages (not short repetitive drills) smooths this out.
+
 ## Test Your Speed Now
 
 Take a free 1-minute typing test on FastTypingLab to find your current WPM, then use the AI Tutor for a personalized plan to reach your next target. Most people add 10-15 WPM within a month of daily 15-minute practice.
@@ -1259,13 +1329,18 @@ The MP CPCT (Computer Proficiency Certification Test) includes a typing skill se
 | English | QWERTY | 30 WPM |
 | Hindi | Mangal (Unicode / INSCRIPT) | 20-30 WPM |
 
-CPCT uses Unicode Mangal for Hindi, not Kruti Dev. This matters — practice on the INSCRIPT layout the exam actually uses.
+CPCT uses Unicode Mangal for Hindi, not Kruti Dev. This matters — practice on the INSCRIPT layout the exam actually uses. Note: public sources on the exact Hindi cut-off vary between roughly 20 and 30 WPM depending on the recruitment cycle — always confirm the figure stated in your own notification rather than relying on a general number.
+
+## CPCT Exam Format in Detail
+
+The typing module is run as a separate timed section inside the broader CPCT computer-skills test, with English and Hindi typed as two distinct timed passages rather than mixed together. Public reporting on the exact per-passage duration isn't fully consistent across sources — most describe each language's typing section running in the 10-15 minute range — so treat "around 15 minutes per language" as a planning estimate and verify the precise timing in your admit card or official notice once released.
 
 ## How CPCT Typing Is Scored
 
-- Separate passages for English and Hindi.
-- Net speed is calculated after subtracting errors.
-- High accuracy directly raises your score, so do not rush.
+- Separate passages for English and Hindi, scored independently.
+- Net speed is calculated after subtracting errors — this is the figure that counts, not your raw typing speed.
+- A simple working formula used across most Indian government typing tests: **Net WPM = (characters typed ÷ 5 − errors) ÷ minutes**. For example, typing 900 characters in 5 minutes with 10 errors gives (900 ÷ 5 − 10) ÷ 5 = **34 net WPM**.
+- High accuracy directly raises your score, so do not rush — a candidate who finishes the passage early but with many errors typically scores lower than one who paces to the time limit with a clean passage.
 
 ## Common CPCT Mistakes
 
@@ -1273,6 +1348,7 @@ CPCT uses Unicode Mangal for Hindi, not Kruti Dev. This matters — practice on 
 - Ignoring matra and half-letter combinations in Hindi.
 - Only practicing English and underestimating Hindi.
 - Not using all ten fingers.
+- Treating the two languages as one skill — Hindi Unicode typing uses entirely different finger patterns from English QWERTY, so progress in one doesn't transfer to the other; both need dedicated daily time.
 
 ## A Simple CPCT Practice Plan
 
@@ -1350,6 +1426,14 @@ Do daily timed Hindi tests in the exam format and track your WPM.
 ### Week 4 — Push and polish
 Raise your top speed with short bursts, then settle into a steady, accurate pace.
 
+## Why Layout Confusion Is the #1 Reason Candidates Fail
+
+Across UP state recruitment cycles, Kruti Dev and Mangal have both been specified at different times for different posts, and candidates who prepared on the wrong one often discover it only when they sit down at the test center — by then it's too late to switch. If your notification is ambiguous or silent on the layout, don't guess: check the official exam authority's website directly, or call the helpline listed in your admit card, rather than relying on what worked for a friend's exam cycle, since requirements can change between recruitment rounds.
+
+## What Happens If You Clear Speed But Fail Accuracy
+
+Some candidates hit the WPM target comfortably but still fail because their error count exceeds the allowed threshold — most UP Police typing tests cap errors as a percentage of the passage, and exceeding it fails the candidate regardless of raw speed. If you're consistently fast but unsure of your error rate, slow down by 10-15% in practice and measure whether your error count drops faster than your WPM does — for most candidates it does, which means the slower pace is actually the safer strategy for a pass/fail test.
+
 ## Practice UP Police Typing Free
 
 FastTypingLab offers free Kruti Dev and Hindi Unicode (Mangal) typing tests with live WPM and accuracy, plus a step-by-step Learn Hindi Typing course. For a full breakdown of requirements and a practice test, see our UP Police typing test page. Consistent daily practice for 4-6 weeks is enough for most candidates to clear the cut-off.
@@ -1404,6 +1488,16 @@ On your phone, WhatsApp uses your keyboard app:
 
 If you are preparing for SSC, CPCT, UP Police or any government exam, invest in **INSCRIPT (Mangal)** — it is the standard and builds real typing speed. Casual users can start with phonetic and switch later.
 
+## Common Problems and Fixes
+
+- **Text shows as boxes or garbled symbols**: usually a missing or mismatched font — Mangal/Unicode text needs no special font and should render everywhere, while Kruti Dev text only displays correctly on a device with the Kruti Dev font installed. If Hindi text looks broken when shared, the recipient likely needs that font.
+- **Autocorrect changes your Hindi words**: on mobile, turn off autocorrect/autosuggest for the Hindi keyboard specifically in your keyboard app's settings — it otherwise tends to "fix" valid Hindi spellings into wrong ones.
+- **Can't find the Hindi keyboard option**: on older Windows versions the path is slightly different (Control Panel → Region and Language → Keyboards), so if the Settings app doesn't show it, try the legacy Control Panel route.
+
+## Typing Hindi in Excel and PDFs
+
+Excel behaves the same as Word — switch input with Windows+Spacebar and set the cell font to Mangal or Nirmala UI for clean rendering. For PDFs, you generally can't type directly into a standard PDF unless it has fillable form fields; the usual workaround is typing your Hindi text in Word first, then exporting to PDF.
+
 ## Practice Hindi Typing Free
 
 Once you have Hindi input set up, build speed with a free Hindi typing test. FastTypingLab offers Mangal (Unicode) and Kruti Dev practice with live WPM and accuracy, plus a step-by-step Learn Hindi Typing course to take you from home row to exam-ready.
@@ -1453,6 +1547,14 @@ Always check your exam notification. If your target exam uses Kruti Dev, practic
 
 Reading a chart is not enough — you learn by typing. Use an on-screen layout while you practice so you always know which key to press, and build muscle memory with short daily sessions.
 
+## A Known Pitfall: Kruti Dev Text Outside the Exam Computer
+
+Because Kruti Dev is font-based rather than Unicode, text you type in it only looks correct on a machine with the Kruti Dev font installed — paste the same text into WhatsApp or a Unicode-only tool and it turns into unreadable symbols. This isn't a bug in your typing; it's inherent to how the layout works. It's also why practicing on a Kruti Dev test tool matters more than it might for Unicode layouts — you need to see the actual Devanagari output rendered correctly, on the actual font, to know your practice is accurate.
+
+## How Kruti Dev Compares to Learning a New Script From Scratch
+
+For English-only typists, learning Kruti Dev can feel closer to learning a new skill than learning a new layout, because the key-to-glyph mapping doesn't follow any pattern you'd recognize from QWERTY — unlike, say, switching between QWERTY and Dvorak, which at least preserves the concept of one key per letter. Budgeting real time for this (most candidates need 3-5 weeks of daily practice before Kruti Dev starts to feel automatic) avoids the common mistake of assuming a "quick chart review" the night before an exam will be enough.
+
 ## Practice Kruti Dev Typing Free
 
 FastTypingLab offers a free Kruti Dev typing test and guide with an on-screen layout, live WPM and accuracy tracking. Practice daily and the chart becomes second nature within a few weeks — exactly what you need for UP Police, Bihar SSC and court typing tests.
@@ -1500,6 +1602,14 @@ Exact requirements and the specified layout are set in the official notification
 2. Spend the first week on key positions and building muscle memory.
 3. Do daily timed tests in the exam format and track your WPM.
 4. Drill your slowest characters until they are automatic.
+
+## Why RO/ARO Candidates Often Underestimate This Stage
+
+The RO/ARO written exam tends to get the bulk of candidates' preparation time, with the typing test treated as an afterthought since it's framed as a qualifying (pass/fail) rather than scoring stage. That's a risky assumption — a qualifying stage still eliminates candidates who don't clear it, regardless of how well they did on the written paper. Treat the typing test with the same seriousness as a scored stage: it has the same power to end your candidacy.
+
+## Building a Realistic Prep Timeline
+
+Candidates balancing RO/ARO's written syllabus with typing practice tend to do best allocating a fixed, protected 20-30 minutes daily to typing rather than treating it as something to fit in "when there's time" — because when exam pressure rises, typing practice is usually the first thing to get skipped, and it's exactly the skill that degrades fastest without regular practice.
 
 ## Practice Free for AHC RO/ARO
 
@@ -1550,6 +1660,14 @@ Because the two layouts have completely different key positions, you cannot swit
 3. If it uses Kruti Dev, install the font and learn that layout.
 4. If you have no specific exam, learn **Mangal/INSCRIPT** — it is the standard and works everywhere.
 
+## Can You Learn Both?
+
+Yes, but sequentially, not in parallel — learning two layouts at the same time tends to produce slower, less confident progress on both than mastering one first. The usual pattern that works: build one layout to a comfortable, exam-ready speed, then layer the second on top once the first is automatic. Most working typists who need both eventually find the second layout takes noticeably less time to learn than the first, since general typing fluency (rhythm, finger independence, not looking down) transfers even though the key positions don't.
+
+## What If Your Notification Doesn't Specify?
+
+Occasionally a notification is vague about the required layout. In that situation, the safest move is contacting the recruiting body directly (via the helpline or email in the notification) rather than assuming — some exam centers bring their own typing software preconfigured for one specific layout, and discovering a mismatch on exam day leaves no time to adapt. If you genuinely cannot get clarity in time, default to Mangal/INSCRIPT, since it's the layout accepted across the broadest range of central and state exams.
+
 ## Practice the Right Layout Free
 
 FastTypingLab offers free practice for both — a Hindi Unicode (Mangal) typing test and a Kruti Dev typing test, each with an on-screen layout and live WPM and accuracy. Pick the one your exam requires and practice daily.
@@ -1599,6 +1717,14 @@ Repeat daily. Within two weeks, the combinations that used to make you pause wil
 - Chasing speed before the combinations are accurate.
 - Looking at the keyboard instead of building finger memory.
 
+## Why This Matters More in Timed Tests Than Casual Writing
+
+In casual Hindi typing — a WhatsApp message, a note to yourself — a brief pause to recall a matra combination costs nothing. In a timed exam, that same half-second hesitation, repeated across dozens of matras and conjuncts in a passage, adds up to a meaningful chunk of your net WPM. This is why exam-focused Hindi practice should specifically include timed drills on matra-heavy and conjunct-heavy text, not just general Hindi reading or writing — the skill that fails under time pressure is reaction speed on these specific combinations, not general familiarity with the script.
+
+## Building Combination Memory, Not Just Key Memory
+
+The difference between a beginner and a fast Hindi typist usually isn't knowing where each key is — it's that fast typists have built muscle memory for entire common combinations (consonant+matra, or full conjuncts) as single motor patterns, the same way an experienced English typist doesn't think letter-by-letter for common words like "the" or "and." Reaching that stage requires typing the same high-frequency combinations hundreds of times across many practice sessions — there's no shortcut around repetition, but focusing that repetition on the combinations that actually appear often (rather than rare, exotic conjuncts) gets you there faster.
+
 ## Practice Hindi Typing Free
 
 Use a free Hindi typing test with an on-screen layout so you always know which key produces each matra and conjunct. FastTypingLab tracks your WPM and accuracy in real time in both Mangal and Kruti Dev — perfect for targeting your weakest combinations.
@@ -1646,6 +1772,19 @@ FastTypingLab is a free, no-signup platform built specifically for Indian govern
 - Dedicated pages for SSC CHSL, SSC CGL, CPCT, UP Police, Railway NTPC, Bihar SSC and more.
 - A step-by-step Learn Hindi Typing course from home row to exam passages.
 - An AI Tutor that analyzes your typing and builds a personalized improvement plan.
+
+## Red Flags to Avoid in Typing Software
+
+Not every free typing tool is actually useful for exam prep. Watch for:
+
+- **Tools that only measure gross WPM**, not net WPM — this flatters your speed but won't match how your actual exam scores you, leading to a nasty surprise on exam day.
+- **Software that requires installation and admin rights** — many exam centers and shared/office computers block installs, so you may not be able to use the same tool you practiced on.
+- **No distinction between Mangal and Kruti Dev** — a tool that only offers one Hindi layout, or doesn't clearly tell you which one you're practicing, risks you preparing the wrong layout without realizing it.
+- **Stale or non-representative passages** — generic lorem-ipsum-style filler text doesn't train you on the vocabulary (government schemes, administrative terms) that actually appears in exam passages.
+
+## Should You Pay for Typing Software?
+
+For government exam preparation specifically, there's rarely a need to pay. The core requirement — accurate WPM/accuracy measurement on exam-realistic passages, in the correct language and layout — is fully covered by free browser-based tools, and the main paid-software advantages (offline use, enterprise reporting) don't matter for individual exam prep. Spend money on study material for the written stages instead; typing speed comes from practice time, not from the price of the tool you practice with.
 
 ## Start Practicing Today
 
@@ -1702,6 +1841,14 @@ Learn these assignments and always use the correct finger — even when it feels
 
 Do not chase speed early. Type slowly and correctly so your fingers learn the right positions. Speed comes automatically once the positions are automatic. Rushing builds errors that are very hard to unlearn.
 
+## What to Do When You Hit an Unfamiliar Key
+
+Even experienced touch typists occasionally need a key they rarely use (an unusual symbol, a less common punctuation mark). The instinct to peek is strongest exactly here. Instead, use process of elimination: recall which hand and general row the key sits in (most keyboard layouts are learnable in zones even before every key is memorized individually), and accept a slower, more deliberate press rather than looking. This single habit — tolerating a slow correct press over a fast glance — is what separates people who successfully convert to touch typing from people who relapse into hunt-and-peck under pressure.
+
+## How Long the Habit Takes to Lock In
+
+Most learners report the urge to look down fades substantially after about 3-4 weeks of consistent daily practice, though it can resurface temporarily under exam pressure or when typing unfamiliar content (foreign words, dense symbols). If that happens during a real test, don't panic — a brief lapse doesn't undo weeks of muscle memory, it just means slowing down slightly until the rhythm returns.
+
 ## Practice Touch Typing Free
 
 FastTypingLab's free Learn Typing course teaches touch typing from the home row up, with an on-screen keyboard and live WPM and accuracy so you never need to look down. Practice 15–20 minutes a day and you will be typing without looking within a few weeks.
@@ -1729,12 +1876,27 @@ Most people practice 1-minute typing tests — and then struggle when the real e
 
 Government typing tests (SSC, CPCT, LDC) are timed at 10–15 minutes precisely because sustained speed separates prepared candidates from unprepared ones.
 
+## Why the Fade Happens
+
+Typing fast is a sustained fine-motor and attention task, not a short burst like a sprint. Two things degrade over several minutes even in trained typists: small, repeated finger movements accumulate micro-fatigue in the hands and forearms, and sustained visual/attentional focus on the source text naturally dips after a couple of minutes without a break. Untrained typists feel both at once, which is why their net WPM in minute 5 can be noticeably lower than in minute 1 — not because they forgot how to type, but because fatigue and attention lapses both show up as errors, and errors are exactly what net WPM punishes.
+
+## A Worked Example of the Fade
+
+Picture a candidate who tests at 45 WPM on a 1-minute test. On a 5-minute test, their minute-by-minute net WPM might look like: 44, 43, 38, 35, 33. The average over the full 5 minutes comes out closer to 38 WPM — meaningfully below their 1-minute number, and potentially below an exam's cut-off even though their "best" speed clears it comfortably. This is the exact gap stamina training closes: the goal isn't to type faster in minute 1, it's to keep minutes 3 through 5 close to minute 1.
+
 ## How to Build Typing Stamina
 
 1. **Practice the full duration.** If your exam is 10 minutes, practice 10-minute tests, not just 1-minute ones.
 2. **Fix your posture.** Sit upright, wrists neutral, feet flat. Poor posture causes fatigue.
 3. **Breathe and relax your shoulders.** Tension slows your hands over time.
 4. **Build up gradually.** Start at 2 minutes, then 5, then your full exam length.
+
+## A 4-Week Stamina Builder
+
+- **Week 1**: Daily 2-minute tests. Focus purely on keeping accuracy above 95% — don't chase speed yet.
+- **Week 2**: Move to daily 5-minute tests. Note your minute-by-minute WPM if your test tool shows it; the goal is a flatter line, not a higher peak.
+- **Week 3**: Add one test per day at your actual exam duration (10 or 15 minutes), alongside the daily 5-minute benchmark.
+- **Week 4**: Full-duration tests only, timed exactly like exam day, including the same posture and environment you'll use on the day.
 
 ## Use the 5-Minute Test as a Benchmark
 
@@ -1791,6 +1953,14 @@ Remington is the **traditional typewriter-based** layout, familiar to anyone who
 ## Do Not Confuse These With Kruti Dev
 
 Kruti Dev is a separate, font-based layout used by UP Police, Bihar SSC and some courts. So there are really three options — INSCRIPT (Mangal), Remington (Gail), and Kruti Dev — and your exam notification tells you which to use.
+
+## Where Remington Gail Still Shows Up
+
+Remington's typewriter heritage means it's most often encountered as an option for older government offices, some court recruitment exams, and candidates who trained on physical Hindi typewriters before computers became standard. If you're from that background, your existing muscle memory is a genuine head start — don't discard it just because INSCRIPT is more commonly cited as "the standard." Check your specific exam's accepted layouts; many still list Remington Gail as a valid alternative to INSCRIPT, not a replacement requirement.
+
+## A Side-by-Side Learning Note
+
+Because the two layouts place vowels, consonants and matras in different key positions, muscle memory from one actively interferes with learning the other during the transition period — candidates switching from Remington to INSCRIPT (or vice versa) often report their speed temporarily drops below where a true beginner would start, because old reflexes fire for the wrong keys. If you must switch, budget extra practice time for this dip rather than reading it as a sign you're learning incorrectly; it's a normal, temporary part of unlearning the first layout.
 
 ## Practice Hindi Typing Free
 
@@ -1850,6 +2020,14 @@ These are averages — regular practice matters far more than age.
 3. Chase accuracy first; speed follows naturally.
 4. Practice 15-20 minutes daily on real passages.
 
+## Why These Numbers Are Ranges, Not Fixed Rules
+
+Typing speed studies and surveys rarely agree on an exact figure for any group, because sample sources differ — a survey of office workers skews higher than a survey of the general population, and self-reported WPM tends to run higher than WPM measured on a standardized test. Treat every number on this page (and on most typing-speed articles online) as a reasonable midpoint estimate, not a precise statistic, and use your own measured result as the only number that actually matters for your own goals.
+
+## Does Typing Speed Plateau With Age?
+
+There's a common belief that typing speed only improves in youth and plateaus or declines with age, but the evidence for pure age-driven decline is weak — what actually predicts speed is accumulated practice volume and whether someone learned proper touch typing, not age itself. Adults who switch to touch typing later in life, or who simply increase their daily typing volume (a new job that requires more writing, for instance), commonly see continued WPM gains well into their 40s and 50s. If your speed has plateaued, the more likely explanation is that your practice habits have plateaued, not your age.
+
 ## Test Your Speed Now
 
 Take a free typing test on FastTypingLab to see where you stand, then use the AI Tutor for a personalized plan. Most people add 10-15 WPM within a month of daily practice — moving from average to genuinely fast.
@@ -1898,6 +2076,16 @@ Fifteen to twenty focused minutes every day beats a three-hour session once a we
 ## 7. Build Rhythm, Not Bursts
 
 Smooth, steady typing is faster over a full passage than fast bursts followed by pauses. Train an even rhythm and your sustained speed rises.
+
+## Why Speed Plateaus Happen and How to Break Them
+
+Most typists improve quickly for the first few weeks, then hit a plateau where WPM barely moves despite continued practice. This usually happens because practice has become passive — typing the same comfortable material at the same pace, which reinforces existing habits rather than challenging them. Breaking a plateau typically requires one deliberate change: slightly harder material (longer words, less familiar vocabulary), a stricter accuracy target that forces more careful finger placement, or timed pressure that pushes you just past your comfort zone. Comfortable, repetitive practice builds consistency; slightly uncomfortable, targeted practice builds new speed.
+
+## A Simple Weekly Structure
+
+- **3-4 days**: standard practice — a mix of passages, 15-20 minutes, tracking WPM and accuracy.
+- **1-2 days**: weak-key focus — drill only the specific keys or combinations your test results flag as slow.
+- **1 day**: a longer, exam-length or stamina test to check that your speed holds up over time, not just in short bursts.
 
 ## Track Your Progress
 
@@ -1950,6 +2138,14 @@ This is where most typists go wrong:
 ## Posture Helps You Type Faster
 
 Relaxed hands move faster and more accurately than tense ones. Good posture lets you sustain your speed through a full 10-minute exam passage instead of fading halfway. It is a small habit with a big payoff.
+
+## Signs Your Setup Is Hurting You
+
+Don't wait for pain to become serious before adjusting your setup. Early warning signs worth acting on immediately include: tingling or numbness in your fingers after typing sessions, a dull ache across the wrists that lingers after you stop, or noticeably stiff fingers in the morning. These are the early markers commonly associated with repetitive strain injuries, and they are far easier to reverse with posture and break changes at this stage than after months of ignoring them. If symptoms persist despite fixing your setup, it's worth getting it checked rather than typing through it.
+
+## Setting Up a Budget-Friendly Ergonomic Station
+
+You don't need expensive equipment to fix most posture problems. A rolled towel or thin cushion under the wrists (used only during pauses, not while actively typing) substitutes for a dedicated wrist rest. Stacking books under a laptop raises the screen to eye level for a few rupees' cost. The highest-value, zero-cost fix for most people is simply moving the chair and desk so feet are flat and elbows sit near 90 degrees — equipment helps at the margins, but basic positioning fixes most of the problem.
 
 ## Practice With Good Form
 
