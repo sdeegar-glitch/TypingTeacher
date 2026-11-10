@@ -111,6 +111,16 @@ export default function ExamLandingPage({ slug }: { slug: string }) {
           </Link>
         </div>
 
+        {/* In-depth guide */}
+        <section className="mb-6 bg-brand-surface border border-brand-border rounded-2xl p-5">
+          <h2 className="text-xl font-black text-brand-text mb-4">{exam.examName} Typing Test: In-Depth Guide</h2>
+          <div className="space-y-4">
+            {exam.deepDive.split('\n\n').map((para, i) => (
+              <p key={i} className="text-sm text-brand-text-muted leading-relaxed">{para}</p>
+            ))}
+          </div>
+        </section>
+
         {/* FAQ */}
         <section className="mb-6">
           <h2 className="text-xl font-black text-brand-text mb-4">Frequently Asked Questions</h2>
