@@ -262,6 +262,16 @@ export default function ToolsPage() {
           </div>
         </section>
 
+        {/* In-depth guide */}
+        <section className="mb-6 bg-brand-surface border border-brand-border rounded-2xl p-5">
+          <h2 className="text-lg font-bold text-brand-text mb-3">About These Tools</h2>
+          <div className="space-y-3 text-sm text-brand-text-muted leading-relaxed">
+            <p>Alongside the typing tests themselves, FastTypingLab includes a set of small, focused utilities that typing practice — and exam preparation specifically — tends to need. A keyboard tester lets you check that every key on a physical or new keyboard actually registers correctly, useful before an important test session or exam. A CPS (clicks-per-second) test and spacebar counter measure click and key-press speed for a different kind of hand-speed practice.</p>
+            <p>For Hindi typists, a Kruti Dev-to-Unicode converter (and the reverse) handles the common problem of text typed in one font layout needing to be readable or usable in the other — paste text in and get an instant, browser-only conversion with nothing uploaded anywhere.</p>
+            <p>A word counter, case converter and code-typing practice mode round out the set for students, data-entry workers, programmers and anyone preparing for a government exam that specifies an exact character or key-depression count. Every tool runs entirely in your browser — nothing is uploaded to a server, and none of them require an account to use.</p>
+          </div>
+        </section>
+
         {/* Coming Soon */}
         <section>
           <h2 className="text-lg font-bold text-brand-text mb-3 flex items-center gap-2">

@@ -225,6 +225,15 @@ export default function LearningCoursePage() {
           </Link>
         </div>
       </div>
+
+      {/* SEO content */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-8">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-3">
+          <h2 className="text-base font-bold text-brand-text">About this touch-typing course</h2>
+          <p>This is a structured, 50-lesson touch-typing course that starts from the home row — the ASDF and JKL; keys your fingers rest on between keystrokes — and works outward to the full keyboard, one small group of keys at a time. Each lesson is short by design: a few minutes of focused drilling on a specific set of keys, with live WPM and accuracy shown as you go, rather than long unfocused sessions that are easy to lose motivation partway through.</p>
+          <p>Lessons unlock progressively, so you always know exactly what to practice next instead of guessing, and the course tracks completed lessons so you can pick up again later exactly where you left off. This method — building finger memory for a small set of keys before adding more — is the same approach professional typing instructors use, and it's specifically what lets you eventually type without looking at the keyboard at all, the real difference between touch typing and hunt-and-peck.</p>
+        </div>
+      </div>
     </div>
   );
 }

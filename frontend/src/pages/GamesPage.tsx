@@ -216,6 +216,13 @@ export default function GamesPage() {
             <p className="text-brand-text-muted text-sm">Every game awards XP that counts toward your level on the Dashboard. Higher scores = more XP. Complete daily challenges for bonus XP rewards.</p>
           </div>
         </div>
+
+        {/* SEO content */}
+        <div className="mt-5 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-3">
+          <h2 className="text-base font-bold text-brand-text">Why play typing games?</h2>
+          <p>Straight timed tests are the most accurate way to measure typing speed, but they're not the only useful way to build it — repetition under light game pressure trains the same finger-to-key reflexes without the mental fatigue of a formal test. FastTypingLab's typing games each apply that pressure differently: Word Rain has falling words you have to clear before they land, Zombie Typing and Speed Racer turn speed into survival or racing progress, and games like Ninja Slash, Space Shooter, Castle Defense and Cyber Hacker add combos, critical hits and short bursts of intensity that reward quick, accurate bursts rather than sustained typing.</p>
+          <p>Every game awards XP as you play, which accumulates on your profile alongside your regular test results, so games double as a lower-pressure way to log practice time on days when a formal timed test feels like too much. They're a supplement to, not a replacement for, the timed tests and lessons elsewhere on the site — genuinely useful for building reflexes, but exam-format practice is still what best predicts real exam performance.</p>
+        </div>
       </div>
     </div>
   );

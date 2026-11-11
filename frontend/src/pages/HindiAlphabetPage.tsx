@@ -181,6 +181,13 @@ export default function HindiAlphabetPage() {
             </Link>
           </div>
         </div>
+
+        {/* SEO content */}
+        <div className="mt-5 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-3">
+          <h2 className="text-base font-bold text-brand-text">About the Hindi alphabet</h2>
+          <p>The Hindi alphabet (हिंदी वर्णमाला) has three parts: स्वर (vowels), which can be pronounced on their own; व्यंजन (consonants), which need a vowel attached to be pronounced; and मात्रा (matras), the shortened vowel signs joined to a consonant, such as आ becoming ा in का. This page lists all 13 vowels, all 33 consonants grouped the way Hindi textbooks group them (कवर्ग, चवर्ग, टवर्ग, तवर्ग, पवर्ग and beyond), and every matra, each with its English transliteration and a short example word.</p>
+          <p>It's meant as a reference for anyone learning Hindi from scratch, and it's also the natural starting point before Hindi typing practice — every key on the Mangal/INSCRIPT or Kruti Dev keyboard layout maps to one of the letters or signs listed here, so knowing the alphabet first makes the keyboard layout click much faster.</p>
+        </div>
       </div>
     </div>
   );

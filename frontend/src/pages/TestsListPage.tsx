@@ -231,6 +231,13 @@ export default function TestsListPage() {
             </p>
           </>
         )}
+
+        {/* SEO content */}
+        <div className="mt-8 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-3">
+          <h2 className="text-base font-bold text-brand-text">About the Typing Tests Library</h2>
+          <p>The Typing Tests Library covers three separate tracks: English, Hindi typed in Unicode Mangal (the INSCRIPT layout most current government exams require), and Hindi typed in the older Kruti Dev font layout still used by some state exams like UP Police and Bihar SSC. Each track offers test durations of 1, 3, 5 and 10 minutes, matching the timings used in real skill tests — SSC CHSL's 10-minute format, for example, or CPCT's shorter timed sections.</p>
+          <p>While you type, the test tracks your gross WPM (characters typed, divided by five, per minute), your net WPM (the same figure after subtracting mistakes, the number most exams and employers actually care about), and your accuracy percentage in real time, so you can see exactly where you're losing speed. Passages are refreshed regularly rather than reused, and results are stored to your profile if you're signed in, so you can track whether your speed is actually improving week over week rather than just guessing.</p>
+        </div>
       </div>
     </div>
   );

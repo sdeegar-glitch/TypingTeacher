@@ -78,9 +78,11 @@ export default function BlogPage() {
         </div>
 
         {/* SEO bottom text */}
-        <div className="mt-6 text-sm text-brand-text-muted space-y-2">
+        <div className="mt-6 bg-brand-surface border border-brand-border rounded-2xl p-5 text-sm text-brand-text-muted space-y-3 leading-relaxed">
           <h2 className="text-base font-bold text-brand-text">About FastTypingLab Blog</h2>
-          <p>The FastTypingLab blog covers everything related to typing speed improvement, government exam typing preparation (SSC, CPCT, Court, Railway), Hindi typing practice, touch typing tutorials, and productivity tips. All articles are written by typing experts for Indian students and professionals.</p>
+          <p>The FastTypingLab blog covers the practical side of typing that a test score alone doesn't explain — how touch typing actually works and why it's faster than hunt-and-peck, correct home-row finger placement, and technique-focused guides on building speed and accuracy without just typing more and hoping it helps.</p>
+          <p>A large share of the articles are exam-specific: SSC CHSL and CGL preparation, CPCT's Hindi Unicode requirements, UP Police and Kruti Dev typing, stenography and Pitman shorthand basics, and what typing speed different government exams actually require, since that number varies more than most people expect.</p>
+          <p>Other articles cover typing for particular audiences — students, programmers, nurses and healthcare workers, kids just learning — plus practical reference pieces like what WPM actually means, average typing speeds by age and profession, and keyboard ergonomics to avoid wrist strain during long practice sessions. New articles are added regularly, and every one links back to the relevant free test or course on the site so you can put what you just read into practice immediately.</p>
         </div>
       </div>
     </div>
