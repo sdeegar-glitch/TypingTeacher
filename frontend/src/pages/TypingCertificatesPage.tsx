@@ -123,7 +123,7 @@ export default function TypingCertificatesPage() {
         {/* SEO */}
         <div className="text-sm text-brand-text-muted space-y-2">
           <h2 className="text-base font-bold text-brand-text">Typing Speed Certificates — FAQ</h2>
-          <p><strong className="text-brand-text">Are these certificates free?</strong> Yes, completely free. Take any typing test and generate your certificate instantly with no registration required.</p>
+          <p><strong className="text-brand-text">Are these certificates free?</strong> Yes, completely free. Create a free account, take any typing test, and generate your certificate instantly — no payment required, just a quick sign-up so your certificate can be verified later.</p>
           <p><strong className="text-brand-text">Can I use this for government exam applications?</strong> Our certificates are for practice and personal milestone tracking. For official government exam certification, you must appear in the official exam conducted by SSC, CPCT, etc.</p>
           <p><strong className="text-brand-text">How are certificates verified?</strong> Each certificate has a unique ID and QR code. Scanning the QR code takes you to our verification page where anyone can confirm the certificate's authenticity.</p>
         </div>      </div>

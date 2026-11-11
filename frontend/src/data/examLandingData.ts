@@ -128,7 +128,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { q: 'What typing speed is needed for CPCT?', a: 'Around 30 WPM in English and 20–30 WPM in Hindi, with net speed calculated after errors.' },
       { q: 'Where can I practice CPCT typing free?', a: 'FastTypingLab offers free Hindi Unicode (Mangal) and English typing tests plus a step-by-step Learn Hindi Typing course.' },
     ],
-    practiceHref: '/hindi-typing-test',
+    practiceHref: '/exam/cpct-hindi',
     practiceLabel: 'Start Hindi (Mangal) Practice',
     related: [
       { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
@@ -167,7 +167,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { q: 'Does UP Police typing use Kruti Dev or Mangal?', a: 'Many UP state exams still use Kruti Dev, while some use Mangal/Unicode. Always check your specific exam notification and practice that layout.' },
       { q: 'How do I practice UP Police typing test free?', a: 'FastTypingLab offers free Kruti Dev and Hindi Unicode typing practice with live WPM and accuracy.' },
     ],
-    practiceHref: '/kruti-dev-typing',
+    practiceHref: '/exam/up-police',
     practiceLabel: 'Start Kruti Dev Practice',
     related: [
       { label: 'Kruti Dev Typing', href: '/kruti-dev-typing/' },
@@ -245,7 +245,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { q: 'Which layout do court typing tests use?', a: 'It depends on the state court — some use Kruti Dev, others Mangal/Unicode. Always check your exam notification and practice that layout.' },
       { q: 'How can I practice court typing test free?', a: 'FastTypingLab offers free Hindi (Kruti Dev and Mangal) and English typing practice with live WPM and accuracy.' },
     ],
-    practiceHref: '/exam/hindi-typing',
+    practiceHref: '/exam/court-typing',
     practiceLabel: 'Start Hindi Typing Practice',
     related: [
       { label: 'Dictation Typing Test', href: '/dictation-typing-test/' },
@@ -285,8 +285,8 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { q: 'Does Bihar SSC use Kruti Dev or Mangal?', a: 'Bihar SSC commonly uses the Kruti Dev layout for Hindi, but always confirm from your specific exam notification.' },
       { q: 'How can I practice Bihar SSC typing free?', a: 'FastTypingLab offers free Kruti Dev and Hindi Unicode typing practice with live WPM and accuracy.' },
     ],
-    practiceHref: '/kruti-dev-typing',
-    practiceLabel: 'Start Kruti Dev Practice',
+    practiceHref: '/hindi-typing-test',
+    practiceLabel: 'Start Hindi Typing Practice',
     related: [
       { label: 'Kruti Dev Typing', href: '/kruti-dev-typing/' },
       { label: 'UP Police Typing', href: '/up-police-typing-test/' },
@@ -362,7 +362,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { q: 'Which layout does RSMSSB use for Hindi?', a: 'It varies by post — commonly Kruti Dev or Mangal. Check your specific notification and practice that layout.' },
       { q: 'How can I practice RSMSSB typing free?', a: 'FastTypingLab offers free Hindi (Kruti Dev and Mangal) and English typing practice with live WPM and accuracy.' },
     ],
-    practiceHref: '/kruti-dev-typing',
+    practiceHref: '/hindi-typing-test',
     practiceLabel: 'Start Hindi Typing Practice',
     related: [
       { label: 'Learn Hindi Typing', href: '/learn-hindi-typing/' },
@@ -440,7 +440,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { q: 'Is SSC Stenographer a typing test?', a: 'Not exactly — it is a shorthand dictation plus computer transcription. But fast, accurate typing is essential to complete the transcription in time.' },
       { q: 'How can I practice for the SSC Steno transcription?', a: 'Build your typing speed and accuracy with free English and Hindi typing tests on FastTypingLab so transcription is quick and error-free.' },
     ],
-    practiceHref: '/tests',
+    practiceHref: '/dictation-typing-test',
     practiceLabel: 'Build Transcription Typing Speed',
     related: [
       { label: 'Dictation Typing Test', href: '/dictation-typing-test/' },
@@ -520,7 +520,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { q: 'Is the UPSSSC typing test qualifying?', a: 'Yes, for most posts it is a qualifying skill test — you must meet the required speed and accuracy, though it may not add to your merit score.' },
       { q: 'How can I practise the UPSSSC typing test free?', a: 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy, in the exam format.' },
     ],
-    practiceHref: '/kruti-dev-typing',
+    practiceHref: '/hindi-typing-test',
     practiceLabel: 'Start Hindi Typing Practice',
     related: [
       { label: 'UP Police Typing Test', href: '/up-police-typing-test/' },
@@ -559,7 +559,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       { q: 'Which Hindi font does the AHC RO/ARO typing test use?', a: 'It is usually Mangal (Unicode) or Kruti Dev depending on the notification. Check yours and practise that specific layout.' },
       { q: 'How can I practise the AHC RO/ARO typing test free?', a: 'FastTypingLab offers free Hindi (Mangal and Kruti Dev) and English typing tests with live WPM and accuracy in the exam format.' },
     ],
-    practiceHref: '/kruti-dev-typing',
+    practiceHref: '/hindi-typing-test',
     practiceLabel: 'Start Hindi Typing Practice',
     related: [
       { label: 'UPSSSC Typing Test', href: '/upsssc-typing-test/' },
