@@ -799,7 +799,7 @@ Shorthand is a two-part skill: **write fast in Pitman, then transcribe fast by t
     content: `
 ## The 30-Day Typing Speed Challenge
 
-Improving your typing speed is one of the highest-return skills you can develop. The average typist types at 40 WPM. Professional typists average 65–75 WPM. With the right approach, you can double your speed in just 30 days.
+Improving your typing speed is one of the highest-return skills you can develop. The average typist types at 40 WPM. Professional typists average 65–75 WPM. With the right approach and consistent daily practice, most people can make real, noticeable gains in 30 days — though how far you get depends on your starting point, how consistently you practice, and factors like hand size, prior keyboard habits and how much time you can actually give it each day. This guide lays out what focused practice looks like week by week, as a realistic range of outcomes rather than a promise.
 
 ## Why Most People Stay Stuck at 30–40 WPM
 
@@ -846,17 +846,19 @@ Take 5-minute timed tests daily. Track your WPM each day. Most people reach 60�
 - **Keyboard Heatmap** — Shows which keys you're slow on. Available on your FastTypingLab Dashboard.
 - **AI Coach** — FastTypingLab's AI analyzes your mistakes and generates targeted practice.
 
-## Expected Results
+## A Realistic Range of Outcomes, Not a Guarantee
 
-| Day | Expected WPM |
+The table below shows the kind of progress people who practice consistently through this plan have reported — not a near-certain outcome for everyone who starts. Your own numbers depend heavily on where you're starting from, how many days a week you actually practice (vs. the plan's daily target), and individual factors like typing habits you're unlearning. Treat these as a plausible range to compare yourself against, not a target you're failing if you miss.
+
+| Day | Typical range reported |
 |-----|-------------|
-| Day 1 | 25–35 |
-| Day 7 | 35–45 |
-| Day 14 | 45–55 |
-| Day 21 | 55–65 |
-| Day 30 | 65–80 |
+| Day 1 | 25–35 WPM |
+| Day 7 | 35–45 WPM |
+| Day 14 | 45–55 WPM |
+| Day 21 | 55–65 WPM |
+| Day 30 | 65–80 WPM |
 
-Results vary based on your starting point, but consistent daily practice of 20–30 minutes is proven to produce measurable improvement within 2 weeks.
+A beginner starting well below 25 WPM, or someone who can only practice 3–4 days a week instead of daily, will reasonably land below this range and still be making excellent progress. Consistency matters more than hitting any specific number on any specific day — if you're practicing daily with rising accuracy, you're on track regardless of where you land on this table.
     `,
   },
   {
@@ -1236,7 +1238,7 @@ Scoring exactly 35 WPM in practice isn't a safe margin, because real exam condit
 
 ## Practice Free for SSC CHSL
 
-Take a real 10-minute SSC CHSL-style mock test on FastTypingLab in both English and Hindi, with live WPM and accuracy. Pair it with the AI Tutor to get a personalized plan that targets your weak keys. Consistent daily practice for 4-6 weeks is enough for most candidates to clear the cut-off comfortably.
+The number that matters here is 10 minutes, not 1 — a candidate who only ever rehearses 1-minute bursts is practicing a different test. Run full 10-minute SSC CHSL-style mocks in both English and Hindi on FastTypingLab, and specifically track whether your WPM in minute 10 drops below minute 1 — that gap is stamina, not speed, and it's the thing this format actually tests.
     `,
   },
   {
@@ -1366,7 +1368,7 @@ Work up to the full exam duration without losing focus.
 
 ## Practice CPCT Typing Free
 
-FastTypingLab offers free Hindi Unicode (Mangal/INSCRIPT) and English typing tests with live WPM and accuracy, plus a step-by-step Learn Hindi Typing course. Practice both languages daily for 4-6 weeks and the CPCT typing section becomes very manageable.
+Because CPCT scores English and Hindi as two separate passages rather than one combined skill, practice them as two separate tracks too — a strong English WPM tells you nothing about your Mangal/INSCRIPT speed. Run them as distinct daily tests on FastTypingLab and watch each number independently; treating them as one "typing practice" session is the mistake that leaves one language under-prepared on exam day.
     `,
   },
   {
@@ -1436,7 +1438,7 @@ Some candidates hit the WPM target comfortably but still fail because their erro
 
 ## Practice UP Police Typing Free
 
-FastTypingLab offers free Kruti Dev and Hindi Unicode (Mangal) typing tests with live WPM and accuracy, plus a step-by-step Learn Hindi Typing course. For a full breakdown of requirements and a practice test, see our UP Police typing test page. Consistent daily practice for 4-6 weeks is enough for most candidates to clear the cut-off.
+Since layout confusion, not raw speed, is the most common reason candidates fail this specific test, confirm Kruti Dev vs Mangal before you log a single hour of practice — then drill that one layout on FastTypingLab's matching test. A candidate who's fast on the wrong layout is worse off than one who's slower on the right one.
     `,
   },
   {
@@ -1557,7 +1559,7 @@ For English-only typists, learning Kruti Dev can feel closer to learning a new s
 
 ## Practice Kruti Dev Typing Free
 
-FastTypingLab offers a free Kruti Dev typing test and guide with an on-screen layout, live WPM and accuracy tracking. Practice daily and the chart becomes second nature within a few weeks — exactly what you need for UP Police, Bihar SSC and court typing tests.
+Because Kruti Dev output only renders correctly on a machine with the font installed, practice on a tool that actually displays Kruti Dev glyphs correctly — not just any Hindi test. FastTypingLab's Kruti Dev test shows the on-screen key-to-glyph layout alongside real rendered output, so you can budget the 3-5 weeks this layout typically takes against an accurate picture of your progress, not a chart you half-remember.
     `,
   },
   {
@@ -1613,7 +1615,7 @@ Candidates balancing RO/ARO's written syllabus with typing practice tend to do b
 
 ## Practice Free for AHC RO/ARO
 
-FastTypingLab offers free Hindi (Kruti Dev and Mangal) and English typing tests with live WPM and accuracy, plus a Learn Hindi Typing course. Practice daily for 4-6 weeks and the AHC RO/ARO typing test becomes very manageable.
+Treat this stage with the same seriousness you'd give a scored paper, not an afterthought squeezed in after written-exam study. Confirm whether your notification specifies Kruti Dev or Mangal, then run that exact test on FastTypingLab for a fixed 20-30 minutes daily — protecting that slot is what separates candidates who clear the qualifying stage from those who get eliminated by it despite a strong written score.
     `,
   },
   {
@@ -1670,7 +1672,7 @@ Occasionally a notification is vague about the required layout. In that situatio
 
 ## Practice the Right Layout Free
 
-FastTypingLab offers free practice for both — a Hindi Unicode (Mangal) typing test and a Kruti Dev typing test, each with an on-screen layout and live WPM and accuracy. Pick the one your exam requires and practice daily.
+If you need both eventually, build one to exam-ready speed on FastTypingLab's matching test before starting the second — trying to run Mangal and Kruti Dev practice side by side from day one is what produces the "slower on both" outcome described above. Lock in your exam's required layout first; add the second only once it's automatic.
     `,
   },
   {
@@ -1745,50 +1747,45 @@ Use a free Hindi typing test with an on-screen layout so you always know which k
 Not all typing tools help you clear a government exam. For exam prep specifically, the right tool should offer:
 
 - **Exam-format tests** — the exact duration (10 min, 15 min) and passage style.
-- **Both languages** — English and Hindi (Mangal and Kruti Dev).
-- **Real WPM and accuracy** — measured the way exams calculate it.
-- **On-screen keyboard** — so you learn touch typing without looking.
-- **No cost, no signup** — you should be able to practice immediately.
+- **Both languages** — English and Hindi (Mangal and Kruti Dev, depending on your exam).
+- **Real WPM and accuracy** — measured as net WPM, the way exams actually score it.
+- **On-screen keyboard** — so you can learn touch typing without looking down.
+- **No cost, no signup barrier** — you should be able to start practicing immediately.
 
-## Free Website vs Installed Software
+## The Real Options Candidates Actually Use
 
-You do not need to install anything. A good browser-based typing test works on any computer, updates automatically, and lets you practice exam passages instantly. Installed software (like old Typing Master builds) can work offline but is often outdated and English-only.
+There is no single "best" tool for every candidate — the right pick depends on your exam's layout, whether you need Hindi, and whether you have reliable internet at your practice location. Here is an honest rundown of what's actually out there:
 
-For government exam prep — especially Hindi — a modern free website that supports both Mangal and Kruti Dev is usually the better choice.
+**Typing Master (classic/offline versions).** Older Typing Master builds have been a staple in computer training centers for years — install once and it works offline, which suits shared or low-bandwidth setups. The downside for government exam prep specifically: it was never built around Indian exam formats, doesn't score net WPM the way SSC/CPCT do, and has no real Hindi Unicode or Kruti Dev support. Useful for building raw English speed; not exam-format-matched.
 
-## What Your Practice Setup Should Include
+**Ratatype.** A free, browser-based typing course and test used by a reasonable number of Indian learners for general English speed building. It has structured lessons and progress tracking, but it isn't built around Indian government exam passage styles or timing, and Hindi support is limited.
 
-1. **English typing test** with 1, 5 and 10-minute options for SSC and DEO.
-2. **Hindi Unicode (Mangal) test** for CPCT and central exams.
-3. **Kruti Dev test** for UP Police, Bihar SSC and courts.
-4. **Progress tracking** so you can see your WPM improve week to week.
-5. **Exam-specific pages** that tell you the required speed and format.
+**10FastFingers.** A well-known free speed test, mostly used for quick English WPM checks and casual competition with others. It's fast and simple, but it's a generic word-based test, not an exam-format passage test, and has no Hindi/Kruti Dev support — useful as a quick speed check, not as exam prep.
 
-## Why FastTypingLab
+**RSCIT and other state computer-course typing software.** Many state-run computer literacy courses (RSCIT in Rajasthan, and similar courses elsewhere) bundle their own basic typing software as part of the curriculum. These are usually English-only or support just one Hindi layout, tied to that specific course, and not really designed for a different exam's passage format.
 
-FastTypingLab is a free, no-signup platform built specifically for Indian government exam typing preparation:
+**Offline typing tutors bundled with coaching institutes.** Many local coaching centers for SSC/CPCT/court exams still use older, often pirated, offline typing software on their lab computers. These can be fine for raw practice but are frequently outdated, buggy on modern Windows versions, and rarely distinguish net WPM from gross WPM — meaning your practice score may not match how the real exam will score you.
 
-- English, Hindi Mangal (Unicode) and Kruti Dev tests with live WPM and accuracy.
-- Dedicated pages for SSC CHSL, SSC CGL, CPCT, UP Police, Railway NTPC, Bihar SSC and more.
-- A step-by-step Learn Hindi Typing course from home row to exam passages.
-- An AI Tutor that analyzes your typing and builds a personalized improvement plan.
+## Where FastTypingLab Fits
 
-## Red Flags to Avoid in Typing Software
+FastTypingLab is one more option in this list, not the only one — free, browser-based, with English, Hindi Mangal (Unicode) and Kruti Dev tests that report net WPM, plus dedicated pages for SSC CHSL, SSC CGL, CPCT, UP Police and other specific exams matched to their actual duration and passage style. Where it's a genuinely better fit than the alternatives above: no install, works on any exam-center-style shared computer, and distinguishes Mangal from Kruti Dev clearly so you don't accidentally prepare the wrong Hindi layout. Where the alternatives above might still suit you better: if you need fully offline practice with no internet at all, a classic Typing Master install still has a place.
 
-Not every free typing tool is actually useful for exam prep. Watch for:
+## Red Flags to Avoid in Any Typing Software
+
+Whichever tool you pick, watch for:
 
 - **Tools that only measure gross WPM**, not net WPM — this flatters your speed but won't match how your actual exam scores you, leading to a nasty surprise on exam day.
 - **Software that requires installation and admin rights** — many exam centers and shared/office computers block installs, so you may not be able to use the same tool you practiced on.
 - **No distinction between Mangal and Kruti Dev** — a tool that only offers one Hindi layout, or doesn't clearly tell you which one you're practicing, risks you preparing the wrong layout without realizing it.
-- **Stale or non-representative passages** — generic lorem-ipsum-style filler text doesn't train you on the vocabulary (government schemes, administrative terms) that actually appears in exam passages.
+- **Stale or non-representative passages** — generic filler text doesn't train you on the vocabulary (government schemes, administrative terms) that actually appears in exam passages.
 
 ## Should You Pay for Typing Software?
 
-For government exam preparation specifically, there's rarely a need to pay. The core requirement — accurate WPM/accuracy measurement on exam-realistic passages, in the correct language and layout — is fully covered by free browser-based tools, and the main paid-software advantages (offline use, enterprise reporting) don't matter for individual exam prep. Spend money on study material for the written stages instead; typing speed comes from practice time, not from the price of the tool you practice with.
+For government exam preparation specifically, there's rarely a need to pay. The core requirement — accurate net-WPM measurement on exam-realistic passages, in the correct language and layout — is covered by several free options, including the ones named above. Spend money on study material for the written stages instead; typing speed comes from practice time, not from the price of the tool you practice with.
 
 ## Start Practicing Today
 
-The best typing software is the one you actually use every day. Pick your exam, open the matching free test, and practice for 20–30 minutes daily. Consistency for 4–6 weeks is enough for most candidates to reach exam speed.
+Pick the tool that actually matches your exam's language, layout and format — not just whichever is most familiar — and practice for 20–30 minutes daily. Consistency for 4–6 weeks is enough for most candidates to reach exam speed, regardless of which free tool gets you there.
     `,
   },
   {
@@ -1964,7 +1961,7 @@ Because the two layouts place vowels, consonants and matras in different key pos
 
 ## Practice Hindi Typing Free
 
-FastTypingLab offers free Hindi typing practice in Mangal (INSCRIPT) and Kruti Dev, with an on-screen keyboard and live WPM and accuracy. Pick the layout your exam requires and practice daily to build real speed.
+If you're coming from a typewriter background, start your Remington Gail practice on FastTypingLab's layout rather than switching cold to INSCRIPT — your existing muscle memory is a real head start, and the two layouts interfere with each other enough that re-learning from scratch wastes it. Confirm your specific exam still lists Remington Gail as accepted before committing to it over INSCRIPT.
     `,
   },
   {
