@@ -791,7 +791,7 @@ Shorthand is a two-part skill: **write fast in Pitman, then transcribe fast by t
     slug: 'how-to-type-faster-in-30-days',
     title: 'How to Type Faster in 30 Days: A Complete Guide',
     seoTitle: 'How to Type Faster in 30 Days | FastTypingLab',
-    metaDesc: 'Learn how to increase your typing speed from 30 WPM to 70+ WPM in just 30 days with this step-by-step daily practice guide.',
+    metaDesc: 'A 30-day daily practice plan to build typing speed, with a week-by-week structure and realistic WPM ranges depending on your starting point.',
     category: 'Tips & Tricks',
     readTime: '7 min',
     date: '2026-05-20',
