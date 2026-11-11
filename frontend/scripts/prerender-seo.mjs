@@ -135,7 +135,10 @@ const ROUTES = [
     ['Why does Kruti Dev text look like random English letters?', 'Kruti Dev is a legacy non-Unicode font. The file stores ordinary Latin characters and the Kruti Dev font draws Devanagari shapes over them, so without that font installed the text looks like gibberish.'],
     ['Is this Kruti Dev converter free?', 'Yes, completely free with no signup and no limit, and your text never leaves your device.'],
   ]) },
-  { path: '/font-converter', title: 'Hindi Font Converter — Kruti Dev ↔ Unicode (Mangal) | FastTypingLab', description: 'Convert Hindi text between Kruti Dev and Unicode (Mangal) instantly. Free browser-based Hindi font converter — copy or download the result, no signup needed.' },
+  // Byte-identical duplicate of /kruti-dev-to-unicode (same FontConverterPage
+  // component, no path-based branching) -- canonicalized to it rather than
+  // removed, since it's live in the sitemap and may already have backlinks.
+  { path: '/font-converter', title: 'Hindi Font Converter — Kruti Dev ↔ Unicode (Mangal) | FastTypingLab', description: 'Convert Hindi text between Kruti Dev and Unicode (Mangal) instantly. Free browser-based Hindi font converter — copy or download the result, no signup needed.', canonical: '/kruti-dev-to-unicode' },
   { path: '/live-test', title: 'Weekly Live Typing Test — Compete Every Sunday | FastTypingLab', description: 'Join the free weekly Live Typing Test every Sunday at 7 PM IST. Everyone types the same passage, then compares WPM on the leaderboard.', jsonLd: faqLd([
     ['When is the weekly Live Typing Test?', 'Every Sunday at 7:00 PM IST. The event window stays open for one hour, and the test itself is one minute long.'],
     ['Do I need an account to join the Live Test?', 'No. You can take the Live Test without signing up. Creating a free account means your result is saved to your profile and can appear on the leaderboard with your name.'],
@@ -313,11 +316,15 @@ for (const r of ROUTES) {
   // GitHub Pages serves dist/<path>/index.html and 301-redirects /path -> /path/,
   // so the canonical must use the trailing-slash form it actually serves.
   const url = `${SITE}${r.path === '/' ? '/' : r.path + '/'}`;
+  // r.canonical lets a duplicate page point its canonical tag at the
+  // preferred URL instead of itself (e.g. /font-converter -> /kruti-dev-to-unicode),
+  // telling Google which one to index without 404ing or losing any backlinks.
+  const canonicalUrl = r.canonical ? `${SITE}${r.canonical}/` : url;
   const type = r.type || 'website';
   let html = TEMPLATE;
   html = setTitle(html, r.title);
   html = setNamedMeta(html, 'description', r.description);
-  html = setCanonical(html, url);
+  html = setCanonical(html, canonicalUrl);
   html = setPropMeta(html, 'og:title', r.title);
   html = setPropMeta(html, 'og:description', r.description);
   html = setPropMeta(html, 'og:url', url);

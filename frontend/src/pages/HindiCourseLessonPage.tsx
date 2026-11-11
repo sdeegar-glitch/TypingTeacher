@@ -201,6 +201,7 @@ export default function HindiCourseLessonPage() {
       <Seo
         title={`${lesson.title} | FastTypingLab`}
         description={`Practice lesson ${id} of the ${isKrutiDev ? 'Kruti Dev' : 'Unicode'} Hindi typing course: ${lesson.title}. Free guided lesson with live WPM, accuracy and stars.`}
+        noindex
       />
 
       <textarea {...engine.inputProps} />
