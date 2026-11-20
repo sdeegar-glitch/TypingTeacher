@@ -94,10 +94,9 @@ export default function AiTutorPage() {
 
         <PageHeader
           icon={Sparkles}
-          gradient="linear-gradient(135deg,#304C53,#2A9DAE)"
-          eyebrow="Powered by AI"
-          title={<>Your <span className="gradient-text">AI Typing Tutor</span></>}
-          subtitle="Analyze your typing and get a personalized, step-by-step plan to type faster and more accurately — tuned to your stats and goals."
+          eyebrow="Diagnostic Plan"
+          title="Personalized Typing Tutor Plan"
+          subtitle="Analyze your test history to build a targeted practice routine matched to your current accuracy and target WPM."
         />
 
         {/* ── Your stats ── */}
@@ -138,14 +137,13 @@ export default function AiTutorPage() {
             <input
               value={goal} onChange={e => setGoal(e.target.value)}
               placeholder="e.g. Reach 40 WPM for SSC CHSL, or improve Hindi accuracy"
-              className="w-full bg-brand-surface border border-brand-border rounded-xl px-4 py-3 text-sm text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-primary/50 mb-3"
+              className="w-full bg-brand-surface border border-brand-border rounded-lg px-4 py-2.5 text-sm text-brand-text placeholder:text-brand-muted focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/30 mb-3"
             />
             <button onClick={() => analyze()} disabled={loading}
-              className="w-full inline-flex items-center justify-center gap-2 text-white px-6 py-3.5 rounded-2xl font-bold transition-all active:scale-[.99] disabled:opacity-60 shadow-lg"
-              style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-              {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Analyzing your typing…</>
-                : plan ? <><RefreshCw className="w-5 h-5" /> Regenerate my plan</>
-                : <><Sparkles className="w-5 h-5" /> Analyze my typing &amp; build my plan</>}
+              className="w-full inline-flex items-center justify-center gap-2 text-white px-6 py-2.5 rounded-md font-semibold text-sm bg-brand-primary hover:opacity-95 transition-all active:scale-[.99] disabled:opacity-60 shadow-sm">
+              {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Analyzing your typing…</>
+                : plan ? <><RefreshCw className="w-4 h-4" /> Regenerate my plan</>
+                : <><Sparkles className="w-4 h-4" /> Analyze my typing &amp; build plan</>}
             </button>
             {stats && (
               <p className="text-center text-xs text-brand-muted mt-2">

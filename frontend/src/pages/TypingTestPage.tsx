@@ -1144,7 +1144,7 @@ export default function TypingTestPage() {
               <ul className="list-disc pl-5 space-y-1">
                 <li>Keep your eyes on the passage, not your hands — glancing down breaks your rhythm more than it helps.</li>
                 <li>Slow down slightly if you're making frequent mistakes; a clean 45 WPM beats a sloppy 60 WPM on most tests.</li>
-                <li>Practice the same duration as your real exam or job test, not just quick one-minute bursts.</li>
+                <li>Practice the exact duration of your exam or job test; short sprints do not reveal stamina fatigue.</li>
                 <li>Retype passages you found hard — repetition on your weak spots improves speed faster than random practice.</li>
               </ul>
             </div>

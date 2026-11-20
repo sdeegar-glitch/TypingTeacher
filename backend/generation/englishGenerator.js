@@ -19,6 +19,9 @@ Rewrite this as a unique, original article for typing practice, at LEAST 1000 wo
 - Plain text only, NO markdown, no bullet points, no headers — just flowing paragraphs
 - Excellent grammar, clear sentences
 - Different enough from the source to be plagiarism-free (your own words and structure)
+- Natural human prose: avoid AI clichés and throat-clearing (e.g., "In today's fast-paced world", "It is crucial to note", "Whether you are", "stands as a testament", "tapestry", "delve", "beacon").
+- Do not use generic summary conclusions ("In conclusion", "Ultimately", "The future looks bright"). End naturally on concrete factual details.
+- Avoid artificial "Not only X but Y" or "Not X, but Y" rhetorical contrasts. State facts directly.
 ${isExamGk ? `- This is General Awareness revision material for Indian government exams (SSC, CPCT, UPSSSC, state clerk). Keep it factually accurate and densely informative: include the specific names, dates, articles, numbers and definitions a candidate would be tested on, worked naturally into the prose. The reader should be revising real exam content while they type.` : ''}
 ${difficultyMixInstructions(targetDifficulty)}
 Return ONLY valid JSON:

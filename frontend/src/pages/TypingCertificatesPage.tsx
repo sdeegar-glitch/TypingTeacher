@@ -7,7 +7,7 @@ import PageHeader from '../components/PageHeader';
 
 const CERT_FEATURES = [
   { icon: '🏆', title: 'WPM Certified', desc: 'Your words per minute score is officially recorded and displayed on the certificate.' },
-  { icon: '🎯', title: 'Accuracy Score', desc: 'Your typing accuracy percentage is included — crucial for government exam requirements.' },
+  { icon: '🎯', title: 'Accuracy Score', desc: 'Displays your verified accuracy percentage required by government exam boards.' },
   { icon: '🔐', title: 'QR Verification', desc: 'Each certificate has a unique QR code that verifies authenticity at fasttypinglab.com/certificate.' },
   { icon: '📅', title: 'Date & Name', desc: 'Certificate includes your name, test title, language, and date of issue.' },
   { icon: '📥', title: 'Instant Download', desc: 'Download a print-ready PDF or a PNG image as soon as it is issued. Needs a free account.' },

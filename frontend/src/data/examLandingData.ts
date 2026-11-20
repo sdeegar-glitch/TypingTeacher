@@ -41,7 +41,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       'No part of the test rewards reckless speed — clean typing wins.',
     ],
     tips: [
-      'Practice the full 10-minute format, not just 1-minute tests — stamina matters.',
+      'Practice the full 10-minute format to build stamina for exam day.',
       'Aim for 40+ WPM in practice so exam nerves never pull you below the 35 cut-off.',
       'Use formal, government-style passages; the vocabulary differs from casual text.',
       'Never look at the keyboard — touch typing is the only way past ~35 WPM.',
@@ -313,7 +313,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
       'Accuracy matters — errors reduce your effective key-depression count.',
     ],
     tips: [
-      'Build endurance for the full 15-minute duration, not just short bursts.',
+      'Build stamina by practicing the complete 15-minute exam block.',
       'Target 35+ WPM so you comfortably clear 8,000 KDPH.',
       'Keep accuracy high; corrections cost you depressions and time.',
       'Practice on formal, data-entry-style English passages.',
@@ -551,7 +551,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     tips: [
       'Confirm the required language, speed and Hindi font from your AHC notification.',
       'Aim a few WPM above the minimum so exam nerves do not pull you below it.',
-      'Each mistake costs 0.1 marks here, so cleaning up matras and half-letters pays off directly in your score, not just your speed.',
+      'Each mistake costs 0.1 marks here, so cleaning up matras and half-letters directly protects both your final score and effective speed.',
       'Do daily timed tests in the exam format to build stamina.',
     ],
     faqs: [
@@ -590,7 +590,7 @@ export const EXAM_LANDINGS: Record<string, ExamLanding> = {
     tips: [
       'Decide your language early and practise only that one to build consistency.',
       'Aim above the minimum so exam pressure does not pull you below the cut-off.',
-      'Since speed converts directly into marks here, clean up Hindi matras and half-letters to push into the next scoring band, not just to pass.',
+      'Since speed converts directly into marks here, clean up Hindi matras and half-letters to reach higher scoring bands rather than settling for the bare minimum.',
       'Do daily 10-minute timed tests to build exam stamina.',
     ],
     faqs: [

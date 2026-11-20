@@ -97,8 +97,8 @@ const CURRICULUM: [title: string, content: string][] = [
   ['Symbols and signs', 'Email me at user@site.com or call 555-123-4567. The total was 45 dollars and 90 cents, a 10% discount on the number 1 best-seller. Use the code SAVE10 and save more.'],
   ['Posture matters', 'Good posture matters as much as finger placement. Sit upright, keep your wrists relaxed, and place the screen at eye level so you can type for long periods without any strain.'],
   ['Exam stamina', 'Government typing tests measure both speed and accuracy over several minutes. Candidates should practise the exact format daily to build the stamina needed to hold their speed.'],
-  ['Longer paragraph', 'The ability to type quickly and accurately is one of the most useful skills in the digital age. Whether you are a student, a professional, or preparing for an exam, steady daily practice on a physical keyboard will raise your words per minute.'],
-  ['Mixed challenge', 'By 2030, most jobs will require basic computer skills. Type smart, not just fast, the experts say. Practise 15 to 20 minutes a day, track your WPM, and review your 3 slowest keys.'],
+  ['Longer paragraph', 'Accurate touch typing saves hours of correction time across school, office, and recruitment tests. Steady daily practice on a physical keyboard builds muscle memory and raises your net words per minute.'],
+  ['Mixed challenge', 'By 2030, most workplace tasks require fast, accurate computer input. Prioritise clean accuracy before chasing top speed. Practise 15 to 20 minutes a day, track your WPM, and review your 3 slowest keys.'],
   ['Final challenge', 'Congratulations on reaching the final lesson. You have built the muscle memory to type without looking, moved across all three rows, and handled words, sentences, numbers, and symbols. Keep practising every day and your speed will keep climbing.'],
 ];
 

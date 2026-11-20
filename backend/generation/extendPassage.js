@@ -24,7 +24,7 @@ function continuationPrompt(content, lang, wordsNeeded) {
 
 """${tail}"""
 
-Continue the article in ${language} with about ${wordsNeeded} more words. Pick up exactly where it stops, add new points (do not repeat or summarise what came before), and end with a natural concluding paragraph. Plain flowing paragraphs only: no markdown, no headings, no bullet points.
+Continue the article in ${language} with about ${wordsNeeded} more words. Pick up exactly where it stops, add new points (do not repeat or summarise what came before), and end naturally on concrete factual points without generic summary clichés (no "In conclusion" or "Ultimately"). Plain flowing paragraphs only: no markdown, no headings, no bullet points.
 
 Return ONLY valid JSON: {"continuation": "the new text"}`;
 }
