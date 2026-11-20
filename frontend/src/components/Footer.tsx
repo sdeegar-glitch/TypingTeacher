@@ -61,8 +61,7 @@ export default function Footer() {
           {/* Brand + community */}
           <div>
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs text-white shadow-sm"
-                style={{ background: 'linear-gradient(135deg, #304C53, #2A9DAE)' }}>F</span>
+              <span className="w-7 h-7 rounded-md flex items-center justify-center font-bold text-xs text-white shadow-sm bg-brand-primary">F</span>
               <span className="font-extrabold text-brand-text text-base">FastTypingLab</span>
             </div>
             <p className="text-xs text-brand-muted max-w-xs leading-snug mb-3">

@@ -182,8 +182,7 @@ export default function ExamTypingInterface({ passage, durationSec, isHindi, exa
           <button onClick={onExit} className="text-sm text-brand-muted hover:text-brand-primary transition-colors">← Exit</button>
           <span className="text-sm font-bold text-brand-text truncate px-2">{examTitle} — Typing Test</span>
           <button onClick={computeAndFinish}
-            className="text-sm font-bold text-white px-3.5 py-1.5 rounded-lg transition-all hover:opacity-90 active:scale-95 shadow-lg"
-            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+            className="text-xs font-semibold text-white px-3.5 py-1.5 rounded-md transition-all bg-brand-primary hover:opacity-95 active:scale-[0.98] shadow-sm">
             Result
           </button>
         </div>
@@ -191,14 +190,14 @@ export default function ExamTypingInterface({ passage, durationSec, isHindi, exa
         {/* Stat bar */}
         <div className="grid grid-cols-4 gap-2 mb-3">
           {[
-            { label: 'Gross', value: grossWpm, cls: 'bg-brand-primary/10 border-brand-primary/20 text-brand-primary' },
-            { label: 'Delete', value: deletes, cls: 'bg-amber-500/10 border-amber-500/20 text-amber-600' },
-            { label: 'Backspace', value: backspaces, cls: 'bg-rose-500/10 border-rose-500/20 text-rose-500' },
-            { label: 'Time Left', value: mmss, cls: urgent ? 'bg-rose-500/20 border-rose-500/40 text-rose-500 animate-pulse' : 'bg-brand-accent/10 border-brand-accent/20 text-brand-accent' },
+            { label: 'Gross WPM', value: grossWpm, cls: 'bg-brand-surface border-brand-border text-brand-primary' },
+            { label: 'Delete', value: deletes, cls: 'bg-brand-surface border-brand-border text-amber-600' },
+            { label: 'Backspace', value: backspaces, cls: 'bg-brand-surface border-brand-border text-rose-500' },
+            { label: 'Time Left', value: mmss, cls: urgent ? 'bg-rose-500/10 border-rose-500/30 text-rose-500 animate-pulse' : 'bg-brand-surface border-brand-border text-brand-accent' },
           ].map(s => (
-            <div key={s.label} className={`rounded-xl px-2 py-2.5 text-center border ${s.cls}`}>
-              <div className="text-[9px] sm:text-[10px] uppercase tracking-widest opacity-70">{s.label}</div>
-              <motion.div key={String(s.value)} initial={{ scale: 1.15 }} animate={{ scale: 1 }} className="text-base sm:text-xl font-black font-mono tabular-nums">{s.value}</motion.div>
+            <div key={s.label} className={`rounded-lg px-2 py-2 text-center border ${s.cls}`}>
+              <div className="text-[10px] font-medium uppercase tracking-wider text-brand-muted">{s.label}</div>
+              <motion.div key={String(s.value)} initial={{ scale: 1.1 }} animate={{ scale: 1 }} className="text-base sm:text-lg font-bold font-mono tabular-nums">{s.value}</motion.div>
             </div>
           ))}
         </div>
@@ -215,7 +214,7 @@ export default function ExamTypingInterface({ passage, durationSec, isHindi, exa
 
         {/* Passage box (cluster-aware so Devanagari conjuncts keep their shape) */}
         {showPassage && (
-          <div ref={passageBoxRef} className="bg-brand-surface border border-brand-border rounded-xl p-4 mb-3 h-40 sm:h-44 overflow-y-auto leading-[2.5rem] text-lg sm:text-xl select-none" style={devFont}>
+          <div ref={passageBoxRef} className="bg-brand-surface border border-brand-border rounded-lg p-4 mb-3 h-40 sm:h-44 overflow-y-auto leading-[2.5rem] text-lg sm:text-xl select-none" style={devFont}>
             <ClusterText text={passage} typedLength={typedLen} mistakes={wrongIdx} skipped={noSkipped} currentIndex={typedLen} />
           </div>
         )}
@@ -223,7 +222,7 @@ export default function ExamTypingInterface({ passage, durationSec, isHindi, exa
         {/* Input box (capped + scrolls) */}
         <div
           ref={inputBoxRef}
-          className="bg-brand-surface border-2 border-brand-accent/40 focus-within:border-brand-accent rounded-xl p-4 h-28 overflow-y-auto text-lg sm:text-xl leading-relaxed cursor-text transition-colors"
+          className="bg-brand-surface border border-brand-border focus-within:border-brand-primary rounded-lg p-4 h-28 overflow-y-auto text-lg sm:text-xl leading-relaxed cursor-text transition-colors shadow-inner"
           style={devFont}>
           {typedLen || engine.composing ? (
             <span className="text-brand-text whitespace-pre-wrap break-words">

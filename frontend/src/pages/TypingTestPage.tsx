@@ -742,9 +742,8 @@ export default function TypingTestPage() {
               Live
             </span>
           )}
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-white truncate max-w-[35%] sm:max-w-xs"
-            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-            <span className="opacity-80 font-semibold">Passage:</span> <span className="truncate">{testContent.title}</span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-white truncate max-w-[35%] sm:max-w-xs bg-brand-primary shadow-sm">
+            <span className="opacity-80 font-normal">Passage:</span> <span className="truncate font-semibold">{testContent.title}</span>
           </span>
           {testContent.excerpt && (
             <div className="relative shrink-0">
@@ -798,12 +797,12 @@ export default function TypingTestPage() {
             the compact meta line below instead. */}
         <div className="grid grid-cols-4 gap-1.5 sm:gap-2 w-full max-w-2xl">
           {[
-            { label: 'Gross', value: stats.wpm, icon: Zap, cls: 'bg-brand-primary/10 border-brand-primary/30 text-brand-primary' },
-            { label: 'Net', value: stats.netWpm, icon: Zap, cls: 'bg-brand-accent/10 border-brand-accent/30 text-brand-accent' },
-            { label: 'Accuracy', value: `${stats.accuracy}%`, icon: Target, cls: stats.accuracy >= 90 ? 'bg-brand-accent/10 border-brand-accent/30 text-brand-accent' : 'bg-rose-500/10 border-rose-500/30 text-rose-500' },
-            { label: 'Time Left', value: formattedTime, icon: Clock, cls: stats.timeLeft <= 10 && stats.isActive ? 'bg-rose-500/15 border-rose-500/40 text-rose-500 animate-pulse' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400' },
+            { label: 'Gross', value: stats.wpm, icon: Zap, cls: 'bg-brand-surface border-brand-border text-brand-primary' },
+            { label: 'Net', value: stats.netWpm, icon: Zap, cls: 'bg-brand-surface border-brand-border text-brand-accent' },
+            { label: 'Accuracy', value: `${stats.accuracy}%`, icon: Target, cls: stats.accuracy >= 90 ? 'bg-brand-surface border-brand-border text-brand-accent' : 'bg-rose-500/10 border-rose-500/20 text-rose-500' },
+            { label: 'Time Left', value: formattedTime, icon: Clock, cls: stats.timeLeft <= 10 && stats.isActive ? 'bg-rose-500/15 border-rose-500/40 text-rose-500 animate-pulse' : 'bg-brand-surface border-brand-border text-brand-text' },
           ].map(s => (
-            <div key={s.label} className={`rounded-xl px-1.5 py-1.5 sm:py-2 text-center border ${s.cls}`}>
+            <div key={s.label} className={`rounded-lg px-1.5 py-1.5 sm:py-2 text-center border ${s.cls}`}>
               <div className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest opacity-80 flex items-center justify-center gap-0.5">
                 <s.icon className="w-2.5 h-2.5" /> {s.label}
               </div>
@@ -824,8 +823,7 @@ export default function TypingTestPage() {
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-2xl mb-3 flex items-center gap-3 rounded-2xl px-4 py-3 border"
-            style={{ background: 'linear-gradient(135deg, rgba(188,108,80,0.12), rgba(188,108,80,0.04))', borderColor: 'rgba(188,108,80,0.3)' }}
+            className="w-full max-w-2xl mb-3 flex items-center gap-3 rounded-lg px-4 py-3 border border-brand-primary/20 bg-brand-surface"
           >
             <span className="text-2xl shrink-0">🏁</span>
             <div className="text-left">
@@ -856,8 +854,7 @@ export default function TypingTestPage() {
               </p>
               {isMobile && (
                 <button onClick={() => focusInput()}
-                  className="text-xs font-bold text-white px-3 py-1.5 rounded-lg transition-all"
-                  style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                  className="text-xs font-semibold text-white px-3 py-1.5 rounded-md bg-brand-primary hover:opacity-95 transition-all shadow-sm">
                   Tap to type
                 </button>
               )}

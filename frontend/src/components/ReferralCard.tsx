@@ -45,7 +45,7 @@ export default function ReferralCard({ showTiers = false }: { showTiers?: boolea
 
   if (loading) {
     return (
-      <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 flex items-center gap-3 text-sm text-brand-muted">
+      <div className="bg-brand-surface border border-brand-border rounded-lg p-5 flex items-center gap-3 text-sm text-brand-muted">
         <Loader2 className="w-4 h-4 animate-spin" /> Loading your invite link…
       </div>
     );
@@ -61,17 +61,14 @@ export default function ReferralCard({ showTiers = false }: { showTiers?: boolea
   const pct = next ? Math.round((stats.qualified / next.count) * 100) : 100;
 
   return (
-    <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+    <div className="bg-brand-surface border border-brand-border rounded-lg p-5">
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex items-center gap-3">
-          <div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
-            style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}
-          >
-            <Gift className="w-6 h-6 text-white" />
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-brand-primary text-white shadow-sm">
+            <Gift className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-black text-brand-text leading-none">Invite a friend</h3>
+            <h3 className="font-bold text-brand-text leading-none">Invite a friend</h3>
             <p className="text-xs text-brand-muted mt-1.5">
               {stats.qualified === 0
                 ? 'Share your link — invites count once they take a test.'
@@ -80,7 +77,7 @@ export default function ReferralCard({ showTiers = false }: { showTiers?: boolea
           </div>
         </div>
         {tier && (
-          <span className="shrink-0 text-xs font-bold px-3 py-1.5 rounded-full bg-brand-surface-2 border border-brand-border text-brand-text">
+          <span className="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-surface-2 border border-brand-border text-brand-text">
             {tier.emoji} {tier.name}
           </span>
         )}
@@ -88,12 +85,12 @@ export default function ReferralCard({ showTiers = false }: { showTiers?: boolea
 
       {/* Share link */}
       <div className="flex items-stretch gap-2 mb-3">
-        <div className="flex-1 min-w-0 px-3 py-2.5 rounded-xl bg-brand-surface-2 border border-brand-border font-mono text-sm text-brand-text truncate flex items-center">
+        <div className="flex-1 min-w-0 px-3 py-2 rounded-md bg-brand-surface-2 border border-brand-border font-mono text-sm text-brand-text truncate flex items-center">
           {url}
         </div>
         <button
           onClick={copyLink}
-          className="shrink-0 px-4 rounded-xl bg-brand-primary text-white text-sm font-bold flex items-center gap-1.5 hover:opacity-90 transition-opacity"
+          className="shrink-0 px-3.5 py-2 rounded-md bg-brand-primary text-white text-sm font-semibold flex items-center gap-1.5 hover:opacity-95 shadow-sm active:scale-[0.98] transition-all"
           aria-label="Copy your invite link"
         >
           {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}

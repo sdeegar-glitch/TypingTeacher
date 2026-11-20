@@ -56,7 +56,7 @@ export default function KeyHeatmapCard() {
     .slice(0, 5);
 
   return (
-    <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+    <div className="bg-brand-surface border border-brand-border rounded-lg p-5">
       <h2 className="font-bold text-brand-text mb-1 flex items-center gap-2">
         <Keyboard className="w-4 h-4 text-brand-primary" /> Your Key Heatmap
       </h2>

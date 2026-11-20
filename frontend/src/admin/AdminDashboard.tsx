@@ -61,7 +61,7 @@ function NotificationsPanel() {
         {logs.map(log => {
           const type = typeFor(log.status);
           return (
-            <div key={log.id} className={`flex items-start gap-4 p-4 rounded-2xl border ${type === 'info' ? 'bg-indigo-500/10 border-indigo-500/20' : type === 'warning' ? 'bg-amber-500/10 border-amber-500/20' : 'bg-rose-500/10 border-rose-500/20'}`}>
+            <div key={log.id} className={`flex items-start gap-4 p-4 rounded-lg border ${type === 'info' ? 'bg-indigo-500/10 border-indigo-500/20' : type === 'warning' ? 'bg-amber-500/10 border-amber-500/20' : 'bg-rose-500/10 border-rose-500/20'}`}>
               <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${type === 'info' ? 'bg-indigo-400' : type === 'warning' ? 'bg-amber-400' : 'bg-rose-400'}`} />
               <div>
                 <p className="text-sm text-white">{log.action.replace(/_/g, ' ')}{log.actor_email ? ` — ${log.actor_email}` : ''}</p>
@@ -159,22 +159,22 @@ export default function AdminDashboard() {
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               placeholder="Quick search..."
-              className="pl-8 pr-4 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 w-48"
+              className="pl-8 pr-4 py-1.5 bg-slate-900 border border-slate-800 rounded-md text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-primary-500/40 focus:border-primary-500 w-48"
             />
-            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-600 bg-white/5 px-1 rounded">⌘K</span>
+            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-500 bg-slate-800 px-1 rounded">⌘K</span>
           </div>
 
           {/* Actions */}
           <div className="flex items-center gap-2">
             <div className="relative">
-              <button onClick={() => setNotifOpen(!notifOpen)} className="relative p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors">
+              <button onClick={() => setNotifOpen(!notifOpen)} className="relative p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-md transition-colors">
                 <Bell size={18} />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full" />
               </button>
             </div>
-            <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-1.5">
-              <div className="w-6 h-6 rounded-full bg-indigo-500/30 border border-indigo-500/40 flex items-center justify-center">
-                <User size={12} className="text-indigo-400" />
+            <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-md px-3 py-1.5">
+              <div className="w-6 h-6 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center">
+                <User size={12} className="text-primary-400" />
               </div>
               <div className="hidden sm:block">
                 <div className="text-xs font-semibold text-white">{adminUser?.name || adminUser?.email || 'Admin'}</div>

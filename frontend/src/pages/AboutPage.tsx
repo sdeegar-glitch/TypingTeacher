@@ -29,7 +29,7 @@ export default function AboutPage() {
           more accurately — without paywalls, and without needing to sign up just to practise.
         </p>
 
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-5">
+        <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-5 shadow-sm">
           <h2 className="font-bold text-lg mb-2">Why we built it</h2>
           <p className="text-brand-text-muted text-sm leading-relaxed">
             Most typing sites are built for English keyboards and generic speed tests. They don't handle
@@ -42,7 +42,7 @@ export default function AboutPage() {
         <h2 className="text-xl font-black mb-4">What you get — all free</h2>
         <div className="grid sm:grid-cols-2 gap-4 mb-5">
           {OFFERINGS.map(o => (
-            <div key={o.title} className="bg-brand-surface border border-brand-border rounded-2xl p-4">
+            <div key={o.title} className="bg-brand-surface border border-brand-border rounded-lg p-4 shadow-sm">
               <o.icon className="w-5 h-5 text-brand-primary mb-2" />
               <h3 className="font-bold text-sm mb-1">{o.title}</h3>
               <p className="text-brand-text-muted text-xs leading-relaxed">{o.desc}</p>
@@ -50,7 +50,7 @@ export default function AboutPage() {
           ))}
         </div>
 
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-5">
+        <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-5 shadow-sm">
           <h2 className="font-bold text-lg mb-2">Our commitment</h2>
           <ul className="text-brand-text-muted text-sm leading-relaxed space-y-2">
             <li>• <strong className="text-brand-text">Free to use</strong> — the core practice is, and will stay, free.</li>
@@ -59,7 +59,7 @@ export default function AboutPage() {
           </ul>
         </div>
 
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-5">
+        <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-5 shadow-sm">
           <h2 className="font-bold text-lg mb-2">Our editorial standards</h2>
           <p className="text-brand-text-muted text-sm leading-relaxed mb-3">
             We care about getting things right, because people rely on our practice material for real exams and jobs.
@@ -75,10 +75,10 @@ export default function AboutPage() {
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <Link to="/tests/" className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-6 py-3 rounded-xl font-bold text-sm transition-all">
+          <Link to="/tests/" className="inline-flex items-center gap-2 bg-brand-primary hover:opacity-95 text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm active:scale-[0.98]">
             <Zap className="w-4 h-4" /> Start a Free Test
           </Link>
-          <Link to="/contact/" className="inline-flex items-center gap-2 bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text px-6 py-3 rounded-xl font-bold text-sm transition-all">
+          <Link to="/contact/" className="inline-flex items-center gap-2 bg-brand-surface border border-brand-border hover:bg-brand-surface-2 text-brand-text px-5 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm">
             Contact Us
           </Link>
         </div>

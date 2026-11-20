@@ -108,7 +108,7 @@ export default function CompetitiveExamTypingPage() {
               { label: 'Min WPM Required', value: '25–35', color: 'text-brand-accent' },
               { label: 'Practice Tests', value: 'Free', color: 'text-amber-500' },
             ].map(s => (
-              <div key={s.label} className="bg-brand-surface border border-brand-border rounded-xl px-3 py-2 flex items-center justify-center gap-2">
+              <div key={s.label} className="bg-brand-surface border border-brand-border rounded-lg px-3 py-2 flex items-center justify-center gap-2">
                 <span className={`text-base font-extrabold font-mono leading-none ${s.color}`}>{s.value}</span>
                 <span className="text-xs text-brand-muted">{s.label}</span>
               </div>
@@ -124,23 +124,23 @@ export default function CompetitiveExamTypingPage() {
               <motion.div key={exam.name}
                 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
                 <Link to={exam.href}
-                  className={`group block bg-brand-surface border ${exam.border} hover:border-brand-primary/40 rounded-2xl p-4 transition-all hover:shadow-md hover:-translate-y-0.5`}>
+                  className={`group block bg-brand-surface border ${exam.border} hover:border-brand-primary/40 rounded-lg p-4 transition-all hover:shadow-sm`}>
                   <div className="flex items-start justify-between mb-2">
-                    <div className={`px-2.5 py-1 rounded-lg text-xs font-bold ${exam.bg} ${exam.color}`}>{exam.name}</div>
+                    <div className={`px-2 py-0.5 rounded text-xs font-semibold ${exam.bg} ${exam.color}`}>{exam.name}</div>
                     <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all" />
                   </div>
                   <p className="text-xs text-brand-muted mb-2 leading-snug">{exam.full}</p>
                   <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="bg-brand-surface-2 rounded-lg p-2">
-                      <div className={`font-black text-sm ${exam.color}`}>{exam.wpm}+</div>
+                    <div className="bg-brand-surface-2 rounded p-2">
+                      <div className={`font-bold font-mono text-sm ${exam.color}`}>{exam.wpm}+</div>
                       <div className="text-[10px] text-brand-muted">WPM</div>
                     </div>
-                    <div className="bg-brand-surface-2 rounded-lg p-2">
-                      <div className="font-black text-sm text-brand-text">{exam.accuracy}%</div>
+                    <div className="bg-brand-surface-2 rounded p-2">
+                      <div className="font-bold font-mono text-sm text-brand-text">{exam.accuracy}%</div>
                       <div className="text-[10px] text-brand-muted">Accuracy</div>
                     </div>
-                    <div className="bg-brand-surface-2 rounded-lg p-2">
-                      <div className="font-black text-sm text-brand-text">{exam.duration}</div>
+                    <div className="bg-brand-surface-2 rounded p-2">
+                      <div className="font-bold font-mono text-sm text-brand-text">{exam.duration}</div>
                       <div className="text-[10px] text-brand-muted">Duration</div>
                     </div>
                   </div>
@@ -174,7 +174,7 @@ export default function CompetitiveExamTypingPage() {
               { label: 'RRB Typing Test', href: '/rrb-typing-test/' },
             ].map(g => (
               <Link key={g.href} to={g.href}
-                className="group flex items-center justify-between gap-2 bg-brand-surface border border-brand-border rounded-xl px-4 py-3 text-sm font-semibold text-brand-text hover:border-brand-primary/40 transition-all">
+                className="group flex items-center justify-between gap-2 bg-brand-surface border border-brand-border rounded-lg px-4 py-3 text-sm font-semibold text-brand-text hover:border-brand-primary/40 transition-all">
                 {g.label}
                 <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary transition-all shrink-0" />
               </Link>
@@ -187,8 +187,8 @@ export default function CompetitiveExamTypingPage() {
           <h2 className="text-xl font-black text-brand-text mb-4">Expert Preparation Tips</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {TIPS.map((tip, i) => (
-              <div key={i} className="flex items-start gap-4 bg-brand-surface border border-brand-border rounded-2xl p-4">
-                <div className="w-9 h-9 rounded-xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center shrink-0">
+              <div key={i} className="flex items-start gap-4 bg-brand-surface border border-brand-border rounded-lg p-4">
+                <div className="w-8 h-8 rounded-md bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center shrink-0">
                   <tip.icon className="w-4 h-4 text-brand-primary" />
                 </div>
                 <div>
@@ -204,14 +204,14 @@ export default function CompetitiveExamTypingPage() {
         <div className="grid sm:grid-cols-3 gap-3 mb-5">
           {[
             { label: 'English Typing Test', desc: '1/2/5/10 min tests', href: '/tests/', color: 'bg-brand-primary' },
-            { label: 'Hindi Typing Test', desc: 'Unicode Devanagari', href: '/hindi-typing-test/', color: 'bg-orange-500' },
-            { label: 'Learn Hindi Typing', desc: 'Step-by-step course', href: '/learn-hindi-typing/', color: 'bg-emerald-600' },
+            { label: 'Hindi Typing Test', desc: 'Unicode Devanagari', href: '/hindi-typing-test/', color: 'bg-brand-secondary' },
+            { label: 'Learn Hindi Typing', desc: 'Step-by-step course', href: '/learn-hindi-typing/', color: 'bg-slate-800 dark:bg-slate-900 border border-brand-border' },
           ].map(cta => (
             <Link key={cta.label} to={cta.href}
-              className={`${cta.color} text-white rounded-2xl p-4 flex items-center justify-between group hover:opacity-90 transition-all`}>
+              className={`${cta.color} text-white rounded-lg p-4 flex items-center justify-between group hover:opacity-95 transition-all shadow-sm`}>
               <div>
                 <div className="font-bold text-sm">{cta.label}</div>
-                <div className="text-white/70 text-xs">{cta.desc}</div>
+                <div className="text-white/80 text-xs">{cta.desc}</div>
               </div>
               <ChevronRight className="w-5 h-5 opacity-70 group-hover:translate-x-0.5 transition-transform" />
             </Link>
@@ -223,8 +223,8 @@ export default function CompetitiveExamTypingPage() {
           <h2 className="text-xl font-black text-brand-text mb-4">Frequently Asked Questions</h2>
           <div className="space-y-3">
             {FAQS.map((faq, i) => (
-              <div key={i} className="bg-brand-surface border border-brand-border rounded-2xl p-4">
-                <h3 className="font-bold text-brand-text mb-2">{faq.q}</h3>
+              <div key={i} className="bg-brand-surface border border-brand-border rounded-lg p-4">
+                <h3 className="font-bold text-brand-text mb-2 text-sm">{faq.q}</h3>
                 <p className="text-brand-text-muted text-sm leading-relaxed">{faq.a}</p>
               </div>
             ))}

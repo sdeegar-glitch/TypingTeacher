@@ -202,37 +202,36 @@ const Navbar = () => {
             <div className="hidden xl:flex items-center gap-1.5">
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" title="Join our WhatsApp channel"
                 onClick={() => trackEvent('whatsapp_cta_click', { variant: 'navbar', page: window.location.pathname })}
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all hover:opacity-90 hover:-translate-y-px"
+                className="w-8 h-8 rounded-md flex items-center justify-center text-white transition-all hover:opacity-90"
                 style={{ background: '#188842' }}>
-                <MessageCircle size={16} />
+                <MessageCircle size={15} />
               </a>
               <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" title="Join our Telegram channel"
                 onClick={() => trackEvent('telegram_cta_click', { variant: 'navbar', page: window.location.pathname })}
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-white transition-all hover:opacity-90 hover:-translate-y-px"
+                className="w-8 h-8 rounded-md flex items-center justify-center text-white transition-all hover:opacity-90"
                 style={{ background: '#1B7EAE' }}>
-                <Send size={16} />
+                <Send size={15} />
               </a>
             </div>
 
             {/* Theme toggle */}
             <button onClick={toggleTheme} aria-label="Toggle theme"
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
+              className="w-8 h-8 rounded-md flex items-center justify-center text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
               {isDark
-                ? <Sun size={17} />
-                : <Moon size={17} />}
+                ? <Sun size={16} />
+                : <Moon size={16} />}
             </button>
 
             {/* Auth buttons — desktop only */}
             {isAuthenticated ? (
               <div className="hidden lg:flex items-center gap-1 xl:gap-2">
                 <Link to="/dashboard"
-                  className="px-2 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-sm font-semibold whitespace-nowrap text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
+                  className="px-2 xl:px-3 py-1.5 rounded-md text-[13px] xl:text-sm font-medium whitespace-nowrap text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
                   Dashboard
                 </Link>
                 <Link to="/profile" title="View profile"
                   className="flex items-center gap-2 pl-1 xl:pr-3 py-1 rounded-full border border-brand-border hover:bg-brand-surface-2 transition-all duration-200">
-                  <span className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-[11px] font-bold shrink-0"
-                    style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                  <span className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-[11px] font-bold shrink-0 bg-brand-primary">
                     {me.avatar ? <img src={me.avatar} alt="" width={28} height={28} className="w-full h-full object-cover" /> : avatarInitials}
                   </span>
                   <span className="hidden xl:inline text-sm font-semibold text-brand-text max-w-[120px] truncate">
@@ -240,28 +239,27 @@ const Navbar = () => {
                   </span>
                 </Link>
                 <button onClick={() => { void logoutAndRedirect(); }}
-                  className="px-2 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-sm font-semibold whitespace-nowrap text-brand-muted hover:text-rose-500 transition-all duration-200">
+                  className="px-2 xl:px-3 py-1.5 rounded-md text-[13px] xl:text-sm font-medium whitespace-nowrap text-brand-muted hover:text-rose-500 transition-all duration-200">
                   Logout
                 </button>
               </div>
             ) : (
               <div className="hidden lg:flex items-center gap-2">
                 <Link to="/login"
-                  className="px-3 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
+                  className="px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap text-brand-muted hover:text-brand-text hover:bg-brand-surface-2 transition-all duration-200">
                   Log in
                 </Link>
                 <Link to="/signup"
-                  className="px-4 py-1.5 rounded-xl text-sm font-bold whitespace-nowrap text-white transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-px active:scale-95"
-                  style={{ background: 'linear-gradient(135deg, #BC6C50 0%, #CC7B5D 100%)', boxShadow: '0 3px 12px rgba(188,108,80,0.35)' }}>
+                  className="px-3.5 py-1.5 rounded-md text-sm font-semibold whitespace-nowrap text-white transition-all duration-200 bg-brand-primary hover:opacity-95 shadow-sm active:scale-[0.98]">
                   Sign up
                 </Link>
               </div>
             )}
 
             {/* Mobile hamburger */}
-            <button className="lg:hidden z-50 relative w-9 h-9 flex items-center justify-center rounded-xl hover:bg-brand-surface-2 text-brand-text transition-all"
+            <button className="lg:hidden z-50 relative w-8 h-8 flex items-center justify-center rounded-md hover:bg-brand-surface-2 text-brand-text transition-all"
               onClick={() => setIsMobileMenuOpen(v => !v)} aria-label="Toggle menu" aria-expanded={isMobileMenuOpen}>
-              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
@@ -310,50 +308,48 @@ const Navbar = () => {
               <p className="px-4 pb-2 text-xs font-bold uppercase tracking-wider text-brand-muted">Join our community</p>
               <div className="flex gap-2 px-1">
                 <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={() => { trackEvent('whatsapp_cta_click', { variant: 'navbar_mobile', page: window.location.pathname }); closeMenu(); }}
-                  className="flex-1 flex items-center justify-center gap-1.5 text-white font-semibold text-sm py-2.5 rounded-xl transition-all"
+                  className="flex-1 flex items-center justify-center gap-1.5 text-white font-medium text-xs py-2 rounded-md transition-all hover:opacity-90"
                   style={{ background: '#188842' }}>
-                  <MessageCircle size={16} /> WhatsApp
+                  <MessageCircle size={15} /> WhatsApp
                 </a>
                 <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => { trackEvent('telegram_cta_click', { variant: 'navbar_mobile', page: window.location.pathname }); closeMenu(); }}
-                  className="flex-1 flex items-center justify-center gap-1.5 text-white font-semibold text-sm py-2.5 rounded-xl transition-all"
+                  className="flex-1 flex items-center justify-center gap-1.5 text-white font-medium text-xs py-2 rounded-md transition-all hover:opacity-90"
                   style={{ background: '#1B7EAE' }}>
-                  <Send size={16} /> Telegram
+                  <Send size={15} /> Telegram
                 </a>
               </div>
             </div>
 
-            <div className="mt-auto pt-6 border-t border-brand-border flex flex-col gap-3">
+            <div className="mt-auto pt-6 border-t border-brand-border flex flex-col gap-2.5">
               {isAuthenticated ? (
                 <>
                   <Link to="/profile" onClick={closeMenu}
-                    className="w-full flex items-center gap-3 py-2.5 px-3 rounded-xl border border-brand-border hover:bg-brand-surface-2 transition-all">
-                    <span className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold shrink-0"
-                      style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-                      {me.avatar ? <img src={me.avatar} alt="" width={36} height={36} className="w-full h-full object-cover" /> : avatarInitials}
+                    className="w-full flex items-center gap-3 py-2 px-3 rounded-md border border-brand-border hover:bg-brand-surface-2 transition-all">
+                    <span className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold shrink-0 bg-brand-primary">
+                      {me.avatar ? <img src={me.avatar} alt="" width={32} height={32} className="w-full h-full object-cover" /> : avatarInitials}
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-sm font-bold text-brand-text truncate">{firstName ? `Hi, ${firstName}` : 'My Profile'}</span>
-                      <span className="block text-xs text-brand-muted">View & edit profile</span>
+                      <span className="block text-sm font-semibold text-brand-text truncate">{firstName ? `Hi, ${firstName}` : 'My Profile'}</span>
+                      <span className="block text-xs text-brand-muted">Account settings</span>
                     </span>
                   </Link>
                   <Link to="/dashboard" onClick={closeMenu}
-                    className="w-full text-center py-3 rounded-xl font-semibold border border-brand-border text-brand-text hover:bg-brand-surface-2 transition-all">
+                    className="w-full text-center py-2.5 rounded-md text-sm font-medium border border-brand-border text-brand-text hover:bg-brand-surface-2 transition-all">
                     Dashboard
                   </Link>
                   <button onClick={() => { void logoutAndRedirect(); }}
-                    className="w-full py-3 rounded-xl font-semibold text-rose-500 border border-rose-200 dark:border-rose-900/40 transition-all">
+                    className="w-full py-2.5 rounded-md text-sm font-medium text-rose-500 border border-rose-200 dark:border-rose-900/40 transition-all">
                     Logout
                   </button>
                 </>
               ) : (
                 <>
                   <Link to="/login" onClick={closeMenu}
-                    className="w-full text-center py-3 rounded-xl font-semibold border border-brand-border text-brand-text hover:bg-brand-surface-2 transition-all">
+                    className="w-full text-center py-2.5 rounded-md text-sm font-medium border border-brand-border text-brand-text hover:bg-brand-surface-2 transition-all">
                     Log in
                   </Link>
                   <Link to="/signup" onClick={closeMenu}
-                    className="w-full text-center py-3 rounded-xl font-bold text-white transition-all shadow-lg active:scale-95"
-                    style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.3)' }}>
+                    className="w-full text-center py-2.5 rounded-md text-sm font-semibold text-white bg-brand-primary hover:opacity-95 transition-all shadow-sm active:scale-[0.98]">
                     Sign up free
                   </Link>
                 </>

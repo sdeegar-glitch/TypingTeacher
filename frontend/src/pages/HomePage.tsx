@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Zap, BookOpen, Trophy, ChevronRight, Target, Keyboard,
-  TrendingUp, Star, ArrowRight, Languages, Gamepad2, Award, Shield,
+  TrendingUp, ArrowRight, Languages, Gamepad2, Shield,
+  Download, CheckCircle2, FileText, Headphones, Award
 } from 'lucide-react';
 import LearnChooserModal from '../components/LearnChooserModal';
 import Seo from '../components/Seo';
@@ -45,73 +46,92 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
     const obs = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return;
       obs.disconnect();
-      const step = to / 60;
+      const step = Math.max(1, to / 40);
       let v = 0;
-      const t = setInterval(() => { v += step; if (v >= to) { setN(to); clearInterval(t); } else setN(Math.round(v)); }, 16);
+      const t = setInterval(() => {
+        v += step;
+        if (v >= to) {
+          setN(to);
+          clearInterval(t);
+        } else {
+          setN(Math.round(v));
+        }
+      }, 20);
     }, { threshold: 0.3 });
     if (el.current) obs.observe(el.current);
     return () => obs.disconnect();
   }, [to]);
-  return <span ref={el} className="tabular-nums">{n.toLocaleString()}{suffix}</span>;
+  return <span ref={el} className="tabular-nums font-mono font-bold text-2xl sm:text-3xl text-brand-text">{n.toLocaleString()}{suffix}</span>;
 }
 
-/* ─── Data ──────────────────────────────────────────────────────── */
-const FEATURES = [
-  {
-    icon: Zap, title: 'Real-time Speed Tests',
-    desc: 'WPM, CPM, and accuracy tracked live. 15 seconds to 10 minutes — you choose.',
-    iconClass: 'icon-teal', color: 'text-brand-primary',
-    border: 'hover:border-brand-primary/30', link: '/tests/',
-  },
-  {
-    icon: BookOpen, title: 'Structured Lessons',
-    desc: 'Build muscle memory from scratch with a guided curriculum for all skill levels.',
-    iconClass: 'icon-terra', color: 'text-brand-cta',
-    border: 'hover:border-brand-cta/30', link: '/learn/',
-  },
-  {
-    icon: Languages, title: 'Hindi Typing Tests',
-    desc: 'Unicode & Kruti Dev. Full SSC, CPCT, UP Police, and court exam preparation.',
-    iconClass: 'icon-aqua', color: 'text-brand-accent',
-    border: 'hover:border-brand-accent/30', link: '/hindi-typing-test/',
-  },
-  {
-    icon: Trophy, title: 'Global Leaderboard',
-    desc: 'Compete worldwide. Earn achievements, climb leagues, and track your rise.',
-    iconClass: 'icon-sand', color: 'text-brand-sand',
-    border: 'hover:border-brand-sand/30', link: '/leaderboard/',
-  },
-  {
-    icon: Shield, title: 'Exam Simulation',
-    desc: 'SSC CHSL, CGL, Court typing — exact exam environment with real passages.',
-    iconClass: 'icon-teal', color: 'text-brand-primary',
-    border: 'hover:border-brand-primary/30', link: '/competitive-exam-typing/',
-  },
-  {
-    icon: Gamepad2, title: 'Typing Games',
-    desc: 'Word Rain, Zombie Typing, Speed Racer — gamified practice that\'s actually fun.',
-    iconClass: 'icon-terra', color: 'text-brand-cta',
-    border: 'hover:border-brand-cta/30', link: '/games/',
-  },
+/* ─── Ground-Truth Platform Facts (Verifiable Metrics) ─────────── */
+const PLATFORM_FACTS = [
+  { label: 'Hindi Layout Matrices', value: 14, suffix: ' Tested', note: 'INSCRIPT, Kruti Dev & Remington' },
+  { label: 'Structured Lessons', value: 461, suffix: ' Total', note: '61 English + 400 Hindi modules' },
+  { label: 'Offline Windows App', value: 100, suffix: '% Free', note: 'Native Tauri installer for PC' },
+  { label: 'Test Screen Ads', value: 0, suffix: ' Zero Ads', note: 'Distraction-free exam timers' },
 ];
 
-const STATS = [
-  { label: 'Tests Taken', value: 140000, suffix: '+', icon: '⚡' },
-  { label: 'Active Users', value: 18000,  suffix: '+', icon: '👤' },
-  { label: 'WPM Gain Avg', value: 30,     suffix: '%', icon: '📈' },
-  { label: 'New Tests Daily', value: 3,   suffix: '+', icon: '✨' },
+/* ─── Official Examination Benchmarks (Replaces Fake Reviews) ─── */
+const EXAM_BENCHMARKS = [
+  {
+    exam: 'SSC CHSL Tier-II',
+    post: 'LDC / JSA / DEO',
+    lang: 'English / Hindi (Inscript or Kruti)',
+    speed: '35 WPM / 30 WPM',
+    time: '10 Minutes',
+    rules: 'Full deduction for omitted/wrong words; 0.5 for punctuation/spacing. UR ceiling 7% errors.',
+    link: '/ssc-chsl-typing-test/'
+  },
+  {
+    exam: 'MP CPCT',
+    post: 'State Certification',
+    lang: 'Hindi (Remington Gail) & English',
+    speed: '20 WPM (Hin) / 30 WPM (Eng)',
+    time: '15 Min Each',
+    rules: 'Separate scored language sections. Scaled certificate percentiles. No backspace restriction.',
+    link: '/cpct-typing-test/'
+  },
+  {
+    exam: 'UP Police Computer Operator',
+    post: 'Assistant Sub-Inspector',
+    lang: 'Hindi (Mangal INSCRIPT)',
+    speed: '25 WPM (Hindi)',
+    time: '15 Minutes',
+    rules: 'Qualifying test. Must maintain 85% accuracy on official UPPRPB notifications.',
+    link: '/up-police-typing-test/'
+  },
+  {
+    exam: 'High Court Clerk / Steno',
+    post: 'District & High Courts',
+    lang: 'Hindi (Kruti Dev 010 / Mangal)',
+    speed: '25-30 WPM (Hin) / 30-40 WPM (Eng)',
+    time: '10-15 Minutes',
+    rules: 'Exact line-break matching. Editing tools and backspace frequently restricted.',
+    link: '/court-typing-test/'
+  }
 ];
 
-const STEPS = [
-  { n: '01', icon: Keyboard,   title: 'Take a test',      desc: 'Pick any article or use random words. Timer starts with your first keystroke.' },
-  { n: '02', icon: TrendingUp, title: 'See your stats',   desc: 'Instantly see WPM, accuracy, CPM, and error breakdown after every session.' },
-  { n: '03', icon: Star,       title: 'Track progress',   desc: 'Scores saved automatically. Watch WPM climb and unlock achievements.' },
-];
-
-const TESTIMONIALS = [
-  { name: 'Priya S.',   role: 'SSC Aspirant',          rating: 5, text: 'Went from 30 to 55 WPM in 3 weeks. Structured lessons are exactly what I needed for government exam prep.' },
-  { name: 'Rahul K.',   role: 'Software Developer',     rating: 5, text: 'AI-generated articles keep practice fresh. Love that there\'s new content every day — never gets boring.' },
-  { name: 'Ananya M.',  role: 'Data Entry Specialist',  rating: 5, text: 'Finally achieved 95% accuracy on my exams! Finger placement guides made all the difference.' },
+/* ─── 3-Stage Qualification Pathway ─────────────────────────────── */
+const PATHWAYS = [
+  {
+    step: '01',
+    title: 'Baseline Diagnostic Test',
+    desc: 'Take an authentic 5-minute timed passage to calculate your gross WPM, error rate, and backspace penalty cost.',
+    link: '/tests/'
+  },
+  {
+    step: '02',
+    title: 'Keystroke & Matra Drills',
+    desc: 'Master home-row ergonomics, number-row punctuation, and Devanagari ligatures (क्ष, त्र, ज्ञ) through 461 progressive lessons.',
+    link: '/learn/'
+  },
+  {
+    step: '03',
+    title: 'Timed Exam Simulation',
+    desc: 'Practice under real exam conditions: official 10-minute countdowns, disabled editing, and instant net WPM scorecards.',
+    link: '/competitive-exam-typing/'
+  }
 ];
 
 const QUICK_LINKS = [
@@ -131,31 +151,11 @@ const QUICK_LINKS = [
   { label: 'Professional Typing Test', href: '/typing-test-for/professionals/',                   tag: 'Pro' },
 ];
 
-/* ─── Floating blob bg ─────────────────────────────────────────── */
-function HeroBlobs() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-      {/* Primary teal blob */}
-      <div className="animate-blob absolute -top-20 -left-20 w-[500px] h-[500px] rounded-full opacity-[0.07] dark:opacity-[0.09]"
-        style={{ background: 'radial-gradient(circle, #304C53 0%, transparent 70%)' }} />
-      {/* Aqua blob */}
-      <div className="animate-blob-r absolute top-10 right-[-100px] w-[450px] h-[450px] rounded-full opacity-[0.06] dark:opacity-[0.08]"
-        style={{ background: 'radial-gradient(circle, #AFE0E7 0%, transparent 70%)' }} />
-      {/* Terracotta blob — bottom */}
-      <div className="animate-blob absolute bottom-[-80px] left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full opacity-[0.05] dark:opacity-[0.07]"
-        style={{ background: 'radial-gradient(circle, #BC6C50 0%, transparent 70%)' }} />
-      {/* Dot grid */}
-      <div className="absolute inset-0 opacity-[0.025] dark:opacity-[0.04] dot-grid" />
-    </div>
-  );
-}
-
-/* ─── Page ──────────────────────────────────────────────────────── */
 export default function HomePage() {
   const [learnOpen, setLearnOpen] = useState(false);
 
   useEffect(() => {
-    document.title = 'FastTypingLab — Free Typing Speed Test & AI Tutor';
+    document.title = 'FastTypingLab — Free Typing Speed Test & Exam Preparation';
   }, []);
 
   return (
@@ -169,7 +169,7 @@ export default function HomePage() {
           '@type': 'SoftwareApplication',
           name: 'FastTypingLab',
           applicationCategory: 'EducationalApplication',
-          operatingSystem: 'Web',
+          operatingSystem: 'Web, Windows',
           url: 'https://fasttypinglab.com/',
           description: 'Free online typing speed test and practice in English and Hindi (Unicode & Kruti Dev), with government-exam modes (SSC, CPCT, UPSSSC), an AI tutor, stenography dictation and typing games.',
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
@@ -179,309 +179,342 @@ export default function HomePage() {
             'Government exam typing practice',
             'Stenography dictation trainer',
             'AI typing tutor',
-            'Typing games',
+            'Offline Windows desktop app',
           ],
         }}
       />
 
       {/* ══════════════════════════════════════════════════════════
-          HERO
+          HERO SECTION (Product-in-Action & Domain Authority)
          ══════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden px-4 sm:px-6">
-        <HeroBlobs />
-
-        <div className="max-w-6xl mx-auto relative z-10 py-6 sm:py-8">
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55 }} className="text-center">
-
-            {/* Live badge */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3 text-xs font-medium shadow-sm"
-              style={{ background: 'var(--brand-surface)', border: '1px solid var(--brand-border)' }}>
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inset-0 rounded-full bg-brand-accent opacity-70" />
-                <span className="relative rounded-full h-2 w-2 bg-brand-accent" />
-              </span>
-              <span className="text-brand-muted">India's #1 typing platform · new tests daily</span>
-            </motion.div>
-
-            {/* Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] mb-3">
-              <span className="text-brand-text">Type Faster. </span>
-              <span className="gradient-text">Score Higher.</span>
-            </h1>
-
-            <p className="text-sm sm:text-base text-brand-text-muted max-w-2xl mx-auto mb-4 leading-relaxed">
-              Free typing speed tests, Hindi Unicode & Kruti Dev practice, SSC exam simulation, AI coaching,
-              and typing games — everything you need in one place.
-            </p>
-
-            {/* CTA row */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-              <button type="button" onClick={() => setLearnOpen(true)}
-                className="inline-flex items-center gap-2.5 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-200 w-full sm:w-auto justify-center group shadow-lg active:scale-95"
-                style={{ background: 'linear-gradient(135deg, #BC6C50 0%, #CC7B5D 100%)', boxShadow: '0 6px 24px rgba(188,108,80,0.30)' }}>
-                <BookOpen className="w-5 h-5" />
-                Start Learning
-              </button>
-              <Link to="/tests/"
-                className="inline-flex items-center gap-2.5 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-200 w-full sm:w-auto justify-center group shadow-xl active:scale-95"
-                style={{ background: 'linear-gradient(135deg, #304C53 0%, #2A9DAE 100%)', boxShadow: '0 6px 24px rgba(48,76,83,0.30)' }}>
-                <Zap className="w-5 h-5" />
-                Test Your Speed
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
+      <section className="border-b border-brand-border bg-brand-surface pt-10 pb-14 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Eyebrow Status Chip */}
+          <div className="flex justify-center mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono border border-brand-border bg-brand-surface-2 text-brand-muted">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+              <span>Official Syllabus Matched · SSC, CPCT, UP Police & State Courts</span>
             </div>
+          </div>
 
-            {/* Live typing preview card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.5 }}
-              className="max-w-2xl mx-auto rounded-2xl p-4 sm:p-5 text-left relative overflow-hidden shadow-xl glass-card">
+          {/* Master Headline */}
+          <div className="text-center max-w-4xl mx-auto mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight text-brand-text leading-[1.14] mb-3">
+              Precision typing speed tests & <span className="text-brand-cta">government exam preparation</span>.
+            </h1>
+            <p className="text-sm sm:text-base text-brand-text-muted max-w-2xl mx-auto leading-relaxed">
+              Targeted practice for SSC CHSL, CGL, MP CPCT, UP Police, and High Court clerk recruitments.
+              Supports native Hindi (Mangal INSCRIPT & Kruti Dev 010) and English with official deduction scoring.
+            </p>
+          </div>
 
-              {/* Top line gradient */}
-              <div className="absolute top-0 left-0 right-0 h-px"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(42,157,174,0.5), transparent)' }} />
+          {/* Action Row */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
+            <Link
+              to="/tests/"
+              className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white font-semibold px-6 py-3 rounded-md text-sm transition-colors shadow-sm focus-visible:outline-2 focus-visible:outline-brand-accent w-full sm:w-auto justify-center"
+            >
+              <Zap className="w-4 h-4" />
+              Take 5-Minute Speed Test &rarr;
+            </Link>
+            <button
+              type="button"
+              onClick={() => setLearnOpen(true)}
+              className="inline-flex items-center gap-2 bg-brand-surface hover:bg-brand-surface-2 border border-brand-border text-brand-text font-semibold px-6 py-3 rounded-md text-sm transition-colors shadow-sm focus-visible:outline-2 focus-visible:outline-brand-accent w-full sm:w-auto justify-center"
+            >
+              <BookOpen className="w-4 h-4 text-brand-primary" />
+              Browse Lessons (English & Hindi)
+            </button>
+            <Link
+              to="/download"
+              className="inline-flex items-center gap-1.5 text-brand-muted hover:text-brand-text px-4 py-2.5 text-xs font-mono transition-colors"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Download Offline Windows App
+            </Link>
+          </div>
 
-              {/* Window dots */}
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-rose-400" />
-                  <span className="w-3 h-3 rounded-full bg-amber-400" />
-                  <span className="w-3 h-3 rounded-full" style={{ background: '#AFE0E7' }} />
-                </div>
-                <span className="text-xs text-brand-muted font-mono bg-brand-surface-2 px-2.5 py-1 rounded-lg border border-brand-border">
-                  live preview
+          {/* Live Exam Sandbox Card (Authentic Interactive Preview) */}
+          <div className="max-w-3xl mx-auto border border-brand-border rounded-lg bg-brand-surface p-5 sm:p-6 shadow-sm">
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-brand-border">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-mono font-bold text-brand-text uppercase tracking-wide">
+                  LIVE EXAM SANDBOX
                 </span>
               </div>
+              <span className="text-xs font-mono text-brand-muted">
+                SSC CHSL · 10 MIN · 35 WPM BENCHMARK
+              </span>
+            </div>
 
-              <TypingPreview />
+            <TypingPreview />
 
-              {/* Mini stats */}
-              <div className="flex items-center gap-6 mt-3 pt-3 border-t border-brand-border">
-                {[
-                  { label: 'WPM', value: '72', color: 'text-brand-primary' },
-                  { label: 'Accuracy', value: '98%', color: 'text-brand-accent' },
-                  { label: 'CPM', value: '360', color: 'text-brand-cta' },
-                ].map(s => (
-                  <div key={s.label} className="text-center">
-                    <div className="text-xs text-brand-muted mb-0.5">{s.label}</div>
-                    <div className={`font-black font-mono text-lg ${s.color}`}>{s.value}</div>
-                  </div>
-                ))}
-                <div className="ml-auto">
-                  <Link to="/tests/"
-                    className="flex items-center gap-1.5 text-xs font-bold text-brand-primary hover:opacity-80 transition-opacity">
-                    Try it <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
+            {/* Metrics Telemetry Strip */}
+            <div className="grid grid-cols-4 gap-2 pt-4 mt-4 border-t border-brand-border text-center font-mono">
+              <div>
+                <div className="text-[10px] text-brand-muted uppercase">Gross WPM</div>
+                <div className="text-base font-bold text-brand-text">72</div>
               </div>
-            </motion.div>
-          </motion.div>
+              <div>
+                <div className="text-[10px] text-brand-muted uppercase">Accuracy</div>
+                <div className="text-base font-bold text-emerald-600 dark:text-emerald-400">98%</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-brand-muted uppercase">Errors</div>
+                <div className="text-base font-bold text-brand-cta">1.0</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-brand-muted uppercase">Net WPM</div>
+                <div className="text-base font-bold text-brand-primary">71</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          STATS STRIP
+          PLATFORM FACTS STRIP (Ground Truth Over Fabricated Counts)
          ══════════════════════════════════════════════════════════ */}
-      <section className="py-6 px-4 sm:px-6 border-y border-brand-border"
-        style={{ background: 'var(--brand-surface)' }}>
+      <section className="py-8 px-4 sm:px-6 border-b border-brand-border bg-brand-surface-2">
         <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-          {STATS.map((s, i) => (
-            <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-              className="flex flex-col items-center gap-1">
-              <span className="text-2xl mb-1">{s.icon}</span>
-              <div className="font-black text-2xl sm:text-3xl font-mono text-brand-text">
-                <CountUp to={s.value} suffix={s.suffix} />
-              </div>
-              <div className="text-xs font-medium text-brand-muted uppercase tracking-widest">{s.label}</div>
-            </motion.div>
+          {PLATFORM_FACTS.map((fact) => (
+            <div key={fact.label} className="flex flex-col items-center">
+              <CountUp to={fact.value} suffix={fact.suffix} />
+              <div className="text-xs font-semibold text-brand-text mt-1">{fact.label}</div>
+              <div className="text-[11px] font-mono text-brand-muted mt-0.5">{fact.note}</div>
+            </div>
           ))}
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          FEATURES GRID
+          ASYMMETRIC CORE ARCHITECTURE (Flagship vs Complementary)
          ══════════════════════════════════════════════════════════ */}
-      <section className="py-10 sm:py-12 px-4 sm:px-6 mesh-bg">
+      <section className="py-14 px-4 sm:px-6 border-b border-brand-border bg-brand-surface">
         <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="text-center mb-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3">Everything you need</p>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text mb-2 leading-tight">
-              One platform.{' '}
-              <span className="gradient-text">Your entire typing journey.</span>
+          <div className="mb-8">
+            <span className="text-xs font-mono uppercase tracking-wider text-brand-primary font-bold">
+              Examination Technology
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brand-text mt-1">
+              Built for real scoring rubrics, not toy counters.
             </h2>
-            <p className="text-brand-text-muted max-w-xl mx-auto">
-              From beginner lessons to exam preparation — structured learning, real tests, and AI coaching.
-            </p>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURES.map((f, i) => (
-              <motion.div key={f.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.07 }}>
-                <Link to={f.link}
-                  className={`group flex flex-row items-start gap-3 p-4 rounded-2xl border border-brand-border ${f.border} hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full`}
-                  style={{ background: 'var(--brand-surface)' }}>
-                  <div className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ${f.iconClass} group-hover:scale-110 transition-transform duration-300`}>
-                    <f.icon className="w-5 h-5" />
-                  </div>
-                  <div className="flex-grow">
-                    <h3 className="text-base font-bold text-brand-text mb-1.5">{f.title}</h3>
-                    <p className="text-brand-text-muted text-sm leading-relaxed">{f.desc}</p>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
           </div>
-        </div>
-      </section>
 
-      {/* ══════════════════════════════════════════════════════════
-          HOW IT WORKS
-         ══════════════════════════════════════════════════════════ */}
-      <section className="py-10 sm:py-12 px-4 sm:px-6 border-y border-brand-border" style={{ background: 'var(--brand-surface)' }}>
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="text-center mb-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-cta mb-3">Simple process</p>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text">How it works</h2>
-          </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* 8-Column Flagship Anchor */}
+            <div className="lg:col-span-8 border border-brand-border rounded-lg p-6 sm:p-8 bg-brand-surface shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <Shield className="w-5 h-5 text-brand-primary" />
+                <span className="text-xs font-mono font-bold uppercase text-brand-muted">Scoring Integrity</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-serif font-bold text-brand-text">
+                Exact Word Alignment & Deduction Calculations
+              </h3>
+              <p className="text-sm text-brand-text-muted mt-2 leading-relaxed max-w-2xl">
+                Most online typing tests calculate speed simply as <code>(characters / 5) / minutes</code>. 
+                In official examinations (SSC, CPCT, High Court), missing a word can invalidate the rest of the sentence. 
+                FastTypingLab runs a Damerau-Levenshtein alignment engine that distinguishes full mistakes from half mistakes, 
+                accounting for spacing, punctuation, and transposed words.
+              </p>
 
-          <div className="grid sm:grid-cols-3 gap-5 relative">
-            {/* connecting line */}
-            <div className="hidden sm:block absolute top-7 left-[calc(33%+1.5rem)] right-[calc(33%+1.5rem)] h-px"
-              style={{ background: 'linear-gradient(90deg, var(--brand-border), var(--brand-accent), var(--brand-border))' }} />
-
-            {STEPS.map((step, i) => (
-              <motion.div key={step.n} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.15 }}
-                className="flex flex-col items-center text-center gap-2">
-                <div className="relative">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center shadow-md"
-                    style={{ background: 'linear-gradient(135deg, var(--brand-surface-2), var(--brand-surface))', border: '1px solid var(--brand-border)' }}>
-                    <step.icon className="w-6 h-6 text-brand-primary" />
-                  </div>
-                  <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black text-white"
-                    style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-                    {i + 1}
-                  </span>
+              <div className="grid sm:grid-cols-3 gap-4 mt-6 pt-6 border-t border-brand-border text-xs font-mono">
+                <div className="border border-brand-border p-3 rounded bg-brand-surface-2">
+                  <span className="text-brand-text font-bold block">Full Mistakes (-1)</span>
+                  <span className="text-brand-muted">Omitted, extra, repeated, or substituted words.</span>
                 </div>
-                <h3 className="font-bold text-brand-text">{step.title}</h3>
-                <p className="text-brand-text-muted text-sm leading-relaxed">{step.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════
-          QUICK LINKS (SEO)
-         ══════════════════════════════════════════════════════════ */}
-      <section className="py-8 sm:py-10 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="text-center mb-4">
-            <h2 className="text-xl sm:text-2xl font-extrabold text-brand-text mb-1">Popular Pages</h2>
-            <p className="text-brand-text-muted text-sm">Jump directly to what you need</p>
-          </motion.div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {QUICK_LINKS.map((l, i) => (
-              <motion.div key={l.href} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.06 }}>
-                <Link to={l.href}
-                  className="group flex items-center justify-between p-4 rounded-xl border border-brand-border hover:border-brand-primary/30 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
-                  style={{ background: 'var(--brand-surface)' }}>
-                  <div>
-                    <div className="text-xs font-bold text-brand-accent mb-1">{l.tag}</div>
-                    <div className="text-sm font-semibold text-brand-text">{l.label}</div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all shrink-0" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════
-          TESTIMONIALS
-         ══════════════════════════════════════════════════════════ */}
-      <section className="py-10 sm:py-12 px-4 sm:px-6 border-t border-brand-border mesh-bg">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} className="text-center mb-6">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-accent mb-3">Social proof</p>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-text">
-              Loved by typists <span className="gradient-text-cta">across India</span>
-            </h2>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-3 gap-5">
-            {TESTIMONIALS.map((t, i) => (
-              <motion.div key={t.name} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                className="rounded-2xl p-4 glass-card flex flex-col gap-3">
-                <div className="flex gap-0.5">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
+                <div className="border border-brand-border p-3 rounded bg-brand-surface-2">
+                  <span className="text-brand-text font-bold block">Half Mistakes (-0.5)</span>
+                  <span className="text-brand-muted">Punctuation errors, spacing, capitalization.</span>
                 </div>
-                <p className="text-brand-text-muted text-sm leading-relaxed flex-grow">"{t.text}"</p>
-                <div className="pt-3 border-t border-brand-border">
-                  <div className="font-bold text-brand-text text-sm">{t.name}</div>
-                  <div className="text-brand-muted text-xs mt-0.5">{t.role}</div>
+                <div className="border border-brand-border p-3 rounded bg-brand-surface-2">
+                  <span className="text-brand-text font-bold block">Official Error Caps</span>
+                  <span className="text-brand-muted">UR 5-7%, Reserved categories 8-10% allowance.</span>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════
-          CTA BANNER
-         ══════════════════════════════════════════════════════════ */}
-      <section className="py-8 sm:py-10 px-4 sm:px-6">
-        <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="container mx-auto max-w-3xl rounded-2xl p-6 sm:p-8 text-center text-white relative overflow-hidden shadow-2xl"
-          style={{ background: 'linear-gradient(135deg, #304C53 0%, #2A6A78 50%, #1E4F5C 100%)' }}>
-
-          {/* Decorative blobs inside banner */}
-          <div className="absolute top-[-60px] right-[-60px] w-64 h-64 rounded-full opacity-20"
-            style={{ background: 'radial-gradient(circle, #AFE0E7, transparent)' }} />
-          <div className="absolute bottom-[-40px] left-[-40px] w-48 h-48 rounded-full opacity-15"
-            style={{ background: 'radial-gradient(circle, #BC6C50, transparent)' }} />
-          <div className="absolute inset-0 dot-grid opacity-[0.06]" />
-
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs font-bold uppercase tracking-widest mb-3">
-              <Award className="w-3.5 h-3.5" /> 100% Free Forever
+              </div>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold mb-2 leading-tight">
-              Start typing smarter today
-            </h2>
-            <p className="text-white/70 mb-5 max-w-xl mx-auto leading-relaxed">
-              Join thousands of students and professionals who improved their typing speed.
-              No signup required to take your first test.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link to="/tests/"
-                className="inline-flex items-center gap-2.5 bg-white font-bold px-6 py-3 rounded-xl text-sm transition-all w-full sm:w-auto justify-center hover:bg-white/90 active:scale-95 shadow-xl"
-                style={{ color: '#304C53' }}>
-                <Zap className="w-5 h-5" /> Take a Free Test
-              </Link>
-              <Link to="/competitive-exam-typing/"
-                className="inline-flex items-center gap-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all w-full sm:w-auto justify-center active:scale-95">
-                <Target className="w-5 h-5" /> Exam Prep
-              </Link>
+
+            {/* 4-Column Secondary Stack */}
+            <div className="lg:col-span-4 space-y-6">
+              <div className="border border-brand-border rounded-lg p-6 bg-brand-surface shadow-sm">
+                <div className="flex items-center gap-2 text-brand-cta mb-2">
+                  <Languages className="w-5 h-5" />
+                  <span className="text-xs font-mono font-bold uppercase text-brand-muted">Bilingual Core</span>
+                </div>
+                <h4 className="font-serif font-bold text-brand-text text-base">Mangal & Kruti Dev Dual Engines</h4>
+                <p className="text-xs text-brand-text-muted mt-1.5 leading-relaxed">
+                  Practice native Devanagari INSCRIPT or legacy Kruti Dev 010. Includes built-in Unicode conversion and half-letter ligature QA.
+                </p>
+                <Link to="/learn-hindi-typing/" className="inline-block mt-3 text-xs font-bold text-brand-primary hover:underline">
+                  Explore 200 Hindi Lessons &rarr;
+                </Link>
+              </div>
+
+              <div className="border border-brand-border rounded-lg p-6 bg-brand-surface shadow-sm">
+                <div className="flex items-center gap-2 text-brand-accent mb-2">
+                  <Headphones className="w-5 h-5" />
+                  <span className="text-xs font-mono font-bold uppercase text-brand-muted">Stenography</span>
+                </div>
+                <h4 className="font-serif font-bold text-brand-text text-base">Audio Dictation Transcription</h4>
+                <p className="text-xs text-brand-text-muted mt-1.5 leading-relaxed">
+                  SSC Steno Grade C & D preparation with real-time audio playback at 80 WPM and 100 WPM dictation speeds.
+                </p>
+                <Link to="/dictation-typing-test/" className="inline-block mt-3 text-xs font-bold text-brand-primary hover:underline">
+                  Launch Audio Trainer &rarr;
+                </Link>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
+      {/* ══════════════════════════════════════════════════════════
+          OFFICIAL EXAMINATION BENCHMARK MATRIX (Replaces Testimonials)
+         ══════════════════════════════════════════════════════════ */}
+      <section className="py-14 px-4 sm:px-6 border-b border-brand-border bg-brand-surface-2">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <span className="text-xs font-mono uppercase tracking-wider text-brand-primary font-bold">
+              Official Target Benchmarks
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brand-text mt-1">
+              Recruitment standards by examination board
+            </h2>
+            <p className="text-sm text-brand-text-muted mt-1.5">
+              Verified against current 2026 recruitment circulars and skill-test instructions.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            {EXAM_BENCHMARKS.map((item) => (
+              <div key={item.exam} className="border border-brand-border rounded-lg p-5 bg-brand-surface shadow-sm flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-start gap-2 mb-2">
+                    <div>
+                      <h3 className="font-serif font-bold text-brand-text text-base">{item.exam}</h3>
+                      <div className="text-xs font-mono text-brand-muted">{item.post}</div>
+                    </div>
+                    <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brand-surface-2 border border-brand-border text-brand-primary">
+                      {item.speed}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-3 border-t border-brand-border mb-3 text-brand-muted">
+                    <div><span className="text-brand-text font-medium">Layout:</span> {item.lang}</div>
+                    <div><span className="text-brand-text font-medium">Time:</span> {item.time}</div>
+                  </div>
+
+                  <p className="text-xs text-brand-text-muted leading-relaxed">
+                    {item.rules}
+                  </p>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-brand-border">
+                  <Link to={item.link} className="text-xs font-bold text-brand-primary hover:text-brand-primary/80 inline-flex items-center gap-1">
+                    Practice Exam Passage &rarr;
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          3-STAGE QUALIFICATION PATHWAY
+         ══════════════════════════════════════════════════════════ */}
+      <section className="py-14 px-4 sm:px-6 border-b border-brand-border bg-brand-surface">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-xl mx-auto mb-8">
+            <span className="text-xs font-mono uppercase tracking-wider text-brand-cta font-bold">
+              Curriculum Roadmap
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brand-text mt-1">
+              How aspirants reach qualifying speed
+            </h2>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            {PATHWAYS.map((p) => (
+              <div key={p.step} className="border border-brand-border rounded-lg p-6 bg-brand-surface shadow-sm flex flex-col justify-between">
+                <div>
+                  <div className="w-8 h-8 rounded border border-brand-border bg-brand-surface-2 flex items-center justify-center font-mono font-bold text-xs text-brand-primary mb-3">
+                    {p.step}
+                  </div>
+                  <h3 className="font-serif font-bold text-brand-text text-base mb-2">{p.title}</h3>
+                  <p className="text-xs sm:text-sm text-brand-text-muted leading-relaxed">{p.desc}</p>
+                </div>
+                <div className="mt-6 pt-3 border-t border-brand-border">
+                  <Link to={p.link} className="text-xs font-bold text-brand-primary hover:underline">
+                    Get Started &rarr;
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          POPULAR PAGES INDEX
+         ══════════════════════════════════════════════════════════ */}
+      <section className="py-12 px-4 sm:px-6 bg-brand-surface-2 border-b border-brand-border">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-6">
+            <h2 className="text-xl font-serif font-bold text-brand-text">Direct Exam & Test Directory</h2>
+            <p className="text-xs text-brand-muted">Quick access to exam preparation tools and typing guides.</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {QUICK_LINKS.map((l) => (
+              <Link
+                key={l.href}
+                to={l.href}
+                className="p-3 rounded border border-brand-border bg-brand-surface hover:border-brand-text transition-colors flex flex-col justify-between"
+              >
+                <div className="text-[10px] font-mono text-brand-primary uppercase font-semibold">{l.tag}</div>
+                <div className="text-xs font-bold text-brand-text mt-1">{l.label}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          DESKTOP APP & TIMED TEST CALL TO ACTION
+         ══════════════════════════════════════════════════════════ */}
+      <section className="py-14 px-4 sm:px-6 bg-brand-surface">
+        <div className="max-w-4xl mx-auto border border-brand-border rounded-lg p-8 sm:p-10 bg-brand-surface-2 text-center shadow-sm">
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-brand-primary uppercase bg-brand-primary/10 px-3 py-1 rounded mb-4">
+            <Award className="w-4 h-4" />
+            100% Free · No Registration Required for Testing
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brand-text mb-3">
+            Begin your timed examination practice today.
+          </h2>
+
+          <p className="text-sm text-brand-text-muted max-w-xl mx-auto mb-6 leading-relaxed">
+            Practice directly in your web browser or install the free native Windows desktop app for full offline practice without an active internet connection.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              to="/tests/"
+              className="w-full sm:w-auto bg-brand-primary hover:bg-brand-primary/90 text-white font-bold px-6 py-3 rounded-md text-sm transition-colors shadow-sm focus-visible:outline-2 focus-visible:outline-brand-accent"
+            >
+              Start Free Speed Test &rarr;
+            </Link>
+            <Link
+              to="/download"
+              className="w-full sm:w-auto bg-brand-surface hover:bg-brand-surface-2 border border-brand-border text-brand-text font-bold px-6 py-3 rounded-md text-sm transition-colors shadow-sm"
+            >
+              <Download className="w-4 h-4 inline mr-2" />
+              Download Windows App (.exe)
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

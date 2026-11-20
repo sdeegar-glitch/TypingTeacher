@@ -49,17 +49,10 @@ export default function SignupPromptBanner({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -6 }}
-        className="relative flex flex-col sm:flex-row sm:items-center gap-3 rounded-2xl p-4 sm:p-5 border overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, rgba(48,76,83,0.10), rgba(42,157,174,0.10))',
-          borderColor: 'rgba(42,157,174,0.25)',
-        }}
+        className="relative flex flex-col sm:flex-row sm:items-center gap-3.5 rounded-lg p-4 sm:p-5 border border-brand-border bg-brand-surface shadow-sm overflow-hidden"
       >
-        <div
-          className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white shadow-md"
-          style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}
-        >
-          <UserPlus className="w-5 h-5" />
+        <div className="w-9 h-9 shrink-0 rounded-md flex items-center justify-center bg-brand-primary/10 border border-brand-primary/20 text-brand-primary">
+          <UserPlus className="w-4 h-4" />
         </div>
 
         <p className="flex-1 text-sm text-brand-text leading-relaxed pr-6 sm:pr-0">
@@ -69,8 +62,7 @@ export default function SignupPromptBanner({
         <Link
           to="/signup"
           onClick={() => trackEvent('signup_banner_click', { dismissKey, page: window.location.pathname })}
-          className="shrink-0 inline-flex items-center justify-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all active:scale-95"
-          style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 14px rgba(188,108,80,.30)' }}
+          className="shrink-0 inline-flex items-center justify-center gap-2 text-white font-medium px-4 py-2 rounded-md text-sm bg-brand-primary hover:opacity-95 shadow-sm active:scale-[0.98] transition-all"
         >
           {cta}
         </Link>

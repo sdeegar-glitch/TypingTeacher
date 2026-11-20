@@ -25,24 +25,19 @@ export default function StreakCard({ compact = false }: { compact?: boolean }) {
   };
 
   return (
-    <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
+    <div className="bg-brand-surface border border-brand-border rounded-lg p-5">
       <div className="flex items-start justify-between gap-4 mb-4">
         {/* Streak */}
         <div className="flex items-center gap-3">
           <div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
-            style={{
-              background: stats.currentStreak > 0
-                ? 'linear-gradient(135deg,#F97316,#FB923C)'
-                : 'var(--brand-surface-2)',
-            }}
+            className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${stats.currentStreak > 0 ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20' : 'bg-brand-surface-2 text-brand-muted'}`}
           >
-            <Flame className={`w-6 h-6 ${stats.currentStreak > 0 ? 'text-white' : 'text-brand-muted'}`} />
+            <Flame className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-2xl font-black text-brand-text leading-none">
+            <div className="text-xl font-bold text-brand-text leading-none">
               {stats.currentStreak}
-              <span className="text-sm font-bold text-brand-muted ml-1">
+              <span className="text-xs font-medium text-brand-muted ml-1">
                 {stats.currentStreak === 1 ? 'day' : 'days'}
               </span>
             </div>
@@ -59,7 +54,7 @@ export default function StreakCard({ compact = false }: { compact?: boolean }) {
         {stats.longestStreak > 0 && (
           <div className="text-right shrink-0">
             <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted">Best</div>
-            <div className="text-lg font-black text-brand-text font-mono">{stats.longestStreak}d</div>
+            <div className="text-base font-bold text-brand-text font-mono">{stats.longestStreak}d</div>
           </div>
         )}
       </div>
@@ -79,15 +74,10 @@ export default function StreakCard({ compact = false }: { compact?: boolean }) {
             {stats.todayCount}/{goal} tests
           </button>
         </div>
-        <div className="h-2.5 rounded-full bg-brand-surface-2 overflow-hidden">
+        <div className="h-2 rounded-full bg-brand-surface-2 overflow-hidden">
           <div
-            className="h-full rounded-full transition-all duration-500"
-            style={{
-              width: `${pct}%`,
-              background: goalMet
-                ? 'linear-gradient(90deg,#22C55E,#4ADE80)'
-                : 'linear-gradient(90deg,#304C53,#2A9DAE)',
-            }}
+            className={`h-full rounded-full transition-all duration-500 ${goalMet ? 'bg-emerald-500' : 'bg-brand-primary'}`}
+            style={{ width: `${pct}%` }}
           />
         </div>
         <p className="text-[11px] text-brand-muted mt-1.5">
