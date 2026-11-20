@@ -189,14 +189,6 @@ export default function HomePage() {
          ══════════════════════════════════════════════════════════ */}
       <section className="border-b border-brand-border bg-brand-surface pt-10 pb-14 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          {/* Eyebrow Status Chip */}
-          <div className="flex justify-center mb-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono border border-brand-border bg-brand-surface-2 text-brand-muted">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-              <span>Official Syllabus Matched · SSC, CPCT, UP Police & State Courts</span>
-            </div>
-          </div>
-
           {/* Master Headline */}
           <div className="text-center max-w-4xl mx-auto mb-6">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight text-brand-text leading-[1.14] mb-3">

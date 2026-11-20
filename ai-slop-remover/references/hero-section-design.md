@@ -132,15 +132,6 @@ export function Hero() {
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Left Column: Authoritative Editorial Copy */}
         <div className="lg:col-span-6 space-y-6">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono uppercase tracking-widest text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded">
-              Official Syllabus Matched
-            </span>
-            <span className="text-xs font-mono text-brand-muted">
-              Updated for 2026 Recruitment Cycles
-            </span>
-          </div>
-
           <h1 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-brand-text leading-[1.12]">
             Authentic Hindi & English typing test engine for competitive exams.
           </h1>
