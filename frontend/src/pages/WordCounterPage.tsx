@@ -70,7 +70,7 @@ export default function WordCounterPage() {
 
         {/* Header */}
         <div className="mb-5">
-          <h1 className="text-2xl sm:text-[28px] font-extrabold text-brand-text mb-2">Word Counter</h1>
+          <h1 className="text-2xl sm:text-[28px] font-serif font-bold text-brand-text mb-2">Word Counter</h1>
           <p className="text-brand-text-muted">Free online word and character counter. Paste or type your text below for instant analysis.</p>
         </div>
 
@@ -80,10 +80,10 @@ export default function WordCounterPage() {
             <motion.div key={s.label}
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className={`border rounded-2xl p-4 text-center ${s.bg}`}>
+              className={`border rounded-lg p-4 text-center ${s.bg} shadow-sm`}>
               <s.icon className={`w-4 h-4 mx-auto mb-2 ${s.color}`} />
-              <div className={`text-2xl font-black font-mono tabular-nums ${s.color}`}>{s.value}</div>
-              <div className="text-[10px] text-brand-muted mt-1 uppercase tracking-wider">{s.label}</div>
+              <div className={`text-2xl font-bold font-mono tabular-nums ${s.color}`}>{s.value}</div>
+              <div className="text-[10px] text-brand-muted mt-1 uppercase tracking-wider font-mono">{s.label}</div>
             </motion.div>
           ))}
         </div>
@@ -91,17 +91,17 @@ export default function WordCounterPage() {
         <div className="grid lg:grid-cols-3 gap-5">
           {/* Text Editor */}
           <div className="lg:col-span-2">
-            <div className="bg-brand-surface border border-brand-border rounded-2xl overflow-hidden">
+            <div className="bg-brand-surface border border-brand-border rounded-lg overflow-hidden shadow-sm">
               <div className="flex items-center justify-between px-4 py-3 border-b border-brand-border bg-brand-surface-2">
                 <span className="text-sm font-semibold text-brand-text">Your Text</span>
                 <div className="flex gap-2">
                   <button onClick={handleCopy}
-                    className="flex items-center gap-1.5 text-xs text-brand-muted hover:text-brand-primary transition-colors px-2 py-1 rounded-lg hover:bg-brand-border">
+                    className="flex items-center gap-1.5 text-xs text-brand-muted hover:text-brand-primary transition-colors px-2.5 py-1 rounded-md hover:bg-brand-border">
                     {copied ? <Check className="w-3.5 h-3.5 text-brand-accent" /> : <Copy className="w-3.5 h-3.5" />}
                     {copied ? 'Copied!' : 'Copy'}
                   </button>
                   <button onClick={() => setText('')}
-                    className="flex items-center gap-1.5 text-xs text-brand-muted hover:text-rose-500 transition-colors px-2 py-1 rounded-lg hover:bg-rose-500/10">
+                    className="flex items-center gap-1.5 text-xs text-brand-muted hover:text-rose-500 transition-colors px-2.5 py-1 rounded-md hover:bg-rose-500/10">
                     <Trash2 className="w-3.5 h-3.5" />
                     Clear
                   </button>
@@ -113,9 +113,9 @@ export default function WordCounterPage() {
                 onChange={e => setText(e.target.value)}
                 placeholder="Start typing or paste your text here…"
                 rows={14}
-                className="w-full bg-transparent px-5 py-4 text-brand-text text-sm leading-relaxed outline-none resize-none placeholder:text-brand-muted"
+                className="w-full bg-transparent px-5 py-4 text-brand-text text-sm leading-relaxed focus:outline-none resize-none placeholder:text-brand-muted"
               />
-              <div className="px-5 py-2 border-t border-brand-border bg-brand-surface-2 flex justify-between text-[11px] text-brand-muted">
+              <div className="px-5 py-2 border-t border-brand-border bg-brand-surface-2 flex justify-between text-[11px] text-brand-muted font-mono">
                 <span>{stats.words} words · {stats.chars} characters</span>
                 <span>~{stats.readingTime} read</span>
               </div>
@@ -124,7 +124,7 @@ export default function WordCounterPage() {
 
           {/* Keyword density sidebar */}
           <div className="space-y-4">
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
+            <div className="bg-brand-surface border border-brand-border rounded-lg p-4 shadow-sm">
               <h2 className="font-bold text-brand-text mb-4 text-sm">Top Keywords</h2>
               {stats.topKeywords.length === 0 ? (
                 <p className="text-brand-muted text-xs">Start typing to see keyword frequency.</p>
@@ -147,7 +147,7 @@ export default function WordCounterPage() {
             </div>
 
             {/* Quick presets */}
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
+            <div className="bg-brand-surface border border-brand-border rounded-lg p-4 shadow-sm">
               <h2 className="font-bold text-brand-text mb-3 text-sm">Test Samples</h2>
               <div className="space-y-2">
                 {[
@@ -155,7 +155,7 @@ export default function WordCounterPage() {
                   { label: 'Essay intro', text: 'In recent years, the importance of digital literacy has grown exponentially. As technology becomes increasingly integrated into every aspect of modern life, the ability to read, write, and interact with digital systems is no longer optional. Schools, governments, and corporations must work together to ensure that all citizens have access to the training and tools they need to participate fully in the digital economy.' },
                 ].map(p => (
                   <button key={p.label} onClick={() => setText(p.text)}
-                    className="w-full text-left px-3 py-2 rounded-xl text-xs text-brand-text-muted hover:bg-brand-surface-2 hover:text-brand-text transition-all border border-transparent hover:border-brand-border">
+                    className="w-full text-left px-3 py-2 rounded-md text-xs text-brand-text-muted hover:bg-brand-surface-2 hover:text-brand-text transition-all border border-transparent hover:border-brand-border">
                     {p.label}
                   </button>
                 ))}
@@ -165,7 +165,7 @@ export default function WordCounterPage() {
         </div>
 
         {/* SEO text */}
-        <div className="mt-5 bg-brand-surface border border-brand-border rounded-2xl p-4 text-sm text-brand-text-muted leading-relaxed space-y-4">
+        <div className="mt-5 bg-brand-surface border border-brand-border rounded-lg p-5 text-sm text-brand-text-muted leading-relaxed space-y-4 shadow-sm">
           <div className="space-y-2">
             <h2 className="text-base font-bold text-brand-text">About This Word Counter</h2>
             <p>This free online word counter tool counts words, characters (with and without spaces), sentences, paragraphs, and estimates your reading time in real time. It also shows keyword density — how often specific words appear in your text.</p>

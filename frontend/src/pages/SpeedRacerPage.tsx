@@ -182,18 +182,18 @@ export default function SpeedRacerPage() {
               <div className="flex justify-center gap-3 mb-8">
                 {DIFFICULTIES.map((d, i) => (
                   <button key={d.label} onClick={() => setDiffIdx(i)}
-                    className={`px-5 py-2.5 rounded-xl font-bold border transition-all text-sm ${diffIdx === i
-                      ? `${d.bg} text-white border-transparent shadow-lg`
+                    className={`px-4 py-2 rounded-md font-semibold border transition-all text-sm ${diffIdx === i
+                      ? `${d.bg} text-white border-transparent shadow-sm`
                       : 'bg-brand-surface border-brand-border text-brand-muted hover:text-brand-text'}`}>
                     {d.label}
-                    <div className={`text-xs font-normal mt-0.5 ${diffIdx === i ? 'text-white/80' : 'text-brand-muted'}`}>Ghost: {d.ghost} WPM</div>
+                    <div className={`text-xs font-normal mt-0.5 font-mono ${diffIdx === i ? 'text-white/80' : 'text-brand-muted'}`}>Ghost: {d.ghost} WPM</div>
                   </button>
                 ))}
               </div>
 
               <button onClick={startGame}
-                className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-8 py-3.5 rounded-2xl font-black text-lg transition-all shadow-lg shadow-brand-primary/30 mx-auto">
-                <Play className="w-5 h-5" /> Start Race!
+                className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white px-6 py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm mx-auto">
+                <Play className="w-4 h-4" /> Start Race
               </button>
             </motion.div>
           )}
@@ -210,26 +210,26 @@ export default function SpeedRacerPage() {
                 { label: 'Errors', value: errors, color: errors > 3 ? 'text-rose-400' : 'text-brand-muted' },
                 { label: 'Time', value: formatTime(elapsed), color: 'text-brand-text' },
               ].map(s => (
-                <div key={s.label} className="bg-brand-surface border border-brand-border rounded-xl p-3 text-center">
-                  <div className={`text-xl font-black font-mono ${s.color}`}>{s.value}</div>
-                  <div className="text-[10px] text-brand-muted uppercase">{s.label}</div>
+                <div key={s.label} className="bg-brand-surface border border-brand-border rounded-md p-3 text-center shadow-sm">
+                  <div className={`text-xl font-bold font-mono ${s.color}`}>{s.value}</div>
+                  <div className="text-[10px] text-brand-muted uppercase font-mono">{s.label}</div>
                 </div>
               ))}
             </div>
 
             {/* Race track */}
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 mb-4">
+            <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-4 shadow-sm">
               <div className="mb-3 space-y-3">
                 {/* Ghost car */}
                 <div>
-                  <div className="flex items-center justify-between text-xs text-brand-muted mb-1">
+                  <div className="flex items-center justify-between text-xs text-brand-muted mb-1 font-mono">
                     <span className="font-semibold">Ghost ({diff.label} — {diff.ghost} WPM)</span>
                     <span className={diff.color}>{Math.round(ghostPct)}%</span>
                   </div>
-                  <div className="relative h-8 bg-brand-surface-2 rounded-xl overflow-hidden">
-                    <motion.div className={`h-full ${diff.bg} opacity-40 rounded-xl`}
+                  <div className="relative h-7 bg-brand-surface-2 rounded-md overflow-hidden">
+                    <motion.div className={`h-full ${diff.bg} opacity-40 rounded-md`}
                       animate={{ width: `${ghostPct}%` }} transition={{ duration: 0.2, ease: 'linear' }} />
-                    <motion.div className="absolute top-1 h-6 flex items-center text-lg"
+                    <motion.div className="absolute top-0.5 h-6 flex items-center text-lg"
                       animate={{ left: `calc(${ghostPct}% - 20px)` }} transition={{ duration: 0.2, ease: 'linear' }}>
                       👻
                     </motion.div>
@@ -238,14 +238,14 @@ export default function SpeedRacerPage() {
 
                 {/* Player car */}
                 <div>
-                  <div className="flex items-center justify-between text-xs text-brand-muted mb-1">
+                  <div className="flex items-center justify-between text-xs text-brand-muted mb-1 font-mono">
                     <span className="font-semibold text-brand-primary">You</span>
                     <span className="text-brand-primary">{Math.round(playerPct)}%</span>
                   </div>
-                  <div className="relative h-8 bg-brand-surface-2 rounded-xl overflow-hidden">
-                    <motion.div className="h-full bg-brand-primary rounded-xl"
+                  <div className="relative h-7 bg-brand-surface-2 rounded-md overflow-hidden">
+                    <motion.div className="h-full bg-brand-primary rounded-md"
                       animate={{ width: `${playerPct}%` }} transition={{ duration: 0.1, ease: 'linear' }} />
-                    <motion.div className="absolute top-1 h-6 flex items-center text-lg"
+                    <motion.div className="absolute top-0.5 h-6 flex items-center text-lg"
                       animate={{ left: `calc(${playerPct}% - 20px)` }} transition={{ duration: 0.1, ease: 'linear' }}>
                       🏎️
                     </motion.div>
@@ -254,14 +254,14 @@ export default function SpeedRacerPage() {
               </div>
 
               {playerBeatsGhost && playerPct > 5 && (
-                <div className="text-center text-xs font-bold text-brand-accent animate-pulse">
+                <div className="text-center text-xs font-bold text-brand-accent animate-pulse font-mono">
                   🔥 You're ahead! Keep going!
                 </div>
               )}
             </div>
 
             {/* Passage */}
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 mb-4">
+            <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-4 shadow-sm">
               <p className="text-lg leading-8 select-none font-mono">{renderPassage()}</p>
             </div>
 
@@ -275,7 +275,7 @@ export default function SpeedRacerPage() {
               spellCheck={false}
               autoComplete="off"
               placeholder="Type the passage above…"
-              className="w-full bg-brand-surface border-2 border-brand-border focus:border-brand-primary rounded-2xl px-5 py-4 text-brand-text text-base outline-none transition-all font-mono"
+              className="w-full bg-brand-surface border border-brand-border focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/30 rounded-md px-4 py-3 text-brand-text text-base focus:outline-none transition-all font-mono shadow-sm"
             />
           </motion.div>
         )}
@@ -285,11 +285,11 @@ export default function SpeedRacerPage() {
           {gameState === 'finished' && (
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               className="text-center">
-              <div className="bg-brand-surface border border-brand-border rounded-3xl p-8 mb-5">
-                <div className="text-5xl mb-3">
+              <div className="bg-brand-surface border border-brand-border rounded-xl p-8 mb-5 shadow-lg">
+                <div className="text-4xl mb-3">
                   {wpm > diff.ghost ? '🏆' : wpm > diff.ghost * 0.8 ? '🥈' : '💪'}
                 </div>
-                <h2 className="text-2xl font-black text-brand-text mb-1">
+                <h2 className="text-2xl font-serif font-bold text-brand-text mb-1">
                   {wpm > diff.ghost ? 'You Win! Ghost Defeated!' : wpm > diff.ghost * 0.8 ? 'So Close! Great Run!' : 'Ghost Wins — Try Again!'}
                 </h2>
                 <p className="text-brand-text-muted text-sm mb-6">
@@ -302,31 +302,31 @@ export default function SpeedRacerPage() {
                     { label: 'Accuracy', value: `${accuracy}%`, color: accuracy >= 90 ? 'text-brand-accent' : 'text-rose-400', sub: `${errors} errors` },
                     { label: 'Time', value: formatTime(elapsed), color: 'text-brand-text', sub: wpm > finalBest - 1 && wpm > bestWpm ? 'New Best!' : '' },
                   ].map(s => (
-                    <div key={s.label} className="bg-brand-surface-2 border border-brand-border rounded-xl p-4">
-                      <div className={`text-2xl font-black font-mono ${s.color}`}>{s.value}</div>
+                    <div key={s.label} className="bg-brand-surface-2 border border-brand-border rounded-md p-4">
+                      <div className={`text-2xl font-bold font-mono ${s.color}`}>{s.value}</div>
                       <div className="text-xs text-brand-muted mt-1">{s.label}</div>
-                      {s.sub && <div className="text-[10px] text-brand-muted mt-0.5">{s.sub}</div>}
+                      {s.sub && <div className="text-[10px] text-brand-muted mt-0.5 font-mono">{s.sub}</div>}
                     </div>
                   ))}
                 </div>
 
                 <div className="flex gap-3 justify-center">
                   <button onClick={reset}
-                    className="flex items-center gap-2 bg-brand-primary text-white px-6 py-2.5 rounded-xl font-bold hover:bg-brand-secondary transition-all">
+                    className="flex items-center gap-2 bg-brand-primary text-white px-5 py-2.5 rounded-md font-semibold text-sm hover:bg-brand-primary/90 transition-all shadow-sm">
                     <RotateCcw className="w-4 h-4" /> Race Again
                   </button>
                   <Link to="/games/"
-                    className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border text-brand-text px-6 py-2.5 rounded-xl font-bold hover:bg-brand-border transition-all">
+                    className="flex items-center gap-2 bg-brand-surface-2 border border-brand-border text-brand-text px-5 py-2.5 rounded-md font-semibold text-sm hover:bg-brand-border transition-all shadow-sm">
                     All Games
                   </Link>
                 </div>
               </div>
 
               {/* XP notice */}
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 flex items-center gap-3">
+              <div className="bg-brand-surface border border-brand-border rounded-lg p-4 flex items-center gap-3 shadow-sm">
                 <Zap className="w-5 h-5 text-brand-primary shrink-0" />
                 <p className="text-sm text-brand-text-muted">
-                  You earned <span className="font-bold text-brand-primary">{wpm * 2} XP</span> from this race. Keep racing to level up on your Dashboard!
+                  You earned <span className="font-bold font-mono text-brand-primary">{wpm * 2} XP</span> from this race. Keep racing to level up on your Dashboard!
                 </p>
                 <Flag className="w-5 h-5 text-brand-accent shrink-0" />
               </div>

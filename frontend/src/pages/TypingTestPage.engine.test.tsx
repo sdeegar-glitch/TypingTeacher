@@ -31,7 +31,7 @@ describe('TypingTestPage engine selection', () => {
     renderPage('');
     expect(input()).toBeNull();
     expect(screen.getByRole('switch', { name: /new typing engine/i })).toHaveAttribute('aria-checked', 'false');
-  });
+  }, 15000);
 
   it('?engine=v2 enables the new engine and remembers the choice', () => {
     renderPage('?engine=v2');

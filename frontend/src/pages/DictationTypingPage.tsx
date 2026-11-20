@@ -150,11 +150,11 @@ export default function DictationTypingPage() {
         {/* ══ CONFIG ══ */}
         {phase === 'config' && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-6 mb-5">
-              <div className="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center mb-4">
-                <Headphones className="w-6 h-6 text-brand-primary" />
+            <div className="bg-brand-surface border border-brand-border rounded-lg p-6 mb-5 shadow-sm">
+              <div className="w-10 h-10 rounded-md bg-brand-primary/10 flex items-center justify-center mb-4">
+                <Headphones className="w-5 h-5 text-brand-primary" />
               </div>
-              <h2 className="text-lg font-black text-brand-text mb-2">Transcribe the dictation</h2>
+              <h2 className="text-lg font-serif font-bold text-brand-text mb-2">Transcribe the dictation</h2>
               <p className="text-brand-text-muted text-sm leading-relaxed mb-1">
                 A passage is read aloud at your chosen speed. <strong className="text-brand-text">Listen and type what you hear</strong> — the text stays hidden, just like a real steno transcription test. When it ends, submit to see your transcription speed and accuracy.
               </p>
@@ -162,7 +162,7 @@ export default function DictationTypingPage() {
             </div>
 
             {!supported && (
-              <div className="mb-5 flex items-start gap-2.5 p-4 rounded-xl border" style={{ background: 'rgba(224,82,82,0.08)', borderColor: 'rgba(224,82,82,0.2)' }}>
+              <div className="mb-5 flex items-start gap-2.5 p-4 rounded-md border" style={{ background: 'rgba(224,82,82,0.08)', borderColor: 'rgba(224,82,82,0.2)' }}>
                 <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
                 <p className="text-rose-500 text-xs leading-relaxed">Your browser does not support speech synthesis, so audio dictation is unavailable. Try the latest Chrome, Edge or Safari.</p>
               </div>
@@ -170,22 +170,21 @@ export default function DictationTypingPage() {
 
             {/* Speed */}
             <div className="mb-5">
-              <label className="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-2">Dictation Speed</label>
+              <label className="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-2 font-mono">Dictation Speed</label>
               <div className="grid grid-cols-3 gap-2.5">
                 {SPEEDS.map(s => (
                   <button key={s.wpm} onClick={() => setSpeedWpm(s.wpm)}
-                    className={`rounded-xl p-3 border text-center transition-all ${speedWpm === s.wpm ? 'border-brand-primary bg-brand-primary/10' : 'border-brand-border bg-brand-surface hover:bg-brand-surface-2'}`}>
-                    <div className="text-lg font-black text-brand-text">{s.wpm}</div>
-                    <div className="text-[10px] text-brand-muted uppercase tracking-wide">WPM · {s.note}</div>
+                    className={`rounded-md p-3 border text-center transition-all ${speedWpm === s.wpm ? 'border-brand-primary bg-brand-primary/10' : 'border-brand-border bg-brand-surface hover:bg-brand-surface-2'}`}>
+                    <div className="text-lg font-bold font-mono text-brand-text">{s.wpm}</div>
+                    <div className="text-[10px] text-brand-muted uppercase tracking-wide font-mono">WPM · {s.note}</div>
                   </button>
                 ))}
               </div>
             </div>
 
             <button onClick={startDictation} disabled={!supported}
-              className="w-full py-4 rounded-2xl font-black text-white transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
-              style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)', boxShadow: '0 6px 20px rgba(48,76,83,.25)' }}>
-              <Play className="w-5 h-5" /> Start Dictation
+              className="w-full py-3 rounded-md font-semibold text-white bg-brand-primary hover:bg-brand-primary/90 transition-all shadow-sm flex items-center justify-center gap-2 disabled:opacity-50">
+              <Play className="w-4 h-4" /> Start Dictation
             </button>
           </motion.div>
         )}
@@ -211,17 +210,16 @@ export default function DictationTypingPage() {
               onChange={e => setTyped(e.target.value)}
               placeholder="Start typing what you hear…"
               rows={9}
-              className="w-full rounded-2xl border border-brand-border bg-brand-surface p-4 text-brand-text text-sm sm:text-base leading-relaxed outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/15 resize-none font-mono"
+              className="w-full rounded-lg border border-brand-border bg-brand-surface p-4 text-brand-text text-sm sm:text-base leading-relaxed focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/30 resize-none font-mono shadow-sm"
             />
 
-            <div className="flex items-center justify-between mt-2 mb-4 text-xs text-brand-muted">
+            <div className="flex items-center justify-between mt-2 mb-4 text-xs text-brand-muted font-mono">
               <span>{words(typed).length} words typed</span>
               <span>Text is hidden until you submit</span>
             </div>
 
             <button onClick={submit}
-              className="w-full py-3.5 rounded-2xl font-bold text-white transition-all shadow-lg flex items-center justify-center gap-2"
-              style={{ background: 'linear-gradient(135deg,#BC6C50,#CC7B5D)', boxShadow: '0 4px 16px rgba(188,108,80,.3)' }}>
+              className="w-full py-2.5 rounded-md font-semibold text-white bg-brand-primary hover:bg-brand-primary/90 transition-all shadow-sm flex items-center justify-center gap-2">
               <Square className="w-4 h-4" /> Done — Submit Transcription
             </button>
           </motion.div>
@@ -236,31 +234,30 @@ export default function DictationTypingPage() {
                 { label: 'Accuracy', value: `${accuracy}%`, color: 'text-brand-accent' },
                 { label: 'Words Captured', value: `${captured}/${srcWords.length}`, color: 'text-brand-secondary' },
               ].map(s => (
-                <div key={s.label} className="bg-brand-surface border border-brand-border rounded-2xl p-4 text-center">
-                  <div className={`text-2xl font-black font-mono ${s.color}`}>{s.value}</div>
-                  <div className="text-[10px] text-brand-muted mt-1 uppercase tracking-wider">{s.label}</div>
+                <div key={s.label} className="bg-brand-surface border border-brand-border rounded-lg p-4 text-center shadow-sm">
+                  <div className={`text-2xl font-bold font-mono ${s.color}`}>{s.value}</div>
+                  <div className="text-[10px] text-brand-muted mt-1 uppercase tracking-wider font-mono">{s.label}</div>
                 </div>
               ))}
             </div>
 
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 mb-4">
-              <h3 className="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Original passage — {passage.title}</h3>
+            <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-4 shadow-sm">
+              <h3 className="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2 font-mono">Original passage — {passage.title}</h3>
               <p className="text-brand-text-muted text-sm leading-relaxed">{passage.text}</p>
             </div>
 
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-5 mb-6">
-              <h3 className="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Your transcription</h3>
+            <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-6 shadow-sm">
+              <h3 className="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2 font-mono">Your transcription</h3>
               <p className="text-brand-text text-sm leading-relaxed font-mono whitespace-pre-wrap">{typed || <span className="text-brand-muted">(nothing typed)</span>}</p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <button onClick={() => reset(true)}
-                className="flex-1 py-3.5 rounded-2xl font-bold text-white flex items-center justify-center gap-2 transition-all"
-                style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+                className="flex-1 py-2.5 rounded-md font-semibold text-white bg-brand-primary hover:bg-brand-primary/90 flex items-center justify-center gap-2 transition-all shadow-sm">
                 <RotateCcw className="w-4 h-4" /> New Dictation
               </button>
               <Link to="/ssc-steno-typing-test/"
-                className="flex-1 py-3.5 rounded-2xl font-bold text-center bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text flex items-center justify-center gap-2 transition-all">
+                className="flex-1 py-2.5 rounded-md font-semibold text-center bg-brand-surface-2 border border-brand-border hover:bg-brand-border text-brand-text flex items-center justify-center gap-2 transition-all shadow-sm">
                 <CheckCircle className="w-4 h-4" /> SSC Steno Practice
               </Link>
             </div>

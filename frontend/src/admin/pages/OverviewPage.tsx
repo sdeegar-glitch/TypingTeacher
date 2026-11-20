@@ -14,25 +14,25 @@ const STAT_CARDS = [
 ];
 
 const COLOR_MAP: Record<string, string> = {
-  indigo:  'from-indigo-500/20 to-indigo-600/5 border-indigo-500/20 text-indigo-400',
-  emerald: 'from-emerald-500/20 to-emerald-600/5 border-emerald-500/20 text-emerald-400',
-  violet:  'from-violet-500/20 to-violet-600/5 border-violet-500/20 text-violet-400',
-  cyan:    'from-cyan-500/20 to-cyan-600/5 border-cyan-500/20 text-cyan-400',
-  amber:   'from-amber-500/20 to-amber-600/5 border-amber-500/20 text-amber-400',
-  rose:    'from-rose-500/20 to-rose-600/5 border-rose-500/20 text-rose-400',
+  indigo:  'border-brand-primary/30 bg-brand-primary/10 text-brand-primary',
+  emerald: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400',
+  violet:  'border-teal-500/30 bg-teal-500/10 text-teal-400',
+  cyan:    'border-cyan-500/30 bg-cyan-500/10 text-cyan-400',
+  amber:   'border-amber-500/30 bg-amber-500/10 text-amber-400',
+  rose:    'border-rose-500/30 bg-rose-500/10 text-rose-400',
 };
 
-const DIFF_COLORS: Record<string, string> = { easy: '#10B981', medium: '#6366F1', hard: '#EF4444' };
+const DIFF_COLORS: Record<string, string> = { easy: '#10B981', medium: '#2A9DAE', hard: '#EF4444' };
 
 function StatCard({ label, value, icon, color }: { label: string; value: number; icon: React.ReactNode; color: string }) {
   const cls = COLOR_MAP[color] || COLOR_MAP.indigo;
   return (
-    <div className={`bg-gradient-to-br ${cls} border rounded-2xl p-5 flex flex-col gap-3`}>
+    <div className={`${cls} border rounded-lg p-5 flex flex-col gap-3 shadow-sm`}>
       <div className="flex items-center justify-between">
         <span className="text-slate-400 text-sm font-medium">{label}</span>
-        <span className={`p-2 rounded-xl bg-white/5`}>{icon}</span>
+        <span className="p-2 rounded-md bg-white/5">{icon}</span>
       </div>
-      <div className="text-3xl font-black text-white">{value.toLocaleString()}</div>
+      <div className="text-3xl font-bold font-mono text-white">{value.toLocaleString()}</div>
     </div>
   );
 }
@@ -60,7 +60,7 @@ export default function OverviewPage() {
   if (!stats) return (
     <div className="p-8">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        {[...Array(6)].map((_, i) => <div key={i} className="h-32 rounded-2xl bg-white/5 animate-pulse" />)}
+        {[...Array(6)].map((_, i) => <div key={i} className="h-32 rounded-lg bg-white/5 animate-pulse" />)}
       </div>
     </div>
   );
@@ -75,8 +75,8 @@ export default function OverviewPage() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-white">Dashboard Overview</h1>
-        <p className="text-slate-400 text-sm mt-1">Welcome back. Here's what's happening with FastTypingLab today.</p>
+        <h1 className="text-2xl font-bold text-white">Dashboard Overview</h1>
+        <p className="text-slate-400 text-sm mt-1">Real-time system telemetry and test activity across FastTypingLab.</p>
       </div>
 
       {/* Stat Cards */}
@@ -95,32 +95,32 @@ export default function OverviewPage() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Area Chart */}
-        <div className="xl:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-5">
+        <div className="xl:col-span-2 bg-slate-900/60 border border-white/10 rounded-lg p-5 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-white font-bold">Typing Tests Started</h3>
               <p className="text-slate-400 text-xs">Last 14 days · real test_sessions data</p>
             </div>
-            <span className="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded-full font-semibold">Daily</span>
+            <span className="text-xs bg-brand-primary/20 text-brand-primary border border-brand-primary/30 px-2.5 py-0.5 rounded font-mono font-semibold">Daily</span>
           </div>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={chartData}>
               <defs>
                 <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6366F1" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#2A9DAE" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#2A9DAE" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <XAxis dataKey="date" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} interval={2} />
               <YAxis tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', color: '#e2e8f0' }} />
-              <Area type="monotone" dataKey="value" stroke="#6366F1" strokeWidth={2} fill="url(#grad)" />
+              <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', color: '#e2e8f0' }} />
+              <Area type="monotone" dataKey="value" stroke="#2A9DAE" strokeWidth={2} fill="url(#grad)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
 
         {/* Pie Chart */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+        <div className="bg-slate-900/60 border border-white/10 rounded-lg p-5 shadow-sm">
           <h3 className="text-white font-bold mb-1">Test Difficulty</h3>
           <p className="text-slate-400 text-xs mb-4">Distribution across all tests</p>
           <ResponsiveContainer width="100%" height={160}>
@@ -130,7 +130,7 @@ export default function OverviewPage() {
                   <Cell key={index} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', color: '#e2e8f0' }} />
+              <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', color: '#e2e8f0' }} />
             </PieChart>
           </ResponsiveContainer>
           <div className="flex flex-col gap-2 mt-2">
@@ -148,7 +148,7 @@ export default function OverviewPage() {
       </div>
 
       {/* Activity Feed (real — activity_log table) */}
-      <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+      <div className="bg-slate-900/60 border border-white/10 rounded-lg p-5 shadow-sm">
         <h3 className="text-white font-bold mb-4">Live Activity Feed</h3>
         <div className="space-y-3 max-h-48 overflow-y-auto">
           {logs.length === 0 && <p className="text-sm text-slate-500">No activity recorded yet.</p>}

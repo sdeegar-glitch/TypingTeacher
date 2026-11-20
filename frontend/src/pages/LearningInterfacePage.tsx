@@ -411,34 +411,34 @@ const LearningInterfacePage = () => {
 
       {/* ── RESULT MODAL ── */}
       {isFinished && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[100] p-4">
-          <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 sm:p-10 max-w-md w-full text-center shadow-2xl">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4">
+          <div className="bg-brand-surface border border-brand-border rounded-xl p-6 sm:p-8 max-w-md w-full text-center shadow-xl">
             {canPass ? (
               <>
-                <div className="text-5xl sm:text-6xl mb-4">🏆</div>
-                <h2 className="text-3xl sm:text-4xl font-black text-brand-text mb-1">Level Complete!</h2>
-                <p className="text-brand-muted mb-6 text-sm">You passed this level with flying colors.</p>
+                <div className="text-4xl sm:text-5xl mb-3">🏆</div>
+                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brand-text mb-1">Level Complete!</h2>
+                <p className="text-brand-muted mb-6 text-sm">You passed this level with required speed and accuracy.</p>
                 <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-                  <div className="bg-brand-surface-2 border border-brand-border p-3 sm:p-4 rounded-2xl">
-                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Gross</span>
-                    <span className="text-xl sm:text-2xl font-black text-brand-text">{wpm} WPM</span>
+                  <div className="bg-brand-surface-2 border border-brand-border p-3 rounded-lg">
+                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1 font-mono">Gross</span>
+                    <span className="text-xl sm:text-2xl font-bold font-mono text-brand-text">{wpm} WPM</span>
                   </div>
-                  <div className="bg-brand-primary/10 border border-brand-primary/20 p-3 sm:p-4 rounded-2xl">
-                    <span className="text-[9px] font-bold text-brand-accent uppercase tracking-widest block mb-1">Net</span>
-                    <span className="text-xl sm:text-2xl font-black text-brand-primary">{netWpm} WPM</span>
+                  <div className="bg-brand-primary/10 border border-brand-primary/20 p-3 rounded-lg">
+                    <span className="text-[9px] font-bold text-brand-accent uppercase tracking-widest block mb-1 font-mono">Net</span>
+                    <span className="text-xl sm:text-2xl font-bold font-mono text-brand-primary">{netWpm} WPM</span>
                   </div>
-                  <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 sm:p-4 rounded-2xl">
-                    <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Acc</span>
-                    <span className="text-xl sm:text-2xl font-black text-emerald-600">{accuracy}%</span>
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-lg">
+                    <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1 font-mono">Acc</span>
+                    <span className="text-xl sm:text-2xl font-bold font-mono text-emerald-600">{accuracy}%</span>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <Link to="/learn/" className="flex-1 bg-brand-surface-2 hover:bg-brand-border text-brand-text py-3 rounded-xl font-bold text-sm transition-all border border-brand-border text-center">
+                  <Link to="/learn/" className="flex-1 bg-brand-surface-2 hover:bg-brand-border text-brand-text py-2.5 rounded-md font-semibold text-sm transition-all border border-brand-border text-center shadow-sm">
                     Course Map
                   </Link>
                   <button
                     onClick={() => navigate(`/learn/${Number(lessonId) + 1}`)}
-                    className="flex-1 bg-brand-primary hover:bg-brand-secondary text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all"
+                    className="flex-1 bg-brand-primary hover:bg-brand-primary/90 text-white py-2.5 rounded-md font-semibold text-sm shadow-sm transition-all"
                   >
                     Next Level →
                   </button>
@@ -446,26 +446,26 @@ const LearningInterfacePage = () => {
               </>
             ) : (
               <>
-                <div className="text-5xl sm:text-6xl mb-4">💪</div>
-                <h2 className="text-3xl sm:text-4xl font-black text-brand-text mb-1">Keep Going!</h2>
-                <p className="text-brand-muted mb-4 text-sm">Need <span className="text-rose-500 font-bold">{currentLesson.minWpm} WPM</span> to pass.</p>
+                <div className="text-4xl sm:text-5xl mb-3">💪</div>
+                <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brand-text mb-1">Keep Going!</h2>
+                <p className="text-brand-muted mb-4 text-sm">Need <span className="text-rose-500 font-bold font-mono">{currentLesson.minWpm} WPM</span> to pass.</p>
                 <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-                  <div className="bg-brand-surface-2 p-3 rounded-2xl">
-                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Gross</span>
-                    <span className="text-xl font-black text-brand-text">{wpm} WPM</span>
+                  <div className="bg-brand-surface-2 border border-brand-border p-3 rounded-lg">
+                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1 font-mono">Gross</span>
+                    <span className="text-xl font-bold font-mono text-brand-text">{wpm} WPM</span>
                   </div>
-                  <div className="bg-brand-surface-2 p-3 rounded-2xl">
-                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Net</span>
-                    <span className="text-xl font-black text-brand-text">{netWpm} WPM</span>
+                  <div className="bg-brand-surface-2 border border-brand-border p-3 rounded-lg">
+                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1 font-mono">Net</span>
+                    <span className="text-xl font-bold font-mono text-brand-text">{netWpm} WPM</span>
                   </div>
-                  <div className="bg-brand-surface-2 p-3 rounded-2xl">
-                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1">Acc</span>
-                    <span className="text-xl font-black text-brand-text">{accuracy}%</span>
+                  <div className="bg-brand-surface-2 border border-brand-border p-3 rounded-lg">
+                    <span className="text-[9px] font-bold text-brand-muted uppercase tracking-widest block mb-1 font-mono">Acc</span>
+                    <span className="text-xl font-bold font-mono text-brand-text">{accuracy}%</span>
                   </div>
                 </div>
                 <button
                   onClick={() => window.location.reload()}
-                  className="w-full bg-brand-primary hover:bg-brand-secondary text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-brand-primary/30 transition-all"
+                  className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white py-2.5 rounded-md font-semibold text-sm shadow-sm transition-all"
                 >
                   Try Again
                 </button>

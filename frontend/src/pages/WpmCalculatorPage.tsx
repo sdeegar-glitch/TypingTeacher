@@ -37,7 +37,7 @@ export default function WpmCalculatorPage() {
   const netWpm = hasInput ? Math.max(0, Math.round((c / 5 - e) / totalMin)) : 0;
   const accuracy = c > 0 ? Math.max(0, Math.round(((c - e) / c) * 100)) : 100;
 
-  const inputCls = 'w-full px-4 py-2.5 rounded-xl text-brand-text text-sm outline-none transition-all border bg-brand-surface-2 border-brand-border focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/15';
+  const inputCls = 'w-full px-4 py-2.5 rounded-md text-brand-text text-sm outline-none transition-all border bg-brand-surface-2 border-brand-border focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/30';
 
   return (
     <div className="bg-brand-bg text-brand-text py-4 sm:py-6 px-4 sm:px-6">
@@ -51,64 +51,64 @@ export default function WpmCalculatorPage() {
       />
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-md bg-brand-primary/10 flex items-center justify-center">
             <Calculator className="w-5 h-5 text-brand-primary" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black">WPM Calculator</h1>
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold">WPM Calculator</h1>
         </div>
         <p className="text-brand-text-muted text-sm leading-relaxed mb-6">
           Calculate your typing speed in words per minute (WPM). Enter how many characters you typed, how long it took, and how many mistakes you made — the calculator shows your gross WPM, net WPM and accuracy instantly.
         </p>
 
         {/* Calculator */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-5">
+        <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-5 shadow-sm">
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-brand-muted mb-1.5">Characters typed</label>
+              <label className="block text-xs font-semibold text-brand-muted mb-1.5 font-mono">Characters typed</label>
               <input className={inputCls} type="number" min="0" inputMode="numeric" value={chars} onChange={e => setChars(e.target.value)} placeholder="e.g. 300" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-brand-muted mb-1.5">Errors (optional)</label>
+              <label className="block text-xs font-semibold text-brand-muted mb-1.5 font-mono">Errors (optional)</label>
               <input className={inputCls} type="number" min="0" inputMode="numeric" value={errors} onChange={e => setErrors(e.target.value)} placeholder="e.g. 5" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-brand-muted mb-1.5">Minutes</label>
+              <label className="block text-xs font-semibold text-brand-muted mb-1.5 font-mono">Minutes</label>
               <input className={inputCls} type="number" min="0" inputMode="numeric" value={minutes} onChange={e => setMinutes(e.target.value)} placeholder="e.g. 1" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-brand-muted mb-1.5">Seconds</label>
+              <label className="block text-xs font-semibold text-brand-muted mb-1.5 font-mono">Seconds</label>
               <input className={inputCls} type="number" min="0" max="59" inputMode="numeric" value={seconds} onChange={e => setSeconds(e.target.value)} placeholder="e.g. 30" />
             </div>
           </div>
 
           {/* Results */}
           <div className="grid grid-cols-3 gap-3 mt-6">
-            <div className="rounded-2xl py-4 text-center text-white shadow-md" style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
-              <div className="text-3xl font-black font-mono leading-none">{netWpm}</div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-white/80 mt-1">Net WPM</div>
+            <div className="rounded-lg py-4 text-center text-white bg-brand-primary shadow-sm">
+              <div className="text-3xl font-bold font-mono leading-none">{netWpm}</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-white/80 mt-1 font-mono">Net WPM</div>
             </div>
-            <div className="rounded-2xl py-4 text-center bg-brand-surface-2 border border-brand-border">
-              <div className="text-3xl font-black font-mono leading-none text-brand-text">{grossWpm}</div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-brand-muted mt-1">Gross WPM</div>
+            <div className="rounded-lg py-4 text-center bg-brand-surface-2 border border-brand-border shadow-sm">
+              <div className="text-3xl font-bold font-mono leading-none text-brand-text">{grossWpm}</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-brand-muted mt-1 font-mono">Gross WPM</div>
             </div>
-            <div className="rounded-2xl py-4 text-center bg-brand-surface-2 border border-brand-border">
-              <div className="text-3xl font-black font-mono leading-none text-brand-primary">{accuracy}%</div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-brand-muted mt-1">Accuracy</div>
+            <div className="rounded-lg py-4 text-center bg-brand-surface-2 border border-brand-border shadow-sm">
+              <div className="text-3xl font-bold font-mono leading-none text-brand-primary">{accuracy}%</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-brand-muted mt-1 font-mono">Accuracy</div>
             </div>
           </div>
 
-          <Link to="/tests/" className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white py-3 rounded-xl font-bold text-sm transition-all">
+          <Link to="/tests/" className="mt-5 w-full inline-flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white py-2.5 rounded-md font-semibold text-sm transition-all shadow-sm">
             <Zap className="w-4 h-4" /> Or take a real typing test →
           </Link>
         </div>
 
         {/* Formula */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
-          <h2 className="font-black text-lg mb-2">The WPM formula</h2>
+        <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-6 shadow-sm">
+          <h2 className="font-serif font-bold text-lg mb-2">The WPM formula</h2>
           <p className="text-brand-text-muted text-sm leading-relaxed mb-3">
             Typing tests treat every <strong className="text-brand-text">5 characters as one word</strong> (including spaces). So:
           </p>
-          <div className="bg-brand-surface-2 border border-brand-border rounded-xl p-4 font-mono text-sm text-brand-text space-y-1">
+          <div className="bg-brand-surface-2 border border-brand-border rounded-md p-4 font-mono text-sm text-brand-text space-y-1">
             <div>Gross WPM = (characters ÷ 5) ÷ minutes</div>
             <div>Net WPM&nbsp;&nbsp; = ((characters ÷ 5) − errors) ÷ minutes</div>
             <div>Accuracy&nbsp;&nbsp; = (characters − errors) ÷ characters × 100</div>
@@ -116,8 +116,8 @@ export default function WpmCalculatorPage() {
         </div>
 
         {/* Benchmarks */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 mb-6">
-          <h2 className="font-black text-lg mb-3">What is a good typing speed?</h2>
+        <div className="bg-brand-surface border border-brand-border rounded-lg p-5 mb-6 shadow-sm">
+          <h2 className="font-serif font-bold text-lg mb-3">What is a good typing speed?</h2>
           <ScrollableRegion label="WPM reference table">
             <table className="w-full text-sm">
               <tbody>
@@ -133,8 +133,8 @@ export default function WpmCalculatorPage() {
         </div>
 
         {/* FAQ */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
-          <h2 className="font-black text-lg mb-4 flex items-center gap-2"><HelpCircle className="w-5 h-5 text-brand-primary" /> FAQ</h2>
+        <div className="bg-brand-surface border border-brand-border rounded-lg p-5 shadow-sm">
+          <h2 className="font-serif font-bold text-lg mb-4 flex items-center gap-2"><HelpCircle className="w-5 h-5 text-brand-primary" /> FAQ</h2>
           <div className="space-y-4">
             {FAQS.map(f => (
               <div key={f.q}>

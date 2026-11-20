@@ -180,7 +180,7 @@ export default function DashboardPage() {
         <AnimatePresence>
           {showRewardBanner && (
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
-              className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-amber-500 text-white px-6 py-3 rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-2">
+              className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-amber-500 text-white px-5 py-2.5 rounded-md shadow-md font-semibold text-sm flex items-center gap-2">
               🎁 Daily Reward Claimed! +{rewardXP} XP · Streak: {streak} days 🔥
             </motion.div>
           )}
@@ -189,37 +189,37 @@ export default function DashboardPage() {
         {/* ── Header ── */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
           <div>
-            <h1 className="text-2xl sm:text-[28px] font-extrabold text-brand-text">Your Dashboard</h1>
+            <h1 className="text-2xl sm:text-[28px] font-serif font-bold text-brand-text">Your Dashboard</h1>
             <p className="text-brand-text-muted text-sm mt-0.5">Track your progress, earn XP, unlock achievements</p>
           </div>
           <div className="flex gap-2">
             {!rewardClaimed ? (
               <button onClick={claimDailyReward}
-                className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md shadow-amber-500/20 animate-pulse">
+                className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-md font-semibold text-sm transition-all shadow-sm">
                 🎁 Claim Daily Reward
               </button>
             ) : (
-              <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-500 px-4 py-2.5 rounded-xl text-sm font-bold">
+              <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 text-amber-500 px-4 py-2 rounded-md text-sm font-semibold">
                 🔥 {streak} Day Streak
               </div>
             )}
             <Link to="/tests/"
-              className="flex items-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md shadow-brand-primary/20">
+              className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white px-4 py-2 rounded-md font-semibold text-sm transition-all shadow-sm">
               <Zap className="w-4 h-4" /> New Test
             </Link>
           </div>
         </div>
 
         {/* ── Level + XP Bar ── */}
-        <div className="bg-brand-surface border border-brand-border rounded-2xl p-4 sm:p-4 mb-3">
+        <div className="bg-brand-surface border border-brand-border rounded-lg p-4 mb-3 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white font-black text-xl shadow-lg shadow-brand-primary/30">
+              <div className="w-10 h-10 rounded-md bg-brand-primary flex items-center justify-center text-white font-mono font-bold text-lg shadow-sm">
                 {stats.level}
               </div>
               <div>
-                <div className="text-xs text-brand-muted uppercase tracking-widest font-semibold">Level {stats.level}</div>
-                <div className="text-lg font-extrabold text-brand-text leading-tight">{levelTitle}</div>
+                <div className="text-xs text-brand-muted uppercase tracking-widest font-semibold font-mono">Level {stats.level}</div>
+                <div className="text-lg font-bold text-brand-text leading-tight">{levelTitle}</div>
                 <div className="text-xs text-brand-muted">{stats.xp} total XP</div>
               </div>
             </div>
@@ -231,21 +231,21 @@ export default function DashboardPage() {
                 { label: 'Streak', value: `${stats.streak}d`, icon: Flame, color: 'text-orange-500' },
               ].map(s => (
                 <div key={s.label}>
-                  <div className={`text-xl font-extrabold font-mono ${s.color}`}>{s.value}</div>
-                  <div className="text-[10px] text-brand-muted uppercase tracking-wider">{s.label}</div>
+                  <div className={`text-xl font-bold font-mono ${s.color}`}>{s.value}</div>
+                  <div className="text-[10px] text-brand-muted uppercase tracking-wider font-mono">{s.label}</div>
                 </div>
               ))}
             </div>
           </div>
           {/* XP bar */}
           <div className="space-y-1.5">
-            <div className="flex justify-between text-xs text-brand-muted">
+            <div className="flex justify-between text-xs text-brand-muted font-mono">
               <span>{stats.xpIntoLevel || 0} / {stats.xpNeeded || 200} XP</span>
               <span>{xpPercent}% to Level {stats.level + 1}</span>
             </div>
             <div className="h-2 bg-brand-surface-2 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-brand-primary to-brand-secondary rounded-full"
+                className="h-full bg-brand-primary rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${xpPercent}%` }}
                 transition={{ duration: 1, ease: 'easeOut' }}
@@ -255,11 +255,11 @@ export default function DashboardPage() {
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex gap-1 bg-brand-surface-2 rounded-xl p-1 mb-3 w-fit">
+        <div className="flex gap-1 bg-brand-surface-2 border border-brand-border rounded-md p-1 mb-3 w-fit">
           {(['overview', 'history', 'achievements', 'coach'] as const).map(t => (
             <button key={t} onClick={() => { setTab(t); if (t === 'coach' && !aiCoach) fetchAICoach(); }}
-              className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all capitalize ${
-                tab === t ? 'bg-brand-surface shadow text-brand-text' : 'text-brand-muted hover:text-brand-text'
+              className={`px-3 sm:px-4 py-1.5 rounded text-xs sm:text-sm font-semibold transition-all capitalize ${
+                tab === t ? 'bg-brand-surface shadow-sm text-brand-text border border-brand-border/60' : 'text-brand-muted hover:text-brand-text'
               }`}>
               {t === 'coach' ? '🤖 AI Coach' : t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
@@ -280,7 +280,7 @@ export default function DashboardPage() {
 
             {/* WPM Chart */}
             {chartData.length >= 2 ? (
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
+              <div className="bg-brand-surface border border-brand-border rounded-lg p-4 shadow-sm">
                 <h2 className="font-bold text-brand-text mb-2 flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-brand-primary" /> WPM Progress
                 </h2>
@@ -295,7 +295,7 @@ export default function DashboardPage() {
                     <XAxis dataKey="session" tick={{ fontSize: 11, fill: 'var(--brand-muted)' }} axisLine={false} tickLine={false} />
                     <YAxis tick={{ fontSize: 11, fill: 'var(--brand-muted)' }} axisLine={false} tickLine={false} />
                     <Tooltip
-                      contentStyle={{ background: 'var(--brand-surface)', border: '1px solid var(--brand-border)', borderRadius: 12, fontSize: 12 }}
+                      contentStyle={{ background: 'var(--brand-surface)', border: '1px solid var(--brand-border)', borderRadius: 6, fontSize: 12 }}
                       labelStyle={{ color: 'var(--brand-text)' }}
                     />
                     <Area type="monotone" dataKey="wpm" stroke="var(--brand-primary)" strokeWidth={2} fill="url(#wpmGrad)" dot={{ fill: 'var(--brand-primary)', r: 3 }} />
@@ -303,7 +303,7 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
               </div>
             ) : (
-              <div className="bg-brand-surface border border-dashed border-brand-border rounded-2xl p-8 text-center">
+              <div className="bg-brand-surface border border-dashed border-brand-border rounded-lg p-8 text-center">
                 <TrendingUp className="w-8 h-8 text-brand-muted mx-auto mb-3" />
                 <p className="text-brand-text-muted text-sm">Complete at least 2 tests to see your WPM progress chart.</p>
                 <Link to="/tests/" className="mt-3 inline-block text-sm font-semibold text-brand-primary hover:underline">Start a test →</Link>
@@ -312,7 +312,7 @@ export default function DashboardPage() {
 
             {/* Recent unlocks */}
             {stats.unlockedKeys.length > 0 && (
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
+              <div className="bg-brand-surface border border-brand-border rounded-lg p-4 shadow-sm">
                 <h2 className="font-bold text-brand-text mb-2 flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-400" /> Recent Achievements
                 </h2>
@@ -322,11 +322,11 @@ export default function DashboardPage() {
                     if (!ach) return null;
                     return (
                       <motion.div key={key} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                        className="flex items-center gap-2 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 px-3 py-2 rounded-xl">
+                        className="flex items-center gap-2 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 px-3 py-2 rounded-md">
                         <span className="text-xl">{ach.icon}</span>
                         <div>
                           <div className="text-xs font-bold text-amber-700 dark:text-amber-400">{ach.name}</div>
-                          <div className="text-[10px] text-amber-600 dark:text-amber-500">+{ach.xp} XP</div>
+                          <div className="text-[10px] text-amber-600 dark:text-amber-500 font-mono">+{ach.xp} XP</div>
                         </div>
                       </motion.div>
                     );
@@ -336,7 +336,7 @@ export default function DashboardPage() {
             )}
 
             {/* Available Tests */}
-            <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
+            <div className="bg-brand-surface border border-brand-border rounded-lg p-4 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-brand-text">Available Tests</h2>
                 <Link to="/tests/" className="text-sm text-brand-primary font-semibold hover:underline">View all →</Link>
@@ -346,10 +346,10 @@ export default function DashboardPage() {
                   <p className="text-brand-muted text-sm">Loading tests…</p>
                 ) : availableTests.map(t => (
                   <Link key={t.id} to={`/tests/config/${t.slug || t.id}`}
-                    className="flex items-center justify-between p-3 rounded-xl hover:bg-brand-surface-2 transition-colors group">
+                    className="flex items-center justify-between p-3 rounded-md hover:bg-brand-surface-2 transition-colors group">
                     <div>
                       <div className="font-semibold text-sm text-brand-text truncate max-w-[300px]">{t.title}</div>
-                      <div className="text-xs text-brand-muted">{t.word_count || 500} words · {t.difficulty_level || 'Medium'}</div>
+                      <div className="text-xs text-brand-muted font-mono">{t.word_count || 500} words · {t.difficulty_level || 'Medium'}</div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-brand-muted group-hover:text-brand-primary transition-colors shrink-0" />
                   </Link>
@@ -361,7 +361,7 @@ export default function DashboardPage() {
 
         {/* ── HISTORY TAB ── */}
         {tab === 'history' && (
-          <div className="bg-brand-surface border border-brand-border rounded-2xl overflow-hidden">
+          <div className="bg-brand-surface border border-brand-border rounded-lg overflow-hidden shadow-sm">
             <div className="px-5 py-4 border-b border-brand-border">
               <h2 className="font-bold text-brand-text">Session History</h2>
               <p className="text-xs text-brand-muted mt-0.5">{sessions.length} sessions recorded locally</p>
@@ -397,12 +397,12 @@ export default function DashboardPage() {
               return (
                 <motion.div key={ach.key}
                   initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                  className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
+                  className={`flex items-center gap-4 p-4 rounded-lg border transition-all ${
                     unlocked
                       ? 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20'
                       : 'bg-brand-surface border-brand-border opacity-50'
                   }`}>
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${unlocked ? 'bg-amber-100 dark:bg-amber-500/20' : 'bg-brand-surface-2'}`}>
+                  <div className={`w-12 h-12 rounded-md flex items-center justify-center text-2xl ${unlocked ? 'bg-amber-100 dark:bg-amber-500/20' : 'bg-brand-surface-2'}`}>
                     {unlocked ? ach.icon : <Lock className="w-5 h-5 text-brand-muted" />}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -419,35 +419,34 @@ export default function DashboardPage() {
 
         {/* ── AI COACH TAB ── */}
         {tab === 'coach' && (
-          <div className="space-y-5">
+          <div className="space-y-4">
             <Link to="/ai-tutor/"
-              className="flex items-center justify-between gap-3 rounded-2xl p-4 text-white transition-all hover:opacity-95 active:scale-[.99]"
-              style={{ background: 'linear-gradient(135deg,#304C53,#2A9DAE)' }}>
+              className="flex items-center justify-between gap-3 rounded-lg p-4 bg-brand-primary text-white transition-all hover:opacity-95 shadow-sm">
               <div>
-                <div className="font-bold text-sm flex items-center gap-2"><Sparkles className="w-4 h-4" /> Try the AI Typing Tutor</div>
-                <div className="text-white/75 text-xs mt-0.5">Get a full step-by-step improvement plan tailored to your stats</div>
+                <div className="font-bold text-sm flex items-center gap-2"><Sparkles className="w-4 h-4" /> Diagnostic Typing Tutor</div>
+                <div className="text-white/80 text-xs mt-0.5">Build a targeted practice routine matched to your accuracy and target WPM</div>
               </div>
               <ChevronRight className="w-5 h-5 opacity-80 shrink-0" />
             </Link>
 
             {sessions.length === 0 ? (
-              <div className="bg-brand-surface border border-dashed border-brand-border rounded-2xl p-10 text-center">
+              <div className="bg-brand-surface border border-dashed border-brand-border rounded-lg p-10 text-center">
                 <Brain className="w-10 h-10 text-brand-muted mx-auto mb-3" />
                 <p className="text-brand-text font-semibold mb-2">Complete some tests first</p>
-                <p className="text-brand-muted text-sm mb-4">The AI coach needs at least 1 session to analyze your performance.</p>
-                <Link to="/tests/" className="bg-brand-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm">Take a Test</Link>
+                <p className="text-brand-muted text-sm mb-4">The coach needs at least 1 session to analyze your performance.</p>
+                <Link to="/tests/" className="bg-brand-primary text-white px-5 py-2.5 rounded-md font-semibold text-sm">Take a Test</Link>
               </div>
             ) : loadingAI ? (
-              <div className="bg-brand-surface border border-brand-border rounded-2xl p-10 text-center">
+              <div className="bg-brand-surface border border-brand-border rounded-lg p-10 text-center">
                 <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
                 <p className="text-brand-muted text-sm">Analyzing your {sessions.length} sessions…</p>
               </div>
             ) : aiCoach ? (
               <>
-                <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
+                <div className="bg-brand-surface border border-brand-border rounded-lg p-4 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-2xl">🤖</span>
-                    <h2 className="font-bold text-brand-text">Your Performance Analysis</h2>
+                    <h2 className="font-bold text-brand-text">Performance Analysis</h2>
                   </div>
                   <p className="text-brand-text-muted leading-relaxed">{aiCoach.analysis}</p>
                   {aiCoach.encouragement && (
@@ -456,25 +455,25 @@ export default function DashboardPage() {
                 </div>
 
                 {aiCoach.weakAreas?.length > 0 && (
-                  <div className="bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-2xl p-4">
+                  <div className="bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-lg p-4">
                     <h3 className="font-bold text-rose-700 dark:text-rose-400 mb-3 flex items-center gap-2">
                       <Target className="w-4 h-4" /> Weak Areas to Focus On
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {aiCoach.weakAreas.map((w: string) => (
-                        <span key={w} className="bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 px-3 py-1 rounded-lg text-sm font-medium">{w}</span>
+                        <span key={w} className="bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 px-3 py-1 rounded-md text-sm font-medium">{w}</span>
                       ))}
                     </div>
                   </div>
                 )}
 
                 {aiCoach.suggestions?.length > 0 && (
-                  <div className="bg-brand-surface border border-brand-border rounded-2xl p-4">
+                  <div className="bg-brand-surface border border-brand-border rounded-lg p-4 shadow-sm">
                     <h3 className="font-bold text-brand-text mb-3">💡 Actionable Tips</h3>
                     <ul className="space-y-2">
                       {aiCoach.suggestions.map((s: string, i: number) => (
                         <li key={i} className="flex gap-3 text-sm text-brand-text-muted">
-                          <span className="text-brand-accent font-bold shrink-0">0{i + 1}.</span>
+                          <span className="text-brand-accent font-bold shrink-0 font-mono">0{i + 1}.</span>
                           {s}
                         </li>
                       ))}
@@ -483,11 +482,11 @@ export default function DashboardPage() {
                 )}
 
                 {aiCoach.practiceText && (
-                  <div className="bg-brand-primary/5 border border-brand-primary/20 rounded-2xl p-4">
+                  <div className="bg-brand-primary/5 border border-brand-primary/20 rounded-lg p-4">
                     <h3 className="font-bold text-brand-text mb-3 flex items-center gap-2">
                       <Zap className="w-4 h-4 text-brand-primary" /> Custom Practice Passage
                     </h3>
-                    <p className="font-mono text-sm text-brand-text-muted leading-relaxed bg-brand-surface rounded-xl p-4 border border-brand-border">{aiCoach.practiceText}</p>
+                    <p className="font-mono text-sm text-brand-text-muted leading-relaxed bg-brand-surface rounded-md p-4 border border-brand-border">{aiCoach.practiceText}</p>
                     <button
                       onClick={() => practicePassage(aiCoach.practiceText)}
                       className="mt-3 inline-flex items-center gap-1.5 text-brand-primary text-sm font-semibold hover:underline"
@@ -498,14 +497,14 @@ export default function DashboardPage() {
                 )}
 
                 <button onClick={fetchAICoach}
-                  className="w-full bg-brand-surface-2 hover:bg-brand-border border border-brand-border text-brand-text py-3 rounded-xl font-semibold text-sm transition-all">
+                  className="w-full bg-brand-surface-2 hover:bg-brand-border border border-brand-border text-brand-text py-2.5 rounded-md font-semibold text-sm transition-all">
                   🔄 Refresh Analysis
                 </button>
               </>
             ) : (
               <button onClick={fetchAICoach}
-                className="w-full bg-brand-primary hover:bg-brand-secondary text-white py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
-                <Brain className="w-5 h-5" /> Analyze My Performance with AI
+                className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white py-3 rounded-md font-semibold text-sm transition-all flex items-center justify-center gap-2 shadow-sm">
+                <Brain className="w-5 h-5" /> Analyze My Performance
               </button>
             )}
           </div>
